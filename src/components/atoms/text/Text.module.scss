@@ -1,0 +1,35 @@
+.text-container {
+    width: max-content;
+}
+
+.primary {
+    color: var(--color-font);
+}
+
+.secondary {
+    color: var(--color-input-placeholder);
+}
+
+.danger {
+    color: var(--color-danger);
+}
+
+.small {
+    font-size: var(--font-size-sm);
+}
+
+.medium {
+    font-size: var(--font-size-md);
+}
+
+.large {
+    font-size: var(--font-size-lg);
+}
+
+.xlarge {
+    font-size: var(--font-size-xl);
+}
+
+.fill {
+    width: 100%;
+}
