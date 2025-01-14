@@ -74,7 +74,7 @@
   display: flex;
   justify-content: space-between;
 }
-// FLEX EDN -------->
+// FLEX END -------->
 
 @mixin textEllipsis($line, $important: "") {
   display: -webkit-box;
@@ -82,4 +82,16 @@
   overflow: hidden;
   text-overflow: ellipsis;
   -webkit-line-clamp: $line#{$important};
+}
+
+@mixin inputContainer {
+  background-color: var(--color-input-background);
+  border-radius: var(--border-radius-lg);
+  color: var(--color-input-placeholder);
+}
+
+@mixin inputMinimizedContainer {
+  @include inputContainer;
+  color: var(--color-font);
+  border-radius: 0;
 }
