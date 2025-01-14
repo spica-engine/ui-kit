@@ -20,6 +20,7 @@
   --color-font: #525252;
   --color-font-light: #FFFFFF;
   --color-border: #D4D0D0;
+  
   --border-radius-md: 3px;
   --border-radius-lg: 5px;
   --border-radius-circle: 50%;
@@ -60,4 +61,6 @@ code {
     monospace;
 }
 
-
+* {
+  box-sizing: border-box;
+}
