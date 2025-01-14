@@ -58,8 +58,22 @@ import WebhookIcon from "@mui/icons-material/Webhook";
 import CloudUploadIcon from "@mui/icons-material/CloudUpload";
 import ChevronLeftIcon from "@mui/icons-material/ChevronLeft";
 
+// Define the literal type of icon names first
+export type IconName = 
+  | "article" | "clockOutline" | "login" | "google" | "facebook" | "github"
+  | "sourceCommit" | "check" | "replay" | "magnify" | "bug" | "callMerge"
+  | "mapMarker" | "palette" | "imageMultiple" | "dataObject" | "formatAlignCenter"
+  | "formatListChecks" | "formatQuoteClose" | "numericBox" | "calendarBlank"
+  | "checkboxBlankOutline" | "security" | "formatSize" | "lock" | "filter"
+  | "layers" | "key" | "accountCircle" | "fileMultiple" | "contentCopy"
+  | "swapHorizontal" | "fileDocument" | "folder" | "fullscreen" | "pencil"
+  | "chevronRight" | "codeTags" | "chevronDown" | "notificationClearAll"
+  | "dragHorizontalVariant" | "dotsHorizontal" | "dotsVertical" | "eye"
+  | "refresh" | "plus" | "delete" | "minus" | "close" | "help" | "cog"
+  | "identities" | "assetstore" | "dashboard" | "bucket" | "function"
+  | "webhook" | "storage" | "chevronLeft";
 
-export const iconMap: { [key: string]: React.ComponentType<{ className?: string }> } =
+export const iconMap: { [key in IconName]: React.ComponentType<{ className?: string }> } =
   {
     "article": ArticleIcon,
     "clockOutline": QueryBuilderIcon,
