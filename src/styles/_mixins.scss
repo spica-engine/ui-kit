@@ -1,0 +1,85 @@
+// <-------- FLEX
+@mixin flexCenter {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
+@mixin flexColCenter {
+  @include flexCenter;
+  flex-direction: column;
+}
+
+@mixin flexAlignCenter {
+  display: flex;
+  align-items: center;
+}
+
+@mixin flexJustifyCenter {
+  display: flex;
+  justify-content: center;
+}
+
+@mixin flexJustifyColCenter {
+  @include flexJustifyCenter;
+  flex-direction: column;
+}
+
+@mixin flexAlignCenterJustifyBetween {
+  @include flexAlignCenter;
+  justify-content: space-between;
+}
+
+@mixin flexAlignCenterRow {
+  @include flexAlignCenter;
+  flex-direction: row;
+}
+
+@mixin flexAlignCenterCol {
+  @include flexAlignCenter;
+  flex-direction: column;
+}
+
+@mixin flexJustifyBetweenCol {
+  @include flexCol();
+  justify-content: space-between;
+}
+
+@mixin flexJustifyBetweenRow {
+  @include flexRow;
+  justify-content: space-between;
+}
+
+@mixin flexCol {
+  display: flex;
+  flex-direction: column;
+}
+
+@mixin flexRow {
+  display: flex;
+  flex-direction: row;
+}
+
+@mixin flexWrap {
+  display: flex;
+  flex-wrap: wrap;
+}
+
+@mixin flexJustifyEnd {
+  display: flex;
+  justify-content: flex-end;
+}
+
+@mixin flexJustifyBetween {
+  display: flex;
+  justify-content: space-between;
+}
+// FLEX EDN -------->
+
+@mixin textEllipsis($line, $important: "") {
+  display: -webkit-box;
+  -webkit-box-orient: vertical;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  -webkit-line-clamp: $line#{$important};
+}
