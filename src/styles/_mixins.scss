@@ -84,13 +84,14 @@
   -webkit-line-clamp: $line#{$important};
 }
 
-@mixin inputDesign {
+@mixin inputContainer {
   background-color: var(--color-input-background);
   border-radius: 5px;
-  color: #9B9B9B;
+  color: var(--color-input-placeholder);
 }
 
-@mixin inputMinimizedDesign {
-  background-color: var(--color-input-background);
+@mixin inputMinimizedContainer {
+  @include inputContainer;
   color: var(--color-font);
+  border-radius: 0;
 }
