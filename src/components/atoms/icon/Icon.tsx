@@ -1,10 +1,10 @@
-import React,{memo} from "react";
+import React, { memo } from "react";
 import FlexElement, { FlexElementProps } from "../flex-element/FlexElement";
 import styles from "./Icon.module.scss";
-import { iconMap } from "../../../utils/iconList";
+import { iconMap, IconName } from "../../../utils/iconList";
 
 type TypeIcon = {
-  name: string;
+  name: IconName;
   className?: string;
 } & FlexElementProps;
 
