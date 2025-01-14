@@ -1,4 +1,4 @@
-import { FC, memo, ReactElement } from "react";
+import { FC, HTMLAttributes, memo, ReactElement } from "react";
 import styles from "./FlexElement.module.scss";
 
 export type FlexElementProps = {
@@ -20,7 +20,7 @@ export type FlexElementProps = {
   className?: string;
 };
 
-const FlexElement: FC<FlexElementProps> = memo(
+const FlexElement: FC<FlexElementProps & HTMLAttributes<HTMLDivElement>> = memo(
   ({
     children,
     alignment = "center",
@@ -29,6 +29,7 @@ const FlexElement: FC<FlexElementProps> = memo(
     dimensionY = "hug",
     gap = 5,
     className = "",
+    ...props
   }) => {
     const alignmentClass = styles[alignment];
     const directionClass = styles[direction === "vertical" ? "vertical" : "horizontal"];
@@ -44,7 +45,8 @@ const FlexElement: FC<FlexElementProps> = memo(
 
     return (
       <div
-        style={inlineStyles}
+        {...props}
+        style={{...props.style, ...inlineStyles}}
         className={`${styles.flexElement} ${alignmentClass} ${directionClass} ${wrapClass} ${dimensionClassX} ${dimensionClassY} ${className}`}
       >
         {children}
