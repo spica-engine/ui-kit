@@ -86,7 +86,7 @@
 
 @mixin inputContainer {
   background-color: var(--color-input-background);
-  border-radius: 5px;
+  border-radius: var(--border-radius-lg);
   color: var(--color-input-placeholder);
 }
 
