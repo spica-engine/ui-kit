@@ -8,6 +8,32 @@
   --font-family-base: 'Inter', -apple-system, BlinkMacSystemFont, 'Segoe UI', 'Roboto', 'Oxygen',
   'Ubuntu', 'Cantarell', 'Fira Sans', 'Droid Sans', 'Helvetica Neue',
   sans-serif;
+
+  --color-primary: #1C1C50;
+  --color-default: #FFFFFF;
+  --color-success: #21F412;
+  --color-danger: #F41212;
+  --color-soft: #F5F5F5;
+  --color-transparent: transparent;
+  --color-input-background: #FEFEFE;
+  --color-input-placeholder: #9B9B9B;
+  --color-font: #525252;
+  --color-font-light: #FFFFFF;
+  --color-border: #D4D0D0;
+  --border-radius-md: 3px;
+  --border-radius-lg: 5px;
+  --border-radius-circle: 50%;
+
+  --padding-sm: 5px;
+  --padding-md: 10px;
+  --padding-lg: 15px;
+  --padding-xl: 20px;
+
+  --gap-md: 5px;
+  --gap-lg: 10px;
+  --gap-xl: 15px;
+
+  --border-default: 1px solid #D4D0D0;
 }
 
 @font-face {
