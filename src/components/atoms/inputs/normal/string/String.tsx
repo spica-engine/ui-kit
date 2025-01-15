@@ -1,11 +1,11 @@
 import React, { FC, memo } from 'react'
-import FluidContainer from '../fluid-container/FluidContainer'
-import Icon from '../icon/Icon'
-import styles from './StringInput.module.scss'
+import FluidContainer from '../../../fluid-container/FluidContainer'
+import Icon from '../../../icon/Icon'
+import styles from './String.module.scss'
 
 type TypeStringInput = {
     value?: string;
-    onChange: (value: string) => void;
+    onChange: (event: React.ChangeEvent<HTMLInputElement>) => void;
     placeholder?: string;
     className?: string;
 };
@@ -20,7 +20,7 @@ const StringInput: FC<TypeStringInput> = memo(
                         <input
                             type="text"
                             value={value}
-                            onChange={(e) => onChange(e.target.value)}
+                            onChange={onChange}
                             placeholder={placeholder}
                             className={styles.input}
                         />                        
@@ -34,7 +34,6 @@ const StringInput: FC<TypeStringInput> = memo(
             />
         );
     }
-    
 );
 
 export default StringInput

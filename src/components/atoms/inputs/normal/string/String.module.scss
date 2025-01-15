@@ -2,7 +2,7 @@
 
 .stringInput {
     @include inputContainer;
-    padding: 10px;
+    padding: var(--padding-md);
 
     .input{
         width: 100%;
