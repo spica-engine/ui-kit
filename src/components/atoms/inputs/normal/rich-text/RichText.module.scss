@@ -1,0 +1,7 @@
+@import "styles/_mixins";
+
+.container {
+  @include inputContainer;
+  color: #000;
+  padding: var(--padding-md);
+}

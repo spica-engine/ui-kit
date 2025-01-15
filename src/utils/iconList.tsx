@@ -57,11 +57,23 @@ import MemoryIcon from "@mui/icons-material/Memory";
 import WebhookIcon from "@mui/icons-material/Webhook";
 import CloudUploadIcon from "@mui/icons-material/CloudUpload";
 import ChevronLeftIcon from "@mui/icons-material/ChevronLeft";
+import FormatAlignLeftIcon from "@mui/icons-material/FormatAlignLeft";
+import formatAlignRightIcon from "@mui/icons-material/FormatAlignRight";
+import FormatAlignJustifyIconIcon from "@mui/icons-material/FormatAlignJustify";
+import FormatBoldIcon from '@mui/icons-material/FormatBold';
+import FormatItalicIcon from '@mui/icons-material/FormatItalic';
+import FormatUnderlinedIcon from '@mui/icons-material/FormatUnderlined';
+import UndoIcon from '@mui/icons-material/Undo';
+import RedoIcon from '@mui/icons-material/Redo';
+import FormatColorTextIcon from '@mui/icons-material/FormatColorText';
+import FormatColorFillIcon from '@mui/icons-material/FormatColorFill';
+import StrikethroughSIcon from '@mui/icons-material/StrikethroughS';
 
 export type IconName = 
   | "article" | "clockOutline" | "login" | "google" | "facebook" | "github"
   | "sourceCommit" | "check" | "replay" | "magnify" | "bug" | "callMerge"
   | "mapMarker" | "palette" | "imageMultiple" | "dataObject" | "formatAlignCenter"
+  | "formatAlignLeft" | "formatAlignRight" | "formatAlignJustify"
   | "formatListChecks" | "formatQuoteClose" | "numericBox" | "calendarBlank"
   | "checkboxBlankOutline" | "security" | "formatSize" | "lock" | "filter"
   | "layers" | "key" | "accountCircle" | "fileMultiple" | "contentCopy"
@@ -70,7 +82,9 @@ export type IconName =
   | "dragHorizontalVariant" | "dotsHorizontal" | "dotsVertical" | "eye"
   | "refresh" | "plus" | "delete" | "minus" | "close" | "help" | "cog"
   | "identities" | "assetstore" | "dashboard" | "bucket" | "function"
-  | "webhook" | "storage" | "chevronLeft";
+  | "webhook" | "storage" | "chevronLeft" | "formatBold" | "formatItalic" 
+  | "formatUnderlined" | "undo" | "redo" | "formatColorText" | "formatColorFill"
+  | "strikethroughS";
 
 export type IconSize = 'sm' | 'md' | 'lg';
 
@@ -93,6 +107,9 @@ export const iconMap: { [key in IconName]: React.ComponentType<{ className?: str
     "imageMultiple": CollectionsIcon,
     "dataObject": DataObjectIcon,
     "formatAlignCenter": FormatAlignCenterOutlinedIcon,
+    "formatAlignLeft": FormatAlignLeftIcon,
+    "formatAlignRight": formatAlignRightIcon,
+    "formatAlignJustify": FormatAlignJustifyIconIcon,
     "formatListChecks": ChecklistIcon,
     "formatQuoteClose": FormatQuoteIcon,
     "numericBox": LooksOneIcon,
@@ -135,4 +152,12 @@ export const iconMap: { [key in IconName]: React.ComponentType<{ className?: str
     "webhook": WebhookIcon,
     "storage": CloudUploadIcon,
     "chevronLeft": ChevronLeftIcon,
+    "formatBold": FormatBoldIcon,
+    "formatItalic": FormatItalicIcon,
+    "formatUnderlined": FormatUnderlinedIcon,
+    "undo": UndoIcon,
+    "redo": RedoIcon,
+    "formatColorFill": FormatColorFillIcon,
+    "formatColorText": FormatColorTextIcon,
+    "strikethroughS": StrikethroughSIcon
   };
