@@ -2,7 +2,7 @@ import { FC, HTMLAttributes, memo, ReactElement } from "react";
 import styles from "./FlexElement.module.scss";
 
 export type FlexElementProps = {
-  children?: ReactElement;
+  children?: ReactElement | string;
   alignment?:
     | "leftTop"
     | "top"
