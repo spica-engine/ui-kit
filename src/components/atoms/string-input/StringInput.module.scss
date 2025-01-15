@@ -1,0 +1,15 @@
+@import "/src/styles/_mixins";
+
+.stringInput {
+    @include inputContainer;
+    padding: 10px;
+
+    .input{
+        width: 100%;
+        border: none;
+        background-color: var(--color-transparent);
+        color: var(--color-font);
+        font-size: var(--font-size-md);
+        outline: none;
+    }
+}
