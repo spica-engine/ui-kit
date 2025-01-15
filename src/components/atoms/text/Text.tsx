@@ -5,17 +5,18 @@ import styles from './Text.module.scss'
 type TypeText = {
     variant?: 'primary' | 'secondary' | 'danger';
     size?: 'small' | 'medium' | 'large' | 'xlarge';
+    className?: string;
     children: ReactElement | string;
 } & FlexElementProps;
 
 const Text: FC<TypeText> = memo(
-    ({ variant = 'primary', size = 'medium', children, ...props }) => {
+    ({ variant = 'primary', size = 'medium', children, className, ...props }) => {
         const variantClass = styles[variant];
         const sizeClass = styles[size];
 
         return (
             <FlexElement {...props}>
-                <span className={`${styles.text} ${variantClass} ${sizeClass}`}>{children}</span>
+                <span className={`${styles.text} ${variantClass} ${sizeClass} ${className}`}>{children}</span>
             </FlexElement>
         );
     }
