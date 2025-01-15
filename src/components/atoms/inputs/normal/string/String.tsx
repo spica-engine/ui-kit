@@ -8,22 +8,25 @@ type TypeStringInput = {
     onChange: (event: React.ChangeEvent<HTMLInputElement>) => void;
     placeholder?: string;
     className?: string;
+    required?: boolean;
 };
 
 const StringInput: FC<TypeStringInput> = memo(
-    ({ value, onChange, placeholder, className = "" }) => {
+    ({ value, onChange, placeholder, className = "", required = false }) => {
         return (
             <FluidContainer
                 prefix={{ children: <Icon name="formatQuoteClose" />, dimensionX: 'hug', alignment: 'center' }}
                 root={{
                     children: (
-                        <input
-                            type="text"
-                            value={value}
-                            onChange={onChange}
-                            placeholder={placeholder}
-                            className={styles.input}
-                        />                        
+                        <>
+                            <input
+                                type="text"
+                                value={value}
+                                onChange={onChange}
+                                placeholder={required ? `${placeholder + '*'}` : placeholder}
+                                className={styles.input}
+                            />
+                        </>                        
                     ),
                     dimensionX: 'fill',
                     alignment:'leftCenter',
