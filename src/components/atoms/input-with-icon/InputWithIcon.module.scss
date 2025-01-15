@@ -1,0 +1,6 @@
+@import "/src/styles/_mixins";
+
+.container{
+@include inputContainer;
+border: var(--border-default);
+}
