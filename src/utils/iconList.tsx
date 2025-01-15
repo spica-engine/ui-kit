@@ -72,6 +72,8 @@ export type IconName =
   | "identities" | "assetstore" | "dashboard" | "bucket" | "function"
   | "webhook" | "storage" | "chevronLeft";
 
+export type IconSize = 'sm' | 'md' | 'lg';
+
 export const iconMap: { [key in IconName]: React.ComponentType<{ className?: string }> } =
   {
     "article": ArticleIcon,
