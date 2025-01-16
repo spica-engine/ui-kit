@@ -1,18 +1,20 @@
 import { FC, memo } from "react";
 import styles from "./Boolean.module.scss";
 import Text from "components/atoms/text/Text";
-import FluidContainer from "components/atoms/fluid-container/FluidContainer";
+import FluidContainer, {
+  FluidContainerProps,
+} from "components/atoms/fluid-container/FluidContainer";
 
 export type TypeInputBoolean = {
   checked: boolean;
   label?: string;
   disabled?: boolean;
-  className?: string;
+  containerProps?: FluidContainerProps;
   onChange?: (checked: boolean) => void;
 };
 
 const InputBoolean: FC<TypeInputBoolean> = memo(
-  ({ checked, disabled = false, label, className, onChange }) => {
+  ({ checked, disabled = false, label, containerProps, onChange }) => {
     const handleToggle = () => {
       if (!disabled) {
         onChange?.(!checked);
@@ -21,12 +23,12 @@ const InputBoolean: FC<TypeInputBoolean> = memo(
 
     return (
       <FluidContainer
-        className={className}
+        {...containerProps}
         gap={10}
         dimensionY={36}
         root={{
           children: (
-            <label className={`${styles.switch} ${disabled ? styles.disabled : ""}`}>
+            <label className={`${styles.switch} ${disabled && styles.disabled}`}>
               <input
                 type="checkbox"
                 checked={checked}

@@ -1,7 +1,7 @@
 import { FC, memo } from "react";
 import FlexElement, { FlexElementProps } from "../flex-element/FlexElement";
 
-type FluidContainerProps = {
+export type FluidContainerProps = {
   prefix?: FlexElementProps;
   root?: FlexElementProps;
   suffix?: FlexElementProps;
