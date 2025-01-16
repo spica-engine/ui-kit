@@ -1,0 +1,31 @@
+@import "styles/_mixins";
+
+.colorInput {
+  @include inputContainer;
+  padding: 0 var(--padding-lg);
+
+  .prefixContainer {
+    border-right: 1px solid var(--color-primary);
+
+    .label {
+      color: var(--color-primary);
+    }
+  }
+
+  input {
+    -webkit-appearance: none;
+    padding: 0;
+    border: none;
+    width: 12px;
+    height: 12px;
+    border-radius: var(--border-radius-circle);
+    border: 1px solid var(--color-gray-tertiary);
+
+    &::-webkit-color-swatch,
+    &::-webkit-color-swatch-wrapper {
+      border: none;
+      border-radius: var(--border-radius-circle);
+      padding: 0;
+    }
+  }
+}
