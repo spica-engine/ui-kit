@@ -1,0 +1,109 @@
+@mixin variant($bg, $color) {
+  background: $bg;
+  * {
+    color: $color;
+  }
+}
+
+@mixin button-style(
+  $bg,
+  $color,
+  $hover-bg: null,
+  $hover-color: null,
+  $border: null,
+  $hover-border: null
+) {
+  @include variant($bg, $color);
+  border: $border;
+
+  &:not(:disabled):hover {
+    @if $hover-bg or $hover-color {
+      @include variant($hover-bg, $hover-color);
+    }
+    @if $hover-border {
+      border-color: $hover-border;
+    }
+  }
+}
+
+button {
+  cursor: pointer;
+  outline: none;
+  border: none;
+  background: none;
+  transition: all 0.2s ease-in-out;
+  height: 36px;
+  padding: var(--padding-md);
+  border-radius: var(--border-radius-md);
+  font-size: var(--font-size-md);
+
+  &:disabled {
+    opacity: 0.6;
+  }
+
+  &.fullWidth {
+    width: 100%;
+  }
+
+  &.default {
+    @include button-style(
+      var(--color-default),
+      var(--color-font),
+      var(--color-default),
+      var(--color-primary)
+    );
+  }
+
+  &.soft {
+    @include button-style(
+      var(--color-soft),
+      var(--color-font),
+      var(--color-soft),
+      var(--color-primary),
+      1px dashed var(--color-border),
+      #9090b6
+    );
+  }
+
+  &.primary {
+    @include button-style(
+      var(--color-primary),
+      var(--color-font-light),
+      #1b1b62,
+      var(--color-font-light)
+    );
+  }
+
+  &.danger {
+    @include button-style(
+      var(--color-danger),
+      var(--color-font-light),
+      #d61111,
+      var(--color-font-light)
+    );
+  }
+
+  &.link {
+    @include button-style(
+      transparent,
+      var(--color-font),
+      transparent,
+      var(--color-primary),
+      null,
+      var(--color-primary)
+    );
+    border-bottom: 1px solid var(--color-border);
+    border-radius: 0;
+  }
+
+  &.transparent {
+    @include button-style(
+      transparent,
+      var(--color-font),
+      null,
+      null,
+      1px solid var(--color-border),
+      var(--color-font)
+    );
+  }
+}
