@@ -1,24 +1,31 @@
-import React from 'react';
-import logo from './logo.svg';
-import './App.scss';
+import React, { useState } from "react";
+import logo from "./logo.svg";
+import "./App.scss";
+import StorageInput from "components/atoms/inputs/normal/storage/Storage";
 
 function App() {
+  const [link, setLink] = useState("");
+
+  const handleFileUpload = (file: File) => {
+    const fileType = file.type;
+
+    if (fileType.startsWith("image/")) {
+      const objectURL = URL.createObjectURL(file);
+      console.log("objectURL: ", typeof objectURL);
+      setLink(objectURL)
+      // setPreview(objectURL);
+      // setIsImage(true);
+    } else {
+      // setPreview(null);
+      // setIsImage(false);
+    }
+
+    // onFileUpload(file);
+  };
+
   return (
     <div className="App">
-      <header className="App-header">
-        <img src={logo} className="App-logo" alt="logo" />
-        <p>
-          Edit <code>src/App.tsx</code> and save to reload.
-        </p>
-        <a
-          className="App-link"
-          href="https://reactjs.org"
-          target="_blank"
-          rel="noopener noreferrer"
-        >
-          Learn React
-        </a>
-      </header>
+      <StorageInput label="Storage" fileLink={link} onFileUpload={(file) => handleFileUpload(file)} />
     </div>
   );
 }

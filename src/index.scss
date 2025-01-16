@@ -43,6 +43,8 @@
   --icon-size-lg: 20px;
 
   --border-default: 1px solid #D4D0D0;
+
+  --transition: 0.2s;
 }
 
 @font-face {
@@ -55,6 +57,7 @@
 
 html {
   font-size: var(--font-size-base);
+  background: black;
 }
 
 body {
