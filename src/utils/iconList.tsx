@@ -60,104 +60,164 @@ import ChevronLeftIcon from "@mui/icons-material/ChevronLeft";
 import FormatAlignLeftIcon from "@mui/icons-material/FormatAlignLeft";
 import formatAlignRightIcon from "@mui/icons-material/FormatAlignRight";
 import FormatAlignJustifyIconIcon from "@mui/icons-material/FormatAlignJustify";
-import FormatBoldIcon from '@mui/icons-material/FormatBold';
-import FormatItalicIcon from '@mui/icons-material/FormatItalic';
-import FormatUnderlinedIcon from '@mui/icons-material/FormatUnderlined';
-import UndoIcon from '@mui/icons-material/Undo';
-import RedoIcon from '@mui/icons-material/Redo';
-import FormatColorTextIcon from '@mui/icons-material/FormatColorText';
-import FormatColorFillIcon from '@mui/icons-material/FormatColorFill';
-import StrikethroughSIcon from '@mui/icons-material/StrikethroughS';
+import FormatBoldIcon from "@mui/icons-material/FormatBold";
+import FormatItalicIcon from "@mui/icons-material/FormatItalic";
+import FormatUnderlinedIcon from "@mui/icons-material/FormatUnderlined";
+import UndoIcon from "@mui/icons-material/Undo";
+import RedoIcon from "@mui/icons-material/Redo";
+import FormatColorTextIcon from "@mui/icons-material/FormatColorText";
+import FormatColorFillIcon from "@mui/icons-material/FormatColorFill";
+import StrikethroughSIcon from "@mui/icons-material/StrikethroughS";
+import InvertColorsIcon from "@mui/icons-material/InvertColors";
 
-export type IconName = 
-  | "article" | "clockOutline" | "login" | "google" | "facebook" | "github"
-  | "sourceCommit" | "check" | "replay" | "magnify" | "bug" | "callMerge"
-  | "mapMarker" | "palette" | "imageMultiple" | "dataObject" | "formatAlignCenter"
-  | "formatAlignLeft" | "formatAlignRight" | "formatAlignJustify"
-  | "formatListChecks" | "formatQuoteClose" | "numericBox" | "calendarBlank"
-  | "checkboxBlankOutline" | "security" | "formatSize" | "lock" | "filter"
-  | "layers" | "key" | "accountCircle" | "fileMultiple" | "contentCopy"
-  | "swapHorizontal" | "fileDocument" | "folder" | "fullscreen" | "pencil"
-  | "chevronRight" | "codeTags" | "chevronDown" | "notificationClearAll"
-  | "dragHorizontalVariant" | "dotsHorizontal" | "dotsVertical" | "eye"
-  | "refresh" | "plus" | "delete" | "minus" | "close" | "help" | "cog"
-  | "identities" | "assetstore" | "dashboard" | "bucket" | "function"
-  | "webhook" | "storage" | "chevronLeft" | "formatBold" | "formatItalic" 
-  | "formatUnderlined" | "undo" | "redo" | "formatColorText" | "formatColorFill"
-  | "strikethroughS";
+export type IconName =
+  | "article"
+  | "clockOutline"
+  | "login"
+  | "google"
+  | "facebook"
+  | "github"
+  | "sourceCommit"
+  | "check"
+  | "replay"
+  | "magnify"
+  | "bug"
+  | "callMerge"
+  | "mapMarker"
+  | "palette"
+  | "imageMultiple"
+  | "dataObject"
+  | "formatAlignCenter"
+  | "formatAlignLeft"
+  | "formatAlignRight"
+  | "formatAlignJustify"
+  | "formatListChecks"
+  | "formatQuoteClose"
+  | "numericBox"
+  | "calendarBlank"
+  | "checkboxBlankOutline"
+  | "security"
+  | "formatSize"
+  | "lock"
+  | "filter"
+  | "layers"
+  | "key"
+  | "accountCircle"
+  | "fileMultiple"
+  | "contentCopy"
+  | "swapHorizontal"
+  | "fileDocument"
+  | "folder"
+  | "fullscreen"
+  | "pencil"
+  | "chevronRight"
+  | "codeTags"
+  | "chevronDown"
+  | "notificationClearAll"
+  | "dragHorizontalVariant"
+  | "dotsHorizontal"
+  | "dotsVertical"
+  | "eye"
+  | "refresh"
+  | "plus"
+  | "delete"
+  | "minus"
+  | "close"
+  | "help"
+  | "cog"
+  | "identities"
+  | "assetstore"
+  | "dashboard"
+  | "bucket"
+  | "function"
+  | "webhook"
+  | "storage"
+  | "chevronLeft"
+  | "formatBold"
+  | "formatItalic"
+  | "formatUnderlined"
+  | "undo"
+  | "redo"
+  | "formatColorText"
+  | "formatColorFill"
+  | "strikethroughS"
+  | "webhook"
+  | "storage"
+  | "chevronLeft"
+  | "invertColors";
 
-export type IconSize = 'sm' | 'md' | 'lg';
+export type IconSize = "sm" | "md" | "lg";
 
-export const iconMap: { [key in IconName]: React.ComponentType<{ className?: string }> } =
-  {
-    "article": ArticleIcon,
-    "clockOutline": QueryBuilderIcon,
-    "login": LoginIcon,
-    "google": GoogleIcon,
-    "facebook": FacebookOutlinedIcon,
-    "github": GitHubIcon,
-    "sourceCommit": CommitIcon,
-    "check": CheckIcon,
-    "replay": ReplayIcon,
-    "magnify": SearchIcon,
-    "bug": BugReportIcon,
-    "callMerge": CallMergeIcon,
-    "mapMarker": PlaceIcon,
-    "palette": PaletteIcon,
-    "imageMultiple": CollectionsIcon,
-    "dataObject": DataObjectIcon,
-    "formatAlignCenter": FormatAlignCenterOutlinedIcon,
-    "formatAlignLeft": FormatAlignLeftIcon,
-    "formatAlignRight": formatAlignRightIcon,
-    "formatAlignJustify": FormatAlignJustifyIconIcon,
-    "formatListChecks": ChecklistIcon,
-    "formatQuoteClose": FormatQuoteIcon,
-    "numericBox": LooksOneIcon,
-    "calendarBlank": CalendarTodayIcon,
-    "checkboxBlankOutline": CheckBoxOutlineBlankIcon,
-    "security": SecurityIcon,
-    "formatSize": FormatSizeIcon,
-    "lock": LockIcon,
-    "filter": FilterAltIcon,
-    "layers": LayersIcon,
-    "key": VpnKeyIcon,
-    "accountCircle": AccountCircleIcon,
-    "fileMultiple": FileCopyIcon,
-    "contentCopy": ContentCopyIcon,
-    "swapHorizontal": SwapHorizOutlinedIcon,
-    "fileDocument": DescriptionIcon,
-    "folder": FolderIcon,
-    "fullscreen": FullscreenIcon,
-    "pencil": EditIcon,
-    "chevronRight": ChevronRightIcon,
-    "codeTags": CodeIcon,
-    "chevronDown": ExpandMoreIcon,
-    "notificationClearAll": ClearAllIcon,
-    "dragHorizontalVariant": DragHandleIcon,
-    "dotsHorizontal": MoreHorizIcon,
-    "dotsVertical": MoreVertIcon,
-    "eye": VisibilityIcon,
-    "refresh": RefreshIcon,
-    "plus": AddIcon,
-    "delete": DeleteIcon,
-    "minus": RemoveIcon,
-    "close": CloseIcon,
-    "help": QuestionMarkOutlinedIcon,
-    "cog": SettingsIcon,
-    "identities": PeopleIcon,
-    "assetstore": LocalGroceryStoreIcon,
-    "dashboard": DashboardIcon,
-    "bucket": ViewAgendaSharpIcon,
-    "function": MemoryIcon,
-    "webhook": WebhookIcon,
-    "storage": CloudUploadIcon,
-    "chevronLeft": ChevronLeftIcon,
-    "formatBold": FormatBoldIcon,
-    "formatItalic": FormatItalicIcon,
-    "formatUnderlined": FormatUnderlinedIcon,
-    "undo": UndoIcon,
-    "redo": RedoIcon,
-    "formatColorFill": FormatColorFillIcon,
-    "formatColorText": FormatColorTextIcon,
-    "strikethroughS": StrikethroughSIcon
-  };
+export const iconMap: { [key in IconName]: React.ComponentType<{ className?: string }> } = {
+  article: ArticleIcon,
+  clockOutline: QueryBuilderIcon,
+  login: LoginIcon,
+  google: GoogleIcon,
+  facebook: FacebookOutlinedIcon,
+  github: GitHubIcon,
+  sourceCommit: CommitIcon,
+  check: CheckIcon,
+  replay: ReplayIcon,
+  magnify: SearchIcon,
+  bug: BugReportIcon,
+  callMerge: CallMergeIcon,
+  mapMarker: PlaceIcon,
+  palette: PaletteIcon,
+  imageMultiple: CollectionsIcon,
+  dataObject: DataObjectIcon,
+  formatAlignCenter: FormatAlignCenterOutlinedIcon,
+  formatAlignLeft: FormatAlignLeftIcon,
+  formatAlignRight: formatAlignRightIcon,
+  formatAlignJustify: FormatAlignJustifyIconIcon,
+  formatListChecks: ChecklistIcon,
+  formatQuoteClose: FormatQuoteIcon,
+  numericBox: LooksOneIcon,
+  calendarBlank: CalendarTodayIcon,
+  checkboxBlankOutline: CheckBoxOutlineBlankIcon,
+  security: SecurityIcon,
+  formatSize: FormatSizeIcon,
+  lock: LockIcon,
+  filter: FilterAltIcon,
+  layers: LayersIcon,
+  key: VpnKeyIcon,
+  accountCircle: AccountCircleIcon,
+  fileMultiple: FileCopyIcon,
+  contentCopy: ContentCopyIcon,
+  swapHorizontal: SwapHorizOutlinedIcon,
+  fileDocument: DescriptionIcon,
+  folder: FolderIcon,
+  fullscreen: FullscreenIcon,
+  pencil: EditIcon,
+  chevronRight: ChevronRightIcon,
+  codeTags: CodeIcon,
+  chevronDown: ExpandMoreIcon,
+  notificationClearAll: ClearAllIcon,
+  dragHorizontalVariant: DragHandleIcon,
+  dotsHorizontal: MoreHorizIcon,
+  dotsVertical: MoreVertIcon,
+  eye: VisibilityIcon,
+  refresh: RefreshIcon,
+  plus: AddIcon,
+  delete: DeleteIcon,
+  minus: RemoveIcon,
+  close: CloseIcon,
+  help: QuestionMarkOutlinedIcon,
+  cog: SettingsIcon,
+  identities: PeopleIcon,
+  assetstore: LocalGroceryStoreIcon,
+  dashboard: DashboardIcon,
+  bucket: ViewAgendaSharpIcon,
+  function: MemoryIcon,
+  webhook: WebhookIcon,
+  storage: CloudUploadIcon,
+  chevronLeft: ChevronLeftIcon,
+  formatBold: FormatBoldIcon,
+  formatItalic: FormatItalicIcon,
+  formatUnderlined: FormatUnderlinedIcon,
+  undo: UndoIcon,
+  redo: RedoIcon,
+  formatColorFill: FormatColorFillIcon,
+  formatColorText: FormatColorTextIcon,
+  strikethroughS: StrikethroughSIcon,
+  invertColors: InvertColorsIcon,
+};
