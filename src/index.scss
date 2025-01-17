@@ -10,9 +10,11 @@
   sans-serif;
 
   --color-primary: #1C1C50;
+  --color-primary-rgb: 28, 28, 80;
   --color-default: #FFFFFF;
   --color-success: #21F412;
   --color-danger: #F41212;
+  --color-danger-hover: #D61111;
   --color-soft: #F5F5F5;
   --color-transparent: transparent;
   --color-input-background: #FEFEFE;
@@ -20,6 +22,10 @@
   --color-font: #525252;
   --color-font-light: #FFFFFF;
   --color-border: #D4D0D0;
+
+  --color-zebra: #F6F6F9;
+  --color-menu-background: #FFFFFF;
+  --box-shadow: 0px 0px 10px 5px #0000000D;
   
   --border-radius-md: 3px;
   --border-radius-lg: 5px;
@@ -34,7 +40,13 @@
   --gap-lg: 10px;
   --gap-xl: 15px;
 
+  --icon-size-sm: 14px;
+  --icon-size-md: 16px;
+  --icon-size-lg: 20px;
+
   --border-default: 1px solid #D4D0D0;
+
+  --transition-duration: 0.3s;
 }
 
 @font-face {

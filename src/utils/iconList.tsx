@@ -57,6 +57,7 @@ import MemoryIcon from "@mui/icons-material/Memory";
 import WebhookIcon from "@mui/icons-material/Webhook";
 import CloudUploadIcon from "@mui/icons-material/CloudUpload";
 import ChevronLeftIcon from "@mui/icons-material/ChevronLeft";
+import InvertColorsIcon from '@mui/icons-material/InvertColors';
 
 export type IconName = 
   | "article" | "clockOutline" | "login" | "google" | "facebook" | "github"
@@ -70,7 +71,9 @@ export type IconName =
   | "dragHorizontalVariant" | "dotsHorizontal" | "dotsVertical" | "eye"
   | "refresh" | "plus" | "delete" | "minus" | "close" | "help" | "cog"
   | "identities" | "assetstore" | "dashboard" | "bucket" | "function"
-  | "webhook" | "storage" | "chevronLeft";
+  | "webhook" | "storage" | "chevronLeft" | "invertColors";
+
+export type IconSize = 'sm' | 'md' | 'lg';
 
 export const iconMap: { [key in IconName]: React.ComponentType<{ className?: string }> } =
   {
@@ -133,4 +136,5 @@ export const iconMap: { [key in IconName]: React.ComponentType<{ className?: str
     "webhook": WebhookIcon,
     "storage": CloudUploadIcon,
     "chevronLeft": ChevronLeftIcon,
+    "invertColors": InvertColorsIcon
   };
