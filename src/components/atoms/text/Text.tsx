@@ -10,7 +10,7 @@ type TypeText = {
 } & FlexElementProps;
 
 const Text: FC<TypeText> = memo(
-    ({ variant = '', size = '', children, className, ...props }) => {
+    ({ variant = 'primary', size = 'medium', children, className, ...props }) => {
         const variantClass = styles[variant];
         const sizeClass = styles[size];
 
