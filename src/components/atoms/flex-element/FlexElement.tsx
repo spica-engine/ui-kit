@@ -2,7 +2,7 @@ import { FC, HTMLAttributes, memo, ReactElement } from "react";
 import styles from "./FlexElement.module.scss";
 
 export type FlexElementProps = {
-  children?: ReactElement | string;
+  children?: ReactElement | string | null;
   alignment?:
     | "leftTop"
     | "top"
@@ -42,6 +42,8 @@ const FlexElement: FC<FlexElementProps & HTMLAttributes<HTMLDivElement>> = memo(
       width: typeof dimensionX === "number" ? `${dimensionX}px` : undefined,
       height: typeof dimensionY === "number" ? `${dimensionY}px` : undefined,
     };
+
+    if(!children) return null;
 
     return (
       <div
