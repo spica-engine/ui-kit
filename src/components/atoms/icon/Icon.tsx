@@ -4,7 +4,7 @@ import styles from "./Icon.module.scss";
 import { iconMap, IconName, IconSize } from "../../../utils/iconList";
 
 
-type TypeIcon = {
+export type TypeIcon = {
   name: IconName;
   className?: string;
   size?: IconSize;
