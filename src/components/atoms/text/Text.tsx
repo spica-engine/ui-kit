@@ -2,7 +2,7 @@ import React, { FC, memo, ReactElement } from 'react'
 import FlexElement, { FlexElementProps } from '../flex-element/FlexElement'
 import styles from './Text.module.scss'
 
-type TypeText = {
+export type TypeText = {
     variant?: 'primary' | 'secondary' | 'danger';
     size?: 'small' | 'medium' | 'large' | 'xlarge';
     className?: string;

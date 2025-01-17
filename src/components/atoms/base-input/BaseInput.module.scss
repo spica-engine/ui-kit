@@ -1,0 +1,52 @@
+@import "/src/styles/_mixins";
+
+.baseInputContainer {
+  @include inputContainer;
+
+  .labelContainer {
+    .activeIcon,
+    .activeText {
+      transition: all var(--transition-duration);
+    }
+    .label {
+      max-width: 150px;
+      min-width: 100px;
+      text-align: left;
+      padding-right: var(--padding-md);
+      display: inline-block;
+      white-space: nowrap;
+      overflow: hidden !important;
+      text-overflow: ellipsis;
+      position: relative;
+
+      &::after {
+        content: "";
+        width: 1px;
+        background-color: var(--color-primary);
+        height: 0;
+        position: absolute;
+        bottom: 0;
+        right: 0;
+        transition: all var(--transition-duration);
+      }
+    }
+  }
+
+  &.active {
+    .activeIcon,
+    .activeText {
+      color: var(--color-primary);
+      transition: all var(--transition-duration);
+    }
+
+    .labelContainer {
+      .label {
+        &::after {
+          height: 100%;
+          transition: all var(--transition-duration);
+        }
+      }
+    }
+  }
+
+}
