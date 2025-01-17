@@ -4,23 +4,33 @@ import Text from "components/atoms/text/Text";
 import FluidContainer, {
   FluidContainerProps,
 } from "components/atoms/fluid-container/FluidContainer";
+import Switch from "components/atoms/switch/Switch";
+import { FlexElementProps } from "components/atoms/flex-element/FlexElement";
 
 export type TypeInputBoolean = {
   checked: boolean;
   label?: string;
   disabled?: boolean;
   containerProps?: FluidContainerProps;
+  switchContainerProps?: FlexElementProps;
+  suffixProps?: FlexElementProps;
+  rootProps?: FlexElementProps;
+  labelProps?: FlexElementProps;
   onChange?: (checked: boolean) => void;
 };
 
 const InputBoolean: FC<TypeInputBoolean> = memo(
-  ({ checked, disabled = false, label, containerProps, onChange }) => {
-    const handleToggle = () => {
-      if (!disabled) {
-        onChange?.(!checked);
-      }
-    };
-
+  ({
+    checked,
+    disabled = false,
+    label,
+    containerProps,
+    switchContainerProps,
+    suffixProps,
+    rootProps,
+    labelProps,
+    onChange,
+  }) => {
     return (
       <FluidContainer
         {...containerProps}
@@ -28,19 +38,18 @@ const InputBoolean: FC<TypeInputBoolean> = memo(
         dimensionY={36}
         root={{
           children: (
-            <label className={`${styles.switch} ${disabled && styles.disabled}`}>
-              <input
-                type="checkbox"
-                checked={checked}
-                disabled={disabled}
-                onChange={handleToggle}
-              />
-              <span className={styles.slider} />
-            </label>
+            <Switch
+              checked={checked}
+              disabled={disabled}
+              {...switchContainerProps}
+              onChange={onChange}
+            />
           ),
+          ...rootProps,
         }}
         suffix={{
-          children: label && <Text>{label}</Text>,
+          children: label && <Text {...labelProps}>{label}</Text>,
+          ...suffixProps,
         }}
       />
     );
