@@ -1,45 +1,35 @@
-import React, { memo, useState } from 'react'
+import React, { FC, memo, useState } from 'react'
 import InputWithIcon from 'components/atoms/input-with-icon/InputWithIcon'
 import styles from './StringMinimized.module.scss'
 import IconButton from 'components/atoms/icon-button/IconButton';
 
 type TypeStringMinimized = {
-    value?: string;
-};
+    onClear?: () => void
+} & React.InputHTMLAttributes<HTMLInputElement>
 
-const StringMinimized: React.FC<TypeStringMinimized> = memo(
-    ({ value: initialValue = "" }) => {
-        const [value, setValue] = useState(initialValue);
-
-        const onValueChange = (event: React.ChangeEvent<HTMLInputElement>) => {
-            setValue(event.target.value);
-        };
-
-        const onClearValue = () => {
-            setValue("");
-        };
+const StringMinimized: FC<TypeStringMinimized> = memo(
+    ({ onClear, ...props }) => {
         return (
             <InputWithIcon
                 className={styles.stringMinimized}
                 inputProps={{
-                    value,
-                    onChange: onValueChange,
+                    ...props,
                 }}
-                suffix={
-                    {   
-                        children: <IconButton
+                suffix={{
+                    children: (
+                        <IconButton
                             icon="close"
-                            variant='base'
+                            variant="base"
                             buttonProps={{
-                                onClick: onClearValue
+                                onClick: onClear,
                             }}
-                        />,
-                        dimensionX: 'hug',
-                        alignment: 'center',
-                    }   
-                }
-                alignment='leftCenter'
-                dimensionX='fill'
+                        />
+                    ),
+                    dimensionX: 'hug',
+                    alignment: 'center',
+                }}
+                alignment="leftCenter"
+                dimensionX="fill"
                 dimensionY={36}
             />
         );
