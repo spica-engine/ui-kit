@@ -1,4 +1,4 @@
-import React, { ReactElement, useState } from "react";
+import React, { memo, useState } from "react";
 
 import Icon, { TypeIcon } from "components/atoms/icon/Icon";
 import styles from "./BaseInput.module.scss";
@@ -6,14 +6,10 @@ import FluidContainer, {
   FluidContainerProps,
 } from "components/atoms/fluid-container/FluidContainer";
 import Text, { TypeText } from "components/atoms/text/Text";
-import FlexElement, {
-  FlexElementProps,
-} from "components/atoms/flex-element/FlexElement";
-import { IconName } from "utils/iconList";
+import { FlexElementProps } from "components/atoms/flex-element/FlexElement";
 import Input from "../input/Input";
 
 type InputProps = {
-
   labelProps?: {
     wrapper?: FlexElementProps;
     container?: FlexElementProps;
@@ -23,33 +19,17 @@ type InputProps = {
     titleContainer?: FlexElementProps;
   };
   labelContainerProps?: FluidContainerProps;
-   inputContainerProps?: {
-      input?: React.InputHTMLAttributes<HTMLInputElement>;
-      container?: FlexElementProps;
-      wrapper? : FlexElementProps;
-   }
+  inputContainerProps?: {
+    input?: React.InputHTMLAttributes<HTMLInputElement>;
+    container?: FlexElementProps;
+    wrapper?: FlexElementProps;
+  };
 } & FluidContainerProps;
 
-const BaseInput: React.FC<InputProps> = ({
-
+const BaseInput: React.FC<InputProps> = memo(({
   labelContainerProps,
-  labelProps ={
-    icon:{
-      name: "article",
-    },
-    title:{
-      children: "title",
-      variant:"secondary"
-    },
-    container:{
-      gap: 10,
-    }
-  },
-  inputContainerProps={
-    input:{
-      placeholder: "",
-    }
-  },
+  labelProps,
+  inputContainerProps,
   ...props
 }) => {
   const [isFocused, setIsFocused] = useState(false);
@@ -84,6 +64,23 @@ const BaseInput: React.FC<InputProps> = ({
     ...props,
   } as const;
 
+  const combinedLabelProps = {
+    icon: {
+      name: "article",
+      ...labelProps?.icon,
+    },
+    title: {
+      children: "title",
+      variant: "secondary",
+      ...labelProps?.title,
+    },
+    container: {
+      gap: 10,
+      ...labelProps?.container,
+    },
+    ...labelProps,
+  } as const;
+
   return (
     <FluidContainer
       ref={containerRef}
@@ -94,33 +91,45 @@ const BaseInput: React.FC<InputProps> = ({
       prefix={{
         children: (
           <FluidContainer
-          {...labelProps?.container}
-
+            {...combinedLabelProps?.container}
             className={`${styles.labelContainer} ${labelProps?.wrapper?.className}`}
             prefix={{
-              children: labelProps?.icon && <Icon {...labelProps.icon} className={`${styles.activeIcon} ${labelProps.icon?.className}`} />,
-              ...labelProps?.iconContainer,
+              children: combinedLabelProps?.icon && (
+                <Icon
+                  {...combinedLabelProps.icon}
+                  className={`${styles.activeIcon} ${combinedLabelProps.icon?.className}`}
+                />
+              ),
+              ...combinedLabelProps?.iconContainer,
             }}
             root={{
-              children: labelProps?.title && (
-                <Text {...labelProps.title} className={`${styles.label} ${styles.activeText} ${labelProps.title?.className}`}>{labelProps.title.children}</Text>
+              children: combinedLabelProps?.title && (
+                <Text
+                  {...combinedLabelProps?.title}
+                  className={`${styles.label} ${styles.activeText} ${combinedLabelProps?.title?.className}`}
+                >
+                  {combinedLabelProps?.title?.children}
+                </Text>
               ),
-              ...labelProps?.titleContainer,
+              ...combinedLabelProps?.titleContainer,
             }}
           />
         ),
-        ...labelProps?.wrapper,
+        ...combinedLabelProps?.wrapper,
       }}
       root={{
         children: (
-         <Input inputProps={inputContainerProps?.input} {...inputContainerProps?.container} isFocused={isFocused}/>
+          <Input
+            inputProps={{...inputContainerProps?.input, placeholder:""}}
+            {...inputContainerProps?.container}
+            isFocused={isFocused}
+          />
         ),
         ...inputContainerProps?.wrapper,
       }}
       onClick={handleClick}
-      
     />
   );
-};
+});
 
 export default BaseInput;

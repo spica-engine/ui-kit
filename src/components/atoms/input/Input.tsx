@@ -1,7 +1,7 @@
 import FlexElement, {
   FlexElementProps,
 } from "components/atoms/flex-element/FlexElement";
-import React, { useEffect } from "react";
+import React, { memo, useEffect } from "react";
 import styles from "./Input.module.scss";
 
 type TypeInput = FlexElementProps & {
@@ -9,7 +9,7 @@ type TypeInput = FlexElementProps & {
   isFocused?: boolean;
 };
 
-const Input: React.FC<TypeInput> = ({ inputProps, ...props }) => {
+const Input: React.FC<TypeInput> = memo(({ inputProps, isFocused, ...props }) => {
   const inputRef = React.useRef<HTMLInputElement>(null);
 
   const flexContainerProps: FlexElementProps = {
@@ -18,10 +18,10 @@ const Input: React.FC<TypeInput> = ({ inputProps, ...props }) => {
   };
 
   useEffect(() => {
-    if (props.isFocused) {
+    if (isFocused) {
       inputRef.current?.focus();
     }
-  }, [props.isFocused]);
+  }, [isFocused]);
 
   return (
     <FlexElement {...flexContainerProps} className={props.className}>
@@ -34,6 +34,6 @@ const Input: React.FC<TypeInput> = ({ inputProps, ...props }) => {
       />
     </FlexElement>
   );
-};
+});
 
 export default Input;
