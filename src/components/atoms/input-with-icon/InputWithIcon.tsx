@@ -1,6 +1,6 @@
-import React, { FC, ReactElement } from "react";
+import React, { FC } from "react";
 import FluidContainer, {
-  FluidContainerProps,
+  TypeFluidContainer,
 } from "../fluid-container/FluidContainer";
 import styles from "./InputWithIcon.module.scss";
 
@@ -8,7 +8,7 @@ type TypeInputWithIcon = {
   className?: string;
   placeholder?: string;
   inputProps?: React.InputHTMLAttributes<HTMLInputElement>;
-} & FluidContainerProps;
+} & TypeFluidContainer;
 
 const InputWithIcon: FC<TypeInputWithIcon> = ({
   className,

@@ -2,15 +2,15 @@ import { ChangeEvent, FC } from "react";
 import styles from "./Color.module.scss";
 import Text from "components/atoms/text/Text";
 import FluidContainer, {
-  FluidContainerProps,
+  TypeFluidContainer,
 } from "components/atoms/fluid-container/FluidContainer";
-import { FlexElementProps } from "components/atoms/flex-element/FlexElement";
+import { TypeFlexElement } from "components/atoms/flex-element/FlexElement";
 
 type TypeColor = {
   value: string;
-  containerProps?: FluidContainerProps;
-  prefixProps?: FlexElementProps;
-  rootProps?: FlexElementProps;
+  containerProps?: TypeFluidContainer;
+  prefixProps?: TypeFlexElement;
+  rootProps?: TypeFlexElement;
   onChange?: (value: string) => void;
 };
 

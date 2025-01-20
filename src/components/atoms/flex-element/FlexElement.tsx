@@ -1,8 +1,8 @@
-import { FC, HTMLAttributes, memo, ReactElement } from "react";
+import React, { memo, forwardRef, CSSProperties, ReactNode } from "react";
 import styles from "./FlexElement.module.scss";
 
-export type FlexElementProps = {
-  children?: ReactElement | string | null;
+export type TypeFlexElement = {
+  children?: ReactNode;
   alignment?:
     | "leftTop"
     | "top"
@@ -18,19 +18,25 @@ export type FlexElementProps = {
   dimensionY?: number | "fill" | "hug";
   gap?: number;
   className?: string;
+  style?: CSSProperties;
+  onClick?: React.MouseEventHandler<HTMLDivElement>;
 };
 
-const FlexElement: FC<FlexElementProps & HTMLAttributes<HTMLDivElement>> = memo(
-  ({
-    children,
-    alignment = "center",
-    direction = "horizontal",
-    dimensionX = "hug",
-    dimensionY = "hug",
-    gap = 5,
-    className = "",
-    ...props
-  }) => {
+const FlexElement = forwardRef<HTMLDivElement, TypeFlexElement>(
+  (
+    {
+      children,
+      alignment = "center",
+      direction = "horizontal",
+      dimensionX = "hug",
+      dimensionY = "hug",
+      gap = 5,
+      className = "",
+      style,
+      onClick,
+    },
+    ref
+  ) => {
     const alignmentClass = styles[alignment];
     const directionClass = styles[direction === "vertical" ? "vertical" : "horizontal"];
     const wrapClass = styles[direction === "wrap" ? "wrap" : "noWrap"];
@@ -43,13 +49,14 @@ const FlexElement: FC<FlexElementProps & HTMLAttributes<HTMLDivElement>> = memo(
       height: typeof dimensionY === "number" ? `${dimensionY}px` : undefined,
     };
 
-    if(!children) return null;
+    if (!children) return null;
 
     return (
       <div
-        {...props}
-        style={{...props.style, ...inlineStyles}}
-        className={`${styles.flexElement} ${alignmentClass} ${directionClass} ${wrapClass} ${dimensionClassX} ${dimensionClassY} ${className}`}
+        ref={ref}
+        onClick={onClick}
+        style={{...style, ...inlineStyles }}
+        className={`${className} ${styles.flexElement} ${alignmentClass} ${directionClass} ${wrapClass} ${dimensionClassX} ${dimensionClassY}`}
       >
         {children}
       </div>
@@ -57,4 +64,4 @@ const FlexElement: FC<FlexElementProps & HTMLAttributes<HTMLDivElement>> = memo(
   }
 );
 
-export default FlexElement;
+export default memo(FlexElement);

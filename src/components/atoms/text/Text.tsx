@@ -1,13 +1,13 @@
-import React, { FC, memo, ReactElement } from 'react'
-import FlexElement, { FlexElementProps } from '../flex-element/FlexElement'
+import React, { FC, memo, ReactNode } from 'react'
+import FlexElement, { TypeFlexElement } from '../flex-element/FlexElement'
 import styles from './Text.module.scss'
 
 export type TypeText = {
     variant?: 'primary' | 'secondary' | 'danger';
     size?: 'small' | 'medium' | 'large' | 'xlarge';
     className?: string;
-    children: ReactElement | string;
-} & FlexElementProps;
+    children: ReactNode;
+} & TypeFlexElement;
 
 const Text: FC<TypeText> = memo(
     ({ variant = 'primary', size = 'medium', children, className, ...props }) => {

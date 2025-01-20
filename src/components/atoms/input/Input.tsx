@@ -1,10 +1,10 @@
 import FlexElement, {
-  FlexElementProps,
+  TypeFlexElement,
 } from "components/atoms/flex-element/FlexElement";
 import React, { memo, useEffect } from "react";
 import styles from "./Input.module.scss";
 
-type TypeInput = FlexElementProps & {
+type TypeInput = TypeFlexElement & {
   inputProps?: React.InputHTMLAttributes<HTMLInputElement>;
   isFocused?: boolean;
 };
@@ -12,7 +12,7 @@ type TypeInput = FlexElementProps & {
 const Input: React.FC<TypeInput> = memo(({ inputProps, isFocused, ...props }) => {
   const inputRef = React.useRef<HTMLInputElement>(null);
 
-  const flexContainerProps: FlexElementProps = {
+  const flexContainerProps: TypeFlexElement = {
     ...props,
     dimensionX: "fill",
   };

@@ -2,13 +2,13 @@ import { ButtonHTMLAttributes, FC } from "react";
 import styles from "./IconButton.module.scss";
 import Icon from "../icon/Icon";
 import { IconName } from "utils/iconList";
-import { FlexElementProps } from "../flex-element/FlexElement";
+import { TypeFlexElement } from "../flex-element/FlexElement";
 
 type TypeIconButton = {
   variant?: "base" | "default" | "danger" | "dangerOutline" | "dangerBase";
   buttonProps?: ButtonHTMLAttributes<HTMLButtonElement>;
   icon: IconName;
-  iconProps?: FlexElementProps;
+  iconProps?: TypeFlexElement;
 };
 
 const IconButton: FC<TypeIconButton> = ({ variant = "default", buttonProps, icon, iconProps }) => {

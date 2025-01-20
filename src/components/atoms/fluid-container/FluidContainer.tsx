@@ -1,18 +1,16 @@
-import { FC, memo } from "react";
-import FlexElement, { FlexElementProps } from "../flex-element/FlexElement";
+import { memo, forwardRef } from "react";
+import FlexElement, { TypeFlexElement } from "../flex-element/FlexElement";
 
-export type FluidContainerProps = {
-  prefix?: FlexElementProps;
-  root?: FlexElementProps;
-  suffix?: FlexElementProps;
-} & FlexElementProps &
-  Omit<React.HTMLAttributes<HTMLDivElement>, "prefix"> &
-  React.RefAttributes<HTMLDivElement>;
+export type TypeFluidContainer = {
+  prefix?: TypeFlexElement;
+  root?: TypeFlexElement;
+  suffix?: TypeFlexElement;
+} & TypeFlexElement;
 
-const FluidContainer: FC<FluidContainerProps> = memo(
-  ({ prefix, root, suffix, ...props }) => {
+const FluidContainer = forwardRef<HTMLDivElement, TypeFluidContainer>(
+  ({ prefix, root, suffix, ...props }, ref) => {
     return (
-      <FlexElement {...props}>
+      <FlexElement {...props} ref={ref}>
         <>
           {prefix?.children && <FlexElement {...prefix} />}
           {root?.children && <FlexElement {...root} />}
@@ -23,4 +21,4 @@ const FluidContainer: FC<FluidContainerProps> = memo(
   }
 );
 
-export default FluidContainer;
+export default memo(FluidContainer);
