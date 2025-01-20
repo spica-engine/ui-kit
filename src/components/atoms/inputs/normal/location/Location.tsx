@@ -13,7 +13,6 @@ type LocationProps = {
 };
 
 const Location: FC<LocationProps> = ({ coordinates, title }) => {
-
   return (
     <FlexElement
       className={styles.location}
@@ -25,12 +24,10 @@ const Location: FC<LocationProps> = ({ coordinates, title }) => {
     >
       <>
         <FluidContainer
-          prefix={{ children: <Icon name="mapMarker" className={styles.icon}/> }}
-          root={
-            {
-              children: <Text variant="secondary">{title}</Text>
-            }
-          }
+          prefix={{ children: <Icon name="mapMarker" className={styles.icon} /> }}
+          root={{
+            children: <Text variant="secondary">{title}</Text>,
+          }}
           dimensionX="fill"
           alignment="leftCenter"
           dimensionY={36}
@@ -46,10 +43,7 @@ const Location: FC<LocationProps> = ({ coordinates, title }) => {
             attribution='&copy; <a href="https://www.openstreetmap.org/copyright">OpenStreetMap</a> contributors'
             url="https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png"
           />
-          {coordinates && (
-            <Marker position={coordinates}>
-            </Marker>
-          )}
+          {coordinates && <Marker position={coordinates}></Marker>}
         </MapContainer>
       </>
     </FlexElement>

@@ -1,13 +1,13 @@
-import React, { memo } from 'react'
-import Text from '../text/Text'
-import styles from './Json.module.scss'
+import React, { memo } from "react";
+import Text from "../text/Text";
+import styles from "./Json.module.scss";
 
 type TypeJson = {
-    data: Record<string, unknown>;
+  data: Record<string, unknown>;
 };
 
 const Json: React.FC<TypeJson> = memo(({ data }) => {
-    return <Text className={styles.jsonContainer}>{JSON.stringify(data, null, 2)}</Text>;
+  return <Text className={styles.jsonContainer}>{JSON.stringify(data, null, 2)}</Text>;
 });
 
 export default Json;

@@ -349,8 +349,8 @@ const ToolbarPlugin: FC<TypeToolbarPlugin> = memo(({ editor }) => {
         $isElementNode(matchingParent)
           ? matchingParent.getFormatType()
           : $isElementNode(node)
-          ? node.getFormatType()
-          : parent?.getFormatType() || "left"
+            ? node.getFormatType()
+            : parent?.getFormatType() || "left"
       );
     }
     if ($isRangeSelection(selection)) {

@@ -1,5 +1,5 @@
 import ColorPicker from "./ColorPicker";
-import DropDown, {  } from "./Dropdown";
+import DropDown from "./Dropdown";
 
 type Props = {
   disabled?: boolean;

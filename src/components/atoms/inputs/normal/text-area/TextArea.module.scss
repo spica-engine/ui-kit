@@ -1,27 +1,27 @@
 @import "/src/styles/_mixins";
 
 .textAreaInputContainer {
-    @include inputContainer;
-    padding: var(--padding-xl);
-    
-    .textAreaTitle{
-        font-size: var(--font-size-md); 
-        color: var(--color-input-placeholder);
+  @include inputContainer;
+  padding: var(--padding-xl);
+
+  .textAreaTitle {
+    font-size: var(--font-size-md);
+    color: var(--color-input-placeholder);
+  }
+  .textArea {
+    width: 100%;
+    font-size: var(--font-size-md);
+    border-radius: var(--border-radius-lg);
+    color: var(--color-font);
+    background-color: var(--color-input-background);
+    outline: none;
+    resize: vertical;
+    overflow: auto;
+    border: 0;
+    line-height: 1rem;
+    &::placeholder {
+      color: var(--color-input-placeholder);
+      font-size: var(--font-size-md);
     }
-    .textArea {
-        width: 100%; 
-        font-size: var(--font-size-md); 
-        border-radius: var(--border-radius-lg);
-        color: var(--color-font);
-        background-color:var(--color-input-background);
-        outline: none; 
-        resize: vertical;
-        overflow: auto;
-        border: 0;
-        line-height: 1rem;
-        &::placeholder {
-            color: var(--color-input-placeholder);
-            font-size: var(--font-size-md); 
-        }
-    }
+  }
 }
