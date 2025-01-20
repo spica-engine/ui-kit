@@ -1,6 +1,6 @@
 import { FC } from "react";
 import styles from "./Color.module.scss";
-import { FluidContainerProps } from "components/atoms/fluid-container/FluidContainer";
+import { TypeFluidContainer } from "components/atoms/fluid-container/FluidContainer";
 import { IconName } from "utils/iconList";
 import BaseInput from "components/atoms/base-input/BaseInput";
 import Color from "components/atoms/color/Color";
@@ -10,7 +10,7 @@ type TypeColorInput = {
   prefixIcon?: IconName;
   value: string;
   containerProps?: {
-    container?: FluidContainerProps;
+    container?: TypeFluidContainer;
   };
 
   onChange?: (value: string) => void;

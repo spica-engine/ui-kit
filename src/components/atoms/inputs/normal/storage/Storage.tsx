@@ -1,10 +1,10 @@
-import { FC, memo, ReactElement } from "react";
+import { FC, memo, ReactNode } from "react";
 import styles from "./Storage.module.scss";
-import FlexElement, { FlexElementProps } from "components/atoms/flex-element/FlexElement";
+import FlexElement, { TypeFlexElement } from "components/atoms/flex-element/FlexElement";
 import Icon from "components/atoms/icon/Icon";
 import Dropzone from "react-dropzone";
 import FluidContainer, {
-  FluidContainerProps,
+  TypeFluidContainer,
 } from "components/atoms/fluid-container/FluidContainer";
 import Text from "components/atoms/text/Text";
 import IconButton from "components/atoms/icon-button/IconButton";
@@ -13,13 +13,13 @@ import { IconName } from "utils/iconList";
 export type TypeStorageInput = {
   label?: string;
   fileLink?: string;
-  containerProps?: FlexElementProps;
+  containerProps?: TypeFlexElement;
   topContainerProps?: {
-    container?: FluidContainerProps;
-    root?: FlexElementProps;
-    rootChildren?: FlexElementProps;
-    suffix?: FlexElementProps;
-    suffixChildren?: FlexElementProps;
+    container?: TypeFluidContainer;
+    root?: TypeFlexElement;
+    rootChildren?: TypeFlexElement;
+    suffix?: TypeFlexElement;
+    suffixChildren?: TypeFlexElement;
     editIcon?: IconName;
     deleteIcon?: IconName;
     hideActions?: boolean;
@@ -27,10 +27,10 @@ export type TypeStorageInput = {
     disableDeleteIcon?: boolean;
   };
   dropzoneContainerProps?: {
-    container?: FlexElementProps;
+    container?: TypeFlexElement;
     uploadIcon?: IconName;
     previewIcon?: IconName;
-    description?: ReactElement | string;
+    description?: ReactNode;
   };
   onUpload: (file: File) => any;
   onDelete?: (event: React.MouseEvent<HTMLButtonElement, MouseEvent>) => void;

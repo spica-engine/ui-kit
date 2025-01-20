@@ -1,7 +1,7 @@
 import { FC, memo } from "react";
-import FlexElement, { FlexElementProps } from "../../../flex-element/FlexElement";
+import FlexElement, { TypeFlexElement } from "../../../flex-element/FlexElement";
 import styles from "./TextArea.module.scss";
-import FluidContainer, { FluidContainerProps } from "components/atoms/fluid-container/FluidContainer";
+import FluidContainer, { TypeFluidContainer } from "components/atoms/fluid-container/FluidContainer";
 import Icon from "components/atoms/icon/Icon";
 import { IconName } from "utils/iconList";
 
@@ -10,11 +10,11 @@ type TypeTextArea = {
         rows?: number;
         cols?: number;
     };
-    textAreaContainerProps?: FlexElementProps;
-    containerProps?: FlexElementProps;
-    titlePrefixProps?: FlexElementProps;
-    titleRootProps?: FlexElementProps;
-    titleContainerProps?: FluidContainerProps;
+    textAreaContainerProps?: TypeFlexElement;
+    containerProps?: TypeFlexElement;
+    titlePrefixProps?: TypeFlexElement;
+    titleRootProps?: TypeFlexElement;
+    titleContainerProps?: TypeFluidContainer;
     title?: string;
     icon?: IconName;
 };

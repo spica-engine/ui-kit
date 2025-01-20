@@ -2,20 +2,20 @@ import { FC, memo } from "react";
 import styles from "./Boolean.module.scss";
 import Text from "components/atoms/text/Text";
 import FluidContainer, {
-  FluidContainerProps,
+  TypeFluidContainer,
 } from "components/atoms/fluid-container/FluidContainer";
 import Switch from "components/atoms/switch/Switch";
-import { FlexElementProps } from "components/atoms/flex-element/FlexElement";
+import { TypeFlexElement } from "components/atoms/flex-element/FlexElement";
 
 export type TypeInputBoolean = {
   checked: boolean;
   label?: string;
   disabled?: boolean;
-  containerProps?: FluidContainerProps;
-  switchContainerProps?: FlexElementProps;
-  suffixProps?: FlexElementProps;
-  rootProps?: FlexElementProps;
-  labelProps?: FlexElementProps;
+  containerProps?: TypeFluidContainer;
+  switchContainerProps?: TypeFlexElement;
+  suffixProps?: TypeFlexElement;
+  rootProps?: TypeFlexElement;
+  labelProps?: TypeFlexElement;
   onChange?: (checked: boolean) => void;
 };
 

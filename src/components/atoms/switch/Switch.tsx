@@ -1,11 +1,11 @@
 import { FC, memo } from "react";
 import styles from "./Switch.module.scss";
-import FlexElement, { FlexElementProps } from "../flex-element/FlexElement";
+import FlexElement, { TypeFlexElement } from "../flex-element/FlexElement";
 
 export type TypeSwitch = {
   checked: boolean;
   disabled?: boolean;
-  containerProps?: FlexElementProps;
+  containerProps?: TypeFlexElement;
   onChange?: (checked: boolean) => void;
 };
 
