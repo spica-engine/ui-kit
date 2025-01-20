@@ -55,7 +55,7 @@ const FlexElement = forwardRef<HTMLDivElement, TypeFlexElement>(
       <div
         ref={ref}
         onClick={onClick}
-        style={{...style, ...inlineStyles }}
+        style={{ ...style, ...inlineStyles }}
         className={`${className} ${styles.flexElement} ${alignmentClass} ${directionClass} ${wrapClass} ${dimensionClassX} ${dimensionClassY}`}
       >
         {children}

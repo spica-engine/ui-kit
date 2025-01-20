@@ -140,7 +140,7 @@ export default function DropDown({
   buttonIconClassName,
   labelClassName,
   children,
-  icon = <Icon name="chevronDown"/>,
+  icon = <Icon name="chevronDown" />,
   stopCloseOnClickSelf,
   buttonOnClick,
 }: DropDownProps): JSX.Element {
@@ -217,7 +217,7 @@ export default function DropDown({
         type="button"
         disabled={disabled}
         aria-label={buttonAriaLabel || buttonLabel}
-        className={`toolbar-item ${!colorPicker && 'dropdownButton'} ${buttonClassName}`}
+        className={`toolbar-item ${!colorPicker && "dropdownButton"} ${buttonClassName}`}
         onClick={() => {
           setShowDropDown(!showDropDown);
           buttonOnClick && buttonOnClick();
