@@ -1,13 +1,13 @@
-import { ButtonHTMLAttributes, FC, ReactElement } from "react";
+import { ButtonHTMLAttributes, FC, ReactNode } from "react";
 import styles from "./Button.module.scss";
-import FluidContainer, { FluidContainerProps } from "../fluid-container/FluidContainer";
+import FluidContainer, { TypeFluidContainer } from "../fluid-container/FluidContainer";
 
 type TypeButton = {
   variant?: "default" | "soft" | "primary" | "danger" | "link" | "transparent";
   fullWidth?: boolean;
-  children: ReactElement | string;
+  children: ReactNode;
   buttonProps?: ButtonHTMLAttributes<HTMLButtonElement>;
-  containerProps?: FluidContainerProps;
+  containerProps?: TypeFluidContainer;
 };
 
 const Button: FC<TypeButton> = ({

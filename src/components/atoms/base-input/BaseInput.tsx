@@ -3,28 +3,28 @@ import React, { memo, useState } from "react";
 import Icon, { TypeIcon } from "components/atoms/icon/Icon";
 import styles from "./BaseInput.module.scss";
 import FluidContainer, {
-  FluidContainerProps,
+  TypeFluidContainer,
 } from "components/atoms/fluid-container/FluidContainer";
 import Text, { TypeText } from "components/atoms/text/Text";
-import { FlexElementProps } from "components/atoms/flex-element/FlexElement";
+import { TypeFlexElement } from "components/atoms/flex-element/FlexElement";
 import Input from "../input/Input";
 
 type InputProps = {
   labelProps?: {
-    wrapper?: FlexElementProps;
-    container?: FlexElementProps;
+    wrapper?: TypeFlexElement;
+    container?: TypeFlexElement;
     title?: TypeText;
     icon?: TypeIcon;
-    iconContainer?: FlexElementProps;
-    titleContainer?: FlexElementProps;
+    iconContainer?: TypeFlexElement;
+    titleContainer?: TypeFlexElement;
   };
-  labelContainerProps?: FluidContainerProps;
+  labelContainerProps?: TypeFluidContainer;
   inputContainerProps?: {
     input?: React.InputHTMLAttributes<HTMLInputElement>;
-    container?: FlexElementProps;
-    wrapper?: FlexElementProps;
+    container?: TypeFlexElement;
+    wrapper?: TypeFlexElement;
   };
-} & FluidContainerProps;
+} & TypeFluidContainer;
 
 const BaseInput: React.FC<InputProps> = memo(({
   labelContainerProps,
