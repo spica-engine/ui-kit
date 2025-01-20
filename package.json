@@ -11,12 +11,12 @@
     "@testing-library/react": "^16.1.0",
     "antd": "^5.23.1",
     "cra-template-typescript": "1.2.0",
-    "lexical": "^0.23.1",
     "leaflet": "^1.9.4",
+    "lexical": "^0.23.1",
     "react": "^19.0.0-rc.1",
     "react-dom": "^19.0.0-rc.1",
-    "react-leaflet": "^5.0.0-rc.2",
     "react-dropzone": "^14.3.5",
+    "react-leaflet": "^5.0.0-rc.2",
     "react-scripts": "^5.0.1",
     "sass": "^1.83.1"
   },
@@ -24,7 +24,8 @@
     "start": "react-scripts start",
     "build": "react-scripts build",
     "test": "react-scripts test",
-    "eject": "react-scripts eject"
+    "eject": "react-scripts eject",
+    "format": "prettier --write \"src/**/*.{ts,js,tsx,jsx,json,css,scss,html}\""
   },
   "eslintConfig": {
     "extends": [
@@ -49,6 +50,7 @@
     "@types/mocha": "^10.0.10",
     "@types/react": "^19.0.6",
     "@types/react-dom": "^19.0.3",
+    "prettier": "3.4.2",
     "typescript": "^5.7.3",
     "web-vitals": "^4.2.4"
   }
