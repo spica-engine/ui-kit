@@ -1,37 +1,45 @@
 import FlexElement, { TypeFlexElement } from "components/atoms/flex-element/FlexElement";
-import React, { memo, useEffect } from "react";
+import React, {
+  memo,
+  InputHTMLAttributes,
+  ChangeEventHandler,
+  KeyboardEvent,
+  forwardRef,
+} from "react";
 import styles from "./Input.module.scss";
 
-type TypeInput = TypeFlexElement & {
-  inputProps?: React.InputHTMLAttributes<HTMLInputElement>;
+type TypeInput<T = string> = TypeFlexElement & {
+  value?: T;
+  type?: InputHTMLAttributes<HTMLInputElement>["type"];
+  placeholder?: string;
   isFocused?: boolean;
+  onChange?: ChangeEventHandler<HTMLInputElement>;
+  onKeyDown?: (event: KeyboardEvent<HTMLInputElement>) => void;
 };
 
-const Input: React.FC<TypeInput> = memo(({ inputProps, isFocused, ...props }) => {
-  const inputRef = React.useRef<HTMLInputElement>(null);
+const Input = forwardRef<HTMLInputElement, TypeInput<string | number | readonly string[]>>(
+  ({ value, type, placeholder, isFocused, onChange, onKeyDown, ...props }, ref) => {
+    const flexContainerProps: TypeFlexElement = {
+      ...props,
+      dimensionX: "fill",
+    };
 
-  const flexContainerProps: TypeFlexElement = {
-    ...props,
-    dimensionX: "fill",
-  };
+    return (
+      <FlexElement {...flexContainerProps}>
+        <input
+          ref={ref}
+          type={type || "text"}
+          value={value}
+          placeholder={placeholder || "Enter value"}
+          className={styles.input}
+          onChange={onChange}
+          onKeyDown={onKeyDown}
+        />
+      </FlexElement>
+    );
+  }
+);
 
-  useEffect(() => {
-    if (isFocused) {
-      inputRef.current?.focus();
-    }
-  }, [isFocused]);
-
-  return (
-    <FlexElement {...flexContainerProps} className={props.className}>
-      <input
-        ref={inputRef}
-        type={inputProps?.type || "text"}
-        {...inputProps}
-        placeholder={inputProps?.placeholder}
-        className={`${styles.input} ${inputProps?.className}`}
-      />
-    </FlexElement>
-  );
-});
-
-export default Input;
+export default memo(Input) as <T = string>(
+  props: TypeInput<T> & { ref?: React.Ref<HTMLInputElement> }
+) => React.ReactElement;
