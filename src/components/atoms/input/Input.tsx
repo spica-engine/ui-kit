@@ -1,6 +1,4 @@
-import FlexElement, {
-  TypeFlexElement,
-} from "components/atoms/flex-element/FlexElement";
+import FlexElement, { TypeFlexElement } from "components/atoms/flex-element/FlexElement";
 import React, { memo, useEffect } from "react";
 import styles from "./Input.module.scss";
 

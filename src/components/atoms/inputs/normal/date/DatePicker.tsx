@@ -12,11 +12,7 @@ type DateRangePickerProps = {
   placeholder?: string;
 };
 
-const DatePickerInput: React.FC<DateRangePickerProps> = ({
-  onChange,
-  value,
-  placeholder,
-}) => (
+const DatePickerInput: React.FC<DateRangePickerProps> = ({ onChange, value, placeholder }) => (
   <FluidContainer
     className={styles.datePickerContainer}
     alignment={"leftCenter"}

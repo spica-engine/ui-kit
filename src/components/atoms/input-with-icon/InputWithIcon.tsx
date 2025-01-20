@@ -1,7 +1,5 @@
 import React, { FC } from "react";
-import FluidContainer, {
-  TypeFluidContainer,
-} from "../fluid-container/FluidContainer";
+import FluidContainer, { TypeFluidContainer } from "../fluid-container/FluidContainer";
 import styles from "./InputWithIcon.module.scss";
 
 type TypeInputWithIcon = {
@@ -10,12 +8,7 @@ type TypeInputWithIcon = {
   inputProps?: React.InputHTMLAttributes<HTMLInputElement>;
 } & TypeFluidContainer;
 
-const InputWithIcon: FC<TypeInputWithIcon> = ({
-  className,
-  placeholder,
-  inputProps,
-  ...props
-}) => {
+const InputWithIcon: FC<TypeInputWithIcon> = ({ className, placeholder, inputProps, ...props }) => {
   return (
     <FluidContainer
       className={`${styles.container} ${className}`}

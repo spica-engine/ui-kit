@@ -1,17 +1,17 @@
 @import "/src/styles/_mixins";
 
-.container{
-@include inputContainer;
-border: var(--border-default);
+.container {
+  @include inputContainer;
+  border: var(--border-default);
 
-.input{
+  .input {
     border: none;
     outline: none;
     width: 100%;
     color: var(--color-font);
 
-    &::placeholder{
-        color: var(--color-input-placeholder);
+    &::placeholder {
+      color: var(--color-input-placeholder);
     }
-}
+  }
 }

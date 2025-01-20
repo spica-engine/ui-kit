@@ -1,18 +1,18 @@
-.icon{
-    color: var(--color-font);
+.icon {
+  color: var(--color-font);
 
-    &.sm{
-       width: var(--icon-size-sm);
-       height: var(--icon-size-sm);
-    }
+  &.sm {
+    width: var(--icon-size-sm);
+    height: var(--icon-size-sm);
+  }
 
-    &.md{
-        width: var(--icon-size-md);
-        height: var(--icon-size-md);
-    }
+  &.md {
+    width: var(--icon-size-md);
+    height: var(--icon-size-md);
+  }
 
-    &.lg{
-        width: var(--icon-size-lg);
-        height: var(--icon-size-lg);
-    }
+  &.lg {
+    width: var(--icon-size-lg);
+    height: var(--icon-size-lg);
+  }
 }
