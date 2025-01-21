@@ -1,5 +1,5 @@
+@import "/src/styles/_mixins";
+
 .modalBody{
-    padding: var(--padding-md);
-    color: var(--color-font);
-    font-size: var(--font-size-md);
+    @include modalContentContainer;
 }
