@@ -1,0 +1,21 @@
+.container {
+  background: var(--color-zebra);
+  padding: var(--padding-md) var(--padding-lg);
+  border-radius: var(--border-radius-lg);
+  cursor: pointer;
+
+  &.disabled {
+    cursor: default;
+    opacity: var(--disabled-opacity);
+  }
+}
+
+.selectDropdown {
+  position: absolute;
+  border-radius: var(--border-radius-lg);
+  z-index: 1000;
+  max-height: 200px;
+  overflow-y: auto;
+  box-shadow: var(--box-shadow);
+  background: var(--color-menu-background);
+}
