@@ -1,5 +1,5 @@
-.modalHeader{
-    color: var(--color-font);
-    font-size: var(--font-size-lg);
-    padding: var(--padding-md);
+@import "/src/styles/_mixins";
+
+.modalHeader {
+    @include modalContentContainer;
 }
