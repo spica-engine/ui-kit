@@ -99,3 +99,9 @@
   color: var(--color-font);
   border-radius: 0;
 }
+
+@mixin modalContentContainer {
+  color: var(--color-font);
+  font-size: var(--font-size-lg);
+  padding: var(--padding-md);
+}
