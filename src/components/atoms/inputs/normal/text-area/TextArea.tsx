@@ -6,6 +6,7 @@ import FluidContainer, {
 } from "components/atoms/fluid-container/FluidContainer";
 import Icon from "components/atoms/icon/Icon";
 import { IconName } from "utils/iconList";
+import InputHeader from "components/atoms/input-header/InputHeader";
 
 type TypeTextArea = {
   textAreaProps?: React.TextareaHTMLAttributes<HTMLTextAreaElement> & {
@@ -16,6 +17,7 @@ type TypeTextArea = {
   containerProps?: TypeFlexElement;
   titlePrefixProps?: TypeFlexElement;
   titleRootProps?: TypeFlexElement;
+  titleSuffixProps?: TypeFlexElement; 
   titleContainerProps?: TypeFluidContainer;
   title?: string;
   icon?: IconName;
@@ -30,6 +32,7 @@ const TextAreaInput: FC<TypeTextArea> = memo(
     titleContainerProps,
     titlePrefixProps,
     titleRootProps,
+    titleSuffixProps,
     containerProps,
   }) => {
     const mergedTextAreaContainerProps = {
@@ -53,6 +56,11 @@ const TextAreaInput: FC<TypeTextArea> = memo(
       alignment: "leftCenter",
       ...titleRootProps,
     } as const;
+    const mergedTitleSuffixProps = {
+      dimensionX: "hug",
+      alignment: "rightCenter",
+      ...titleSuffixProps,
+    } as const;
     const mergedContainerProps = {
       dimensionX: "fill",
       alignment: "leftCenter",
@@ -63,7 +71,7 @@ const TextAreaInput: FC<TypeTextArea> = memo(
     return (
       <FlexElement className={styles.textAreaInputContainer} {...mergedContainerProps}>
         <>
-          <FluidContainer
+          <InputHeader
             {...mergedTitleContainerProps}
             prefix={{
               children: <Icon name={`${icon}`} />,
@@ -72,6 +80,10 @@ const TextAreaInput: FC<TypeTextArea> = memo(
             root={{
               children: title,
               ...mergedTitleRootProps,
+            }}
+            suffix={{
+              children: titleSuffixProps?.children,
+              ...mergedTitleSuffixProps,
             }}
             className={styles.textAreaTitle}
           />
