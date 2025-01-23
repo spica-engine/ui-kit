@@ -1,4 +1,4 @@
-import { FC, memo, useEffect, useRef, useState } from "react";
+import { FC, memo, useEffect, useLayoutEffect, useRef, useState } from "react";
 import styles from "./Select.module.scss";
 import FluidContainer, {
   TypeFluidContainer,
@@ -35,6 +35,7 @@ const Select: FC<TypeSelect & TypeFluidContainer> = ({
   onChange,
   ...props
 }) => {
+  const [displayerWidth, setDisplayerWidth] = useState(0);
   const [isOpen, setIsOpen] = useState(false);
   const [selectedOption, setSelectedOption] = useState<TypeValue | null>(
     value || (multiple ? [] : null)
@@ -69,12 +70,10 @@ const Select: FC<TypeSelect & TypeFluidContainer> = ({
 
   const calculatePosition = () => {
     if (!containerRef.current || !dropdownRef.current) return;
-
     const rect = containerRef.current.getBoundingClientRect();
     const dropdownHeight = dropdownRef.current.offsetHeight;
     const viewportHeight = window.innerHeight;
     const viewportWidth = window.innerWidth;
-
     const calculatePositions = () => ({
       bottom: {
         top: rect.bottom + window.scrollY,
@@ -112,7 +111,11 @@ const Select: FC<TypeSelect & TypeFluidContainer> = ({
   const toggleDropdown = () => {
     if (disabled) return;
     setIsOpen((prev) => !prev);
-    if (!isOpen) calculatePosition();
+    if (!isOpen) {
+      setTimeout(() => {
+        calculatePosition();
+      });
+    }
   };
 
   useEffect(() => {
@@ -134,31 +137,36 @@ const Select: FC<TypeSelect & TypeFluidContainer> = ({
   const getDisplayer = (): string => {
     if (!selectedOption) return placeholder;
 
-    if (!multiple) {
-      return handleSingleSelection(selectedOption as string | number);
+    if (multiple) {
+      return handleMultipleSelection(selectedOption as (string | number)[]);
     }
 
-    return handleMultipleSelection(selectedOption);
+    return handleSingleSelection(selectedOption as string | number);
   };
 
-  const handleSingleSelection = (option: string | number): string => {
-    if (typeof option !== "object") return String(option);
-    return getLabelByValue(option) as string;
+  const handleSingleSelection = (selectedOption: string | number): string => {
+    if (typeof options[0] !== "object") return String(selectedOption);
+    return getLabelByValue(selectedOption) as string;
   };
 
-  const handleMultipleSelection = (options: unknown): string => {
-    if (!Array.isArray(options) || options.length === 0) return placeholder;
+  const handleMultipleSelection = (selectedOption: (string | number)[]): string => {
+    if (!selectedOption.length) return placeholder;
 
-    if (typeof options[0] !== "object") {
-      return options.join(", ");
+    if (typeof options[0] === "object") {
+      return selectedOption.map((option) => getLabelByValue(option)).join(", ");
     }
 
-    return options.map((option) => getLabelByValue(option)).join(", ");
+    return selectedOption.join(", ");
   };
 
-  const getLabelByValue = (value: string | number): string | undefined => {
+  const getLabelByValue = (value: string | number) => {
     return (options as TypeLabeledValue[]).find((el) => el.value === value)?.label;
   };
+
+  useLayoutEffect(() => {
+    if (!containerRef.current) return;
+    setDisplayerWidth(containerRef.current?.offsetWidth - 50);
+  }, []);
 
   return (
     <>
@@ -169,7 +177,17 @@ const Select: FC<TypeSelect & TypeFluidContainer> = ({
         dimensionY={36}
         className={`${props.className} ${styles.container} ${disabled && styles.disabled}`}
         root={{
-          children: <Text>{getDisplayer()}</Text>,
+          children: (
+            <Text
+              style={{
+                maxWidth: displayerWidth,
+                ...props.root?.style,
+              }}
+              className={`${props.root?.className} ${styles.displayer}`}
+            >
+              {getDisplayer()}
+            </Text>
+          ),
           dimensionX: "fill",
           alignment: "leftCenter",
         }}
@@ -187,31 +205,32 @@ const Select: FC<TypeSelect & TypeFluidContainer> = ({
           }}
           className={`${popupClassName} ${styles.selectDropdown}`}
         >
-          {options.map((option) => {
-            const optionValue = typeof option === "object" ? option.value : option;
-            const selected = multiple
-              ? Array.isArray(selectedOption) && selectedOption.includes(optionValue)
-              : selectedOption === optionValue;
+          {dropdownRef.current &&
+            options.map((option) => {
+              const optionValue = typeof option === "object" ? option.value : option;
+              const selected = multiple
+                ? Array.isArray(selectedOption) && selectedOption.includes(optionValue)
+                : selectedOption === optionValue;
 
-            const isDisabled =
-              multiple &&
-              !!maxCount &&
-              Array.isArray(selectedOption) &&
-              selectedOption.length >= maxCount &&
-              !selected;
+              const isDisabled =
+                multiple &&
+                !!maxCount &&
+                Array.isArray(selectedOption) &&
+                selectedOption.length >= maxCount &&
+                !selected;
 
-            return (
-              <SelectOption
-                disabled={isDisabled}
-                key={optionValue.toString()}
-                multiple={multiple}
-                option={option}
-                selected={selected}
-                onSelect={handleOptionSelect}
-                {...optionProps}
-              />
-            );
-          })}
+              return (
+                <SelectOption
+                  disabled={isDisabled}
+                  key={optionValue.toString()}
+                  multiple={multiple}
+                  option={option}
+                  selected={selected}
+                  onSelect={handleOptionSelect}
+                  {...optionProps}
+                />
+              );
+            })}
         </div>
       )}
     </>

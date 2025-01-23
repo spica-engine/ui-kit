@@ -2,12 +2,14 @@ import React, { FC, memo, ReactNode, useState } from "react";
 import styles from "./Checkbox.module.scss";
 import FluidContainer, { TypeFluidContainer } from "../fluid-container/FluidContainer";
 import Text from "../text/Text";
+import { TypeFlexElement } from "../flex-element/FlexElement";
 
 type TypeCheckbox = {
   checked?: boolean;
   disabled?: boolean;
   label?: ReactNode;
   indeterminate?: boolean;
+  labelProps?: TypeFlexElement;
   onChange?: (checked: boolean) => void;
 };
 
@@ -16,6 +18,7 @@ const Checkbox: FC<TypeCheckbox & TypeFluidContainer> = ({
   disabled,
   label,
   indeterminate,
+  labelProps,
   onChange,
   ...props
 }) => {
@@ -42,7 +45,7 @@ const Checkbox: FC<TypeCheckbox & TypeFluidContainer> = ({
         ),
         ...props.prefix,
       }}
-      root={{ children: <Text>{label}</Text>, ...props.root }}
+      root={{ children: <Text {...labelProps}>{label}</Text>, ...props.root }}
     />
   );
 };

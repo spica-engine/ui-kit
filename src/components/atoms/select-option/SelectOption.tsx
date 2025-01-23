@@ -1,7 +1,6 @@
-import { FC, memo } from "react";
+import { FC, memo, useLayoutEffect, useRef, useState } from "react";
 import styles from "./SelectOption.module.scss";
 import FluidContainer, { TypeFluidContainer } from "../fluid-container/FluidContainer";
-import Text from "../text/Text";
 import Checkbox from "../checkbox/Checkbox";
 
 export type TypeLabeledValue = {
@@ -25,6 +24,9 @@ const SelectOption: FC<TypeSelectOption & TypeFluidContainer> = ({
   onSelect,
   ...props
 }) => {
+  const [displayerWidth, setDisplayerWidth] = useState(0);
+  const containerRef = useRef<HTMLDivElement | null>(null);
+
   const { value, label } =
     typeof option === "object"
       ? { value: option.value, label: option.label }
@@ -35,8 +37,14 @@ const SelectOption: FC<TypeSelectOption & TypeFluidContainer> = ({
     onSelect(value);
   };
 
+  useLayoutEffect(() => {
+    if (!containerRef.current) return;
+    setDisplayerWidth(containerRef.current?.offsetWidth - 50);
+  }, []);
+
   return (
     <FluidContainer
+      ref={containerRef}
       key={value}
       dimensionX="fill"
       dimensionY={36}
@@ -44,18 +52,19 @@ const SelectOption: FC<TypeSelectOption & TypeFluidContainer> = ({
       onClick={() => handleClick(value)}
       className={`${styles.option} ${selected && styles.selected} ${disabled && styles.disabled}`}
       root={{
-        children: multiple ? (
+        children: (
           <Checkbox
             disabled={disabled}
             dimensionX="fill"
             checked={selected}
             label={label}
             alignment="leftCenter"
+            prefix={multiple ? undefined : { children: null }}
+            root={{
+              className: `${props.root?.className} ${styles.displayer}`,
+            }}
+            labelProps={{ style: { maxWidth: displayerWidth }, className: styles.displayer }}
           />
-        ) : (
-          <Text dimensionX="fill" alignment="leftCenter">
-            {label}
-          </Text>
         ),
         dimensionX: "fill",
       }}

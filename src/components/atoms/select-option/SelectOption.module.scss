@@ -1,3 +1,5 @@
+@import "/src/styles/_mixins";
+
 .option {
   cursor: pointer;
   padding: var(--padding-md) var(--padding-lg);
@@ -13,5 +15,9 @@
   &.disabled {
     cursor: default;
     opacity: var(--disabled-opacity);
+  }
+
+  .displayer {
+    @include textEllipsis(1);
   }
 }

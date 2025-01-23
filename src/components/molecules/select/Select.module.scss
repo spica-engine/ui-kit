@@ -1,3 +1,5 @@
+@import "/src/styles/_mixins";
+
 .container {
   background: var(--color-zebra);
   padding: var(--padding-md) var(--padding-lg);
@@ -7,6 +9,10 @@
   &.disabled {
     cursor: default;
     opacity: var(--disabled-opacity);
+  }
+
+  .displayer {
+    @include textEllipsis(1);
   }
 }
 
