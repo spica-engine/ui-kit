@@ -1,39 +1,69 @@
-import { ButtonHTMLAttributes, FC, ReactNode } from "react";
+import { CSSProperties, FC, memo, ReactNode } from "react";
 import styles from "./Button.module.scss";
 import FluidContainer, { TypeFluidContainer } from "../fluid-container/FluidContainer";
 
 type TypeButton = {
-  variant?: "default" | "soft" | "primary" | "danger" | "link" | "transparent";
   fullWidth?: boolean;
   children: ReactNode;
-  buttonProps?: ButtonHTMLAttributes<HTMLButtonElement>;
+  disabled?: boolean;
   containerProps?: TypeFluidContainer;
+  className?: string;
+  style?: CSSProperties;
+  shape?: "default" | "circle" | "round";
+  type?: "submit" | "reset" | "button";
+  variant?: "solid" | "outlined" | "dashed" | "filled" | "text" | "link";
+  color?: "primary" | "default" | "success" | "danger" | "soft" | "transparent";
+  onClick?: React.MouseEventHandler<HTMLButtonElement>;
 };
 
 const Button: FC<TypeButton> = ({
-  variant = "default",
   fullWidth,
-  buttonProps,
+  type = "button",
+  disabled,
   containerProps,
   children,
+  className = "",
+  style,
+  shape = "default",
+  variant = "solid",
+  color = "primary",
+  onClick,
 }) => {
+  const colors = {
+    primary: styles.cPrimary,
+    default: styles.cDefault,
+    success: styles.cSuccess,
+    danger: styles.cDanger,
+    soft: styles.cSoft,
+    transparent: styles.cTransparent,
+  };
+
   const variants = {
-    default: styles.default,
-    soft: styles.soft,
-    primary: styles.primary,
-    danger: styles.danger,
-    link: styles.link,
-    transparent: styles.transparent,
+    solid: styles.vSolid,
+    outlined: styles.vOutlined,
+    dashed: styles.vDashed,
+    filled: styles.vFilled,
+    text: styles.vText,
+    link: styles.vLink,
+  };
+
+  const shapes = {
+    default: styles.sDefault,
+    circle: styles.sCircle,
+    round: styles.sRound,
   };
 
   return (
     <button
-      {...buttonProps}
-      className={`${variants[variant]} ${buttonProps?.className} ${fullWidth && styles.fullWidth}`}
+      disabled={disabled}
+      onClick={onClick}
+      type={type}
+      style={style}
+      className={`${shapes[shape]} ${variants[variant]} ${colors[color]} ${className} ${fullWidth && styles.fullWidth}`}
     >
       <FluidContainer {...containerProps} root={{ children }} />
     </button>
   );
 };
 
-export default Button;
+export default memo(Button);
