@@ -24,14 +24,22 @@
         transform: translateX(100%);
     }
 
+    &.topToBottom {
+        animation: slideFromTop 0.4s forwards ease;
+    }
+
+    &.bottomToTop {
+        animation: slideFromBottom 0.4s forwards ease;
+    }
+
     &.growFromCenter {
         animation: growFromCenter 0.2s forwards ease;
     }
 
-    &.zoom {
+    &.zoomIn {
         animation: classicModalZoom 0.8s forwards cubic-bezier(0.25, 0.8, 0.25, 1);
     }
-    // Animations
+
     @keyframes slideFromLeft {
         0% {
             clip-path: inset(0 100% 0 0);
@@ -54,6 +62,27 @@
         }
     }
 
+    @keyframes slideFromTop {
+        0% {
+            clip-path: inset(100% 0 0 0);
+            opacity: 0;
+        }
+        100% {
+            clip-path: inset(0 0 0 0);
+            opacity: 1;
+        }
+    }
+
+    @keyframes slideFromBottom {
+        0% {
+            clip-path: inset(0 0 100% 0);
+            opacity: 0;
+        }
+        100% {
+            clip-path: inset(0 0 0 0);
+            opacity: 1;
+        }
+    }
 
     @keyframes growFromCenter {
         0% {

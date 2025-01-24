@@ -10,7 +10,7 @@ import Icon from '../icon/Icon';
 
 type TypeModal = {
     className?: string;
-    animation?: 'leftToMiddle' | 'rightToMiddle' | 'growFromCenter' | 'zoom';
+    animation?: 'leftToMiddle' | 'rightToMiddle' | 'topToBottom' | 'bottomToTop' | 'growFromCenter' | 'zoomIn';
     showCloseButton?: boolean;
     children: React.ReactNode;
     onClose?: () => void;
