@@ -3,6 +3,10 @@
   padding: var(--gap-lg);
   border-radius: var(--border-radius-lg);
 
+  .icon {
+    color: var(--color-font);
+  }
+
   .map {
     height: 100%;
     width: 100%;
