@@ -4,21 +4,23 @@ import React, {
   InputHTMLAttributes,
   ChangeEventHandler,
   KeyboardEvent,
+  FocusEventHandler,
   forwardRef,
 } from "react";
 import styles from "./Input.module.scss";
 
-type TypeInput<T = string> = TypeFlexElement & {
+export type TypeInput<T = string> = TypeFlexElement & {
   value?: T;
   type?: InputHTMLAttributes<HTMLInputElement>["type"];
   placeholder?: string;
-  isFocused?: boolean;
+  id?: string;
   onChange?: ChangeEventHandler<HTMLInputElement>;
+  onFocus?: FocusEventHandler<HTMLInputElement>;
   onKeyDown?: (event: KeyboardEvent<HTMLInputElement>) => void;
 };
 
 const Input = forwardRef<HTMLInputElement, TypeInput<string | number | readonly string[]>>(
-  ({ value, type, placeholder, isFocused, onChange, onKeyDown, ...props }, ref) => {
+  ({ value, type, placeholder, id, onChange, onKeyDown, onFocus, ...props }, ref) => {
     const flexContainerProps: TypeFlexElement = {
       ...props,
       dimensionX: "fill",
@@ -34,6 +36,8 @@ const Input = forwardRef<HTMLInputElement, TypeInput<string | number | readonly 
           className={styles.input}
           onChange={onChange}
           onKeyDown={onKeyDown}
+          onFocus={onFocus}
+          id={id}
         />
       </FlexElement>
     );

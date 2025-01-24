@@ -1,129 +1,92 @@
-import React, { memo, useState } from "react";
+import React, { useRef, useState } from "react";
+import InputGroup from "./InputGroup";
 
-import Icon, { TypeIcon } from "components/atoms/icon/Icon";
+import { TypeFluidContainer } from "../fluid-container/FluidContainer";
 import styles from "./BaseInput.module.scss";
-import FluidContainer, {
-  TypeFluidContainer,
-} from "components/atoms/fluid-container/FluidContainer";
-import Text, { TypeText } from "components/atoms/text/Text";
-import { TypeFlexElement } from "components/atoms/flex-element/FlexElement";
-import Input from "../input/Input";
-
-type InputProps = {
-  labelProps?: {
-    wrapper?: TypeFlexElement;
-    container?: TypeFlexElement;
-    title?: TypeText;
-    icon?: TypeIcon;
-    iconContainer?: TypeFlexElement;
-    titleContainer?: TypeFlexElement;
+import Text from "../text/Text";
+import FlexElement from "../flex-element/FlexElement";
+type TypeBaseInputProps = {
+  errorMessage?: string;
+  description?: string;
+  className?: string;
+  labelProps?: TypeFluidContainer & {
+    focusedClassName?: string;
+    dividerClassName?: string;
+    divider?: boolean;
   };
-  labelContainerProps?: TypeFluidContainer;
-  inputContainerProps?: {
-    input?: React.InputHTMLAttributes<HTMLInputElement>;
-    container?: TypeFlexElement;
-    wrapper?: TypeFlexElement;
-  };
-} & TypeFluidContainer;
+  children: React.ReactElement<{
+    ref?: React.RefObject<any>;
+    onChange?: (event: React.ChangeEvent<any>) => void;
+    value?: string | number | readonly string[] | undefined;
+  }>;
+};
 
-const BaseInput: React.FC<InputProps> = memo(
-  ({ labelContainerProps, labelProps, inputContainerProps, ...props }) => {
-    const [isFocused, setIsFocused] = useState(false);
-    const containerRef = React.useRef<HTMLDivElement>(null);
+const BaseInput = ({
+  errorMessage,
+  description,
+  labelProps,
+  children,
+  ...props
+}: TypeBaseInputProps) => {
+  const [isFocused, setIsFocused] = useState(false);
 
-    React.useEffect(() => {
-      const handleClickOutside = (event: MouseEvent) => {
-        if (containerRef.current && !containerRef.current.contains(event.target as Node)) {
-          setIsFocused(false);
-        }
-      };
+  const containerRef = useRef<HTMLDivElement>(null);
+  const inputRef = useRef<any>(null);
 
-      document.addEventListener("mousedown", handleClickOutside);
-      return () => {
-        document.removeEventListener("mousedown", handleClickOutside);
-      };
-    }, []);
-
-    const handleClick = () => {
-      setIsFocused(true);
+  React.useEffect(() => {
+    const handleClickOutside = (event: MouseEvent) => {
+      if (containerRef.current && !containerRef.current.contains(event.target as Node)) {
+        setIsFocused(false);
+      }
     };
+    document.addEventListener("mousedown", handleClickOutside);
+    return () => {
+      document.removeEventListener("mousedown", handleClickOutside);
+    };
+  }, []);
 
-    const containerProps = {
-      dimensionX: "fill",
-      dimensionY: 36,
-      alignment: "leftCenter",
-      gap: 10,
-      className: "",
-      ...props,
-    } as const;
+  const handleClick = () => {
+    setIsFocused(true);
+    if (inputRef.current) {
+      inputRef.current.focus();
+    }
+  };
 
-    const combinedLabelProps = {
-      icon: {
-        name: "article",
-        ...labelProps?.icon,
-      },
-      title: {
-        children: "title",
-        variant: "secondary",
-        ...labelProps?.title,
-      },
-      container: {
-        gap: 10,
-        ...labelProps?.container,
-      },
-      ...labelProps,
-    } as const;
+  const clonedChildren = React.cloneElement(children, {
+    ref: inputRef,
+  });
 
-    return (
-      <FluidContainer
-        ref={containerRef}
-        {...containerProps}
-        className={`${styles.baseInputContainer} ${
-          isFocused ? styles.active : ""
-        } ${containerProps.className}`}
-        prefix={{
-          children: (
-            <FluidContainer
-              {...combinedLabelProps?.container}
-              className={`${styles.labelContainer} ${labelProps?.wrapper?.className}`}
-              prefix={{
-                children: combinedLabelProps?.icon && (
-                  <Icon
-                    {...combinedLabelProps.icon}
-                    className={`${styles.activeIcon} ${combinedLabelProps.icon?.className}`}
-                  />
-                ),
-                ...combinedLabelProps?.iconContainer,
-              }}
-              root={{
-                children: combinedLabelProps?.title && (
-                  <Text
-                    {...combinedLabelProps?.title}
-                    className={`${styles.label} ${styles.activeText} ${combinedLabelProps?.title?.className}`}
-                  >
-                    {combinedLabelProps?.title?.children}
-                  </Text>
-                ),
-                ...combinedLabelProps?.titleContainer,
-              }}
-            />
-          ),
-          ...combinedLabelProps?.wrapper,
-        }}
-        root={{
-          children: (
-            <Input
-              inputProps={{ ...inputContainerProps?.input, placeholder: "" }}
-              {...inputContainerProps?.container}
-              isFocused={isFocused}
-            />
-          ),
-          ...inputContainerProps?.wrapper,
-        }}
-        onClick={handleClick}
-      />
-    );
-  }
-);
+  return (
+    <InputGroup onClick={handleClick} ref={containerRef} direction="vertical">
+      <FlexElement className={`${styles.baseInputContainer} ${props.className}`}>
+        <InputGroup.Label
+          {...labelProps}
+          prefix={{
+            children: labelProps?.prefix?.children,
+            ...labelProps?.prefix,
+          }}
+          root={{
+            children: labelProps?.root?.children,
+            ...labelProps?.root,
+          }}
+          isFocused={isFocused || !!children.props.value}
+          className={
+            isFocused || !!children.props.value
+              ? labelProps?.focusedClassName || styles.focused
+              : ""
+          }
+          dividerClassName={labelProps?.dividerClassName}
+        />
+        {clonedChildren}
+      </FlexElement>
+
+      <InputGroup.HelperText className={styles.helperText} alignment="leftCenter" dimensionX="fill">
+        <Text size="small" variant={errorMessage ? "danger" : "secondary"}>
+          {errorMessage || description}
+        </Text>
+      </InputGroup.HelperText>
+    </InputGroup>
+  );
+};
 
 export default BaseInput;
