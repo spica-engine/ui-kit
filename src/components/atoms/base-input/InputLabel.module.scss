@@ -1,0 +1,51 @@
+.reverse {
+  flex-direction: row-reverse !important;
+
+  .title {
+    padding-left: var(--padding-md);
+    padding-right: 0;
+    text-align: right;
+  }
+}
+
+.divider {
+  width: 1px;
+  height: 0;
+  background: var(--color-primary);
+  transition: all var(--transition-duration);
+}
+
+.title {
+  font-size: var(--font-size-md);
+  color: var(--color-font);
+  max-width: 150px;
+  min-width: 100px;
+  text-align: left;
+  padding-right: var(--padding-md);
+  display: inline-block;
+  white-space: nowrap;
+  overflow: hidden !important;
+  text-overflow: ellipsis;
+  position: relative;
+  transition: all var(--transition-duration);
+  &::after {
+    content: "";
+    width: 1px;
+    background-color: var(--color-primary);
+    height: 0;
+    position: absolute;
+    bottom: 0;
+    right: 0;
+    transition: all var(--transition-duration);
+  }
+}
+.icon {
+  transition: all var(--transition-duration);
+}
+
+.focused {
+  .divider {
+    height: 100%;
+    transition: all var(--transition-duration);
+  }
+}
