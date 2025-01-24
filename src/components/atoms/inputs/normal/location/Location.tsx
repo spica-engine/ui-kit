@@ -6,6 +6,7 @@ import FlexElement from "components/atoms/flex-element/FlexElement";
 import FluidContainer from "components/atoms/fluid-container/FluidContainer";
 import Icon from "components/atoms/icon/Icon";
 import Text from "components/atoms/text/Text";
+import InputHeader from "components/atoms/input-header/InputHeader";
 
 type LocationProps = {
   coordinates: [number, number];
@@ -22,30 +23,23 @@ const Location: FC<LocationProps> = ({ coordinates, title }) => {
       direction="vertical"
       alignment="leftCenter"
     >
-      <>
-        <FluidContainer
-          prefix={{ children: <Icon name="mapMarker" className={styles.icon} /> }}
-          root={{
-            children: <Text variant="secondary">{title}</Text>,
-          }}
-          dimensionX="fill"
-          alignment="leftCenter"
-          dimensionY={36}
-        />
+      <InputHeader
+        prefix={{ children: <Icon name="mapMarker" className={styles.icon} /> }}
+        root={{ children: <Text variant="secondary">{title}</Text> }}
+      />
 
-        <MapContainer
-          center={coordinates || [51.505, -0.09]}
-          zoom={13}
-          scrollWheelZoom={true}
-          className={styles.map}
-        >
-          <TileLayer
-            attribution='&copy; <a href="https://www.openstreetmap.org/copyright">OpenStreetMap</a> contributors'
-            url="https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png"
-          />
-          {coordinates && <Marker position={coordinates}></Marker>}
-        </MapContainer>
-      </>
+      <MapContainer
+        center={coordinates || [51.505, -0.09]}
+        zoom={13}
+        scrollWheelZoom={true}
+        className={styles.map}
+      >
+        <TileLayer
+          attribution='&copy; <a href="https://www.openstreetmap.org/copyright">OpenStreetMap</a> contributors'
+          url="https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png"
+        />
+        {coordinates && <Marker position={coordinates}></Marker>}
+      </MapContainer>
     </FlexElement>
   );
 };
