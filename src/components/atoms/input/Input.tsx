@@ -13,12 +13,13 @@ type TypeInput<T = string> = TypeFlexElement & {
   type?: InputHTMLAttributes<HTMLInputElement>["type"];
   placeholder?: string;
   isFocused?: boolean;
+  disabled?: boolean;
   onChange?: ChangeEventHandler<HTMLInputElement>;
   onKeyDown?: (event: KeyboardEvent<HTMLInputElement>) => void;
 };
 
 const Input = forwardRef<HTMLInputElement, TypeInput<string | number | readonly string[]>>(
-  ({ value, type, placeholder, isFocused, onChange, onKeyDown, ...props }, ref) => {
+  ({ value, type, placeholder, isFocused, disabled, onChange, onKeyDown, ...props }, ref) => {
     const flexContainerProps: TypeFlexElement = {
       ...props,
       dimensionX: "fill",
@@ -30,6 +31,7 @@ const Input = forwardRef<HTMLInputElement, TypeInput<string | number | readonly 
           ref={ref}
           type={type || "text"}
           value={value}
+          disabled={disabled}
           placeholder={placeholder || "Enter value"}
           className={styles.input}
           onChange={onChange}
