@@ -1,0 +1,23 @@
+@import "/src/styles/_mixins";
+
+.item {
+  cursor: pointer;
+  padding: var(--padding-md) var(--padding-lg);
+
+  &:not(.disabled):hover {
+    background: var(--color-zebra);
+  }
+
+  &.active {
+    background: var(--color-zebra);
+  }
+
+  &.disabled {
+    cursor: default;
+    opacity: var(--disabled-opacity);
+  }
+
+  .displayer {
+    @include textEllipsis(1);
+  }
+}

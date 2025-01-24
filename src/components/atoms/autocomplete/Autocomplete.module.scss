@@ -1,0 +1,17 @@
+@import "/src/styles/_mixins";
+
+.input {
+  input {
+    @include textEllipsis(1);
+  }
+}
+
+.menuItems {
+  position: absolute;
+  border-radius: var(--border-radius-lg);
+  z-index: 1000;
+  max-height: 200px;
+  overflow-y: auto;
+  box-shadow: var(--box-shadow);
+  background: var(--color-menu-background);
+}
