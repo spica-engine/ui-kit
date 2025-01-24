@@ -1,33 +1,57 @@
-import React, { FC } from "react";
+import React, { ChangeEventHandler, FC, forwardRef, memo } from "react";
 import FluidContainer, { TypeFluidContainer } from "../fluid-container/FluidContainer";
 import styles from "./InputWithIcon.module.scss";
+import Input from "../input/Input";
+import { TypeFlexElement } from "../flex-element/FlexElement";
 
 type TypeInputWithIcon = {
+  value?: string | number;
+  disabled?: boolean;
   className?: string;
   placeholder?: string;
   inputProps?: React.InputHTMLAttributes<HTMLInputElement>;
+  inputContainerProps?: TypeFlexElement;
+  onChange?: ChangeEventHandler<HTMLInputElement>;
 } & TypeFluidContainer;
 
-const InputWithIcon: FC<TypeInputWithIcon> = ({ className, placeholder, inputProps, ...props }) => {
-  return (
-    <FluidContainer
-      className={`${styles.container} ${className}`}
-      dimensionY={36}
-      root={{
-        children: (
-          <input
-            type={inputProps?.type || "text"}
-            {...inputProps}
-            placeholder={placeholder}
-            className={styles.input}
-          />
-        ),
-        dimensionX: "fill",
-        alignment: "leftCenter",
-      }}
-      {...props}
-    />
-  );
-};
+const InputWithIcon = forwardRef<HTMLDivElement, TypeInputWithIcon>(
+  (
+    {
+      value,
+      disabled,
+      className,
+      placeholder,
+      inputProps,
+      inputContainerProps,
+      onChange,
+      ...props
+    },
+    ref
+  ) => {
+    return (
+      <FluidContainer
+        ref={ref}
+        className={`${styles.container} ${className} ${disabled && styles.disabled}`}
+        dimensionY={36}
+        root={{
+          children: (
+            <Input
+              value={value}
+              disabled={disabled}
+              type={inputProps?.type || "text"}
+              placeholder={placeholder}
+              className={`${inputContainerProps?.className} ${styles.input}`}
+              onChange={onChange}
+              {...inputContainerProps}
+            />
+          ),
+          dimensionX: "fill",
+          alignment: "leftCenter",
+        }}
+        {...props}
+      />
+    );
+  }
+);
 
-export default InputWithIcon;
+export default memo(InputWithIcon);

@@ -4,10 +4,16 @@
   @include inputContainer;
   border: var(--border-default);
 
+  &.disabled {
+    cursor: default;
+    opacity: var(--disabled-opacity);
+  }
+
   .input {
     border: none;
     outline: none;
     width: 100%;
+    background: none;
     color: var(--color-font);
 
     &::placeholder {
