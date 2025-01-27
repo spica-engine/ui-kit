@@ -7,13 +7,15 @@ import FluidContainer from "components/atoms/fluid-container/FluidContainer";
 import Icon from "components/atoms/icon/Icon";
 import Text from "components/atoms/text/Text";
 import InputHeader from "components/atoms/input-header/InputHeader";
+import Map from "components/atoms/map/Map";
 
 type LocationProps = {
-  coordinates: [number, number];
-  title: string;
+  coordinates?: [number, number];
+  title?: string;
+  onChange?: (coordinates: [number, number]) => void;
 };
 
-const Location: FC<LocationProps> = ({ coordinates, title }) => {
+const Location: FC<LocationProps> = ({ coordinates, title, onChange }) => {
   return (
     <FlexElement
       className={styles.location}
@@ -28,18 +30,13 @@ const Location: FC<LocationProps> = ({ coordinates, title }) => {
         root={{ children: <Text variant="secondary">{title}</Text> }}
       />
 
-      <MapContainer
-        center={coordinates || [51.505, -0.09]}
-        zoom={13}
-        scrollWheelZoom={true}
-        className={styles.map}
-      >
-        <TileLayer
-          attribution='&copy; <a href="https://www.openstreetmap.org/copyright">OpenStreetMap</a> contributors'
-          url="https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png"
-        />
-        {coordinates && <Marker position={coordinates}></Marker>}
-      </MapContainer>
+      <Map
+        coordinates={coordinates}
+        markerIcon={{
+          icon: <Icon name="mapMarker" size="lg" className={styles.mapMarker} />,
+        }}
+        onChange={onChange}
+      />
     </FlexElement>
   );
 };
