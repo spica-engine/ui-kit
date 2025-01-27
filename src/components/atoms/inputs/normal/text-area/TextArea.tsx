@@ -26,7 +26,7 @@ type TypeTextArea = {
 const TextAreaInput: FC<TypeTextArea> = memo(
   ({
     title = "",
-    icon = "formatSize",
+    icon,
     textAreaProps,
     textAreaContainerProps,
     titleContainerProps,
@@ -71,33 +71,33 @@ const TextAreaInput: FC<TypeTextArea> = memo(
     return (
       <FlexElement className={styles.textAreaInputContainer} {...mergedContainerProps}>
         <>
-          <InputHeader
-            {...mergedTitleContainerProps}
-            prefix={{
-              children: <Icon name={`${icon}`} />,
-              ...mergedTitlePrefixProps,
-            }}
-            root={{
-              children: title,
-              ...mergedTitleRootProps,
-            }}
-            suffix={{
-              children: titleSuffixProps?.children,
-              ...mergedTitleSuffixProps,
-            }}
-            className={styles.textAreaTitle}
-          />
+          {(title || icon || titlePrefixProps || titleSuffixProps) && (
+            <InputHeader
+              {...mergedTitleContainerProps}
+              prefix={{
+                children: icon ? <Icon name={`${icon}`} /> : null,
+                ...mergedTitlePrefixProps,
+              }}
+              root={{
+                children: title,
+                ...mergedTitleRootProps,
+              }}
+              suffix={{
+                children: titleSuffixProps?.children,
+                ...mergedTitleSuffixProps,
+              }}
+              className={styles.textAreaTitle}
+            />
+          )}
           <FlexElement
-            children={
-              <textarea
-                {...textAreaProps}
-                placeholder={textAreaProps?.placeholder}
-                className={styles.textArea}
-              />
-            }
             className={styles.textAreaInput}
             {...mergedTextAreaContainerProps}
-          />
+          > 
+            <textarea
+              {...textAreaProps}
+              className={styles.textArea}
+            ></textarea>
+          </FlexElement>
         </>
       </FlexElement>
     );
