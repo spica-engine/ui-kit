@@ -1,15 +1,18 @@
-import React, { ChangeEvent, FC, memo, useEffect, useRef, useState } from "react";
+import React, { ChangeEvent, FC, memo, useEffect, useRef, useState, useLayoutEffect } from "react";
 import styles from "./Autocomplete.module.scss";
 import { TypeFluidContainer } from "../fluid-container/FluidContainer";
 import ListItem from "../list-item/ListItem";
 import InputWithIcon from "../input-with-icon/InputWithIcon";
+import FlexElement from "../flex-element/FlexElement";
+import { useOnClickOutside } from "custom-hooks/useOnClickOutside";
+import useAdaptivePosition from "custom-hooks/useAdaptivePosition";
 
 type TypeAutocomplete = {
   value?: string;
   className?: string;
   options: string[];
   placeholder?: string;
-  position?: "bottom" | "top";
+  placement?: "bottom" | "top";
   popupClassName?: string;
   onChange?: (value: string) => void;
 };
@@ -17,7 +20,7 @@ type TypeAutocomplete = {
 const Autocomplete: FC<TypeAutocomplete & TypeFluidContainer> = ({
   className,
   value = "",
-  position = "bottom",
+  placement = "bottom",
   popupClassName = "",
   placeholder = "",
   options,
@@ -25,37 +28,32 @@ const Autocomplete: FC<TypeAutocomplete & TypeFluidContainer> = ({
   ...props
 }) => {
   const containerRef = useRef<HTMLDivElement | null>(null);
-  const dropdownRef = useRef<HTMLDivElement | null>(null);
+  const menuRef = useRef<HTMLDivElement | null>(null);
+
+  useOnClickOutside({
+    refs: [menuRef, containerRef],
+    onClickOutside: () => setShowMenu(false),
+  });
+
+  const { targetPosition, calculatePosition } = useAdaptivePosition({
+    containerRef,
+    targetRef: menuRef,
+    initialPlacement: placement,
+  });
 
   const [showMenu, setShowMenu] = useState(false);
   const [search, setSearch] = useState(value);
   const [filteredOptions, setFilteredOptions] = useState<string[]>(options);
-  const [dropdownPosition, setDropdownPosition] = useState<{
-    top?: number;
-    left?: number;
-    right?: number;
-  }>({});
 
   useEffect(() => {
     filterOptions(search);
   }, [search, options]);
 
-  useEffect(() => {
-    if (showMenu) calculatePosition();
-  }, [showMenu, filteredOptions]);
-
-  useEffect(() => {
-    const handleClickOutside = (event: MouseEvent) => {
-      if (
-        !dropdownRef.current?.contains(event.target as Node) &&
-        !containerRef.current?.contains(event.target as Node)
-      ) {
-        setShowMenu(false);
-      }
-    };
-    document.addEventListener("mousedown", handleClickOutside);
-    return () => document.removeEventListener("mousedown", handleClickOutside);
-  }, []);
+  useLayoutEffect(() => {
+    if (showMenu && containerRef.current && menuRef.current) {
+      calculatePosition();
+    }
+  }, [showMenu, filteredOptions, calculatePosition]);
 
   const filterOptions = (query: string) => {
     setFilteredOptions(
@@ -63,44 +61,6 @@ const Autocomplete: FC<TypeAutocomplete & TypeFluidContainer> = ({
         ? options.filter((option) => option.toLowerCase().includes(query.toLowerCase()))
         : options
     );
-  };
-
-  const calculatePosition = () => {
-    if (!containerRef.current || !dropdownRef.current) return;
-
-    const rect = containerRef.current.getBoundingClientRect();
-    const dropdownHeight = dropdownRef.current.offsetHeight;
-    const viewportHeight = window.innerHeight;
-    const viewportWidth = window.innerWidth;
-
-    const positions = {
-      bottom: {
-        top: rect.bottom + window.scrollY,
-        left: rect.left + window.scrollX,
-        right: viewportWidth - rect.right - window.scrollX,
-      },
-      top: {
-        top: rect.top - dropdownHeight + window.scrollY,
-        left: rect.left + window.scrollX,
-        right: viewportWidth - rect.right - window.scrollX,
-      },
-    };
-
-    if (
-      position === "bottom" &&
-      rect.bottom + dropdownHeight > viewportHeight &&
-      rect.top - dropdownHeight >= 0
-    ) {
-      setDropdownPosition(positions.top);
-    } else if (
-      position === "top" &&
-      rect.top - dropdownHeight < 0 &&
-      rect.bottom + dropdownHeight <= viewportHeight
-    ) {
-      setDropdownPosition(positions.bottom);
-    } else {
-      setDropdownPosition(positions[position]);
-    }
   };
 
   const handleInputChange = (event: ChangeEvent<HTMLInputElement>) => {
@@ -120,8 +80,9 @@ const Autocomplete: FC<TypeAutocomplete & TypeFluidContainer> = ({
   return (
     <>
       <InputWithIcon
-        placeholder={placeholder}
         ref={containerRef}
+        placeholder={placeholder}
+        dimensionX="fill"
         value={search}
         onClick={toggleDropdown}
         onChange={handleInputChange}
@@ -129,23 +90,24 @@ const Autocomplete: FC<TypeAutocomplete & TypeFluidContainer> = ({
         {...props}
       />
       {showMenu && (
-        <div
-          ref={dropdownRef}
-          style={{
-            ...dropdownPosition,
-            width: containerRef.current?.offsetWidth || "100%",
-          }}
+        <FlexElement
+          ref={menuRef}
+          style={{ ...targetPosition }}
           className={`${popupClassName} ${styles.menuItems}`}
+          direction="vertical"
+          alignment="leftTop"
+          gap={0}
         >
           {filteredOptions.map((option) => (
             <ListItem
+              dimensionX={containerRef.current?.offsetWidth}
               key={option}
               label={option}
               onSelect={handleItemSelect}
               active={option.toLowerCase() === search.toLowerCase()}
             />
           ))}
-        </div>
+        </FlexElement>
       )}
     </>
   );
