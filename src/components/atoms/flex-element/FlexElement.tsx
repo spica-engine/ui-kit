@@ -1,6 +1,8 @@
 import React, { memo, forwardRef, CSSProperties, ReactNode } from "react";
 import styles from "./FlexElement.module.scss";
 
+export type TypeDimension = number | "fill" | "hug";
+
 export type TypeFlexElement = {
   children?: ReactNode;
   alignment?:
@@ -14,8 +16,8 @@ export type TypeFlexElement = {
     | "bottom"
     | "rightBottom";
   direction?: "vertical" | "horizontal" | "wrap";
-  dimensionX?: number | "fill" | "hug";
-  dimensionY?: number | "fill" | "hug";
+  dimensionX?: TypeDimension;
+  dimensionY?: TypeDimension;
   gap?: number;
   className?: string;
   style?: CSSProperties;
