@@ -4,17 +4,16 @@ import FlexElement, { TypeFlexElement } from 'components/atoms/flex-element/Flex
 
 type TypeModalBody = {
     className?: string;
-    data: React.ReactNode;
 } & TypeFlexElement;
 
 const ModalBody: FC<TypeModalBody> = memo((
-  { className, data, ...props }
+  { className, children, ...props }
   ) => {
     return (
         <FlexElement 
             className= {`${styles.modalBody} ${className}`}
             {...{ alignment:"leftCenter", dimensionX:"fill", dimensionY: "fill", ...props }}
-            children= {data}
+            children= {children}
         />
     )
 })
