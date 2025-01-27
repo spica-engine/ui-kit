@@ -6,6 +6,7 @@ import FluidContainer, {
 } from "components/atoms/fluid-container/FluidContainer";
 import Icon from "components/atoms/icon/Icon";
 import { IconName } from "utils/iconList";
+import InputHeader from "components/atoms/input-header/InputHeader";
 
 type TypeTextArea = {
   textAreaProps?: React.TextareaHTMLAttributes<HTMLTextAreaElement> & {
@@ -16,6 +17,7 @@ type TypeTextArea = {
   containerProps?: TypeFlexElement;
   titlePrefixProps?: TypeFlexElement;
   titleRootProps?: TypeFlexElement;
+  titleSuffixProps?: TypeFlexElement; 
   titleContainerProps?: TypeFluidContainer;
   title?: string;
   icon?: IconName;
@@ -24,12 +26,13 @@ type TypeTextArea = {
 const TextAreaInput: FC<TypeTextArea> = memo(
   ({
     title = "",
-    icon = "formatSize",
+    icon,
     textAreaProps,
     textAreaContainerProps,
     titleContainerProps,
     titlePrefixProps,
     titleRootProps,
+    titleSuffixProps,
     containerProps,
   }) => {
     const mergedTextAreaContainerProps = {
@@ -53,6 +56,11 @@ const TextAreaInput: FC<TypeTextArea> = memo(
       alignment: "leftCenter",
       ...titleRootProps,
     } as const;
+    const mergedTitleSuffixProps = {
+      dimensionX: "hug",
+      alignment: "rightCenter",
+      ...titleSuffixProps,
+    } as const;
     const mergedContainerProps = {
       dimensionX: "fill",
       alignment: "leftCenter",
@@ -63,29 +71,33 @@ const TextAreaInput: FC<TypeTextArea> = memo(
     return (
       <FlexElement className={styles.textAreaInputContainer} {...mergedContainerProps}>
         <>
-          <FluidContainer
-            {...mergedTitleContainerProps}
-            prefix={{
-              children: <Icon name={`${icon}`} />,
-              ...mergedTitlePrefixProps,
-            }}
-            root={{
-              children: title,
-              ...mergedTitleRootProps,
-            }}
-            className={styles.textAreaTitle}
-          />
+          {(title || icon || titlePrefixProps || titleSuffixProps) && (
+            <InputHeader
+              {...mergedTitleContainerProps}
+              prefix={{
+                children: icon ? <Icon name={`${icon}`} /> : null,
+                ...mergedTitlePrefixProps,
+              }}
+              root={{
+                children: title,
+                ...mergedTitleRootProps,
+              }}
+              suffix={{
+                children: titleSuffixProps?.children,
+                ...mergedTitleSuffixProps,
+              }}
+              className={styles.textAreaTitle}
+            />
+          )}
           <FlexElement
-            children={
-              <textarea
-                {...textAreaProps}
-                placeholder={textAreaProps?.placeholder}
-                className={styles.textArea}
-              />
-            }
             className={styles.textAreaInput}
             {...mergedTextAreaContainerProps}
-          />
+          > 
+            <textarea
+              {...textAreaProps}
+              className={styles.textArea}
+            ></textarea>
+          </FlexElement>
         </>
       </FlexElement>
     );
