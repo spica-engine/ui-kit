@@ -1,4 +1,4 @@
-import { FC, memo, useEffect, useLayoutEffect, useRef, useState } from "react";
+import { FC, memo, useLayoutEffect, useRef, useState } from "react";
 import styles from "./Select.module.scss";
 import FluidContainer, {
   TypeFluidContainer,
@@ -6,14 +6,17 @@ import FluidContainer, {
 import Icon from "components/atoms/icon/Icon";
 import Text from "components/atoms/text/Text";
 import SelectOption, { TypeLabeledValue } from "components/atoms/select-option/SelectOption";
+import FlexElement from "components/atoms/flex-element/FlexElement";
+import { useOnClickOutside } from "custom-hooks/useOnClickOutside";
+import useAdaptivePosition from "custom-hooks/useAdaptivePosition";
 
-type TypeValue = string | number | (string | number)[];
+export type TypeValue = string | number | (string | number)[];
 
 type TypeSelect = {
   value?: TypeValue;
   options: (string | number | TypeLabeledValue)[];
   placeholder?: string;
-  position?: "top" | "bottom";
+  placement?: "bottom" | "top";
   multiple?: boolean;
   maxCount?: number;
   disabled?: boolean;
@@ -26,7 +29,7 @@ const Select: FC<TypeSelect & TypeFluidContainer> = ({
   value,
   options,
   placeholder = "Select an option",
-  position = "bottom",
+  placement = "bottom",
   multiple = false,
   disabled = false,
   maxCount,
@@ -40,14 +43,32 @@ const Select: FC<TypeSelect & TypeFluidContainer> = ({
   const [selectedOption, setSelectedOption] = useState<TypeValue | null>(
     value || (multiple ? [] : null)
   );
-  const [dropdownPosition, setDropdownPosition] = useState<{
-    top?: number;
-    left?: number;
-    right?: number;
-  }>({});
 
   const containerRef = useRef<HTMLDivElement | null>(null);
   const dropdownRef = useRef<HTMLDivElement | null>(null);
+
+  useOnClickOutside({
+    refs: [dropdownRef, containerRef],
+    onClickOutside: () => setIsOpen(false),
+  });
+
+  const { targetPosition, calculatePosition } = useAdaptivePosition({
+    containerRef,
+    targetRef: dropdownRef,
+    initialPlacement: placement,
+  });
+
+  useLayoutEffect(() => {
+    if (containerRef.current) {
+      setDisplayerWidth(containerRef.current.offsetWidth - 50);
+    }
+  }, []);
+
+  useLayoutEffect(() => {
+    if (isOpen && containerRef.current && dropdownRef.current) {
+      calculatePosition();
+    }
+  }, [isOpen, options, calculatePosition]);
 
   const handleOptionSelect = (option: string | number) => {
     const updateMultipleSelection = () => {
@@ -68,71 +89,10 @@ const Select: FC<TypeSelect & TypeFluidContainer> = ({
     multiple ? updateMultipleSelection() : updateSingleSelection();
   };
 
-  const calculatePosition = () => {
-    if (!containerRef.current || !dropdownRef.current) return;
-    const rect = containerRef.current.getBoundingClientRect();
-    const dropdownHeight = dropdownRef.current.offsetHeight;
-    const viewportHeight = window.innerHeight;
-    const viewportWidth = window.innerWidth;
-    const calculatePositions = () => ({
-      bottom: {
-        top: rect.bottom + window.scrollY,
-        left: rect.left + window.scrollX,
-        right: viewportWidth - rect.right - window.scrollX,
-      },
-      top: {
-        top: rect.top - dropdownHeight + window.scrollY,
-        left: rect.left + window.scrollX,
-        right: viewportWidth - rect.right - window.scrollX,
-      },
-    });
-
-    const positions = calculatePositions();
-
-    const shouldSwitchToTop =
-      position === "bottom" &&
-      rect.bottom + dropdownHeight > viewportHeight &&
-      rect.top - dropdownHeight >= 0;
-
-    const shouldSwitchToBottom =
-      position === "top" &&
-      rect.top - dropdownHeight < 0 &&
-      rect.bottom + dropdownHeight <= viewportHeight;
-
-    if (shouldSwitchToTop) {
-      setDropdownPosition(positions.top);
-    } else if (shouldSwitchToBottom) {
-      setDropdownPosition(positions.bottom);
-    } else {
-      setDropdownPosition(positions[position]);
-    }
-  };
-
   const toggleDropdown = () => {
     if (disabled) return;
     setIsOpen((prev) => !prev);
-    if (!isOpen) {
-      setTimeout(() => {
-        calculatePosition();
-      });
-    }
   };
-
-  useEffect(() => {
-    const handleClickOutside = (event: MouseEvent) => {
-      if (
-        !dropdownRef?.current?.contains?.(event.target as Node) &&
-        !containerRef?.current?.contains?.(event.target as Node)
-      ) {
-        setIsOpen(false);
-      }
-    };
-
-    document.addEventListener("mousedown", handleClickOutside);
-    return () => {
-      document.removeEventListener("mousedown", handleClickOutside);
-    };
-  }, []);
 
   const getDisplayer = (): string => {
     if (!selectedOption) return placeholder;
@@ -163,14 +123,10 @@ const Select: FC<TypeSelect & TypeFluidContainer> = ({
     return (options as TypeLabeledValue[]).find((el) => el.value === value)?.label;
   };
 
-  useLayoutEffect(() => {
-    if (!containerRef.current) return;
-    setDisplayerWidth(containerRef.current?.offsetWidth - 50);
-  }, []);
-
   return (
     <>
       <FluidContainer
+        {...props}
         ref={containerRef}
         onClick={toggleDropdown}
         dimensionX="fill"
@@ -194,44 +150,43 @@ const Select: FC<TypeSelect & TypeFluidContainer> = ({
         suffix={{
           children: <Icon name="chevronDown" />,
         }}
-        {...props}
       />
       {isOpen && (
-        <div
+        <FlexElement
           ref={dropdownRef}
-          style={{
-            ...dropdownPosition,
-            width: containerRef.current?.offsetWidth || "100%",
-          }}
+          style={{ ...targetPosition }}
           className={`${popupClassName} ${styles.selectDropdown}`}
+          direction="vertical"
+          alignment="leftTop"
+          gap={0}
         >
-          {dropdownRef.current &&
-            options.map((option) => {
-              const optionValue = typeof option === "object" ? option.value : option;
-              const selected = multiple
-                ? Array.isArray(selectedOption) && selectedOption.includes(optionValue)
-                : selectedOption === optionValue;
+          {options.map((option) => {
+            const optionValue = typeof option === "object" ? option.value : option;
+            const selected = multiple
+              ? Array.isArray(selectedOption) && selectedOption.includes(optionValue)
+              : selectedOption === optionValue;
 
-              const isDisabled =
-                multiple &&
-                !!maxCount &&
-                Array.isArray(selectedOption) &&
-                selectedOption.length >= maxCount &&
-                !selected;
+            const isDisabled =
+              multiple &&
+              !!maxCount &&
+              Array.isArray(selectedOption) &&
+              selectedOption.length >= maxCount &&
+              !selected;
 
-              return (
-                <SelectOption
-                  disabled={isDisabled}
-                  key={optionValue.toString()}
-                  multiple={multiple}
-                  option={option}
-                  selected={selected}
-                  onSelect={handleOptionSelect}
-                  {...optionProps}
-                />
-              );
-            })}
-        </div>
+            return (
+              <SelectOption
+                disabled={isDisabled}
+                dimensionX={containerRef.current?.offsetWidth}
+                key={optionValue.toString()}
+                multiple={multiple}
+                option={option}
+                selected={selected}
+                onSelect={handleOptionSelect}
+                {...optionProps}
+              />
+            );
+          })}
+        </FlexElement>
       )}
     </>
   );

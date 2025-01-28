@@ -1,10 +1,11 @@
 import React, { useRef, useState } from "react";
 import InputGroup from "./InputGroup";
-
 import { TypeFluidContainer } from "../fluid-container/FluidContainer";
 import styles from "./BaseInput.module.scss";
 import Text from "../text/Text";
 import FlexElement from "../flex-element/FlexElement";
+import { useOnClickOutside } from "custom-hooks/useOnClickOutside";
+
 type TypeBaseInputProps = {
   errorMessage?: string;
   description?: string;
@@ -15,49 +16,46 @@ type TypeBaseInputProps = {
     divider?: boolean;
   };
   children: React.ReactElement<{
-    ref?: React.RefObject<any>;
-    onChange?: (event: React.ChangeEvent<any>) => void;
+    ref?: React.RefObject<unknown>;
+    onChange?: React.ChangeEventHandler<unknown>;
     value?: string | number | readonly string[] | undefined;
   }>;
+  disabled?: boolean;
+  readonly?: boolean;
+  onFocusChange?: (isFocused: boolean) => void;
 };
 
 const BaseInput = ({
   errorMessage,
   description,
   labelProps,
+  onFocusChange,
+  disabled = false,
+  readonly = false,
   children,
   ...props
 }: TypeBaseInputProps) => {
   const [isFocused, setIsFocused] = useState(false);
-
   const containerRef = useRef<HTMLDivElement>(null);
-  const inputRef = useRef<any>(null);
 
-  React.useEffect(() => {
-    const handleClickOutside = (event: MouseEvent) => {
-      if (containerRef.current && !containerRef.current.contains(event.target as Node)) {
-        setIsFocused(false);
-      }
-    };
-    document.addEventListener("mousedown", handleClickOutside);
-    return () => {
-      document.removeEventListener("mousedown", handleClickOutside);
-    };
-  }, []);
-
-  const handleClick = () => {
-    setIsFocused(true);
-    if (inputRef.current) {
-      inputRef.current.focus();
-    }
-  };
-
-  const clonedChildren = React.cloneElement(children, {
-    ref: inputRef,
+  useOnClickOutside({
+    refs: [containerRef],
+    onClickOutside: () => setIsFocused(false),
   });
 
+  const handleClick = () => {
+    if (disabled || readonly) return;
+    setIsFocused(true);
+    onFocusChange?.(true);
+  };
+
   return (
-    <InputGroup onClick={handleClick} ref={containerRef} direction="vertical">
+    <InputGroup
+      onClick={handleClick}
+      ref={containerRef}
+      direction="vertical"
+      className={`${disabled ? styles.disabled : ""} ${props.className}`}
+    >
       <FlexElement className={`${styles.baseInputContainer} ${props.className}`}>
         <InputGroup.Label
           {...labelProps}
@@ -77,14 +75,21 @@ const BaseInput = ({
           }
           dividerClassName={labelProps?.dividerClassName}
         />
-        {clonedChildren}
+        {children}
       </FlexElement>
 
-      <InputGroup.HelperText className={styles.helperText} alignment="leftCenter" dimensionX="fill">
-        <Text size="small" variant={errorMessage ? "danger" : "secondary"}>
-          {errorMessage || description}
-        </Text>
-      </InputGroup.HelperText>
+      {errorMessage ||
+        (description && (
+          <InputGroup.HelperText
+            alignment="leftCenter"
+            dimensionX="fill"
+            className={styles.helperText}
+          >
+            <Text size="small" variant={errorMessage ? "danger" : "secondary"}>
+              {errorMessage || description}
+            </Text>
+          </InputGroup.HelperText>
+        ))}
     </InputGroup>
   );
 };
