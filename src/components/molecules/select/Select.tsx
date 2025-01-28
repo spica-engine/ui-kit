@@ -171,6 +171,7 @@ const Select: FC<TypeSelect & TypeFluidContainer> = ({
   return (
     <>
       <FluidContainer
+        {...props}
         ref={containerRef}
         onClick={toggleDropdown}
         dimensionX="fill"
@@ -194,7 +195,6 @@ const Select: FC<TypeSelect & TypeFluidContainer> = ({
         suffix={{
           children: <Icon name="chevronDown" />,
         }}
-        {...props}
       />
       {isOpen && (
         <div
