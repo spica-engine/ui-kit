@@ -6,8 +6,11 @@ import React, {
   KeyboardEvent,
   FocusEventHandler,
   forwardRef,
+  useState,
+  useEffect,
 } from "react";
 import styles from "./Input.module.scss";
+import { useDebounce } from "custom-hooks/useDebounce";
 
 export type TypeInput<T = string> = TypeFlexElement & {
   value?: T;
@@ -16,28 +19,55 @@ export type TypeInput<T = string> = TypeFlexElement & {
   isFocused?: boolean;
   disabled?: boolean;
   id?: string;
+  debounceDelay?: number;
   onChange?: ChangeEventHandler<HTMLInputElement>;
   onFocus?: FocusEventHandler<HTMLInputElement>;
   onKeyDown?: (event: KeyboardEvent<HTMLInputElement>) => void;
 };
 
 const Input = forwardRef<HTMLInputElement, TypeInput<string | number | readonly string[]>>(
-  ({ value, type, placeholder, id, isFocused, disabled, onChange, onFocus, onKeyDown, ...props }, ref) => {
+  (
+    {
+      value,
+      type,
+      placeholder,
+      id,
+      isFocused,
+      disabled,
+      debounceDelay,
+      onChange,
+      onFocus,
+      onKeyDown,
+      ...props
+    },
+    ref
+  ) => {
     const flexContainerProps: TypeFlexElement = {
       ...props,
       dimensionX: "fill",
     };
+    const [localValue, setLocalValue] = useState(value);
 
+    const handleChange = (e: React.ChangeEvent<HTMLInputElement>) => {
+      const value = e.target.value;
+      setLocalValue(value);
+      debouncedOnChange(value);
+    };
+
+    const debouncedOnChange = useDebounce(
+      (value: unknown) => onChange?.({ target: { value } } as React.ChangeEvent<HTMLInputElement>),
+      { delay: debounceDelay || 0 }
+    );
     return (
       <FlexElement {...flexContainerProps}>
         <input
           ref={ref}
           type={type || "text"}
-          value={value}
+          value={localValue}
           disabled={disabled}
-          placeholder={placeholder || "Enter value"}
+          placeholder={placeholder}
           className={styles.input}
-          onChange={onChange}
+          onChange={handleChange}
           onKeyDown={onKeyDown}
           onFocus={onFocus}
           id={id}
