@@ -12,19 +12,14 @@ type TypeEnum = {
 const Enum: FC<TypeEnum> = memo(
   ({ selectClassName = "", label = "", options = [], onChange, ...props }) => {
     return (
-      <FlexElement
-        {...props}
-        dimensionX={"fill"}
-        alignment={"leftCenter"}
-        children={
-          <Select
-            className={selectClassName}
-            placeholder={label}
-            options={options}
-            onChange={onChange || (() => {})}
-          />
-        }
-      />
+      <FlexElement {...props} dimensionX={"fill"} alignment={"leftCenter"}>
+        <Select
+          className={selectClassName}
+          placeholder={label}
+          options={options}
+          onChange={onChange || (() => {})}
+        />
+      </FlexElement>
     );
   }
 );
