@@ -1,129 +1,136 @@
 .modalContainer {
+  position: absolute;
+  z-index: 1000;
+  background-color: var(--color-menu-background);
+  padding: var(--padding-md);
+  min-height: 100px;
+  max-width: 90%;
+  max-height: 90%;
+  overflow: hidden;
+
+  &.noOverflow {
+    max-height: none;
+    top: 0%;
+    overflow-y: auto;
+  }
+
+  .closeButton {
     position: absolute;
-    z-index: 1000;
-    background-color: var(--color-menu-background);
-    max-width: 90%;
-    max-height: 90%;
-    overflow: hidden;    
-    .closeButton {
-        position: absolute;
-        top: 0;
-        right: 0;
-        padding: var(--padding-md);
-        cursor: pointer;
-        border: 0;
-    }
-    
-    &.leftToMiddle {
-        animation: slideFromLeft 0.8s forwards ease;
-        transform: translateX(-100%);
-    }
+    top: 0;
+    right: 0;
+    padding: var(--padding-md);
+    cursor: pointer;
+    border: 0;
+  }
 
-    &.rightToMiddle {
-        animation: slideFromRight 0.8s forwards ease;
-        transform: translateX(100%);
-    }
+  &.leftToMiddle {
+    animation: slideFromLeft 0.8s forwards ease;
+  }
 
-    &.topToBottom {
-        animation: slideFromTop 0.4s forwards ease;
-    }
+  &.rightToMiddle {
+    animation: slideFromRight 0.8s forwards ease;
+  }
 
-    &.bottomToTop {
-        animation: slideFromBottom 0.4s forwards ease;
-    }
+  &.topToBottom {
+    animation: slideFromTop 0.4s forwards ease;
+  }
 
-    &.growFromCenter {
-        animation: growFromCenter 0.2s forwards ease;
-    }
+  &.bottomToTop {
+    animation: slideFromBottom 0.4s forwards ease;
+  }
 
-    &.zoomIn {
-        animation: classicModalZoom 0.8s forwards cubic-bezier(0.25, 0.8, 0.25, 1);
-    }
+  &.growFromCenter {
+    animation: growFromCenter 0.2s forwards ease;
+  }
 
-    @keyframes slideFromLeft {
-        0% {
-            clip-path: inset(0 100% 0 0);
-            opacity: 0;
-        }
-        100% {
-            clip-path: inset(0 0 0 0);
-            opacity: 1;
-        }
-    }
+  &.zoomIn {
+    animation: classicModalZoom 0.8s forwards cubic-bezier(0.25, 0.8, 0.25, 1);
+  }
 
-    @keyframes slideFromRight {
-        0% {
-            clip-path: inset(0 0 0 100%);
-            opacity: 0;
-        }
-        100% {
-            clip-path: inset(0 0 0 0);
-            opacity: 1;
-        }
+  @keyframes slideFromLeft {
+    0% {
+      clip-path: inset(0 100% 0 0);
+      opacity: 0;
     }
+    100% {
+      clip-path: inset(0 0 0 0);
+      opacity: 1;
+    }
+  }
 
-    @keyframes slideFromTop {
-        0% {
-            clip-path: inset(100% 0 0 0);
-            opacity: 0;
-        }
-        100% {
-            clip-path: inset(0 0 0 0);
-            opacity: 1;
-        }
+  @keyframes slideFromRight {
+    0% {
+      clip-path: inset(0 0 0 100%);
+      opacity: 0;
     }
+    100% {
+      clip-path: inset(0 0 0 0);
+      opacity: 1;
+    }
+  }
 
-    @keyframes slideFromBottom {
-        0% {
-            clip-path: inset(0 0 100% 0);
-            opacity: 0;
-        }
-        100% {
-            clip-path: inset(0 0 0 0);
-            opacity: 1;
-        }
+  @keyframes slideFromTop {
+    0% {
+      clip-path: inset(100% 0 0 0);
+      opacity: 0;
     }
+    100% {
+      clip-path: inset(0 0 0 0);
+      opacity: 1;
+    }
+  }
 
-    @keyframes growFromCenter {
-        0% {
-            transform: scale(0.2);
-            opacity: 0;
-        }
-        100% {
-            transform: scale(1);
-            opacity: 1;
-        }
+  @keyframes slideFromBottom {
+    0% {
+      clip-path: inset(0 0 100% 0);
+      opacity: 0;
     }
+    100% {
+      clip-path: inset(0 0 0 0);
+      opacity: 1;
+    }
+  }
 
-    @keyframes classicModalZoom {
-        0% {
-            transform: scale(0.95) translateY(-20px);
-            opacity: 0;
-        }
-        100% {
-            transform: scale(1) translateY(0);
-            opacity: 1;
-        }
+  @keyframes growFromCenter {
+    0% {
+      transform: scale(0.2);
+      opacity: 0;
     }
+    100% {
+      transform: scale(1);
+      opacity: 1;
+    }
+  }
+
+  @keyframes classicModalZoom {
+    0% {
+      transform: scale(0.95) translateY(-20px);
+      opacity: 0;
+    }
+    100% {
+      transform: scale(1) translateY(0);
+      opacity: 1;
+    }
+  }
 }
 
 .modalBackdrop {
-    position: fixed;
-    top: 0;
-    left: 0;
-    width: 100vw;
-    height: 100vh;
-    background-color: rgba(53, 52, 52, 0.651);
-    z-index: 10;
-    opacity: 0;
-    animation: fadeIn 0.3s forwards ease;
+  position: fixed;
+  top: 0;
+  left: 0;
+  width: 100vw;
+  height: 100vh;
+  z-index: 10;
+  opacity: 0;
+  background-color: rgba(53, 52, 52, 0.651);
+  animation: fadeIn 0.3s forwards ease;
 
-    @keyframes fadeIn {
-        0% {
-            opacity: 0;
-        }
-        100% {
-            opacity: 1;
-        }
+  @keyframes fadeIn {
+    0% {
+      opacity: 0;
     }
+    100% {
+      opacity: 1;
+    }
+  }
 }
