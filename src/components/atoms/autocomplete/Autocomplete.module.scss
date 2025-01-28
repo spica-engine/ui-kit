@@ -7,7 +7,7 @@
 }
 
 .menuItems {
-  position: absolute;
+  position: fixed;
   border-radius: var(--border-radius-lg);
   z-index: 1000;
   height: 100%;
