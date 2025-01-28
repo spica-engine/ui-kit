@@ -22,20 +22,26 @@ const InputLabel = ({ icon, title, dividerClassName, isFocused, ...props }: Type
 
   return (
     <FluidContainer
+      {...labelDefaults}
+      mode="fill"
       prefix={{
         children: props.prefix?.children,
         ...props.prefix,
-        className: props.prefix?.className,
+        className: `${props.prefix?.className}`,
       }}
-      root={{ children: props.root?.children, ...props.root }}
+      root={{
+        ...props.root,
+        children: props.root?.children,
+        className: `${styles.title} ${props.root?.className} `,
+        alignment: "leftCenter",
+      }}
       suffix={{
         children: labelDefaults.divider && (
           <div className={`${styles.divider} ${dividerClassName}`} />
         ),
         dimensionY: "fill",
       }}
-      {...labelDefaults}
-      className={`${labelDefaults.reverse ? styles.reverse : ""} ${props.className} ${
+      className={`${styles.container} ${labelDefaults.reverse ? styles.reverse : ""} ${props.className} ${
         isFocused ? styles.focused : ""
       }`}
     />
