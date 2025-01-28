@@ -58,6 +58,10 @@
     @include borderColor(var(--color-soft));
   }
 
+  &.transparent {
+    @include borderColor(transparent);
+  }
+
   // Size
   &.small {
     @include size(1.125rem, 2px);
