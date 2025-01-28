@@ -18,6 +18,7 @@ export type TypeInput<T = string> = TypeFlexElement & {
   placeholder?: string;
   isFocused?: boolean;
   disabled?: boolean;
+  readonly?: boolean;
   id?: string;
   debounceDelay?: number;
   onChange?: ChangeEventHandler<HTMLInputElement>;
@@ -35,6 +36,7 @@ const Input = forwardRef<HTMLInputElement, TypeInput<string | number | readonly 
       isFocused,
       disabled,
       debounceDelay,
+      readonly,
       onChange,
       onFocus,
       onKeyDown,
@@ -66,6 +68,7 @@ const Input = forwardRef<HTMLInputElement, TypeInput<string | number | readonly 
           value={localValue}
           disabled={disabled}
           placeholder={placeholder}
+          readOnly={readonly}
           className={styles.input}
           onChange={handleChange}
           onKeyDown={onKeyDown}
