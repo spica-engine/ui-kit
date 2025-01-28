@@ -10,7 +10,7 @@ import FlexElement from "components/atoms/flex-element/FlexElement";
 import { useOnClickOutside } from "custom-hooks/useOnClickOutside";
 import useAdaptivePosition from "custom-hooks/useAdaptivePosition";
 
-type TypeValue = string | number | (string | number)[];
+export type TypeValue = string | number | (string | number)[];
 
 type TypeSelect = {
   value?: TypeValue;
@@ -126,6 +126,7 @@ const Select: FC<TypeSelect & TypeFluidContainer> = ({
   return (
     <>
       <FluidContainer
+        {...props}
         ref={containerRef}
         onClick={toggleDropdown}
         dimensionX="fill"
@@ -149,7 +150,6 @@ const Select: FC<TypeSelect & TypeFluidContainer> = ({
         suffix={{
           children: <Icon name="chevronDown" />,
         }}
-        {...props}
       />
       {isOpen && (
         <FlexElement
