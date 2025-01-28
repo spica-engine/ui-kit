@@ -1,13 +1,22 @@
 import React, { FC, ReactNode, useState } from "react";
-import { MapContainer, Marker, Popup, TileLayer, useMap, useMapEvents } from "react-leaflet";
+import { MapContainer, Marker, TileLayer, useMapEvents } from "react-leaflet";
 import "leaflet/dist/leaflet.css";
 import styles from "./Map.module.scss";
 import Icon from "../icon/Icon";
-import L from "leaflet";
+import L, { LeafletMouseEvent } from "leaflet";
 import ReactDOMServer from "react-dom/server";
 
+export type TypeCoordinates = {
+  lat: number;
+  lng: number;
+};
+
+export type MapClickHandlerProps = {
+  onMapClick: (coords: TypeCoordinates) => void;
+};
+
 type MapProps = {
-  coordinates?: [number, number];
+  coordinates?: TypeCoordinates;
   markerIcon?: {
     icon?: ReactNode;
     iconContainerClassName?: string;
@@ -15,12 +24,12 @@ type MapProps = {
   scrollWheelZoom?: boolean;
   zoom?: number;
   className?: string;
-  onChange?: (coordinates: [number, number]) => void;
+  onChange?: (coordinates: TypeCoordinates) => void;
 };
 
-const MapClickHandler = ({ onMapClick }: any) => {
+const MapClickHandler = ({ onMapClick }: MapClickHandlerProps) => {
   useMapEvents({
-    click: (event) => {
+    click: (event: LeafletMouseEvent) => {
       onMapClick(event.latlng);
     },
   });
@@ -40,9 +49,9 @@ const Map: FC<MapProps> = ({
     html: ReactDOMServer.renderToString(markerIcon?.icon || <Icon name="mapMarker" />),
   });
 
-  const [position, setPosition] = useState(coordinates! || [51.505, -0.09]);
+  const [position, setPosition] = useState(coordinates! || { lat: 51.505, lng: -0.09 });
 
-  const handleMapClick = (latlng: any) => {
+  const handleMapClick = (latlng: TypeCoordinates) => {
     setPosition(latlng);
     onChange?.(latlng);
   };

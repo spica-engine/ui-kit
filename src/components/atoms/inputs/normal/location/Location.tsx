@@ -1,18 +1,16 @@
-import React, { FC, memo, useEffect, useState } from "react";
-import { MapContainer, Marker, Popup, TileLayer, useMap } from "react-leaflet";
+import React, { FC } from "react";
 import styles from "./Location.module.scss";
 import "leaflet/dist/leaflet.css";
 import FlexElement from "components/atoms/flex-element/FlexElement";
-import FluidContainer from "components/atoms/fluid-container/FluidContainer";
 import Icon from "components/atoms/icon/Icon";
 import Text from "components/atoms/text/Text";
 import InputHeader from "components/atoms/input-header/InputHeader";
-import Map from "components/atoms/map/Map";
+import Map, { TypeCoordinates } from "components/atoms/map/Map";
 
 type LocationProps = {
-  coordinates?: [number, number];
+  coordinates?: TypeCoordinates;
   title?: string;
-  onChange?: (coordinates: [number, number]) => void;
+  onChange?: (coordinates: TypeCoordinates) => void;
 };
 
 const Location: FC<LocationProps> = ({ coordinates, title, onChange }) => {
