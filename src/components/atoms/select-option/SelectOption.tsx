@@ -45,7 +45,6 @@ const SelectOption: FC<TypeSelectOption & TypeFluidContainer> = ({
   return (
     <FluidContainer
       ref={containerRef}
-      key={value}
       dimensionX="fill"
       dimensionY={36}
       alignment="leftCenter"

@@ -5,6 +5,8 @@ import { TypeFluidContainer } from "../fluid-container/FluidContainer";
 import styles from "./BaseInput.module.scss";
 import Text from "../text/Text";
 import FlexElement from "../flex-element/FlexElement";
+import { useOnClickOutside } from "custom-hooks/useOnClickOutside";
+
 type TypeBaseInputProps = {
   errorMessage?: string;
   description?: string;
@@ -33,17 +35,10 @@ const BaseInput = ({
   const containerRef = useRef<HTMLDivElement>(null);
   const inputRef = useRef<any>(null);
 
-  React.useEffect(() => {
-    const handleClickOutside = (event: MouseEvent) => {
-      if (containerRef.current && !containerRef.current.contains(event.target as Node)) {
-        setIsFocused(false);
-      }
-    };
-    document.addEventListener("mousedown", handleClickOutside);
-    return () => {
-      document.removeEventListener("mousedown", handleClickOutside);
-    };
-  }, []);
+  useOnClickOutside({
+    refs: [containerRef],
+    onClickOutside: () => setIsFocused(false),
+  });
 
   const handleClick = () => {
     setIsFocused(true);
