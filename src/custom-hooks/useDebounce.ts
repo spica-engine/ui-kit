@@ -7,7 +7,7 @@ interface UseDebounceOptions {
 
 export const useDebounce = <T extends (...args: unknown[]) => unknown>(
   callback: T,
-  { delay = 500, dependencies = [] }: UseDebounceOptions = {}
+  { delay = 0, dependencies = [] }: UseDebounceOptions = {}
 ) => {
   const callbackRef = useRef(callback);
   const timeoutRef = useRef<NodeJS.Timeout | undefined>(undefined);

@@ -58,7 +58,7 @@ const Input = forwardRef<HTMLInputElement, TypeInput<string | number | readonly 
 
     const debouncedOnChange = useDebounce(
       (value: unknown) => onChange?.({ target: { value } } as React.ChangeEvent<HTMLInputElement>),
-      { delay: debounceDelay || 0 }
+      { delay: debounceDelay }
     );
     return (
       <FlexElement {...flexContainerProps}>
