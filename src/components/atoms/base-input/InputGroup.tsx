@@ -1,7 +1,5 @@
 import React, { memo } from "react";
 import InputLabel from "./InputLabel";
-import Input from "../input/Input";
-import styles from "./BaseInput.module.scss";
 import FlexElement, { TypeFlexElement } from "../flex-element/FlexElement";
 
 type TypeBaseInputProps = {
