@@ -7,7 +7,7 @@ import Icon from "components/atoms/icon/Icon";
 import Text from "components/atoms/text/Text";
 import SelectOption, { TypeLabeledValue } from "components/atoms/select-option/SelectOption";
 
-type TypeValue = string | number | (string | number)[];
+export type TypeValue = string | number | (string | number)[];
 
 type TypeSelect = {
   value?: TypeValue;
