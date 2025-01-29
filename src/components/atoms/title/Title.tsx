@@ -8,12 +8,12 @@ export type TypeTitle = {
   children: string;
 } & TypeFlexElement;
 
-const Title: FC<TypeTitle> = memo(({ type = "h1", children, className, ...props }) => {
+const Title: FC<TypeTitle> = ({ type = "h1", children, className, ...props }) => {
   return (
     <FlexElement {...props}>
       {React.createElement(type, { className: `${styles.title} ${className || ""}` }, children)}
     </FlexElement>
   );
-});
+};
 
-export default Title;
+export default memo(Title);
