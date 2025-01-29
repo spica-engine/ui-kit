@@ -1,0 +1,12 @@
+@import "/src/styles/_mixins";
+
+.textArea {
+  @include inputContainer;
+
+  textarea {
+    border: none;
+    outline: none;
+    width: 100%;
+    padding: 0;
+  }
+}
