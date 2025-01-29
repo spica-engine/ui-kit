@@ -3,7 +3,7 @@ import InputGroup from "./InputGroup";
 import { TypeFluidContainer } from "../fluid-container/FluidContainer";
 import styles from "./BaseInput.module.scss";
 import Text from "../text/Text";
-import FlexElement from "../flex-element/FlexElement";
+import FlexElement, { TypeFlexElement } from "../flex-element/FlexElement";
 import { useOnClickOutside } from "custom-hooks/useOnClickOutside";
 
 type TypeBaseInputProps = {
@@ -23,7 +23,7 @@ type TypeBaseInputProps = {
   disabled?: boolean;
   readonly?: boolean;
   onFocusChange?: (isFocused: boolean) => void;
-};
+} & TypeFlexElement;
 
 const BaseInput = ({
   errorMessage,
@@ -51,12 +51,13 @@ const BaseInput = ({
 
   return (
     <InputGroup
+      {...props}
       onClick={handleClick}
       ref={containerRef}
       direction="vertical"
       className={`${disabled ? styles.disabled : ""} ${props.className}`}
     >
-      <FlexElement className={`${styles.baseInputContainer} ${props.className}`}>
+      <FlexElement dimensionX="fill" className={`${styles.baseInputContainer} ${props.className}`}>
         <InputGroup.Label
           {...labelProps}
           prefix={{
