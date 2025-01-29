@@ -1,71 +1,81 @@
 import BaseInput from "components/atoms/base-input/BaseInput";
 import Icon from "components/atoms/icon/Icon";
 import Input from "components/atoms/input/Input";
-import React, { ChangeEvent, FC, memo, FocusEvent, useState } from "react";
-import Enum from "../enum/Enum";
+import React, { FC, memo, useState, useRef } from "react";
 import Text from "components/atoms/text/Text";
 import styles from "./String.module.scss";
+import { TypeLabeledValue } from "components/atoms/select-option/SelectOption";
+import Select from "components/molecules/select/Select";
 
-type TypeString = {
+type TypeStringInput = {
   label: string;
   value?: string;
   className?: string;
-  isEnum?: boolean;
-  options?: { label: string; value: string }[];
-  onChange?: React.ChangeEventHandler<HTMLInputElement>;
+  options?: (string | TypeLabeledValue)[];
+  onChange?: (value: string) => void;
 };
 
-const String: FC<TypeString> = memo(
-  ({ label, value, className, isEnum, options = [], onChange }) => {
-    const [isFocused, setIsFocused] = useState(false);
+const StringInput: FC<TypeStringInput> = ({ label, value, className, options, onChange }) => {
+  const selectRef = useRef<any>(null);
 
-    const handleOnFocusChange = (isFocused: boolean) => {
-      console.log("isEisFocusednum", isFocused);
+  const [myFocus, setMyFocus] = useState(false);
 
-      if (isEnum) {
-        console.log("isEnum", isEnum);
+  const handleOnFocusChange = (isFocused: boolean) => {
+    selectRef?.current?.toggleDropdown(isFocused);
+    setMyFocus(isFocused);
 
-        setIsFocused(isFocused);
-      }
-      if (isFocused) {
-        inputRef.current?.focus();
-      }
-    };
-    const inputRef = React.createRef<HTMLInputElement>();
-    return (
-      <BaseInput
-        dimensionX={"fill"}
-        onFocusChange={(isFocused) => handleOnFocusChange(isFocused)}
-        labelProps={{
+    if (isFocused) {
+      inputRef.current?.focus();
+    }
+  };
+
+  const inputRef = React.createRef<HTMLInputElement>();
+  return (
+    <BaseInput
+      dimensionX={"fill"}
+      forceFocus={myFocus}
+      onFocusChange={(isFocused) => handleOnFocusChange(isFocused)}
+      labelProps={{
+        dimensionX: "hug",
+        divider: true,
+        prefix: {
+          children: <Icon className={styles.icon} name="formatQuoteClose" />,
+        },
+        root: {
           dimensionX: "hug",
-          divider: true,
-          prefix: {
-            children: <Icon className={styles.icon} name="formatQuoteClose" />,
-          },
-          root: {
-            dimensionX: "hug",
-            children: (
-              <Text className={styles.text} size="medium">
-                {label}
-              </Text>
-            ),
-          },
-        }}
-      >
-        {isEnum ? (
-          <Enum label={label} options={options} value={value}></Enum>
-        ) : (
-          <Input
-            ref={inputRef}
-            value={value}
-            className={className}
-            onChange={onChange}
-            dimensionX={"fill"}
-          />
-        )}
-      </BaseInput>
-    );
-  }
-);
+          children: (
+            <Text className={styles.text} size="medium">
+              {label}
+            </Text>
+          ),
+        },
+      }}
+      inputContainerProps={{ className: styles.baseInput }}
+    >
+      {!!options ? (
+        <Select
+          className={styles.select}
+          selectRef={selectRef}
+          disableClick
+          options={options}
+          value={value}
+          placeholder=""
+          onChange={(value) => {
+            onChange?.(value as string);
+            setMyFocus(false);
+          }}
+        />
+      ) : (
+        <Input
+          ref={inputRef}
+          value={value}
+          className={`${styles.input}`}
+          onChange={(e) => onChange?.(e.target.value)}
+          dimensionX={"fill"}
+        />
+      )}
+    </BaseInput>
+  );
+};
 
-export default String;
+export default memo(StringInput);
