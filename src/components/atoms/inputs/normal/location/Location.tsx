@@ -1,4 +1,4 @@
-import React, { FC } from "react";
+import React, { FC, memo } from "react";
 import styles from "./Location.module.scss";
 import "leaflet/dist/leaflet.css";
 import FlexElement from "components/atoms/flex-element/FlexElement";
@@ -39,4 +39,4 @@ const Location: FC<LocationProps> = ({ coordinates, title, onChange }) => {
   );
 };
 
-export default Location;
+export default memo(Location);

@@ -10,6 +10,9 @@ type TypeBaseInputProps = {
   errorMessage?: string;
   description?: string;
   className?: string;
+  inputContainerProps?: TypeFlexElement;
+  helperTextContainerProps?: TypeFlexElement;
+  helperTextProps?: TypeFlexElement;
   labelProps?: TypeFluidContainer & {
     focusedClassName?: string;
     dividerClassName?: string;
@@ -32,6 +35,9 @@ const BaseInput = ({
   onFocusChange,
   disabled = false,
   readonly = false,
+  inputContainerProps,
+  helperTextProps,
+  helperTextContainerProps,
   children,
   ...props
 }: TypeBaseInputProps) => {
@@ -51,13 +57,19 @@ const BaseInput = ({
 
   return (
     <InputGroup
-      {...props}
       onClick={handleClick}
       ref={containerRef}
       direction="vertical"
+      gap={2}
+      {...props}
       className={`${disabled ? styles.disabled : ""} ${props.className}`}
     >
-      <FlexElement dimensionX="fill" className={`${styles.baseInputContainer} ${props.className}`}>
+      <FlexElement
+        dimensionX="fill"
+        gap={15}
+        {...inputContainerProps}
+        className={`${styles.baseInputContainer} ${inputContainerProps?.className}`}
+      >
         <InputGroup.Label
           {...labelProps}
           prefix={{
@@ -79,18 +91,21 @@ const BaseInput = ({
         {children}
       </FlexElement>
 
-      {errorMessage ||
-        (description && (
-          <InputGroup.HelperText
-            alignment="leftCenter"
-            dimensionX="fill"
-            className={styles.helperText}
-          >
-            <Text size="small" variant={errorMessage ? "danger" : "secondary"}>
-              {errorMessage || description}
-            </Text>
-          </InputGroup.HelperText>
-        ))}
+      <InputGroup.HelperText
+        alignment="leftCenter"
+        dimensionX="fill"
+        {...helperTextContainerProps}
+        className={`${styles.helperText} ${helperTextContainerProps?.className}`}
+      >
+        <Text
+          {...helperTextProps}
+          size="small"
+          variant={errorMessage ? "danger" : "secondary"}
+          className={`${helperTextProps?.className}`}
+        >
+          {errorMessage || description}
+        </Text>
+      </InputGroup.HelperText>
     </InputGroup>
   );
 };

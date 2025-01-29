@@ -1,9 +1,7 @@
 import { FC, memo } from "react";
 import FlexElement, { TypeFlexElement } from "../../../flex-element/FlexElement";
 import styles from "./TextArea.module.scss";
-import FluidContainer, {
-  TypeFluidContainer,
-} from "components/atoms/fluid-container/FluidContainer";
+import { TypeFluidContainer } from "components/atoms/fluid-container/FluidContainer";
 import Icon from "components/atoms/icon/Icon";
 import { IconName } from "utils/iconList";
 import InputHeader from "components/atoms/input-header/InputHeader";
@@ -17,91 +15,83 @@ type TypeTextArea = {
   containerProps?: TypeFlexElement;
   titlePrefixProps?: TypeFlexElement;
   titleRootProps?: TypeFlexElement;
-  titleSuffixProps?: TypeFlexElement; 
+  titleSuffixProps?: TypeFlexElement;
   titleContainerProps?: TypeFluidContainer;
   title?: string;
   icon?: IconName;
 };
 
-const TextAreaInput: FC<TypeTextArea> = memo(
-  ({
-    title = "",
-    icon,
-    textAreaProps,
-    textAreaContainerProps,
-    titleContainerProps,
-    titlePrefixProps,
-    titleRootProps,
-    titleSuffixProps,
-    containerProps,
-  }) => {
-    const mergedTextAreaContainerProps = {
-      dimensionX: "fill",
-      alignment: "leftCenter",
-      ...textAreaContainerProps,
-    } as const;
-    const mergedTitleContainerProps = {
-      dimensionX: "fill",
-      dimensionY: 36,
-      alignment: "leftCenter",
-      ...titleContainerProps,
-    } as const;
-    const mergedTitlePrefixProps = {
-      dimensionX: "hug",
-      alignment: "leftCenter",
-      ...titlePrefixProps,
-    } as const;
-    const mergedTitleRootProps = {
-      dimensionX: "fill",
-      alignment: "leftCenter",
-      ...titleRootProps,
-    } as const;
-    const mergedTitleSuffixProps = {
-      dimensionX: "hug",
-      alignment: "rightCenter",
-      ...titleSuffixProps,
-    } as const;
-    const mergedContainerProps = {
-      dimensionX: "fill",
-      alignment: "leftCenter",
-      direction: "vertical",
-      ...containerProps,
-    } as const;
+const TextAreaInput: FC<TypeTextArea> = ({
+  title = "",
+  icon,
+  textAreaProps,
+  textAreaContainerProps,
+  titleContainerProps,
+  titlePrefixProps,
+  titleRootProps,
+  titleSuffixProps,
+  containerProps,
+}) => {
+  const mergedTextAreaContainerProps = {
+    dimensionX: "fill",
+    alignment: "leftCenter",
+    ...textAreaContainerProps,
+  } as const;
+  const mergedTitleContainerProps = {
+    dimensionX: "fill",
+    dimensionY: 36,
+    alignment: "leftCenter",
+    ...titleContainerProps,
+  } as const;
+  const mergedTitlePrefixProps = {
+    dimensionX: "hug",
+    alignment: "leftCenter",
+    ...titlePrefixProps,
+  } as const;
+  const mergedTitleRootProps = {
+    dimensionX: "fill",
+    alignment: "leftCenter",
+    ...titleRootProps,
+  } as const;
+  const mergedTitleSuffixProps = {
+    dimensionX: "hug",
+    alignment: "rightCenter",
+    ...titleSuffixProps,
+  } as const;
+  const mergedContainerProps = {
+    dimensionX: "fill",
+    alignment: "leftCenter",
+    direction: "vertical",
+    ...containerProps,
+  } as const;
 
-    return (
-      <FlexElement className={styles.textAreaInputContainer} {...mergedContainerProps}>
-        <>
-          {(title || icon || titlePrefixProps || titleSuffixProps) && (
-            <InputHeader
-              {...mergedTitleContainerProps}
-              prefix={{
-                children: icon ? <Icon name={`${icon}`} /> : null,
-                ...mergedTitlePrefixProps,
-              }}
-              root={{
-                children: title,
-                ...mergedTitleRootProps,
-              }}
-              suffix={{
-                children: titleSuffixProps?.children,
-                ...mergedTitleSuffixProps,
-              }}
-              className={styles.textAreaTitle}
-            />
-          )}
-          <FlexElement
-            className={styles.textAreaInput}
-            {...mergedTextAreaContainerProps}
-          > 
-            <textarea
-              {...textAreaProps}
-              className={styles.textArea}
-            ></textarea>
-          </FlexElement>
-        </>
-      </FlexElement>
-    );
-  }
-);
+  return (
+    <FlexElement className={styles.textAreaInputContainer} {...mergedContainerProps}>
+      <>
+        {(title || icon || titlePrefixProps || titleSuffixProps) && (
+          <InputHeader
+            {...mergedTitleContainerProps}
+            prefix={{
+              children: icon ? <Icon name={`${icon}`} /> : null,
+              ...mergedTitlePrefixProps,
+            }}
+            root={{
+              children: title,
+              ...mergedTitleRootProps,
+            }}
+            suffix={{
+              children: titleSuffixProps?.children,
+              ...mergedTitleSuffixProps,
+            }}
+            className={styles.textAreaTitle}
+          />
+        )}
+        <FlexElement className={styles.textAreaInput} {...mergedTextAreaContainerProps}>
+          <textarea {...textAreaProps} className={styles.textArea}></textarea>
+        </FlexElement>
+      </>
+    </FlexElement>
+  );
+};
 
-export default TextAreaInput;
+export default memo(TextAreaInput);

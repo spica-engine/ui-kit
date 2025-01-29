@@ -1,4 +1,4 @@
-import { ChangeEvent, FC } from "react";
+import { ChangeEvent, FC, memo } from "react";
 import styles from "./Color.module.scss";
 import Text from "components/atoms/text/Text";
 import FluidContainer, {
@@ -42,4 +42,4 @@ const Color: FC<TypeColor> = ({
   );
 };
 
-export default Color;
+export default memo(Color);
