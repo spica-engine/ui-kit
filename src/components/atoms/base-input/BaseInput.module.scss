@@ -16,3 +16,8 @@
   cursor: not-allowed;
   pointer-events: none;
 }
+
+.helperText {
+  padding-left: var(--padding-lg);
+  font-size: var(--font-size-sm) !important;
+}
