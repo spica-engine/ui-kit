@@ -1,3 +1,5 @@
+@import "styles/mixins";
+
 @mixin button-base {
   cursor: pointer;
   outline: none;
@@ -5,7 +7,7 @@
   background: none;
   transition: all var(--transition-duration) ease-in-out;
   height: 36px;
-  padding: var(--padding-md);
+  padding: 0 var(--padding-md);
   font-size: var(--font-size-md);
 
   &:disabled {
@@ -50,6 +52,7 @@
 
 button {
   @include button-base;
+  @include flexCenter;
 
   &.fullWidth {
     width: 100%;

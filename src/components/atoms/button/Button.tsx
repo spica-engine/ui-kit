@@ -1,6 +1,7 @@
-import { CSSProperties, FC, memo, ReactNode } from "react";
+import { CSSProperties, FC, memo, ReactNode, useRef } from "react";
 import styles from "./Button.module.scss";
 import FluidContainer, { TypeFluidContainer } from "../fluid-container/FluidContainer";
+import Spinner, { TypeSpinner } from "../spinner/Spinner";
 
 type TypeButton = {
   fullWidth?: boolean;
@@ -13,6 +14,9 @@ type TypeButton = {
   type?: "submit" | "reset" | "button";
   variant?: "solid" | "outlined" | "dashed" | "filled" | "text" | "link";
   color?: "primary" | "default" | "success" | "danger" | "soft" | "transparent";
+  loading?: boolean;
+  spinnerProps?: TypeSpinner;
+  keepWidth?: boolean;
   onClick?: React.MouseEventHandler<HTMLButtonElement>;
 };
 
@@ -27,8 +31,13 @@ const Button: FC<TypeButton> = ({
   shape = "default",
   variant = "solid",
   color = "primary",
+  loading,
+  spinnerProps,
+  keepWidth = true,
   onClick,
 }) => {
+  const buttonRef = useRef<HTMLButtonElement>(null);
+
   const colors = {
     primary: styles.cPrimary,
     default: styles.cDefault,
@@ -53,15 +62,39 @@ const Button: FC<TypeButton> = ({
     round: styles.sRound,
   };
 
+  const customStyle = {
+    minWidth: keepWidth ? buttonRef?.current?.offsetWidth : "unset",
+    ...style,
+  };
+
+  const getSpinnerColor = () => {
+    const isDefaultOrSoftColor = color === "default" || color === "soft";
+
+    if (variant === "solid") {
+      return isDefaultOrSoftColor ? "primary" : "default";
+    }
+
+    if (["outlined", "dashed", "filled", "text", "link"].includes(variant)) {
+      return isDefaultOrSoftColor ? "primary" : color;
+    }
+
+    return "primary";
+  };
+
   return (
     <button
+      ref={buttonRef}
       disabled={disabled}
       onClick={onClick}
       type={type}
-      style={style}
+      style={customStyle}
       className={`${shapes[shape]} ${variants[variant]} ${colors[color]} ${className} ${fullWidth && styles.fullWidth}`}
     >
-      <FluidContainer {...containerProps} root={{ children }} />
+      {loading ? (
+        <Spinner size="small" color={getSpinnerColor()} {...spinnerProps} />
+      ) : (
+        <FluidContainer root={{ children }} {...containerProps} />
+      )}
     </button>
   );
 };
