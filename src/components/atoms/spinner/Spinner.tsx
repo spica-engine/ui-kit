@@ -2,9 +2,9 @@ import React, { FC, memo, ReactNode } from "react";
 import styles from "./Spinner.module.scss";
 import FlexElement, { TypeFlexElement } from "../flex-element/FlexElement";
 
-type TypeSpinner = {
+export type TypeSpinner = {
   size?: "small" | "medium" | "large" | "xlarge";
-  color?: "primary" | "default" | "success" | "danger" | "soft";
+  color?: "primary" | "default" | "success" | "danger" | "soft" | "transparent";
   speed?: "fast" | "normal" | "slow";
   spinnerClassName?: string;
   spinning?: boolean;
