@@ -21,7 +21,7 @@ export type TypeInput<T = string> = TypeFlexElement & {
   readonly?: boolean;
   id?: string;
   debounceDelay?: number;
-  inputRef?: RefObject<HTMLInputElement>;
+  inputRef?: RefObject<HTMLInputElement | null>;
   onChange?: ChangeEventHandler<HTMLInputElement>;
   onFocus?: FocusEventHandler<HTMLInputElement>;
   onKeyDown?: (event: KeyboardEvent<HTMLInputElement>) => void;

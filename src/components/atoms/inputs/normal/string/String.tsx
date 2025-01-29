@@ -6,34 +6,40 @@ import Text from "components/atoms/text/Text";
 import styles from "./String.module.scss";
 import { TypeLabeledValue } from "components/atoms/select-option/SelectOption";
 import Select from "components/molecules/select/Select";
+import { TypeFlexElement } from "components/atoms/flex-element/FlexElement";
 
 type TypeStringInput = {
   label: string;
   value?: string;
-  className?: string;
   options?: (string | TypeLabeledValue)[];
   onChange?: (value: string) => void;
 };
 
-const StringInput: FC<TypeStringInput> = ({ label, value, className, options, onChange }) => {
+const StringInput: FC<TypeStringInput & TypeFlexElement> = ({
+  label,
+  value,
+  options,
+  onChange,
+  ...props
+}) => {
   const selectRef = useRef<any>(null);
+  const inputRef = useRef<HTMLInputElement>(null);
 
-  const [myFocus, setMyFocus] = useState(false);
+  const [forceFocus, setMyFocus] = useState(false);
 
   const handleOnFocusChange = (isFocused: boolean) => {
     selectRef?.current?.toggleDropdown(isFocused);
     setMyFocus(isFocused);
 
-    if (isFocused) {
+    if (isFocused && !options) {
       inputRef.current?.focus();
     }
   };
 
-  const inputRef = React.createRef<HTMLInputElement>();
   return (
     <BaseInput
       dimensionX={"fill"}
-      forceFocus={myFocus}
+      forceFocus={forceFocus}
       onFocusChange={(isFocused) => handleOnFocusChange(isFocused)}
       labelProps={{
         dimensionX: "hug",
@@ -51,6 +57,7 @@ const StringInput: FC<TypeStringInput> = ({ label, value, className, options, on
         },
       }}
       inputContainerProps={{ className: styles.baseInput }}
+      {...props}
     >
       {!!options ? (
         <Select
@@ -67,7 +74,7 @@ const StringInput: FC<TypeStringInput> = ({ label, value, className, options, on
         />
       ) : (
         <Input
-          ref={inputRef}
+          inputRef={inputRef}
           value={value}
           className={`${styles.input}`}
           onChange={(e) => onChange?.(e.target.value)}
