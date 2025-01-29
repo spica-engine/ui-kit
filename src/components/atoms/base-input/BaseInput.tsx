@@ -56,8 +56,13 @@ const BaseInput = ({
       ref={containerRef}
       direction="vertical"
       className={`${disabled ? styles.disabled : ""} ${props.className}`}
+      gap={2}
     >
-      <FlexElement dimensionX="fill" className={`${styles.baseInputContainer} ${props.className}`}>
+      <FlexElement
+        className={`${styles.baseInputContainer} ${props.className}`}
+        dimensionX="fill"
+        gap={15}
+      >
         <InputGroup.Label
           {...labelProps}
           prefix={{
@@ -79,18 +84,11 @@ const BaseInput = ({
         {children}
       </FlexElement>
 
-      {errorMessage ||
-        (description && (
-          <InputGroup.HelperText
-            alignment="leftCenter"
-            dimensionX="fill"
-            className={styles.helperText}
-          >
-            <Text size="small" variant={errorMessage ? "danger" : "secondary"}>
-              {errorMessage || description}
-            </Text>
-          </InputGroup.HelperText>
-        ))}
+      <InputGroup.HelperText alignment="leftCenter" dimensionX="fill" className={styles.helperText}>
+        <Text size="small" variant={errorMessage ? "danger" : "secondary"}>
+          {errorMessage || description}
+        </Text>
+      </InputGroup.HelperText>
     </InputGroup>
   );
 };
