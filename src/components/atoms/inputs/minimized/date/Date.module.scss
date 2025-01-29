@@ -1,0 +1,11 @@
+@import "/src/styles/_mixins";
+
+.minimizedDatePicker {
+  @include inputContainer;
+
+  .clearButton {
+    cursor: pointer;
+    height: max-content;
+    padding: 0 !important;
+  }
+}

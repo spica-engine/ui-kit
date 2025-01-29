@@ -3,7 +3,7 @@ import type { DatePickerProps } from "antd";
 import { DatePicker } from "antd";
 import dayjs from "dayjs";
 import Icon from "components/atoms/icon/Icon";
-import styles from "./DatePicker.module.scss";
+import styles from "./Date.module.scss";
 import FluidContainer from "components/atoms/fluid-container/FluidContainer";
 
 type DateRangePickerProps = {
