@@ -69,6 +69,9 @@ import FormatColorTextIcon from "@mui/icons-material/FormatColorText";
 import FormatColorFillIcon from "@mui/icons-material/FormatColorFill";
 import StrikethroughSIcon from "@mui/icons-material/StrikethroughS";
 import InvertColorsIcon from "@mui/icons-material/InvertColors";
+import FolderZipIcon from "@mui/icons-material/FolderZip";
+import MovieIcon from "@mui/icons-material/Movie";
+import GridOnIcon from "@mui/icons-material/GridOn";
 
 export type IconName =
   | "article"
@@ -144,7 +147,10 @@ export type IconName =
   | "webhook"
   | "storage"
   | "chevronLeft"
-  | "invertColors";
+  | "invertColors"
+  | "folderZip"
+  | "movie"
+  | "gridOn";
 
 export type IconSize = "sm" | "md" | "lg";
 
@@ -220,4 +226,7 @@ export const iconMap: { [key in IconName]: React.ComponentType<{ className?: str
   formatColorText: FormatColorTextIcon,
   strikethroughS: StrikethroughSIcon,
   invertColors: InvertColorsIcon,
+  folderZip: FolderZipIcon,
+  movie: MovieIcon,
+  gridOn: GridOnIcon,
 };
