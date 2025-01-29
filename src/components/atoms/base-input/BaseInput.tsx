@@ -11,6 +11,8 @@ type TypeBaseInputProps = {
   description?: string;
   className?: string;
   inputContainerProps?: TypeFlexElement;
+  helperTextContainerProps?: TypeFlexElement;
+  helperTextProps?: TypeFlexElement;
   labelProps?: TypeFluidContainer & {
     focusedClassName?: string;
     dividerClassName?: string;
@@ -34,6 +36,8 @@ const BaseInput = ({
   disabled = false,
   readonly = false,
   inputContainerProps,
+  helperTextProps,
+  helperTextContainerProps,
   children,
   ...props
 }: TypeBaseInputProps) => {
@@ -53,20 +57,19 @@ const BaseInput = ({
 
   return (
     <InputGroup
-      {...props}
       onClick={handleClick}
       ref={containerRef}
       direction="vertical"
-      className={`${disabled ? styles.disabled : ""} ${props.className}`}
       gap={2}
+      {...props}
+      className={`${disabled ? styles.disabled : ""} ${props.className}`}
     >
       <FlexElement
-        {...inputContainerProps}
-        className={`${styles.baseInputContainer} ${inputContainerProps?.className}`}
         dimensionX="fill"
         gap={15}
+        {...inputContainerProps}
+        className={`${styles.baseInputContainer} ${inputContainerProps?.className}`}
       >
-
         <InputGroup.Label
           {...labelProps}
           prefix={{
@@ -88,8 +91,18 @@ const BaseInput = ({
         {children}
       </FlexElement>
 
-      <InputGroup.HelperText alignment="leftCenter" dimensionX="fill" className={styles.helperText}>
-        <Text size="small" variant={errorMessage ? "danger" : "secondary"}>
+      <InputGroup.HelperText
+        alignment="leftCenter"
+        dimensionX="fill"
+        {...helperTextContainerProps}
+        className={`${styles.helperText} ${helperTextContainerProps?.className}`}
+      >
+        <Text
+          {...helperTextProps}
+          size="small"
+          variant={errorMessage ? "danger" : "secondary"}
+          className={`${helperTextProps?.className}`}
+        >
           {errorMessage || description}
         </Text>
       </InputGroup.HelperText>
