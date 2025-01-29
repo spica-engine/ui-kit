@@ -1,27 +1,51 @@
 import React, { FC, memo, useState } from "react";
-import InputWithIcon from "components/atoms/input-with-icon/InputWithIcon";
 import styles from "./StringMinimized.module.scss";
 import IconButton from "components/atoms/icon-button/IconButton";
+import FluidContainer from "components/atoms/fluid-container/FluidContainer";
+import Input from "components/atoms/input/Input";
+import Select from "components/molecules/select/Select";
+import Button from "components/atoms/button/Button";
+import Icon from "components/atoms/icon/Icon";
 
 type TypeStringMinimized = {
   onClear?: () => void;
+  value?: string;
+  isEnum?: boolean;
+  options?: { label: string; value: string }[];
+  className?: string;
 } & React.InputHTMLAttributes<HTMLInputElement>;
 
-const StringMinimized: FC<TypeStringMinimized> = ({ onClear, ...props }) => {
+const StringMinimized: FC<TypeStringMinimized> = ({
+  onClear,
+  value,
+  isEnum,
+  options,
+  ...props
+}) => {
   return (
-    <InputWithIcon
+    <FluidContainer
       className={styles.stringMinimized}
-      inputProps={{
-        ...props,
+      root={{
+        children: isEnum ? (
+          <Select
+            className={styles.select}
+            placeholder={value || " "}
+            options={options || []}
+            onChange={(value) => console.log(value)}
+          />
+        ) : (
+          <Input value={value} {...props} />
+        ),
+        dimensionX: "fill",
+        alignment: "leftCenter",
       }}
       suffix={{
         children: (
-          <IconButton
-            icon="close"
-            variant="base"
-            buttonProps={{
-              onClick: onClear,
-            }}
+          <Button
+            children={<Icon name="close" />}
+            color="transparent"
+            onClick={onClear}
+            className={styles.closeIcon}
           />
         ),
         dimensionX: "hug",
@@ -29,7 +53,6 @@ const StringMinimized: FC<TypeStringMinimized> = ({ onClear, ...props }) => {
       }}
       alignment="leftCenter"
       dimensionX="fill"
-      dimensionY={36}
     />
   );
 };
