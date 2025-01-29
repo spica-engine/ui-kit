@@ -2,11 +2,7 @@ import React, { FC, memo } from "react";
 import FluidContainer, { TypeFluidContainer } from "../fluid-container/FluidContainer";
 import styles from "./SectionTitle.module.scss";
 
-type TypeSectionTitle = {
-  className?: string;
-} & TypeFluidContainer;
-
-const SectionTitle: FC<TypeSectionTitle> = memo(({ className = "", ...props }) => {
+const SectionTitle: FC<TypeFluidContainer> = ({ className = "", ...props }) => {
   return (
     <FluidContainer
       {...props}
@@ -14,6 +10,6 @@ const SectionTitle: FC<TypeSectionTitle> = memo(({ className = "", ...props }) =
       className={`${styles.sectionTitle} ${className}`}
     />
   );
-});
+};
 
-export default SectionTitle;
+export default memo(SectionTitle);
