@@ -1,0 +1,35 @@
+@import "/src/styles/_mixins";
+
+.container {
+  border-radius: var(--border-radius-lg);
+  padding: var(--padding-lg);
+  box-shadow: var(--box-shadow);
+  justify-content: space-between !important;
+
+  &:hover {
+    cursor: pointer;
+  }
+
+  .viewContainer {
+    flex: 1;
+    overflow: hidden;
+    img,
+    embed {
+      width: 100%;
+      max-height: calc(85% - (2 * var(--padding-lg)));
+    }
+
+    .icon {
+      width: 2rem;
+      height: 2rem;
+    }
+  }
+
+  .name {
+    width: 100%;
+    border-top: var(--border-default);
+    text-align: center;
+    padding-top: var(--padding-md);
+    @include textEllipsis(1);
+  }
+}
