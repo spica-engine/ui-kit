@@ -7,7 +7,7 @@ type TypeStringMinimized = {
   onClear?: () => void;
 } & React.InputHTMLAttributes<HTMLInputElement>;
 
-const StringMinimized: FC<TypeStringMinimized> = memo(({ onClear, ...props }) => {
+const StringMinimized: FC<TypeStringMinimized> = ({ onClear, ...props }) => {
   return (
     <InputWithIcon
       className={styles.stringMinimized}
@@ -32,6 +32,6 @@ const StringMinimized: FC<TypeStringMinimized> = memo(({ onClear, ...props }) =>
       dimensionY={36}
     />
   );
-});
+};
 
-export default StringMinimized;
+export default memo(StringMinimized);

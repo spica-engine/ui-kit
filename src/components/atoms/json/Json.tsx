@@ -6,8 +6,8 @@ type TypeJson = {
   data: Record<string, unknown>;
 };
 
-const Json: React.FC<TypeJson> = memo(({ data }) => {
+const Json: React.FC<TypeJson> = ({ data }) => {
   return <Text className={styles.jsonContainer}>{JSON.stringify(data, null, 2)}</Text>;
-});
+};
 
-export default Json;
+export default memo(Json);

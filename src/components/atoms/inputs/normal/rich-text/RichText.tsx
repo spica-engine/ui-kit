@@ -28,83 +28,86 @@ export type TypeRichTextInput = {
   onChange?: (value: string) => void;
 };
 
-const RichTextInput: FC<TypeRichTextInput> = memo(
-  ({ className = "", value = "<p></p>", headerProps, onChange }) => {
-    const updateHTML = (editor: LexicalEditor, value: string) => {
-      const root = $getRoot();
-      const parser = new DOMParser();
-      const dom = parser.parseFromString(value, "text/html");
-      const nodes = $generateNodesFromDOM(editor, dom);
-      root.clear();
+const RichTextInput: FC<TypeRichTextInput> = ({
+  className = "",
+  value = "<p></p>",
+  headerProps,
+  onChange,
+}) => {
+  const updateHTML = (editor: LexicalEditor, value: string) => {
+    const root = $getRoot();
+    const parser = new DOMParser();
+    const dom = parser.parseFromString(value, "text/html");
+    const nodes = $generateNodesFromDOM(editor, dom);
+    root.clear();
 
-      try {
-        root.append(...nodes);
-      } catch {
-        const p = $createParagraphNode();
-        p.append(...nodes);
-        root.append(p);
-      }
-    };
+    try {
+      root.append(...nodes);
+    } catch {
+      const p = $createParagraphNode();
+      p.append(...nodes);
+      root.append(p);
+    }
+  };
 
-    const prepopulatedRichText = (editor: LexicalEditor, html: string) => {
-      updateHTML(editor, html);
-      return editor;
-    };
+  const prepopulatedRichText = (editor: LexicalEditor, html: string) => {
+    updateHTML(editor, html);
+    return editor;
+  };
 
-    const initialConfig = {
-      namespace: "RichTextInput",
-      onError: (error: Error) => {
-        console.error("Lexical Error:", error);
+  const initialConfig = {
+    namespace: "RichTextInput",
+    onError: (error: Error) => {
+      console.error("Lexical Error:", error);
+    },
+    editorState: (editor: any) => prepopulatedRichText(editor, value as string),
+    nodes: [
+      ExtendedTextNode,
+      {
+        replace: TextNode,
+        with: (node: TextNode) => new ExtendedTextNode(node.__text),
       },
-      editorState: (editor: any) => prepopulatedRichText(editor, value as string),
-      nodes: [
-        ExtendedTextNode,
-        {
-          replace: TextNode,
-          with: (node: TextNode) => new ExtendedTextNode(node.__text),
-        },
-        ListNode,
-        ListItemNode,
-        HeadingNode,
-        QuoteNode,
-        CodeNode,
-        CodeHighlightNode,
-      ],
-    };
+      ListNode,
+      ListItemNode,
+      HeadingNode,
+      QuoteNode,
+      CodeNode,
+      CodeHighlightNode,
+    ],
+  };
 
-    const handleChange = useCallback((state: EditorState, editor: LexicalEditor) => {
-      state.read(() => {
-        const htmlString = $generateHtmlFromNodes(editor, null);
-        onChange?.(htmlString);
-      });
-    }, []);
+  const handleChange = useCallback((state: EditorState, editor: LexicalEditor) => {
+    state.read(() => {
+      const htmlString = $generateHtmlFromNodes(editor, null);
+      onChange?.(htmlString);
+    });
+  }, []);
 
-    return (
-      <FlexElement
-        className={`${styles.container} ${className}`}
-        dimensionX="fill"
-        direction="vertical"
-      >
-        {headerProps && (
-          <InputHeader
-            prefix={{
-              children: headerProps?.icon && <Icon name={headerProps?.icon} />,
-              ...headerProps?.iconProps,
-            }}
-            root={{
-              children: headerProps?.label && <Text>{headerProps?.label}</Text>,
-              ...headerProps?.labelProps,
-            }}
-            {...headerProps?.container}
-          />
-        )}
+  return (
+    <FlexElement
+      className={`${styles.container} ${className}`}
+      dimensionX="fill"
+      direction="vertical"
+    >
+      {headerProps && (
+        <InputHeader
+          prefix={{
+            children: headerProps?.icon && <Icon name={headerProps?.icon} />,
+            ...headerProps?.iconProps,
+          }}
+          root={{
+            children: headerProps?.label && <Text>{headerProps?.label}</Text>,
+            ...headerProps?.labelProps,
+          }}
+          {...headerProps?.container}
+        />
+      )}
 
-        <LexicalComposer initialConfig={initialConfig}>
-          <LexicalContent onChange={handleChange} />
-        </LexicalComposer>
-      </FlexElement>
-    );
-  }
-);
+      <LexicalComposer initialConfig={initialConfig}>
+        <LexicalContent onChange={handleChange} />
+      </LexicalComposer>
+    </FlexElement>
+  );
+};
 
-export default RichTextInput;
+export default memo(RichTextInput);

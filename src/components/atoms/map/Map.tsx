@@ -1,4 +1,4 @@
-import React, { FC, ReactNode, useState } from "react";
+import React, { FC, memo, ReactNode, useState } from "react";
 import { MapContainer, Marker, TileLayer, useMapEvents } from "react-leaflet";
 import "leaflet/dist/leaflet.css";
 import styles from "./Map.module.scss";
@@ -72,4 +72,4 @@ const Map: FC<MapProps> = ({
   );
 };
 
-export default Map;
+export default memo(Map);

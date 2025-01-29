@@ -10,10 +10,13 @@ export type TypeInputBooleanMinimized = {
   onChange?: (checked: boolean) => void;
 };
 
-const InputBooleanMinimized: FC<TypeInputBooleanMinimized> = memo(
-  ({ checked, disabled = false, containerProps, onChange }) => {
-    return <Switch checked={checked} disabled={disabled} {...containerProps} onChange={onChange} />;
-  }
-);
+const InputBooleanMinimized: FC<TypeInputBooleanMinimized> = ({
+  checked,
+  disabled = false,
+  containerProps,
+  onChange,
+}) => {
+  return <Switch checked={checked} disabled={disabled} {...containerProps} onChange={onChange} />;
+};
 
-export default InputBooleanMinimized;
+export default memo(InputBooleanMinimized);

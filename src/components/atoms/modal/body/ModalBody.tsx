@@ -6,7 +6,7 @@ type TypeModalBody = {
   className?: string;
 } & TypeFlexElement;
 
-const ModalBody: FC<TypeModalBody> = memo(({ className, children, ...props }) => {
+const ModalBody: FC<TypeModalBody> = ({ className, children, ...props }) => {
   return (
     <FlexElement
       className={`${styles.modalBody} ${className}`}
@@ -14,6 +14,6 @@ const ModalBody: FC<TypeModalBody> = memo(({ className, children, ...props }) =>
       children={children}
     />
   );
-});
+};
 
-export default ModalBody;
+export default memo(ModalBody);

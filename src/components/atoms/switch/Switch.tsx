@@ -9,7 +9,7 @@ export type TypeSwitch = {
   onChange?: (checked: boolean) => void;
 };
 
-const Switch: FC<TypeSwitch> = memo(({ checked, disabled = false, containerProps, onChange }) => {
+const Switch: FC<TypeSwitch> = ({ checked, disabled = false, containerProps, onChange }) => {
   const handleToggle = () => {
     if (!disabled) {
       onChange?.(!checked);
@@ -24,6 +24,6 @@ const Switch: FC<TypeSwitch> = memo(({ checked, disabled = false, containerProps
       </label>
     </FlexElement>
   );
-});
+};
 
-export default Switch;
+export default memo(Switch);

@@ -9,13 +9,13 @@ export type TypeIcon = {
   size?: IconSize;
 } & TypeFlexElement;
 
-const Icon: React.FC<TypeIcon> = memo(({ name, className, size = "md", ...props }) => {
+const Icon: React.FC<TypeIcon> = ({ name, className, size = "md", ...props }) => {
   const IconItem = iconMap[name];
   return (
     <FlexElement {...props}>
       <IconItem className={`${styles.icon} ${styles[size]} ${className}`} />
     </FlexElement>
   );
-});
+};
 
-export default Icon;
+export default memo(Icon);

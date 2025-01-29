@@ -9,19 +9,21 @@ export type TypeText = {
   children: ReactNode;
 } & TypeFlexElement;
 
-const Text: FC<TypeText> = memo(
-  ({ variant = "primary", size = "medium", children, className, ...props }) => {
-    const variantClass = styles[variant];
-    const sizeClass = styles[size];
+const Text: FC<TypeText> = ({
+  variant = "primary",
+  size = "medium",
+  children,
+  className,
+  ...props
+}) => {
+  const variantClass = styles[variant];
+  const sizeClass = styles[size];
 
-    return (
-      <FlexElement {...props}>
-        <span className={`${styles.text} ${variantClass} ${sizeClass} ${className}`}>
-          {children}
-        </span>
-      </FlexElement>
-    );
-  }
-);
+  return (
+    <FlexElement {...props}>
+      <span className={`${styles.text} ${variantClass} ${sizeClass} ${className}`}>{children}</span>
+    </FlexElement>
+  );
+};
 
-export default Text;
+export default memo(Text);

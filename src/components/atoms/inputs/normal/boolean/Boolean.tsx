@@ -19,41 +19,39 @@ export type TypeInputBoolean = {
   onChange?: (checked: boolean) => void;
 };
 
-const InputBoolean: FC<TypeInputBoolean> = memo(
-  ({
-    checked,
-    disabled = false,
-    label,
-    containerProps,
-    switchContainerProps,
-    suffixProps,
-    rootProps,
-    labelProps,
-    onChange,
-  }) => {
-    return (
-      <FluidContainer
-        {...containerProps}
-        gap={10}
-        dimensionY={36}
-        root={{
-          children: (
-            <Switch
-              checked={checked}
-              disabled={disabled}
-              {...switchContainerProps}
-              onChange={onChange}
-            />
-          ),
-          ...rootProps,
-        }}
-        suffix={{
-          children: label && <Text {...labelProps}>{label}</Text>,
-          ...suffixProps,
-        }}
-      />
-    );
-  }
-);
+const InputBoolean: FC<TypeInputBoolean> = ({
+  checked,
+  disabled = false,
+  label,
+  containerProps,
+  switchContainerProps,
+  suffixProps,
+  rootProps,
+  labelProps,
+  onChange,
+}) => {
+  return (
+    <FluidContainer
+      {...containerProps}
+      gap={10}
+      dimensionY={36}
+      root={{
+        children: (
+          <Switch
+            checked={checked}
+            disabled={disabled}
+            {...switchContainerProps}
+            onChange={onChange}
+          />
+        ),
+        ...rootProps,
+      }}
+      suffix={{
+        children: label && <Text {...labelProps}>{label}</Text>,
+        ...suffixProps,
+      }}
+    />
+  );
+};
 
-export default InputBoolean;
+export default memo(InputBoolean);
