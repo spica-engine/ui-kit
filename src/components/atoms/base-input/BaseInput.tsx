@@ -10,6 +10,7 @@ type TypeBaseInputProps = {
   errorMessage?: string;
   description?: string;
   className?: string;
+  inputContainerProps?: TypeFlexElement;
   labelProps?: TypeFluidContainer & {
     focusedClassName?: string;
     dividerClassName?: string;
@@ -32,6 +33,7 @@ const BaseInput = ({
   onFocusChange,
   disabled = false,
   readonly = false,
+  inputContainerProps,
   children,
   ...props
 }: TypeBaseInputProps) => {
@@ -59,7 +61,8 @@ const BaseInput = ({
       gap={2}
     >
       <FlexElement
-        className={`${styles.baseInputContainer} ${props.className}`}
+        {...inputContainerProps}
+        className={`${styles.baseInputContainer} ${inputContainerProps?.className}`}
         dimensionX="fill"
         gap={15}
       >
