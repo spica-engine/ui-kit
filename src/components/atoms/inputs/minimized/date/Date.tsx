@@ -5,11 +5,12 @@ import FluidContainer, {
   TypeFluidContainer,
 } from "components/atoms/fluid-container/FluidContainer";
 import dayjs from "dayjs";
-import Icon from "components/atoms/icon/Icon";
 import styles from "./Date.module.scss";
+import Button from "components/atoms/button/Button";
+import Icon from "components/atoms/icon/Icon";
 
 type DateInputProps = {
-  onChange: DatePickerProps["onChange"];
+  onChange?: DatePickerProps["onChange"];
   value?: dayjs.Dayjs;
   placeholder?: string;
   onClear?: () => void;
@@ -46,8 +47,12 @@ const DateMinimizedInput = ({
         ...props.root,
       }}
       suffix={{
-        children: <Icon name="close" className={styles.clearIcon} onClick={onClear} />,
         ...props.suffix,
+        children: (
+          <Button variant="text" className={styles.clearButton} keepWidth={false} onClick={onClear}>
+            <Icon name="close" />
+          </Button>
+        ),
       }}
     />
   );
