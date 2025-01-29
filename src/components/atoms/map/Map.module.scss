@@ -1,0 +1,19 @@
+.map {
+  height: 100%;
+  width: 100%;
+  border-radius: var(--border-radius-lg);
+
+  :global {
+    .leaflet-control-container {
+      .leaflet-bottom {
+        display: none !important;
+      }
+    }
+  }
+}
+
+.icon {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+}
