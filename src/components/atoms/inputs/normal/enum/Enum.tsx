@@ -9,19 +9,23 @@ type TypeEnum = {
   onChange?: (value: TypeValue) => void;
 } & TypeFlexElement;
 
-const Enum: FC<TypeEnum> = memo(
-  ({ selectClassName = "", label = "", options = [], onChange, ...props }) => {
-    return (
-      <FlexElement {...props} dimensionX={"fill"} alignment={"leftCenter"}>
-        <Select
-          className={selectClassName}
-          placeholder={label}
-          options={options}
-          onChange={onChange || (() => {})}
-        />
-      </FlexElement>
-    );
-  }
-);
+const Enum: FC<TypeEnum> = ({
+  selectClassName = "",
+  label = "",
+  options = [],
+  onChange,
+  ...props
+}) => {
+  return (
+    <FlexElement {...props} dimensionX={"fill"} alignment={"leftCenter"}>
+      <Select
+        className={selectClassName}
+        placeholder={label}
+        options={options}
+        onChange={onChange || (() => {})}
+      />
+    </FlexElement>
+  );
+};
 
-export default Enum;
+export default memo(Enum);

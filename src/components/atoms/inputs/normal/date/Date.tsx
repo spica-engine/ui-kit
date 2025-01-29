@@ -1,4 +1,4 @@
-import React from "react";
+import React, { memo } from "react";
 import type { DatePickerProps } from "antd";
 import { DatePicker } from "antd";
 import dayjs from "dayjs";
@@ -32,4 +32,4 @@ const DatePickerInput: React.FC<DateRangePickerProps> = ({ onChange, value, plac
   />
 );
 
-export default DatePickerInput;
+export default memo(DatePickerInput);
