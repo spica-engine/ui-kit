@@ -1,6 +1,14 @@
 .stringMinimized {
   border-radius: 0;
-  padding: var(--padding-md);
+  padding: 0 var(--padding-md);
   font-size: var(--font-size-md);
   color: var(--color-font);
+  background: var(--color-input-background);
+
+  .select {
+    background: var(--color-input-background);
+  }
+  .closeIcon {
+    border: 0;
+  }
 }
