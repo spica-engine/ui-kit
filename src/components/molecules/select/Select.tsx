@@ -1,4 +1,4 @@
-import { FC, memo, useLayoutEffect, useRef, useState } from "react";
+import { FC, memo, Ref, useImperativeHandle, useLayoutEffect, useRef, useState } from "react";
 import styles from "./Select.module.scss";
 import FluidContainer, {
   TypeFluidContainer,
@@ -12,6 +12,10 @@ import useAdaptivePosition from "custom-hooks/useAdaptivePosition";
 
 export type TypeValue = string | number | (string | number)[];
 
+type TypeSelectRef = {
+  toggleDropdown: (toggleValue?: boolean) => void;
+};
+
 type TypeSelect = {
   value?: TypeValue;
   options: (string | number | TypeLabeledValue)[];
@@ -22,6 +26,8 @@ type TypeSelect = {
   disabled?: boolean;
   popupClassName?: string;
   optionProps?: TypeFluidContainer;
+  selectRef?: Ref<TypeSelectRef>;
+  disableClick?: boolean;
   onChange: (value: TypeValue) => void;
 };
 
@@ -35,6 +41,8 @@ const Select: FC<TypeSelect & TypeFluidContainer> = ({
   maxCount,
   popupClassName = "",
   optionProps,
+  selectRef,
+  disableClick,
   onChange,
   ...props
 }) => {
@@ -49,7 +57,10 @@ const Select: FC<TypeSelect & TypeFluidContainer> = ({
 
   useOnClickOutside({
     refs: [dropdownRef, containerRef],
-    onClickOutside: () => setIsOpen(false),
+    onClickOutside: () => {
+      if (disableClick) return;
+      setIsOpen(false);
+    },
   });
 
   const { targetPosition, calculatePosition } = useAdaptivePosition({
@@ -89,9 +100,21 @@ const Select: FC<TypeSelect & TypeFluidContainer> = ({
     multiple ? updateMultipleSelection() : updateSingleSelection();
   };
 
-  const toggleDropdown = () => {
-    if (disabled) return;
+  useImperativeHandle(selectRef, () => ({
+    toggleDropdown,
+  }));
+
+  const toggleDropdown = (toggleValue?: boolean) => {
+    if (typeof toggleValue !== "undefined") {
+      setIsOpen(toggleValue);
+      return;
+    }
     setIsOpen((prev) => !prev);
+  };
+
+  const handleOnClick = () => {
+    if (disabled || disableClick) return;
+    toggleDropdown();
   };
 
   const getDisplayer = (): string => {
@@ -128,7 +151,7 @@ const Select: FC<TypeSelect & TypeFluidContainer> = ({
       <FluidContainer
         {...props}
         ref={containerRef}
-        onClick={toggleDropdown}
+        onClick={handleOnClick}
         dimensionX="fill"
         dimensionY={36}
         className={`${props.className} ${styles.container} ${disabled && styles.disabled}`}
