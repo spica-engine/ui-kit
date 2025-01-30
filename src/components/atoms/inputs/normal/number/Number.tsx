@@ -64,7 +64,6 @@ const NumberInput: FC<TypeNumberInput & TypeFlexElement> = ({
     >
       {!!options ? (
         <Select
-          className={`${styles.select} ${selectProps?.className}`}
           selectRef={selectRef}
           disableClick
           options={options}
@@ -75,6 +74,7 @@ const NumberInput: FC<TypeNumberInput & TypeFlexElement> = ({
             setForceFocus(false);
           }}
           {...selectProps}
+          className={`${styles.select} ${selectProps?.className}`}
         />
       ) : (
         <Input
@@ -82,9 +82,9 @@ const NumberInput: FC<TypeNumberInput & TypeFlexElement> = ({
           inputRef={inputRef}
           value={value}
           type="number"
-          className={`${styles.input} ${inputProps?.className}`}
           onChange={(e) => onChange?.(Number(e.target.value))}
           {...inputProps}
+          className={`${styles.input} ${inputProps?.className}`}
         />
       )}
     </BaseInput>
