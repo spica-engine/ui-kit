@@ -1,4 +1,4 @@
-import React, { useRef, useState } from "react";
+import React, { useEffect, useRef, useState } from "react";
 import InputGroup from "./InputGroup";
 import { TypeFluidContainer } from "../fluid-container/FluidContainer";
 import styles from "./BaseInput.module.scss";
@@ -25,6 +25,7 @@ type TypeBaseInputProps = {
   }>;
   disabled?: boolean;
   readonly?: boolean;
+  forceFocus?: boolean;
   onFocusChange?: (isFocused: boolean) => void;
 } & TypeFlexElement;
 
@@ -39,21 +40,31 @@ const BaseInput = ({
   helperTextProps,
   helperTextContainerProps,
   children,
+  forceFocus = false,
   ...props
 }: TypeBaseInputProps) => {
-  const [isFocused, setIsFocused] = useState(false);
+  const [isFocused, setIsFocused] = useState(forceFocus);
   const containerRef = useRef<HTMLDivElement>(null);
+
+  useEffect(() => {
+    setIsFocused(forceFocus);
+  }, [forceFocus]);
 
   useOnClickOutside({
     refs: [containerRef],
-    onClickOutside: () => setIsFocused(false),
+    onClickOutside: () => {
+      setIsFocused(false);
+    },
   });
 
   const handleClick = () => {
     if (disabled || readonly) return;
     setIsFocused(true);
-    onFocusChange?.(true);
   };
+
+  useEffect(() => {
+    onFocusChange?.(isFocused);
+  }, [isFocused]);
 
   return (
     <InputGroup

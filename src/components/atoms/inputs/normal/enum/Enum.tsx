@@ -7,6 +7,7 @@ type TypeEnum = {
   label: string;
   options: { label: string; value: string }[];
   onChange?: (value: TypeValue) => void;
+  value?: TypeValue;
 } & TypeFlexElement;
 
 const Enum: FC<TypeEnum> = ({
