@@ -1,0 +1,19 @@
+@import "/src/styles/mixins.scss";
+
+.multiSelectionContainer {
+  @include inputContainer;
+  padding: 0;
+
+  .multiSelect {
+    background: transparent;
+  }
+
+  .visible {
+    visibility: visible;
+  }
+
+  .hidden {
+    visibility: hidden;
+    pointer-events: none;
+  }
+}
