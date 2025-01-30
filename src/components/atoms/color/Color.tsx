@@ -8,18 +8,17 @@ import { TypeFlexElement } from "components/atoms/flex-element/FlexElement";
 
 type TypeColor = {
   value: string;
-  containerProps?: TypeFluidContainer;
   prefixProps?: TypeFlexElement;
   rootProps?: TypeFlexElement;
   onChange?: (value: string) => void;
 };
 
-const Color: FC<TypeColor> = ({
+const Color: FC<TypeColor & TypeFluidContainer> = ({
   value = "#000000",
-  containerProps,
   prefixProps,
   rootProps,
   onChange,
+  ...props
 }) => {
   const handleChangeColor = (event: ChangeEvent<HTMLInputElement>) => {
     onChange?.(event.target.value);
@@ -36,8 +35,8 @@ const Color: FC<TypeColor> = ({
         children: value && <Text>{value}</Text>,
         ...rootProps,
       }}
-      className={`${containerProps?.className} ${styles.color}`}
-      {...containerProps}
+      {...props}
+      className={`${props?.className} ${styles.color}`}
     />
   );
 };
