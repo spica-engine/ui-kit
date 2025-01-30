@@ -1,25 +1,29 @@
 import BaseInput from "components/atoms/base-input/BaseInput";
+import { TypeFlexElement } from "components/atoms/flex-element/FlexElement";
 import Icon from "components/atoms/icon/Icon";
 import Input from "components/atoms/input/Input";
-import React, { FC, memo, useState, useRef } from "react";
-import Text from "components/atoms/text/Text";
-import styles from "./String.module.scss";
-import { TypeLabeledValue } from "components/atoms/select-option/SelectOption";
 import Select, { TypeSelectRef } from "components/molecules/select/Select";
-import { TypeFlexElement } from "components/atoms/flex-element/FlexElement";
+import React, { FC, memo, useRef, useState } from "react";
+import Text from "components/atoms/text/Text";
+import styles from "./Number.module.scss";
+import { TypeFluidContainer } from "components/atoms/fluid-container/FluidContainer";
 
-type TypeStringInput = {
+type TypeNumberInput = {
   label: string;
-  value?: string;
-  options?: string[];
-  onChange?: (value: string) => void;
+  value?: number;
+  options?: number[];
+  onChange?: (value: number) => void;
+  inputProps?: TypeFlexElement;
+  selectProps?: TypeFluidContainer;
 };
 
-const StringInput: FC<TypeStringInput & TypeFlexElement> = ({
+const NumberInput: FC<TypeNumberInput & TypeFlexElement> = ({
   label,
   value,
   options,
   onChange,
+  selectProps,
+  inputProps,
   ...props
 }) => {
   const selectRef = useRef<TypeSelectRef>(null);
@@ -35,7 +39,6 @@ const StringInput: FC<TypeStringInput & TypeFlexElement> = ({
       inputRef.current?.focus();
     }
   };
-
   return (
     <BaseInput
       dimensionX={"fill"}
@@ -45,7 +48,7 @@ const StringInput: FC<TypeStringInput & TypeFlexElement> = ({
         dimensionX: "hug",
         divider: true,
         prefix: {
-          children: <Icon className={styles.icon} name="formatQuoteClose" />,
+          children: <Icon className={styles.icon} name="numericBox" />,
         },
         root: {
           dimensionX: "hug",
@@ -61,28 +64,31 @@ const StringInput: FC<TypeStringInput & TypeFlexElement> = ({
     >
       {!!options ? (
         <Select
-          className={styles.select}
           selectRef={selectRef}
           disableClick
           options={options}
           value={value}
           placeholder=""
           onChange={(value) => {
-            onChange?.(value as string);
+            onChange?.(value as number);
             setForceFocus(false);
           }}
+          {...selectProps}
+          className={`${styles.select} ${selectProps?.className}`}
         />
       ) : (
         <Input
+          dimensionX={"fill"}
           inputRef={inputRef}
           value={value}
-          className={`${styles.input}`}
-          onChange={(e) => onChange?.(e.target.value)}
-          dimensionX={"fill"}
+          type="number"
+          onChange={(e) => onChange?.(Number(e.target.value))}
+          {...inputProps}
+          className={`${styles.input} ${inputProps?.className}`}
         />
       )}
     </BaseInput>
   );
 };
 
-export default memo(StringInput);
+export default memo(NumberInput);
