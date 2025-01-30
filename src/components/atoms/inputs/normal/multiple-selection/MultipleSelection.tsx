@@ -3,14 +3,16 @@ import Icon from "components/atoms/icon/Icon";
 import Text from "components/atoms/text/Text";
 import React, { memo, useRef, useState } from "react";
 import styles from "./MultipleSelection.module.scss";
-import Select from "components/molecules/select/Select";
+import Select, { TypeSelectRef } from "components/molecules/select/Select";
 import { TypeFlexElement } from "components/atoms/flex-element/FlexElement";
+import { TypeFluidContainer } from "components/atoms/fluid-container/FluidContainer";
 
 type TypeMultipleSelection<T = string | number> = {
   label: string;
   value?: T[];
   options?: T[];
   onChange?: (value: T[]) => void;
+  selectProps?: TypeFluidContainer;
 } & TypeFlexElement;
 
 const MultipleSelection = <T extends string | number>({
@@ -18,9 +20,10 @@ const MultipleSelection = <T extends string | number>({
   value = [],
   options,
   onChange,
+  selectProps,
   ...props
 }: TypeMultipleSelection<T>) => {
-  const selectRef = useRef<any>(null);
+  const selectRef = useRef<TypeSelectRef>(null);
 
   const [forceFocus, setForceFocus] = useState(false);
 
@@ -53,7 +56,6 @@ const MultipleSelection = <T extends string | number>({
       {...props}
     >
       <Select
-        className={styles.select}
         selectRef={selectRef}
         disableClick
         options={options || []}
@@ -63,6 +65,8 @@ const MultipleSelection = <T extends string | number>({
         onChange={(value) => {
           onChange?.(value as T[]);
         }}
+        {...selectProps}
+        className={`${styles.select} ${selectProps?.className}`}
       />
     </BaseInput>
   );
