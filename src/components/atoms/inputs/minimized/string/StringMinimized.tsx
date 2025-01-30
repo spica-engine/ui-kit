@@ -12,7 +12,6 @@ type TypeStringMinimized = {
   onClear?: () => void;
   value?: string;
   options?: { label: string; value: string }[];
-  className?: string;
   inputProps?: React.InputHTMLAttributes<HTMLInputElement>;
   enumOnChange?: (value: string) => void;
 } & TypeFluidContainer;
