@@ -4,7 +4,8 @@ import Input from "components/atoms/input/Input";
 import React, { FC, memo, useState, useRef } from "react";
 import Text from "components/atoms/text/Text";
 import styles from "./String.module.scss";
-import Select from "components/molecules/select/Select";
+import { TypeLabeledValue } from "components/atoms/select-option/SelectOption";
+import Select, { TypeSelectRef } from "components/molecules/select/Select";
 import { TypeFlexElement } from "components/atoms/flex-element/FlexElement";
 
 type TypeStringInput = {
@@ -21,7 +22,7 @@ const StringInput: FC<TypeStringInput & TypeFlexElement> = ({
   onChange,
   ...props
 }) => {
-  const selectRef = useRef<any>(null);
+  const selectRef = useRef<TypeSelectRef>(null);
   const inputRef = useRef<HTMLInputElement>(null);
 
   const [forceFocus, setForceFocus] = useState(false);
