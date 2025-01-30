@@ -1,26 +1,27 @@
-import { FC } from "react";
+import { FC, memo } from "react";
 import styles from "./Color.module.scss";
 import { TypeFluidContainer } from "components/atoms/fluid-container/FluidContainer";
-import { IconName } from "utils/iconList";
 import BaseInput from "components/atoms/base-input/BaseInput";
 import Color from "components/atoms/color/Color";
+import Icon from "components/atoms/icon/Icon";
+import Text from "components/atoms/text/Text";
+import { TypeFlexElement } from "components/atoms/flex-element/FlexElement";
 
 type TypeColorInput = {
   label: string;
-  prefixIcon?: IconName;
   value: string;
-  containerProps?: {
-    container?: TypeFluidContainer;
-  };
-
+  labelProps?: TypeFluidContainer;
+  colorContainerProps?: TypeFluidContainer;
   onChange?: (value: string) => void;
 };
 
-const ColorInput: FC<TypeColorInput> = ({
+const ColorInput: FC<TypeColorInput & TypeFlexElement> = ({
   label,
-  prefixIcon = "invertColors",
   value = "#000000",
+  labelProps,
+  colorContainerProps,
   onChange,
+  ...props
 }) => {
   const handleChangeColor = (value: string) => {
     onChange?.(value);
@@ -28,15 +29,34 @@ const ColorInput: FC<TypeColorInput> = ({
 
   return (
     <BaseInput
+      dimensionX={"fill"}
       labelProps={{
-        icon: { name: prefixIcon },
-        title: { children: label },
+        dimensionX: "hug",
+        divider: true,
+        prefix: {
+          children: <Icon className={styles.icon} name="invertColors" />,
+        },
+        root: {
+          dimensionX: "hug",
+          children: (
+            <Text className={styles.text} size="medium">
+              {label}
+            </Text>
+          ),
+        },
+        ...labelProps,
       }}
-      root={{
-        children: <Color value={value} onChange={handleChangeColor} />,
-      }}
-    />
+      inputContainerProps={{ className: styles.baseInput }}
+      {...props}
+    >
+      <Color
+        dimensionX={"fill"}
+        value={value}
+        onChange={handleChangeColor}
+        {...colorContainerProps}
+      />
+    </BaseInput>
   );
 };
 
-export default ColorInput;
+export default memo(ColorInput);
