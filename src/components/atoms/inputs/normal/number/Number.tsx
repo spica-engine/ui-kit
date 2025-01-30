@@ -6,12 +6,15 @@ import Select from "components/molecules/select/Select";
 import React, { FC, memo, useRef, useState } from "react";
 import Text from "components/atoms/text/Text";
 import styles from "./Number.module.scss";
+import { TypeFluidContainer } from "components/atoms/fluid-container/FluidContainer";
 
 type TypeNumberInput = {
   label: string;
   value?: number;
   options?: number[];
   onChange?: (value: number) => void;
+  inputProps?: TypeFlexElement;
+  selectProps?: TypeFluidContainer;
 };
 
 const NumberInput: FC<TypeNumberInput & TypeFlexElement> = ({
@@ -19,6 +22,8 @@ const NumberInput: FC<TypeNumberInput & TypeFlexElement> = ({
   value,
   options,
   onChange,
+  selectProps,
+  inputProps,
   ...props
 }) => {
   const selectRef = useRef<any>(null);
@@ -59,7 +64,7 @@ const NumberInput: FC<TypeNumberInput & TypeFlexElement> = ({
     >
       {!!options ? (
         <Select
-          className={styles.select}
+          className={`${styles.select} ${selectProps?.className}`}
           selectRef={selectRef}
           disableClick
           options={options}
@@ -69,6 +74,7 @@ const NumberInput: FC<TypeNumberInput & TypeFlexElement> = ({
             onChange?.(value as number);
             setForceFocus(false);
           }}
+          {...selectProps}
         />
       ) : (
         <Input
@@ -76,8 +82,9 @@ const NumberInput: FC<TypeNumberInput & TypeFlexElement> = ({
           inputRef={inputRef}
           value={value}
           type="number"
-          className={`${styles.input}`}
+          className={`${styles.input} ${inputProps?.className}`}
           onChange={(e) => onChange?.(Number(e.target.value))}
+          {...inputProps}
         />
       )}
     </BaseInput>
