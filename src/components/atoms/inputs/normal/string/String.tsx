@@ -25,11 +25,11 @@ const StringInput: FC<TypeStringInput & TypeFlexElement> = ({
   const selectRef = useRef<any>(null);
   const inputRef = useRef<HTMLInputElement>(null);
 
-  const [forceFocus, setMyFocus] = useState(false);
+  const [forceFocus, setForceFocus] = useState(false);
 
   const handleOnFocusChange = (isFocused: boolean) => {
     selectRef?.current?.toggleDropdown(isFocused);
-    setMyFocus(isFocused);
+    setForceFocus(isFocused);
 
     if (isFocused && !options) {
       inputRef.current?.focus();
@@ -69,7 +69,7 @@ const StringInput: FC<TypeStringInput & TypeFlexElement> = ({
           placeholder=""
           onChange={(value) => {
             onChange?.(value as string);
-            setMyFocus(false);
+            setForceFocus(false);
           }}
         />
       ) : (
