@@ -2,7 +2,7 @@ import BaseInput from "components/atoms/base-input/BaseInput";
 import { TypeFlexElement } from "components/atoms/flex-element/FlexElement";
 import Icon from "components/atoms/icon/Icon";
 import Input from "components/atoms/input/Input";
-import Select from "components/molecules/select/Select";
+import Select, { TypeSelectRef } from "components/molecules/select/Select";
 import React, { FC, memo, useRef, useState } from "react";
 import Text from "components/atoms/text/Text";
 import styles from "./Number.module.scss";
@@ -26,7 +26,7 @@ const NumberInput: FC<TypeNumberInput & TypeFlexElement> = ({
   inputProps,
   ...props
 }) => {
-  const selectRef = useRef<any>(null);
+  const selectRef = useRef<TypeSelectRef>(null);
   const inputRef = useRef<HTMLInputElement>(null);
 
   const [forceFocus, setForceFocus] = useState(false);
