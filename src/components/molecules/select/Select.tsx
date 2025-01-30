@@ -12,11 +12,12 @@ import useAdaptivePosition from "custom-hooks/useAdaptivePosition";
 
 export type TypeValue = string | number | (string | number)[];
 
-type TypeSelectRef = {
+export type TypeSelectRef = {
   toggleDropdown: (toggleValue?: boolean) => void;
+  clear: () => void;
 };
 
-type TypeSelect = {
+export type TypeSelect = {
   value?: TypeValue;
   options: (string | number | TypeLabeledValue)[];
   placeholder?: string;
@@ -102,7 +103,14 @@ const Select: FC<TypeSelect & TypeFluidContainer> = ({
 
   useImperativeHandle(selectRef, () => ({
     toggleDropdown,
+    clear,
   }));
+
+  const clear = () => {
+    setSelectedOption([]);
+    onChange([]);
+    setIsOpen(false);
+  };
 
   const toggleDropdown = (toggleValue?: boolean) => {
     if (typeof toggleValue !== "undefined") {
@@ -149,12 +157,10 @@ const Select: FC<TypeSelect & TypeFluidContainer> = ({
   return (
     <>
       <FluidContainer
-        {...props}
         ref={containerRef}
         onClick={handleOnClick}
         dimensionX="fill"
         dimensionY={36}
-        className={`${props.className} ${styles.container} ${disabled && styles.disabled}`}
         root={{
           children: (
             <Text
@@ -173,6 +179,8 @@ const Select: FC<TypeSelect & TypeFluidContainer> = ({
         suffix={{
           children: <Icon name="chevronDown" />,
         }}
+        {...props}
+        className={`${props.className} ${styles.container} ${disabled && styles.disabled}`}
       />
       {isOpen && (
         <FlexElement
