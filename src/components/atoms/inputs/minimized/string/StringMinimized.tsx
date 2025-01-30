@@ -10,23 +10,16 @@ import Icon from "components/atoms/icon/Icon";
 type TypeStringMinimized = {
   onClear?: () => void;
   value?: string;
-  isEnum?: boolean;
   options?: { label: string; value: string }[];
   className?: string;
 } & React.InputHTMLAttributes<HTMLInputElement>;
 
-const StringMinimized: FC<TypeStringMinimized> = ({
-  onClear,
-  value,
-  isEnum,
-  options,
-  ...props
-}) => {
+const StringMinimized: FC<TypeStringMinimized> = ({ onClear, value, options, ...props }) => {
   return (
     <FluidContainer
       className={styles.stringMinimized}
       root={{
-        children: isEnum ? (
+        children: options ? (
           <Select
             className={styles.select}
             placeholder={value || " "}
