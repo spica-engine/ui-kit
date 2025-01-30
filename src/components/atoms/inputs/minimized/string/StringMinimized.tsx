@@ -1,7 +1,8 @@
 import React, { FC, memo, useState } from "react";
 import styles from "./StringMinimized.module.scss";
-import IconButton from "components/atoms/icon-button/IconButton";
-import FluidContainer from "components/atoms/fluid-container/FluidContainer";
+import FluidContainer, {
+  TypeFluidContainer,
+} from "components/atoms/fluid-container/FluidContainer";
 import Input from "components/atoms/input/Input";
 import Select from "components/molecules/select/Select";
 import Button from "components/atoms/button/Button";
@@ -12,27 +13,42 @@ type TypeStringMinimized = {
   value?: string;
   options?: { label: string; value: string }[];
   className?: string;
-} & React.InputHTMLAttributes<HTMLInputElement>;
+  inputProps?: React.InputHTMLAttributes<HTMLInputElement>;
+  enumOnChange?: (value: string) => void;
+} & TypeFluidContainer;
 
-const StringMinimized: FC<TypeStringMinimized> = ({ onClear, value, options, ...props }) => {
+const StringMinimized: FC<TypeStringMinimized> = ({
+  onClear,
+  value,
+  options,
+  inputProps,
+  enumOnChange,
+  ...props
+}) => {
   return (
     <FluidContainer
+      alignment="leftCenter"
+      dimensionX="fill"
       className={styles.stringMinimized}
+      {...props}
       root={{
+        dimensionX: "fill",
+        alignment: "leftCenter",
         children: options ? (
           <Select
             className={styles.select}
             placeholder={value || " "}
             options={options || []}
-            onChange={(value) => console.log(value)}
+            onChange={(value) => enumOnChange?.(String(value))}
           />
         ) : (
-          <Input value={value} {...props} />
+          <Input value={value} {...inputProps} />
         ),
-        dimensionX: "fill",
-        alignment: "leftCenter",
+        ...props.root,
       }}
       suffix={{
+        dimensionX: "hug",
+        alignment: "center",
         children: (
           <Button
             children={<Icon name="close" />}
@@ -41,11 +57,8 @@ const StringMinimized: FC<TypeStringMinimized> = ({ onClear, value, options, ...
             className={styles.closeIcon}
           />
         ),
-        dimensionX: "hug",
-        alignment: "center",
+        ...props.suffix,
       }}
-      alignment="leftCenter"
-      dimensionX="fill"
     />
   );
 };
