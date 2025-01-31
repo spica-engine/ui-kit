@@ -4,15 +4,17 @@ import Input from "components/atoms/input/Input";
 import React, { FC, memo, useState, useRef } from "react";
 import Text from "components/atoms/text/Text";
 import styles from "./String.module.scss";
-import { TypeLabeledValue } from "components/atoms/select-option/SelectOption";
 import Select, { TypeSelectRef } from "components/molecules/select/Select";
 import { TypeFlexElement } from "components/atoms/flex-element/FlexElement";
+import { TypeFluidContainer } from "components/atoms/fluid-container/FluidContainer";
 
 type TypeStringInput = {
   label: string;
   value?: string;
   options?: string[];
   onChange?: (value: string) => void;
+  inputProps?: TypeFlexElement;
+  selectProps?: TypeFluidContainer;
 };
 
 const StringInput: FC<TypeStringInput & TypeFlexElement> = ({
@@ -20,6 +22,8 @@ const StringInput: FC<TypeStringInput & TypeFlexElement> = ({
   value,
   options,
   onChange,
+  selectProps,
+  inputProps,
   ...props
 }) => {
   const selectRef = useRef<TypeSelectRef>(null);
@@ -61,7 +65,6 @@ const StringInput: FC<TypeStringInput & TypeFlexElement> = ({
     >
       {!!options ? (
         <Select
-          className={styles.select}
           selectRef={selectRef}
           disableClick
           options={options}
@@ -71,14 +74,17 @@ const StringInput: FC<TypeStringInput & TypeFlexElement> = ({
             onChange?.(value as string);
             setForceFocus(false);
           }}
+          {...selectProps}
+          className={`${styles.select} ${selectProps?.className}`}
         />
       ) : (
         <Input
           inputRef={inputRef}
           value={value}
-          className={`${styles.input}`}
           onChange={(e) => onChange?.(e.target.value)}
           dimensionX={"fill"}
+          {...inputProps}
+          className={`${styles.input} ${inputProps?.className}`}
         />
       )}
     </BaseInput>
