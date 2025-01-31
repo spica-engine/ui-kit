@@ -153,7 +153,7 @@ export type IconName =
   | "movie"
   | "gridOn";
 
-export type IconSize = "sm" | "md" | "lg" | number;
+export type IconSize = "small" | "medium" | "large" | number;
 
 export const iconMap: {
   [key in IconName]: React.ComponentType<{ className?: string; style?: CSSProperties }>;
