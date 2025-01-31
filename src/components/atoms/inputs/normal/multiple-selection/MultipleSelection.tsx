@@ -7,22 +7,24 @@ import Select, { TypeSelectRef } from "components/molecules/select/Select";
 import { TypeFlexElement } from "components/atoms/flex-element/FlexElement";
 import { TypeFluidContainer } from "components/atoms/fluid-container/FluidContainer";
 
-type TypeMultipleSelection<T = string | number> = {
+type TypeMultipleSelectionInput<T = string | number> = {
   label: string;
+  description?: string;
   value?: T[];
   options?: T[];
   onChange?: (value: T[]) => void;
   selectProps?: TypeFluidContainer;
 } & TypeFlexElement;
 
-const MultipleSelection = <T extends string | number>({
+const MultipleSelectionInput = <T extends string | number>({
   label,
+  description,
   value = [],
   options,
   onChange,
   selectProps,
   ...props
-}: TypeMultipleSelection<T>) => {
+}: TypeMultipleSelectionInput<T>) => {
   const selectRef = useRef<TypeSelectRef>(null);
 
   const [forceFocus, setForceFocus] = useState(false);
@@ -35,6 +37,7 @@ const MultipleSelection = <T extends string | number>({
   return (
     <BaseInput
       dimensionX={"fill"}
+      description={description}
       forceFocus={forceFocus}
       onFocusChange={(isFocused) => handleOnFocusChange(isFocused)}
       labelProps={{
@@ -72,4 +75,4 @@ const MultipleSelection = <T extends string | number>({
   );
 };
 
-export default memo(MultipleSelection);
+export default memo(MultipleSelectionInput);

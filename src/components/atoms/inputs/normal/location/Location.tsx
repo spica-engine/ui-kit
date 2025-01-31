@@ -1,27 +1,33 @@
 import React, { FC, memo } from "react";
 import styles from "./Location.module.scss";
 import "leaflet/dist/leaflet.css";
-import FlexElement from "components/atoms/flex-element/FlexElement";
+import FlexElement, { TypeFlexElement } from "components/atoms/flex-element/FlexElement";
 import Icon from "components/atoms/icon/Icon";
 import Text from "components/atoms/text/Text";
 import InputHeader from "components/atoms/input-header/InputHeader";
 import Map, { TypeCoordinates } from "components/atoms/map/Map";
 
-type LocationProps = {
+type TypeLocationInput = {
   coordinates?: TypeCoordinates;
   title?: string;
   onChange?: (coordinates: TypeCoordinates) => void;
 };
 
-const Location: FC<LocationProps> = ({ coordinates, title, onChange }) => {
+const LocationInput: FC<TypeLocationInput & TypeFlexElement> = ({
+  coordinates,
+  title,
+  onChange,
+  ...props
+}) => {
   return (
     <FlexElement
-      className={styles.location}
       dimensionX={500}
       dimensionY={500}
       gap={10}
       direction="vertical"
       alignment="leftCenter"
+      {...props}
+      className={`${props.className} ${styles.location}`}
     >
       <InputHeader
         prefix={{ children: <Icon name="mapMarker" className={styles.icon} /> }}
@@ -39,4 +45,4 @@ const Location: FC<LocationProps> = ({ coordinates, title, onChange }) => {
   );
 };
 
-export default memo(Location);
+export default memo(LocationInput);
