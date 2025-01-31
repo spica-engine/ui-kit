@@ -6,6 +6,7 @@ import InputWithIcon from "../input-with-icon/InputWithIcon";
 import FlexElement from "../flex-element/FlexElement";
 import { useOnClickOutside } from "custom-hooks/useOnClickOutside";
 import useAdaptivePosition from "custom-hooks/useAdaptivePosition";
+import { TypeInput } from "../input/Input";
 
 type TypeAutocomplete = {
   value?: string;
@@ -14,6 +15,8 @@ type TypeAutocomplete = {
   placeholder?: string;
   placement?: "bottom" | "top";
   popupClassName?: string;
+  inputProps?: TypeInput;
+  disabled?: boolean;
   onChange?: (value: string) => void;
 };
 
@@ -24,6 +27,8 @@ const Autocomplete: FC<TypeAutocomplete & TypeFluidContainer> = ({
   popupClassName = "",
   placeholder = "",
   options,
+  inputProps,
+  disabled,
   onChange,
   ...props
 }) => {
@@ -74,6 +79,7 @@ const Autocomplete: FC<TypeAutocomplete & TypeFluidContainer> = ({
   };
 
   const toggleDropdown = () => {
+    if (disabled) return;
     setShowMenu((prev) => !prev);
   };
 
@@ -81,12 +87,16 @@ const Autocomplete: FC<TypeAutocomplete & TypeFluidContainer> = ({
     <>
       <InputWithIcon
         ref={containerRef}
-        placeholder={placeholder}
+        inputProps={{
+          placeholder,
+          value: search,
+          onChange: handleInputChange,
+          disabled,
+          ...inputProps,
+          className: `${inputProps?.className} ${styles.input}`,
+        }}
         dimensionX="fill"
-        value={search}
         onClick={toggleDropdown}
-        onChange={handleInputChange}
-        inputContainerProps={{ className: styles.input }}
         {...props}
       />
       {showMenu && (

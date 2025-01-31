@@ -31,7 +31,7 @@ const Location: FC<LocationProps> = ({ coordinates, title, onChange }) => {
       <Map
         coordinates={coordinates}
         markerIcon={{
-          icon: <Icon name="mapMarker" size="lg" className={styles.mapMarker} />,
+          icon: <Icon name="mapMarker" size="large" className={styles.mapMarker} />,
         }}
         onChange={onChange}
       />

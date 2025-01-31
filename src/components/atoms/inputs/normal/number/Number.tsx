@@ -1,9 +1,9 @@
 import BaseInput from "components/atoms/base-input/BaseInput";
 import { TypeFlexElement } from "components/atoms/flex-element/FlexElement";
 import Icon from "components/atoms/icon/Icon";
-import Input from "components/atoms/input/Input";
+import Input, { TypeInput } from "components/atoms/input/Input";
 import Select, { TypeSelectRef } from "components/molecules/select/Select";
-import React, { FC, memo, useRef, useState } from "react";
+import { FC, memo, useRef, useState } from "react";
 import Text from "components/atoms/text/Text";
 import styles from "./Number.module.scss";
 import { TypeFluidContainer } from "components/atoms/fluid-container/FluidContainer";
@@ -13,7 +13,7 @@ type TypeNumberInput = {
   value?: number;
   options?: number[];
   onChange?: (value: number) => void;
-  inputProps?: TypeFlexElement;
+  inputProps?: TypeInput;
   selectProps?: TypeFluidContainer;
 };
 
@@ -78,8 +78,7 @@ const NumberInput: FC<TypeNumberInput & TypeFlexElement> = ({
         />
       ) : (
         <Input
-          dimensionX={"fill"}
-          inputRef={inputRef}
+          ref={inputRef}
           value={value}
           type="number"
           onChange={(e) => onChange?.(Number(e.target.value))}
