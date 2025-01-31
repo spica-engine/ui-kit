@@ -1,3 +1,4 @@
+import { CSSProperties } from "react";
 import ArticleIcon from "@mui/icons-material/Article";
 import QueryBuilderIcon from "@mui/icons-material/QueryBuilder";
 import LoginIcon from "@mui/icons-material/Login";
@@ -152,9 +153,11 @@ export type IconName =
   | "movie"
   | "gridOn";
 
-export type IconSize = "sm" | "md" | "lg";
+export type IconSize = "small" | "medium" | "large" | number;
 
-export const iconMap: { [key in IconName]: React.ComponentType<{ className?: string }> } = {
+export const iconMap: {
+  [key in IconName]: React.ComponentType<{ className?: string; style?: CSSProperties }>;
+} = {
   article: ArticleIcon,
   clockOutline: QueryBuilderIcon,
   login: LoginIcon,

@@ -1,6 +1,6 @@
 import BaseInput from "components/atoms/base-input/BaseInput";
 import Icon from "components/atoms/icon/Icon";
-import Input from "components/atoms/input/Input";
+import Input, { TypeInput } from "components/atoms/input/Input";
 import React, { FC, memo, useState, useRef } from "react";
 import Text from "components/atoms/text/Text";
 import styles from "./String.module.scss";
@@ -13,7 +13,7 @@ type TypeStringInput = {
   value?: string;
   options?: string[];
   onChange?: (value: string) => void;
-  inputProps?: TypeFlexElement;
+  inputProps?: TypeInput;
   selectProps?: TypeFluidContainer;
 };
 
@@ -79,10 +79,9 @@ const StringInput: FC<TypeStringInput & TypeFlexElement> = ({
         />
       ) : (
         <Input
-          inputRef={inputRef}
+          ref={inputRef}
           value={value}
           onChange={(e) => onChange?.(e.target.value)}
-          dimensionX={"fill"}
           {...inputProps}
           className={`${styles.input} ${inputProps?.className}`}
         />
