@@ -9,7 +9,8 @@ import { TypeFlexElement } from "components/atoms/flex-element/FlexElement";
 
 type TypeColorInput = {
   label: string;
-  value: string;
+  description?: string;
+  value?: string;
   labelProps?: TypeFluidContainer;
   colorContainerProps?: TypeFluidContainer;
   onChange?: (value: string) => void;
@@ -17,6 +18,7 @@ type TypeColorInput = {
 
 const ColorInput: FC<TypeColorInput & TypeFlexElement> = ({
   label,
+  description,
   value = "#000000",
   labelProps,
   colorContainerProps,
@@ -30,6 +32,7 @@ const ColorInput: FC<TypeColorInput & TypeFlexElement> = ({
   return (
     <BaseInput
       dimensionX={"fill"}
+      description={description}
       labelProps={{
         dimensionX: "hug",
         divider: true,

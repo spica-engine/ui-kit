@@ -10,6 +10,7 @@ import { TypeFluidContainer } from "components/atoms/fluid-container/FluidContai
 
 type TypeStringInput = {
   label: string;
+  description?: string;
   value?: string;
   options?: string[];
   onChange?: (value: string) => void;
@@ -19,6 +20,7 @@ type TypeStringInput = {
 
 const StringInput: FC<TypeStringInput & TypeFlexElement> = ({
   label,
+  description,
   value,
   options,
   onChange,
@@ -43,6 +45,7 @@ const StringInput: FC<TypeStringInput & TypeFlexElement> = ({
   return (
     <BaseInput
       dimensionX={"fill"}
+      description={description}
       forceFocus={forceFocus}
       onFocusChange={(isFocused) => handleOnFocusChange(isFocused)}
       labelProps={{
