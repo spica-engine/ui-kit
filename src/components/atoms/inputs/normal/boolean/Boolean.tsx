@@ -7,7 +7,7 @@ import FluidContainer, {
 import Switch from "components/atoms/switch/Switch";
 import { TypeFlexElement } from "components/atoms/flex-element/FlexElement";
 
-export type TypeInputBoolean = {
+export type TypeBooleanInput = {
   checked: boolean;
   label?: string;
   disabled?: boolean;
@@ -19,7 +19,7 @@ export type TypeInputBoolean = {
   onChange?: (checked: boolean) => void;
 };
 
-const InputBoolean: FC<TypeInputBoolean> = ({
+const BooleanInput: FC<TypeBooleanInput> = ({
   checked,
   disabled = false,
   label,
@@ -54,4 +54,4 @@ const InputBoolean: FC<TypeInputBoolean> = ({
   );
 };
 
-export default memo(InputBoolean);
+export default memo(BooleanInput);
