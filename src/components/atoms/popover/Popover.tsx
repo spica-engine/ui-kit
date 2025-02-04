@@ -3,6 +3,7 @@ import FlexElement, { TypeFlexElement } from "../flex-element/FlexElement";
 import styles from "./Popover.module.scss";
 import useAdaptivePosition, { Placement } from "custom-hooks/useAdaptivePosition";
 import { useOnClickOutside } from "custom-hooks/useOnClickOutside";
+import useKeyDown from "custom-hooks/useKeyDown";
 
 type TypePopover = {
   placement: Placement;
@@ -10,6 +11,7 @@ type TypePopover = {
   children: ReactNode;
   trigger?: "hover" | "click";
   open?: boolean;
+  containerProps?: TypeFlexElement;
   contentProps?: TypeFlexElement;
 };
 
@@ -19,12 +21,19 @@ const Popover: FC<TypePopover> = ({
   trigger = "click",
   children,
   open,
+  containerProps,
   contentProps,
 }) => {
   const containerRef = useRef<HTMLDivElement | null>(null);
   const popoverRef = useRef<HTMLDivElement | null>(null);
   const childrenRef = useRef<HTMLDivElement | null>(null);
   const [isOpen, setIsOpen] = useState(open);
+
+  useKeyDown("Escape", () => {
+    if (isOpen) {
+      setIsOpen(false);
+    }
+  });
 
   useEffect(() => {
     setIsOpen(open);
@@ -54,13 +63,14 @@ const Popover: FC<TypePopover> = ({
   };
 
   return (
-    <div ref={containerRef} {...handleInteraction}>
+    // !TODO Change with FlexElement
+    <div ref={containerRef} {...handleInteraction} className={styles.container}>
       <div ref={childrenRef}>{children}</div>
       {isOpen && (
         <FlexElement
           ref={popoverRef}
           style={{ ...targetPosition }}
-          className={`${contentProps?.className} ${styles.container}`}
+          className={`${contentProps?.className} ${styles.content}`}
           {...contentProps}
         >
           {content}

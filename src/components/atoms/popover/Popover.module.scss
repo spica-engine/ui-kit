@@ -1,6 +1,9 @@
 .container {
-  position: fixed;
-  box-shadow: var(--box-shadow);
-  padding: var(--padding-md);
-  border-radius: var(--border-radius-lg);
+  height: max-content;
+  .content {
+    position: fixed;
+    box-shadow: var(--box-shadow);
+    padding: var(--padding-md);
+    border-radius: var(--border-radius-lg);
+  }
 }
