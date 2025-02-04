@@ -1,6 +1,6 @@
 import { useState, useCallback, RefObject } from "react";
 
-type Placement =
+export type Placement =
   | "topStart"
   | "top"
   | "topEnd"
@@ -33,7 +33,7 @@ const useAdaptivePosition = ({
   initialPlacement = "bottom",
 }: AdaptivePositionProps) => {
   const [targetPosition, setTargetPosition] = useState<PositionStyle | null>(null);
-
+  const GAP = 4;
   const calculatePosition = useCallback(() => {
     if (!containerRef.current || !targetRef.current) return;
 
@@ -43,76 +43,81 @@ const useAdaptivePosition = ({
     const viewportHeight = window.innerHeight;
     const viewportWidth = window.innerWidth;
 
+    const topGap = rect.top - targetHeight + window.scrollY - GAP;
+    const bottomGap = rect.bottom + window.scrollY + GAP;
+    const leftGap = rect.left - targetWidth + window.scrollX - GAP;
+    const rightGap = rect.right + window.scrollX + GAP;
+
     const placements: Record<Placement, PositionStyle> = {
       topStart: {
-        top: rect.top - targetHeight + window.scrollY,
+        top: topGap,
         left: rect.left + window.scrollX,
         bottom: rect.top + window.scrollY,
         right: rect.left + targetWidth + window.scrollX,
       },
       top: {
-        top: rect.top - targetHeight + window.scrollY,
+        top: topGap,
         left: rect.left + rect.width / 2 - targetWidth / 2 + window.scrollX,
         bottom: rect.top + window.scrollY,
         right: rect.left + rect.width / 2 + targetWidth / 2 + window.scrollX,
       },
       topEnd: {
-        top: rect.top - targetHeight + window.scrollY,
+        top: topGap,
         left: rect.right - targetWidth + window.scrollX,
         bottom: rect.top + window.scrollY,
         right: rect.right + window.scrollX,
       },
       rightStart: {
         top: rect.top + window.scrollY,
-        left: rect.right + window.scrollX,
+        left: rightGap,
         bottom: rect.top + targetHeight + window.scrollY,
         right: rect.right + targetWidth + window.scrollX,
       },
       right: {
         top: rect.top + rect.height / 2 - targetHeight / 2 + window.scrollY,
-        left: rect.right + window.scrollX,
+        left: rightGap,
         bottom: rect.top + rect.height / 2 + targetHeight / 2 + window.scrollY,
         right: rect.right + targetWidth + window.scrollX,
       },
       rightEnd: {
         top: rect.bottom - targetHeight + window.scrollY,
-        left: rect.right + window.scrollX,
+        left: rightGap,
         bottom: rect.bottom + window.scrollY,
         right: rect.right + targetWidth + window.scrollX,
       },
       bottomStart: {
-        top: rect.bottom + window.scrollY,
+        top: bottomGap,
         left: rect.left + window.scrollX,
         bottom: rect.bottom + targetHeight + window.scrollY,
         right: rect.left + targetWidth + window.scrollX,
       },
       bottom: {
-        top: rect.bottom + window.scrollY,
+        top: bottomGap,
         left: rect.left + rect.width / 2 - targetWidth / 2 + window.scrollX,
         bottom: rect.bottom + targetHeight + window.scrollY,
         right: rect.left + rect.width / 2 + targetWidth / 2 + window.scrollX,
       },
       bottomEnd: {
-        top: rect.bottom + window.scrollY,
+        top: bottomGap,
         left: rect.right - targetWidth + window.scrollX,
         bottom: rect.bottom + targetHeight + window.scrollY,
         right: rect.right + window.scrollX,
       },
       leftStart: {
         top: rect.top + window.scrollY,
-        left: rect.left - targetWidth + window.scrollX,
+        left: leftGap,
         bottom: rect.top + targetHeight + window.scrollY,
         right: rect.left + window.scrollX,
       },
       left: {
         top: rect.top + rect.height / 2 - targetHeight / 2 + window.scrollY,
-        left: rect.left - targetWidth + window.scrollX,
+        left: leftGap,
         bottom: rect.top + rect.height / 2 + targetHeight / 2 + window.scrollY,
         right: rect.left + window.scrollX,
       },
       leftEnd: {
         top: rect.bottom - targetHeight + window.scrollY,
-        left: rect.left - targetWidth + window.scrollX,
+        left: leftGap,
         bottom: rect.bottom + window.scrollY,
         right: rect.left + window.scrollX,
       },
@@ -131,18 +136,18 @@ const useAdaptivePosition = ({
 
     const getBestPlacement = (): Placement => {
       const alternativePlacements: Record<Placement, Placement[]> = {
-        top: ["bottom", "bottomStart", "bottomEnd", "right", "left", "leftStart", "leftEnd"],
-        bottom: ["top", "topStart", "topEnd", "right", "left", "leftStart", "leftEnd"],
-        left: ["right", "rightStart", "rightEnd", "top", "bottom", "topStart", "topEnd"],
-        right: ["left", "leftStart", "leftEnd", "top", "bottom", "topStart", "topEnd"],
-        topStart: ["bottomStart", "bottom", "bottomEnd", "right", "left"],
-        topEnd: ["bottomStart", "bottom", "bottomEnd", "right", "left"],
-        rightStart: ["leftStart", "left", "leftEnd", "top", "bottom"],
-        rightEnd: ["leftStart", "left", "leftEnd", "top", "bottom"],
-        bottomStart: ["topStart", "top", "topEnd", "right", "left"],
-        bottomEnd: ["topStart", "top", "topEnd", "right", "left"],
-        leftStart: ["rightStart", "right", "rightEnd", "top", "bottom"],
-        leftEnd: ["rightStart", "right", "rightEnd", "top", "bottom"],
+        top: ["topStart", "topEnd", "bottom", "bottomStart", "bottomEnd"],
+        bottom: ["bottomStart", "bottomEnd", "top", "topStart", "topEnd"],
+        left: ["leftStart", "leftEnd", "right", "rightStart", "rightEnd"],
+        right: ["rightStart", "rightEnd", "left", "leftStart", "leftEnd"],
+        topStart: ["top", "topEnd", "bottom", "bottomStart", "bottomEnd"],
+        topEnd: ["bottom", "bottomEnd", "top", "topStart", "topEnd"],
+        rightStart: ["right", "rightEnd", "left", "leftStart", "leftEnd"],
+        rightEnd: ["right", "rightStart", "left", "leftStart", "leftEnd"],
+        bottomStart: ["bottom", "bottomEnd", "top", "topStart", "topEnd"],
+        bottomEnd: ["bottom", "bottomStart", "top", "topStart", "topEnd"],
+        leftStart: ["left", "leftEnd", "right", "rightStart", "rightEnd"],
+        leftEnd: ["left", "leftStart", "right", "rightStart", "rightEnd"],
       };
 
       if (checkPositionFit(placements[initialPlacement])) {
