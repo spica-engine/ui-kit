@@ -5,6 +5,7 @@ import { TypeFluidContainer } from "components/atoms/fluid-container/FluidContai
 import Icon from "components/atoms/icon/Icon";
 import { IconName } from "utils/iconList";
 import InputHeader from "components/atoms/input-header/InputHeader";
+import Text from "components/atoms/text/Text";
 
 type TypeTextArea = {
   textAreaProps?: React.TextareaHTMLAttributes<HTMLTextAreaElement> & {
@@ -19,6 +20,7 @@ type TypeTextArea = {
   titleContainerProps?: TypeFluidContainer;
   title?: string;
   icon?: IconName;
+  description?: string;
 };
 
 const TextAreaInput: FC<TypeTextArea> = ({
@@ -31,6 +33,7 @@ const TextAreaInput: FC<TypeTextArea> = ({
   titleRootProps,
   titleSuffixProps,
   containerProps,
+  description,
 }) => {
   const mergedTextAreaContainerProps = {
     dimensionX: "fill",
@@ -90,6 +93,9 @@ const TextAreaInput: FC<TypeTextArea> = ({
           <textarea {...textAreaProps} className={styles.textArea}></textarea>
         </FlexElement>
       </>
+      <Text size="xsmall" className={`${styles.description}`} textClassName={`${styles.text}`}>
+        {description}
+      </Text>
     </FlexElement>
   );
 };

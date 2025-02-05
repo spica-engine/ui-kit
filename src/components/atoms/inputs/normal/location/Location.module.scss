@@ -1,3 +1,5 @@
+@import "/src/styles/_mixins";
+
 .location {
   background: var(--color-input-background);
   padding: var(--gap-lg);
@@ -15,5 +17,11 @@
   .mapMarker {
     width: 35px;
     height: 35px;
+  }
+  .description {
+    width: 100% !important;
+  }
+  .text {
+    @include inputDescriptionContainer;
   }
 }

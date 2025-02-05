@@ -14,6 +14,10 @@
     color: var(--color-danger);
   }
 
+  &.xsmall {
+    font-size: var(--font-size-xs);
+  }
+
   &.small {
     font-size: var(--font-size-sm);
   }

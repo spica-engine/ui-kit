@@ -4,4 +4,11 @@
   @include inputContainer;
   color: #000;
   padding: var(--padding-md);
+
+  .description {
+    width: 100% !important;
+  }
+  .text {
+    @include inputDescriptionContainer;
+  }
 }

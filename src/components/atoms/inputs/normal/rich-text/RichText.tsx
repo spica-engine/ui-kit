@@ -26,12 +26,14 @@ export type TypeRichTextInput = {
   value?: string;
   className?: string;
   onChange?: (value: string) => void;
+  description?: string;
 };
 
 const RichTextInput: FC<TypeRichTextInput> = ({
   className = "",
   value = "<p></p>",
   headerProps,
+  description,
   onChange,
 }) => {
   const updateHTML = (editor: LexicalEditor, value: string) => {
@@ -106,6 +108,9 @@ const RichTextInput: FC<TypeRichTextInput> = ({
       <LexicalComposer initialConfig={initialConfig}>
         <LexicalContent onChange={handleChange} />
       </LexicalComposer>
+      <Text size="xsmall" className={`${styles.description}`} textClassName={`${styles.text}`}>
+        {description}
+      </Text>
     </FlexElement>
   );
 };

@@ -110,7 +110,7 @@ const BaseInput = ({
       >
         <Text
           {...helperTextProps}
-          size="small"
+          size="xsmall"
           variant={errorMessage ? "danger" : "secondary"}
           className={`${helperTextProps?.className}`}
         >

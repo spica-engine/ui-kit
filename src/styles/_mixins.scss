@@ -105,3 +105,8 @@
   font-size: var(--font-size-lg);
   padding: var(--padding-md);
 }
+
+@mixin inputDescriptionContainer {
+  @include textEllipsis(2);
+  padding: 0 var(--padding-md);
+}

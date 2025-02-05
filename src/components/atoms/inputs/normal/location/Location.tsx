@@ -11,12 +11,14 @@ type TypeLocationInput = {
   coordinates?: TypeCoordinates;
   title?: string;
   onChange?: (coordinates: TypeCoordinates) => void;
+  description?: string;
 };
 
 const LocationInput: FC<TypeLocationInput & TypeFlexElement> = ({
   coordinates,
   title,
   onChange,
+  description,
   ...props
 }) => {
   return (
@@ -41,6 +43,9 @@ const LocationInput: FC<TypeLocationInput & TypeFlexElement> = ({
         }}
         onChange={onChange}
       />
+      <Text size="xsmall" className={`${styles.description}`} textClassName={`${styles.text}`}>
+        {description}
+      </Text>
     </FlexElement>
   );
 };
