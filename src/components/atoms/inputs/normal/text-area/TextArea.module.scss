@@ -25,4 +25,10 @@
       font-size: var(--font-size-md);
     }
   }
+  .description {
+    width: 100% !important;
+  }
+  .text {
+    @include inputDescriptionContainer;
+  }
 }

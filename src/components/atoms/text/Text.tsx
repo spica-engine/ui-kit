@@ -4,8 +4,8 @@ import styles from "./Text.module.scss";
 
 export type TypeText = {
   variant?: "primary" | "secondary" | "danger";
-  size?: "small" | "medium" | "large" | "xlarge";
-  className?: string;
+  size?: "xsmall" | "small" | "medium" | "large" | "xlarge";
+  textClassName?: string;
   children: ReactNode;
 } & TypeFlexElement;
 
@@ -13,7 +13,7 @@ const Text: FC<TypeText> = ({
   variant = "primary",
   size = "medium",
   children,
-  className,
+  textClassName,
   ...props
 }) => {
   const variantClass = styles[variant];
@@ -21,7 +21,9 @@ const Text: FC<TypeText> = ({
 
   return (
     <FlexElement {...props}>
-      <span className={`${styles.text} ${variantClass} ${sizeClass} ${className}`}>{children}</span>
+      <span className={`${styles.text} ${variantClass} ${sizeClass} ${textClassName}`}>
+        {children}
+      </span>
     </FlexElement>
   );
 };

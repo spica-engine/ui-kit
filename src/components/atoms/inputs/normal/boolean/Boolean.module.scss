@@ -1,0 +1,8 @@
+@import "/src/styles/_mixins";
+
+.description {
+  width: 100% !important;
+}
+.text {
+  @include inputDescriptionContainer;
+}

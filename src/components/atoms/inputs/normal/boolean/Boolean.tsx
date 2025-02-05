@@ -5,7 +5,7 @@ import FluidContainer, {
   TypeFluidContainer,
 } from "components/atoms/fluid-container/FluidContainer";
 import Switch from "components/atoms/switch/Switch";
-import { TypeFlexElement } from "components/atoms/flex-element/FlexElement";
+import FlexElement, { TypeFlexElement } from "components/atoms/flex-element/FlexElement";
 
 export type TypeBooleanInput = {
   checked: boolean;
@@ -16,6 +16,7 @@ export type TypeBooleanInput = {
   suffixProps?: TypeFlexElement;
   rootProps?: TypeFlexElement;
   labelProps?: TypeFlexElement;
+  description?: string;
   onChange?: (checked: boolean) => void;
 };
 
@@ -28,29 +29,35 @@ const BooleanInput: FC<TypeBooleanInput> = ({
   suffixProps,
   rootProps,
   labelProps,
+  description,
   onChange,
 }) => {
   return (
-    <FluidContainer
-      {...containerProps}
-      gap={10}
-      dimensionY={36}
-      root={{
-        children: (
-          <Switch
-            checked={checked}
-            disabled={disabled}
-            {...switchContainerProps}
-            onChange={onChange}
-          />
-        ),
-        ...rootProps,
-      }}
-      suffix={{
-        children: label && <Text {...labelProps}>{label}</Text>,
-        ...suffixProps,
-      }}
-    />
+    <FlexElement dimensionX="fill" alignment="leftCenter" direction="vertical">
+      <FluidContainer
+        dimensionY={36}
+        dimensionX="fill"
+        root={{
+          children: (
+            <Switch
+              checked={checked}
+              disabled={disabled}
+              {...switchContainerProps}
+              onChange={onChange}
+            />
+          ),
+          ...rootProps,
+        }}
+        suffix={{
+          children: label && <Text {...labelProps}>{label}</Text>,
+          ...suffixProps,
+        }}
+        {...containerProps}
+      />
+      <Text size="xsmall" className={`${styles.description}`} textClassName={`${styles.text}`}>
+        {description}
+      </Text>
+    </FlexElement>
   );
 };
 
