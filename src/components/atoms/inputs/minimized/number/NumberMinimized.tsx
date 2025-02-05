@@ -13,7 +13,7 @@ type TypeStringMinimized = {
   value?: number;
   options?: number[];
   inputProps?: React.InputHTMLAttributes<HTMLInputElement>;
-  enumOnChange?: (value: number) => void;
+  onChange?: (value: number) => void;
 } & TypeFluidContainer;
 
 const NumberMinimized: FC<TypeStringMinimized> = ({
@@ -21,7 +21,7 @@ const NumberMinimized: FC<TypeStringMinimized> = ({
   value,
   options,
   inputProps,
-  enumOnChange,
+  onChange,
   ...props
 }) => {
   const selectRef = useRef<TypeSelectRef>(null);
@@ -58,10 +58,16 @@ const NumberMinimized: FC<TypeStringMinimized> = ({
             placeholder={value !== undefined ? String(value) : ""}
             value={value}
             options={options || []}
-            onChange={(value) => enumOnChange?.(value as number)}
+            onChange={(value) => onChange?.(value as number)}
           />
         ) : (
-          <Input ref={inputRef} value={value ?? ""} type="number" {...inputProps} />
+          <Input
+            ref={inputRef}
+            value={value ?? ""}
+            type="number"
+            {...inputProps}
+            onChange={(event) => onChange?.(Number(event.target.value))}
+          />
         ),
         ...props.root,
       }}
