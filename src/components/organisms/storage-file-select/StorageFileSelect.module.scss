@@ -1,0 +1,26 @@
+.actions {
+  button {
+    height: max-content;
+    padding: var(--padding-sm) !important;
+  }
+}
+
+.content {
+  display: grid !important;
+  grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+  .file {
+    min-width: 100px;
+    min-height: 100px;
+    max-height: 200px;
+    height: 200px;
+  }
+}
+
+@media screen and (max-width: 992px) {
+  .content {
+    grid-template-columns: repeat(auto-fit, minmax(100px, 1fr));
+    .file {
+      height: 100px;
+    }
+  }
+}

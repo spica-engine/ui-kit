@@ -73,6 +73,9 @@ import InvertColorsIcon from "@mui/icons-material/InvertColors";
 import FolderZipIcon from "@mui/icons-material/FolderZip";
 import MovieIcon from "@mui/icons-material/Movie";
 import GridOnIcon from "@mui/icons-material/GridOn";
+import GridViewIcon from "@mui/icons-material/GridView";
+import ViewListIcon from "@mui/icons-material/ViewList";
+import SortIcon from "@mui/icons-material/Sort";
 
 export type IconName =
   | "article"
@@ -151,7 +154,10 @@ export type IconName =
   | "invertColors"
   | "folderZip"
   | "movie"
-  | "gridOn";
+  | "gridOn"
+  | "gridView"
+  | "viewList"
+  | "sort";
 
 export type IconSize = "small" | "medium" | "large" | number;
 
@@ -232,4 +238,7 @@ export const iconMap: {
   folderZip: FolderZipIcon,
   movie: MovieIcon,
   gridOn: GridOnIcon,
+  gridView: GridViewIcon,
+  viewList: ViewListIcon,
+  sort: SortIcon,
 };

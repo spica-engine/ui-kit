@@ -6,9 +6,9 @@ import { useOnClickOutside } from "custom-hooks/useOnClickOutside";
 import useKeyDown from "custom-hooks/useKeyDown";
 
 type TypePopover = {
-  placement: Placement;
+  placement?: Placement;
   content: ReactNode;
-  children: ReactNode;
+  children?: ReactNode;
   trigger?: "hover" | "click";
   open?: boolean;
   containerProps?: TypeFlexElement;
@@ -16,7 +16,7 @@ type TypePopover = {
 };
 
 const Popover: FC<TypePopover> = ({
-  placement,
+  placement = "bottom",
   content,
   trigger = "click",
   children,

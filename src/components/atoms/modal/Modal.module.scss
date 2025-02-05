@@ -6,7 +6,10 @@
   min-height: 100px;
   max-width: 90%;
   max-height: 90%;
-  overflow: hidden;
+  // !TODO need to check if this is necessary
+  // overflow: hidden;
+  box-shadow: var(--box-shadow);
+  border-radius: var(--border-radius-lg);
 
   &.noOverflow {
     max-height: none;
