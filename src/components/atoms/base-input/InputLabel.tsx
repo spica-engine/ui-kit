@@ -1,19 +1,15 @@
 import React from "react";
 import styles from "./InputLabel.module.scss";
 import FluidContainer, { TypeFluidContainer } from "../fluid-container/FluidContainer";
-import { TypeIcon } from "../icon/Icon";
-import { TypeText } from "../text/Text";
 
 type TypeInputLabel = {
-  icon?: TypeIcon;
-  title?: TypeText;
   reverse?: boolean;
   divider?: boolean;
   dividerClassName?: string;
   isFocused?: boolean;
 } & TypeFluidContainer;
 
-const InputLabel = ({ icon, title, dividerClassName, isFocused, ...props }: TypeInputLabel) => {
+const InputLabel = ({ dividerClassName, isFocused, ...props }: TypeInputLabel) => {
   const labelDefaults = {
     reverse: false,
     divider: true,
@@ -22,7 +18,6 @@ const InputLabel = ({ icon, title, dividerClassName, isFocused, ...props }: Type
 
   return (
     <FluidContainer
-      {...labelDefaults}
       mode="fill"
       prefix={{
         children: props.prefix?.children,
@@ -41,6 +36,7 @@ const InputLabel = ({ icon, title, dividerClassName, isFocused, ...props }: Type
         ),
         dimensionY: "fill",
       }}
+      {...labelDefaults}
       className={`${styles.container} ${labelDefaults.reverse ? styles.reverse : ""} ${props.className} ${
         isFocused ? styles.focused : ""
       }`}

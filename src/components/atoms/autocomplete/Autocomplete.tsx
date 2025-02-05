@@ -20,7 +20,7 @@ type TypeAutocomplete = {
   onChange?: (value: string) => void;
 };
 
-const Autocomplete: FC<TypeAutocomplete & TypeFluidContainer> = ({
+const Autocomplete: FC<TypeAutocomplete> = ({
   className,
   value = "",
   placement = "bottom",
@@ -113,7 +113,7 @@ const Autocomplete: FC<TypeAutocomplete & TypeFluidContainer> = ({
               dimensionX={containerRef.current?.offsetWidth}
               key={option}
               label={option}
-              onSelect={handleItemSelect}
+              onClick={() => handleItemSelect(option)}
               active={option.toLowerCase() === search.toLowerCase()}
             />
           ))}

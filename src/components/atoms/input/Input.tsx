@@ -1,14 +1,29 @@
-import { memo, useState, FC, RefObject, InputHTMLAttributes } from "react";
+import { memo, useState, FC, RefObject, InputHTMLAttributes, useEffect } from "react";
 import styles from "./Input.module.scss";
 import { useDebounce } from "custom-hooks/useDebounce";
+import { TypeFlexDimension } from "utils/interface";
+import { useFlexStyles } from "custom-hooks/useFlexStyles";
 
 export type TypeInput = {
   debounceDelay?: number;
   ref?: RefObject<HTMLInputElement | null>;
-} & InputHTMLAttributes<HTMLInputElement>;
+} & InputHTMLAttributes<HTMLInputElement> &
+  TypeFlexDimension;
 
-const Input: FC<TypeInput> = ({ debounceDelay, ref, value, onChange, ...props }) => {
+const Input: FC<TypeInput> = ({
+  debounceDelay,
+  dimensionX,
+  dimensionY,
+  ref,
+  value,
+  onChange,
+  ...props
+}) => {
   const [localValue, setLocalValue] = useState(value);
+
+  useEffect(() => {
+    setLocalValue(value);
+  }, [value]);
 
   const handleChange = (e: React.ChangeEvent<HTMLInputElement>) => {
     const value = e.target.value;
@@ -28,13 +43,18 @@ const Input: FC<TypeInput> = ({ debounceDelay, ref, value, onChange, ...props })
     { delay: debounceDelay }
   );
 
+  const inputFlexStyles = useFlexStyles<TypeFlexDimension>({
+    dimensionX: dimensionX ?? "hug",
+    dimensionY: dimensionY ?? "hug",
+  });
+
   return (
     <input
       ref={ref}
       value={localValue}
       onChange={handleChange}
       {...props}
-      className={`${props.className} ${styles.input}`}
+      className={`${props.className} ${styles.input} ${inputFlexStyles}`}
     />
   );
 };
