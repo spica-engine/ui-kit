@@ -4,7 +4,6 @@ import styles from "./Date.module.scss";
 import BaseInput from "components/atoms/base-input/BaseInput";
 import Text from "components/atoms/text/Text";
 import DatePicker from "components/atoms/date-picker/DatePicker";
-import dayjs, { Dayjs } from "dayjs";
 
 type DateRangePickerProps = {
   label?: string;
@@ -23,7 +22,7 @@ const DateInput: React.FC<DateRangePickerProps> = ({
   placeholder = "",
   inputContainerClassName,
 }) => {
-  const handleOnChange = (date: Dayjs, dateString: string | string[]) => {
+  const handleOnChange = (dateString: string | string[]) => {
     onChange?.(new Date(dateString as string));
   };
 
@@ -46,7 +45,7 @@ const DateInput: React.FC<DateRangePickerProps> = ({
         placeholder={placeholder}
         suffixIcon={null}
         onChange={handleOnChange}
-        value={value ? dayjs(value) : null}
+        value={value}
       />
     </BaseInput>
   );
