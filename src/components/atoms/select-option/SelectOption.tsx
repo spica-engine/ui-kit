@@ -13,7 +13,6 @@ type TypeSelectOption = {
   selected?: boolean;
   multiple?: boolean;
   disabled?: boolean;
-  onSelect: (value: string | number) => void;
 };
 
 const SelectOption: FC<TypeSelectOption & TypeFluidContainer> = ({
@@ -22,6 +21,7 @@ const SelectOption: FC<TypeSelectOption & TypeFluidContainer> = ({
   multiple,
   disabled,
   onSelect,
+  onClick,
   ...props
 }) => {
   const [displayerWidth, setDisplayerWidth] = useState(0);
@@ -31,11 +31,6 @@ const SelectOption: FC<TypeSelectOption & TypeFluidContainer> = ({
     typeof option === "object"
       ? { value: option.value, label: option.label }
       : { value: option, label: option };
-
-  const handleClick = (value: string | number) => {
-    if (disabled) return;
-    onSelect(value);
-  };
 
   useLayoutEffect(() => {
     if (!containerRef.current) return;
@@ -48,7 +43,7 @@ const SelectOption: FC<TypeSelectOption & TypeFluidContainer> = ({
       dimensionX="fill"
       dimensionY={36}
       alignment="leftCenter"
-      onClick={() => handleClick(value)}
+      onClick={onClick}
       className={`${styles.option} ${selected && styles.selected} ${disabled && styles.disabled}`}
       root={{
         children: (

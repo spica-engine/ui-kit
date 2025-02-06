@@ -7,28 +7,16 @@ type TypeListItem = {
   label: string;
   active?: boolean;
   disabled?: boolean;
-  onSelect?: (value: string) => void;
-};
+} & TypeFluidContainer;
 
-const ListItem: FC<TypeListItem & TypeFluidContainer> = ({
-  label,
-  active,
-  disabled,
-  onSelect,
-  ...props
-}) => {
-  const handleClick = (value: string) => {
-    if (disabled) return;
-    onSelect?.(value);
-  };
-
+const ListItem: FC<TypeListItem> = ({ label, active, disabled, onClick, ...props }) => {
   return (
     <FluidContainer
       key={label}
       dimensionX="fill"
       dimensionY={36}
       alignment="leftCenter"
-      onClick={() => handleClick(label)}
+      onClick={onClick}
       className={`${styles.item} ${active && styles.active} ${disabled && styles.disabled}`}
       root={{
         children: (
