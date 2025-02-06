@@ -4,7 +4,8 @@
   @include inputContainer;
   color: var(--color-font);
   border-radius: var(--border-radius-round);
-  padding: var(--padding-md) var(--padding-sm) var(--padding-md) var(--padding-md);
+  padding: 6px 6px 6px var(--padding-md);
+  font-size: var(--font-size-md);
 
   &.outlined {
     border: 1px solid var(--color-border);
