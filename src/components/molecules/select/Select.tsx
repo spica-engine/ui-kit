@@ -212,7 +212,7 @@ const Select: FC<TypeSelect & TypeFluidContainer> = ({
                 multiple={multiple}
                 option={option}
                 selected={selected}
-                onSelect={handleOptionSelect}
+                onClick={() => handleOptionSelect(optionValue)}
                 {...optionProps}
               />
             );
