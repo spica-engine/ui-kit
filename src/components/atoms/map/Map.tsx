@@ -15,7 +15,7 @@ export type MapClickHandlerProps = {
   onMapClick: (coords: TypeCoordinates) => void;
 };
 
-type MapProps = {
+export type TypeMapProps = {
   coordinates?: TypeCoordinates;
   markerIcon?: {
     icon?: ReactNode;
@@ -36,7 +36,7 @@ const MapClickHandler = ({ onMapClick }: MapClickHandlerProps) => {
   return null;
 };
 
-const Map: FC<MapProps> = ({
+const Map: FC<TypeMapProps> = ({
   coordinates,
   markerIcon,
   scrollWheelZoom = true,

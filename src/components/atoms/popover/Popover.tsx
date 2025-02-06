@@ -63,9 +63,15 @@ const Popover: FC<TypePopover> = ({
   };
 
   return (
-    // !TODO Change with FlexElement
-    <div ref={containerRef} {...handleInteraction} className={styles.container}>
-      <div ref={childrenRef}>{children}</div>
+    <FlexElement
+      ref={containerRef}
+      {...handleInteraction}
+      {...containerProps}
+      className={styles.container}
+    >
+      <FlexElement ref={childrenRef} {...containerProps}>
+        {children}
+      </FlexElement>
       {isOpen && (
         <FlexElement
           ref={popoverRef}
@@ -76,7 +82,7 @@ const Popover: FC<TypePopover> = ({
           {content}
         </FlexElement>
       )}
-    </div>
+    </FlexElement>
   );
 };
 
