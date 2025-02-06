@@ -1,0 +1,12 @@
+@import "/src/styles/_mixins";
+
+.colorMinimized {
+  @include inputMinimizedContainer;
+  padding: 0 var(--padding-md);
+  font-size: var(--font-size-md);
+
+  .closeIcon {
+    border: 0;
+    padding: 0;
+  }
+}
