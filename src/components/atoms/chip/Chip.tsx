@@ -27,7 +27,6 @@ const Chip: FC<TypeChip> = ({
     <FluidContainer
       dimensionX="hug"
       gap={10}
-      className={`${props.className} ${styles.chip} ${styles[variant]} ${!onDelete && !suffixIcon ? styles.noButton : ""}`}
       prefix={{
         dimensionX: "hug",
         children: icon ? <Icon name={icon} /> : undefined,
@@ -55,6 +54,7 @@ const Chip: FC<TypeChip> = ({
         }
       }
       {...props}
+      className={`${props.className} ${styles.chip} ${styles[variant]} ${!onDelete && !suffixIcon ? styles.noButton : ""}`}
     />
   );
 };
