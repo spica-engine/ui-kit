@@ -16,6 +16,7 @@ type TypeNumberInput = {
   onChange?: (value: number) => void;
   inputProps?: TypeInput;
   selectProps?: TypeFluidContainer;
+  inputContainerClassName?: string;
 };
 
 const NumberInput: FC<TypeNumberInput & TypeFlexElement> = ({
@@ -26,6 +27,7 @@ const NumberInput: FC<TypeNumberInput & TypeFlexElement> = ({
   onChange,
   selectProps,
   inputProps,
+  inputContainerClassName,
   ...props
 }) => {
   const selectRef = useRef<TypeSelectRef>(null);
@@ -62,7 +64,7 @@ const NumberInput: FC<TypeNumberInput & TypeFlexElement> = ({
           ),
         },
       }}
-      inputContainerProps={{ className: styles.baseInput }}
+      inputContainerProps={{ className: `${styles.baseInput} ${inputContainerClassName}` }}
       {...props}
     >
       {!!options ? (

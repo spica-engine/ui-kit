@@ -14,6 +14,7 @@ type TypeMultipleSelectionInput<T = string | number> = {
   options?: T[];
   onChange?: (value: T[]) => void;
   selectProps?: TypeFluidContainer;
+  inputContainerClassName?: string;
 } & TypeFlexElement;
 
 const MultipleSelectionInput = <T extends string | number>({
@@ -23,6 +24,7 @@ const MultipleSelectionInput = <T extends string | number>({
   options,
   onChange,
   selectProps,
+  inputContainerClassName,
   ...props
 }: TypeMultipleSelectionInput<T>) => {
   const selectRef = useRef<TypeSelectRef>(null);
@@ -55,7 +57,7 @@ const MultipleSelectionInput = <T extends string | number>({
           ),
         },
       }}
-      inputContainerProps={{ className: styles.baseInput }}
+      inputContainerProps={{ className: `${styles.baseInput} ${inputContainerClassName}` }}
       {...props}
     >
       <Select

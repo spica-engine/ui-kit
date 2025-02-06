@@ -13,6 +13,7 @@ type TypeColorInput = {
   value?: string;
   labelProps?: TypeFluidContainer;
   colorContainerProps?: TypeFluidContainer;
+  inputContainerClassName?: string;
   onChange?: (value: string) => void;
 };
 
@@ -22,6 +23,7 @@ const ColorInput: FC<TypeColorInput & TypeFlexElement> = ({
   value = "#000000",
   labelProps,
   colorContainerProps,
+  inputContainerClassName,
   onChange,
   ...props
 }) => {
@@ -49,7 +51,7 @@ const ColorInput: FC<TypeColorInput & TypeFlexElement> = ({
         },
         ...labelProps,
       }}
-      inputContainerProps={{ className: styles.baseInput }}
+      inputContainerProps={{ className: `${styles.baseInput} ${inputContainerClassName}` }}
       {...props}
     >
       <Color

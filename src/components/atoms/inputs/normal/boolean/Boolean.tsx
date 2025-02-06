@@ -8,7 +8,7 @@ import Switch from "components/atoms/switch/Switch";
 import FlexElement, { TypeFlexElement } from "components/atoms/flex-element/FlexElement";
 
 export type TypeBooleanInput = {
-  checked: boolean;
+  checked?: boolean;
   label?: string;
   disabled?: boolean;
   containerProps?: TypeFluidContainer;
@@ -21,7 +21,7 @@ export type TypeBooleanInput = {
 };
 
 const BooleanInput: FC<TypeBooleanInput> = ({
-  checked,
+  checked = false,
   disabled = false,
   label,
   containerProps,
