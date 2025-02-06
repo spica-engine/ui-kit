@@ -1,0 +1,16 @@
+@import "/src/styles/_mixins";
+
+.numberMinimized {
+  @include inputMinimizedContainer;
+  padding: 0 var(--padding-md);
+  font-size: var(--font-size-md);
+
+  .select {
+    background: var(--color-input-background);
+    padding: 0;
+  }
+  .closeIcon {
+    border: 0;
+    padding: 0;
+  }
+}
