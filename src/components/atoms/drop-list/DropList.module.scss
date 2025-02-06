@@ -1,0 +1,16 @@
+.container {
+  overflow: scroll;
+  button {
+    width: 30px;
+    min-width: 30px !important;
+    height: 30px;
+    border-radius: var(--border-radius-circle) !important;
+    background: #eeeeee !important;
+    color: var(--color-font) !important;
+    border: 1px solid #eeeeee !important;
+
+    &.active {
+      background: transparent !important;
+    }
+  }
+}
