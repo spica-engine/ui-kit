@@ -1,0 +1,28 @@
+@import "/src/styles/_mixins";
+
+.chip {
+  @include inputContainer;
+  color: var(--color-font);
+  border-radius: var(--border-radius-round);
+  padding: var(--padding-md) var(--padding-sm) var(--padding-md) var(--padding-md);
+
+  &.outlined {
+    border: 1px solid var(--color-border);
+    background-color: transparent;
+  }
+
+  &.filled {
+    background-color: var(--color-soft-hover);
+    border: none;
+  }
+
+  &.noButton {
+    padding: var(--padding-md) var(--padding-lg);
+  }
+
+  .closeButton {
+    border: 0;
+    padding: 0;
+    height: var(--icon-size-md);
+  }
+}

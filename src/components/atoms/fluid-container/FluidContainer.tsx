@@ -1,5 +1,6 @@
 import { memo, FC } from "react";
-import FlexElement, { TypeDimension, TypeFlexElement } from "../flex-element/FlexElement";
+import FlexElement, { TypeFlexElement } from "../flex-element/FlexElement";
+import { TypeDimension } from "../../../utils/interface";
 
 export type TypeFluidContainer = {
   prefix?: TypeFlexElement;

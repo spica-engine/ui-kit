@@ -6,9 +6,9 @@ import { useOnClickOutside } from "custom-hooks/useOnClickOutside";
 import useKeyDown from "custom-hooks/useKeyDown";
 
 type TypePopover = {
-  placement: Placement;
+  placement?: Placement;
   content: ReactNode;
-  children: ReactNode;
+  children?: ReactNode;
   trigger?: "hover" | "click";
   open?: boolean;
   containerProps?: TypeFlexElement;
@@ -16,7 +16,7 @@ type TypePopover = {
 };
 
 const Popover: FC<TypePopover> = ({
-  placement,
+  placement = "bottom",
   content,
   trigger = "click",
   children,
@@ -63,9 +63,15 @@ const Popover: FC<TypePopover> = ({
   };
 
   return (
-    // !TODO Change with FlexElement
-    <div ref={containerRef} {...handleInteraction} className={styles.container}>
-      <div ref={childrenRef}>{children}</div>
+    <FlexElement
+      ref={containerRef}
+      {...handleInteraction}
+      {...containerProps}
+      className={styles.container}
+    >
+      <FlexElement ref={childrenRef} {...containerProps}>
+        {children}
+      </FlexElement>
       {isOpen && (
         <FlexElement
           ref={popoverRef}
@@ -76,7 +82,7 @@ const Popover: FC<TypePopover> = ({
           {content}
         </FlexElement>
       )}
-    </div>
+    </FlexElement>
   );
 };
 

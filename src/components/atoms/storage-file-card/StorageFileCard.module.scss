@@ -3,7 +3,7 @@
 .container {
   border-radius: var(--border-radius-lg);
   padding: var(--padding-lg);
-  box-shadow: var(--box-shadow);
+  border: var(--border-default);
   justify-content: space-between !important;
 
   &:hover {
@@ -17,6 +17,7 @@
     embed {
       width: 100%;
       max-height: calc(85% - (2 * var(--padding-lg)));
+      object-fit: contain;
     }
 
     .icon {

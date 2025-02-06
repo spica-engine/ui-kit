@@ -74,6 +74,9 @@ import FolderZipIcon from "@mui/icons-material/FolderZip";
 import MovieIcon from "@mui/icons-material/Movie";
 import GridOnIcon from "@mui/icons-material/GridOn";
 import BallotIcon from "@mui/icons-material/Ballot";
+import GridViewIcon from "@mui/icons-material/GridView";
+import ViewListIcon from "@mui/icons-material/ViewList";
+import SortIcon from "@mui/icons-material/Sort";
 
 export type IconName =
   | "article"
@@ -153,7 +156,10 @@ export type IconName =
   | "folderZip"
   | "movie"
   | "gridOn"
-  | "ballot";
+  | "ballot"
+  | "gridView"
+  | "viewList"
+  | "sort";
 
 export type IconSize = "small" | "medium" | "large" | number;
 
@@ -235,4 +241,7 @@ export const iconMap: {
   movie: MovieIcon,
   gridOn: GridOnIcon,
   ballot: BallotIcon,
+  gridView: GridViewIcon,
+  viewList: ViewListIcon,
+  sort: SortIcon,
 };
