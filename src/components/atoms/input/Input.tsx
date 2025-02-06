@@ -1,4 +1,4 @@
-import { memo, useState, FC, RefObject, InputHTMLAttributes } from "react";
+import { memo, useState, FC, RefObject, InputHTMLAttributes, useEffect } from "react";
 import styles from "./Input.module.scss";
 import { useDebounce } from "custom-hooks/useDebounce";
 
@@ -9,6 +9,10 @@ export type TypeInput = {
 
 const Input: FC<TypeInput> = ({ debounceDelay, ref, value, onChange, ...props }) => {
   const [localValue, setLocalValue] = useState(value);
+
+  useEffect(() => {
+    setLocalValue(value);
+  }, [value]);
 
   const handleChange = (e: React.ChangeEvent<HTMLInputElement>) => {
     const value = e.target.value;

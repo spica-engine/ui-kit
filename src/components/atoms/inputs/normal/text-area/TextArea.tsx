@@ -1,4 +1,4 @@
-import { FC, memo } from "react";
+import { ChangeEventHandler, FC, memo } from "react";
 import FlexElement, { TypeFlexElement } from "../../../flex-element/FlexElement";
 import styles from "./TextArea.module.scss";
 import { TypeFluidContainer } from "components/atoms/fluid-container/FluidContainer";
@@ -8,6 +8,7 @@ import InputHeader from "components/atoms/input-header/InputHeader";
 import Text from "components/atoms/text/Text";
 
 type TypeTextArea = {
+  value?: string;
   textAreaProps?: React.TextareaHTMLAttributes<HTMLTextAreaElement> & {
     rows?: number;
     cols?: number;
@@ -21,9 +22,11 @@ type TypeTextArea = {
   title?: string;
   icon?: IconName;
   description?: string;
+  onChange?: ChangeEventHandler<HTMLTextAreaElement>;
 };
 
 const TextAreaInput: FC<TypeTextArea> = ({
+  value,
   title = "",
   icon,
   textAreaProps,
@@ -34,6 +37,7 @@ const TextAreaInput: FC<TypeTextArea> = ({
   titleSuffixProps,
   containerProps,
   description,
+  onChange,
 }) => {
   const mergedTextAreaContainerProps = {
     dimensionX: "fill",
@@ -90,7 +94,12 @@ const TextAreaInput: FC<TypeTextArea> = ({
           />
         )}
         <FlexElement className={styles.textAreaInput} {...mergedTextAreaContainerProps}>
-          <textarea {...textAreaProps} className={styles.textArea}></textarea>
+          <textarea
+            {...textAreaProps}
+            className={styles.textArea}
+            value={value}
+            onChange={onChange}
+          ></textarea>
         </FlexElement>
       </>
       <Text size="xsmall" className={`${styles.description}`} textClassName={`${styles.text}`}>
