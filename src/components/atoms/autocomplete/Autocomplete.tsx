@@ -9,27 +9,18 @@ import useAdaptivePosition from "custom-hooks/useAdaptivePosition";
 import { TypeInput } from "../input/Input";
 
 type TypeAutocomplete = {
-  value?: string;
-  className?: string;
   options: string[];
-  placeholder?: string;
   placement?: "bottom" | "top";
   popupClassName?: string;
-  inputProps?: TypeInput;
-  disabled?: boolean;
-  onChange?: (value: string) => void;
-};
+  inputProps?: Omit<TypeInput, "value"> & { value?: string };
+} & TypeFluidContainer;
 
 const Autocomplete: FC<TypeAutocomplete> = ({
   className,
-  value = "",
   placement = "bottom",
   popupClassName = "",
-  placeholder = "",
   options,
   inputProps,
-  disabled,
-  onChange,
   ...props
 }) => {
   const containerRef = useRef<HTMLDivElement | null>(null);
@@ -47,8 +38,12 @@ const Autocomplete: FC<TypeAutocomplete> = ({
   });
 
   const [showMenu, setShowMenu] = useState(false);
-  const [search, setSearch] = useState(value);
+  const [search, setSearch] = useState(inputProps?.value || "");
   const [filteredOptions, setFilteredOptions] = useState<string[]>(options);
+
+  useEffect(() => {
+    setSearch(inputProps?.value || "");
+  }, [inputProps?.value]);
 
   useEffect(() => {
     filterOptions(search);
@@ -73,13 +68,13 @@ const Autocomplete: FC<TypeAutocomplete> = ({
   };
 
   const handleItemSelect = (selectedValue: string) => {
-    onChange?.(selectedValue);
+    inputProps?.onChange?.(selectedValue as unknown as ChangeEvent<HTMLInputElement>);
     setSearch(selectedValue);
     setShowMenu(false);
   };
 
   const toggleDropdown = () => {
-    if (disabled) return;
+    if (inputProps?.disabled) return;
     setShowMenu((prev) => !prev);
   };
 
@@ -88,10 +83,8 @@ const Autocomplete: FC<TypeAutocomplete> = ({
       <InputWithIcon
         ref={containerRef}
         inputProps={{
-          placeholder,
           value: search,
           onChange: handleInputChange,
-          disabled,
           ...inputProps,
           className: `${inputProps?.className} ${styles.input}`,
         }}

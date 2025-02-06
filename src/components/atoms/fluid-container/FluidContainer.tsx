@@ -3,7 +3,7 @@ import FlexElement, { TypeFlexElement } from "../flex-element/FlexElement";
 import { TypeDimension } from "../../../utils/interface";
 
 export type TypeFluidContainer = {
-  prefix?: TypeFlexElement & Omit<React.HTMLAttributes<HTMLDivElement>, "prefix">;
+  prefix?: TypeFlexElement;
   root?: TypeFlexElement;
   suffix?: TypeFlexElement;
   mode?: "hug" | "fill" | "middle";

@@ -14,8 +14,6 @@ export function useFlexStyles<T extends Partial<TypeFlexContainer & TypeFlexDime
   return useMemo(() => {
     const { alignment, direction, dimensionX, dimensionY, gap } = options;
 
-    console.log("options", options);
-
     const classes = [
       "flexElement",
       alignment ? alignment : "",
@@ -27,8 +25,6 @@ export function useFlexStyles<T extends Partial<TypeFlexContainer & TypeFlexDime
       .filter(Boolean)
       .join(" ")
       .trim();
-
-    console.log("classes", classes);
 
     const inlineStyles = {
       gap: `${gap}px`,
