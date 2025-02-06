@@ -73,6 +73,7 @@ import InvertColorsIcon from "@mui/icons-material/InvertColors";
 import FolderZipIcon from "@mui/icons-material/FolderZip";
 import MovieIcon from "@mui/icons-material/Movie";
 import GridOnIcon from "@mui/icons-material/GridOn";
+import BallotIcon from "@mui/icons-material/Ballot";
 
 export type IconName =
   | "article"
@@ -151,7 +152,8 @@ export type IconName =
   | "invertColors"
   | "folderZip"
   | "movie"
-  | "gridOn";
+  | "gridOn"
+  | "ballot";
 
 export type IconSize = "small" | "medium" | "large" | number;
 
@@ -232,4 +234,5 @@ export const iconMap: {
   folderZip: FolderZipIcon,
   movie: MovieIcon,
   gridOn: GridOnIcon,
+  ballot: BallotIcon,
 };
