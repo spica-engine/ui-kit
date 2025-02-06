@@ -43,9 +43,9 @@ const Input: FC<TypeInput> = ({
     { delay: debounceDelay }
   );
 
-  const inputFlexStyles = useFlexStyles<TypeFlexDimension>({
-    dimensionX: dimensionX ?? "hug",
-    dimensionY: dimensionY ?? "hug",
+  const { classes, inlineStyles } = useFlexStyles<TypeFlexDimension>({
+    dimensionX: dimensionX,
+    dimensionY: dimensionY,
   });
 
   return (
@@ -54,7 +54,8 @@ const Input: FC<TypeInput> = ({
       value={localValue}
       onChange={handleChange}
       {...props}
-      className={`${props.className} ${styles.input} ${inputFlexStyles}`}
+      className={`${props.className} ${styles.input} ${classes}`}
+      style={{ ...inlineStyles, ...props.style }}
     />
   );
 };
