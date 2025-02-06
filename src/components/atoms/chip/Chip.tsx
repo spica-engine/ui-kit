@@ -26,7 +26,7 @@ const Chip: FC<TypeChip> = ({
   return (
     <FluidContainer
       dimensionX="hug"
-      gap={10}
+      gap={8}
       prefix={{
         dimensionX: "hug",
         children: icon ? <Icon name={icon} /> : undefined,
