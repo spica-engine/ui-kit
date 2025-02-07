@@ -9,7 +9,7 @@ import { TypeFlexElement } from "components/atoms/flex-element/FlexElement";
 import { TypeFluidContainer } from "components/atoms/fluid-container/FluidContainer";
 
 type TypeStringInput = {
-  label: string;
+  label?: string;
   description?: string;
   value?: string;
   options?: string[];
