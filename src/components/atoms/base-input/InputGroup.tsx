@@ -14,7 +14,7 @@ type TypeBaseInputComponent = React.FC<TypeBaseInputProps> & {
 
 const InputGroupComponent: React.FC<TypeBaseInputProps> = ({ ref, children, ...props }) => {
   return (
-    <FlexElement ref={ref} {...props}>
+    <FlexElement {...props} ref={ref}>
       {children}
     </FlexElement>
   );
