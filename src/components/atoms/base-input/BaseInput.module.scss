@@ -9,6 +9,10 @@
       color: var(--color-primary) !important;
     }
   }
+
+  &.containerFocused {
+    outline: 1px solid var(--color-primary);
+  }
 }
 
 .disabled {
