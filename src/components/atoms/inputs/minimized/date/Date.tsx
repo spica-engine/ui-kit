@@ -1,17 +1,15 @@
 import React from "react";
-import type { DatePickerProps } from "antd";
 import DatePicker from "components/atoms/date-picker/DatePicker";
 import FluidContainer, {
   TypeFluidContainer,
 } from "components/atoms/fluid-container/FluidContainer";
-import dayjs from "dayjs";
 import styles from "./Date.module.scss";
 import Button from "components/atoms/button/Button";
 import Icon from "components/atoms/icon/Icon";
 
 type DateInputProps = {
-  onChange?: DatePickerProps["onChange"];
-  value?: dayjs.Dayjs;
+  onChange?: (value: Date) => void;
+  value?: Date | string | null;
   placeholder?: string;
   onClear?: () => void;
   datePickerClassName?: string;
@@ -25,6 +23,10 @@ const DateMinimizedInput = ({
   datePickerClassName,
   ...props
 }: DateInputProps) => {
+  const handleOnChange = (dateString: string | string[]) => {
+    onChange?.(new Date(dateString as string));
+  };
+
   return (
     <FluidContainer
       mode="fill"
@@ -36,7 +38,7 @@ const DateMinimizedInput = ({
         alignment: "leftCenter",
         children: (
           <DatePicker
-            onChange={onChange}
+            onChange={handleOnChange}
             value={value}
             placeholder={placeholder}
             suffixIcon={null}

@@ -1,0 +1,10 @@
+@import "src/styles/_mixins";
+
+.container {
+  @include inputContainer;
+}
+
+.map {
+  width: 300px;
+  height: 300px;
+}
