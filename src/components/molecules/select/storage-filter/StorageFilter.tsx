@@ -204,7 +204,7 @@ const StorageFilter: FC<TypeStorageFilter> = ({ onApply, onCancel }) => {
             children: (
               <FlexElement className={styles.content} dimensionY={31.5} dimensionX={200}>
                 <DatePicker
-                  onChange={(date, dateStr) => formik.setFieldValue("dateRange.from", dateStr)}
+                  onChange={(date) => formik.setFieldValue("dateRange.from", date)}
                   value={formik.values.dateRange.from || null}
                   placeholder="Date"
                   suffixIcon={<Icon name="chevronDown" />}
@@ -226,7 +226,7 @@ const StorageFilter: FC<TypeStorageFilter> = ({ onApply, onCancel }) => {
             children: (
               <FlexElement className={styles.content} dimensionY={31.5} dimensionX={200}>
                 <DatePicker
-                  onChange={(date, dateStr) => formik.setFieldValue("dateRange.to", dateStr)}
+                  onChange={(date) => formik.setFieldValue("dateRange.to", date)}
                   value={formik.values.dateRange.to}
                   placeholder="Date"
                   suffixIcon={<Icon name="chevronDown" />}
