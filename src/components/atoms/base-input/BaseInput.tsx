@@ -79,10 +79,11 @@ const BaseInput = ({
         dimensionX="fill"
         gap={15}
         {...inputContainerProps}
-        className={`${styles.baseInputContainer} ${inputContainerProps?.className}`}
+        className={`${styles.baseInputContainer} ${inputContainerProps?.className} ${
+          isFocused ? styles.containerFocused : ""
+        }`}
       >
         <InputGroup.Label
-          {...labelProps}
           prefix={{
             children: labelProps?.prefix?.children,
             ...labelProps?.prefix,
@@ -91,6 +92,7 @@ const BaseInput = ({
             children: labelProps?.root?.children,
             ...labelProps?.root,
           }}
+          {...labelProps}
           isFocused={isFocused || !!children.props.value}
           className={
             isFocused || !!children.props.value

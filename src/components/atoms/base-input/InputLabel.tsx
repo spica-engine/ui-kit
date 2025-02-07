@@ -1,6 +1,7 @@
 import React from "react";
 import styles from "./InputLabel.module.scss";
 import FluidContainer, { TypeFluidContainer } from "../fluid-container/FluidContainer";
+import Text from "../text/Text";
 
 type TypeInputLabel = {
   reverse?: boolean;
@@ -9,13 +10,13 @@ type TypeInputLabel = {
   isFocused?: boolean;
 } & TypeFluidContainer;
 
-const InputLabel = ({ dividerClassName, isFocused, ...props }: TypeInputLabel) => {
-  const labelDefaults = {
-    reverse: false,
-    divider: true,
-    ...props,
-  };
-
+const InputLabel = ({
+  dividerClassName,
+  reverse = false,
+  divider = true,
+  isFocused,
+  ...props
+}: TypeInputLabel) => {
   return (
     <FluidContainer
       mode="fill"
@@ -25,19 +26,17 @@ const InputLabel = ({ dividerClassName, isFocused, ...props }: TypeInputLabel) =
         className: `${props.prefix?.className}`,
       }}
       root={{
-        ...props.root,
         children: props.root?.children,
+        ...props.root,
         className: `${styles.title} ${props.root?.className} `,
-        alignment: "leftCenter",
       }}
       suffix={{
-        children: labelDefaults.divider && (
-          <div className={`${styles.divider} ${dividerClassName}`} />
-        ),
         dimensionY: "fill",
+        children: divider && <div className={`${styles.divider} ${dividerClassName}`} />,
+        ...props.suffix,
+        className: `${props.suffix?.className}`,
       }}
-      {...labelDefaults}
-      className={`${styles.container} ${labelDefaults.reverse ? styles.reverse : ""} ${props.className} ${
+      className={`${styles.container} ${reverse ? styles.reverse : ""} ${props.className} ${
         isFocused ? styles.focused : ""
       }`}
     />
