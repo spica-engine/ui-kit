@@ -1,4 +1,3 @@
-// @ts-nocheck
 import { TypeCoordinates } from "components/atoms/map/Map";
 import { Fragment, ReactNode } from "react";
 import StringInput from "../components/atoms/inputs/normal/string/String";
@@ -232,7 +231,9 @@ const types: TypeInputTypeMap = {
         properties={props.properties!}
         title={props.title}
         description={props.description}
+        //@ts-ignore
         value={props.value}
+        //@ts-ignore
         onChange={(value) => props.onChange?.({ key: props.key, value })}
       />
     );
@@ -242,6 +243,7 @@ const types: TypeInputTypeMap = {
       <ArrayInput
         title={props.title}
         description={props.description}
+        //@ts-ignore
         value={props.value}
         onChange={(value) => props.onChange?.({ key: props.title, value })}
         minItems={props.minItems}
@@ -272,12 +274,14 @@ const useInputRepresenter = ({ properties, value, onChange }: TypeUseInputRepres
           key,
           title: el.title,
           description: el.description,
+          //@ts-ignore
           value: el.type === "object" ? value?.[key] : value,
           className: el.className,
           properties: el.properties,
           enum: el.enum as any,
           minItems: el.minItems,
           maxItems: el.maxItems,
+          //@ts-ignore
           items: el.items,
           onChange: handleChange,
         })}
