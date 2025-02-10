@@ -3,7 +3,7 @@ import styles from "./StorageFilter.module.scss";
 import FlexElement from "components/atoms/flex-element/FlexElement";
 import FluidContainer from "components/atoms/fluid-container/FluidContainer";
 import Text from "components/atoms/text/Text";
-import Select from "../Select";
+import Select from "../select/Select";
 import Input from "components/atoms/input/Input";
 import Chip from "components/atoms/chip/Chip";
 import DatePicker from "components/atoms/date-picker/DatePicker";
