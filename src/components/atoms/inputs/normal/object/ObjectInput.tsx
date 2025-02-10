@@ -8,12 +8,11 @@ import InputGroup from "components/atoms/base-input/InputGroup";
 import useInputRepresenter, {
   TypeChangeEvent,
   TypeProperties,
+  TypeRepresenterValue,
 } from "custom-hooks/useInputRepresenter";
 
 type TypeObjectInput = {
-  value: {
-    [key: string]: unknown;
-  };
+  value: TypeRepresenterValue;
   properties: TypeProperties;
   title: string;
   description: string;

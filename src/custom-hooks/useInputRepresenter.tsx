@@ -11,19 +11,18 @@ import MultipleSelectionInput from "../components/atoms/inputs/normal/multiple-s
 import LocationInput from "../components/atoms/inputs/normal/location/Location";
 import RichTextInput from "../components/atoms/inputs/normal/rich-text/RichText";
 import Icon from "components/atoms/icon/Icon";
-import { isTypeSpicaLocation } from "utils/helper";
 import ObjectInput from "components/atoms/inputs/normal/object/ObjectInput";
 import ArrayInput from "components/atoms/inputs/normal/array/ArrayInput";
+import { apiUtils } from "utils/apiUtils";
 
 export type TypeProperties = {
   [key: string]: {
     type: keyof typeof types;
-    key: string;
     title: string;
     description: string;
     options?: TypeOptions;
     enum?: (string | number)[];
-    default?: boolean;
+    default?: TypeValueType;
     items?: TypeMultipleItems | TypeArrayItems;
     minItems?: number;
     maxItems?: number;
@@ -31,6 +30,12 @@ export type TypeProperties = {
     className?: string;
     properties?: TypeProperties;
   };
+};
+
+export type TypeValueType = string | number | boolean | string[] | number[] | object;
+
+export type TypeRepresenterValue = {
+  [key: string]: TypeValueType;
 };
 
 export type TypeInputType =
@@ -48,10 +53,9 @@ export type TypeInputType =
   | "array";
 
 type TypeOptions = {
-  position: "top" | "bottom" | "left" | "right";
+  position?: "top" | "bottom" | "left" | "right";
+  index?: boolean;
 };
-
-export type TypeSpicaLocation = { type: string; coordinates: [number, number] };
 
 type TypeMultipleItems = {
   title?: string;
@@ -59,7 +63,7 @@ type TypeMultipleItems = {
   enum?: (number | string)[];
 };
 
-type TypeArrayItems = {
+export type TypeArrayItems = {
   title?: string;
   type: TypeInputType;
   properties: TypeProperties;
@@ -76,27 +80,40 @@ export type TypeInputProps<T> = {
   description: string;
   value?: T;
   className?: string;
-  properties?: TypeProperties;
-  options?: any[];
-  minItems?: number;
-  maxItems?: number;
-  items?: any;
   onChange?: ({ key, value }: TypeChangeEvent<T>) => void;
 };
 
+type TypeObjectInputProps<T> = {
+  properties?: TypeProperties;
+} & TypeInputProps<T>;
+
+type TypeSelectInputProps<T extends string | number> = {
+  enum?: T[];
+} & TypeInputProps<T>;
+
+type TypeMultiSelectInputProps<T extends string | number> = {
+  enum?: T[];
+} & TypeInputProps<T[]>;
+
+type TypeArrayInputProps<T> = {
+  minItems?: number;
+  maxItems?: number;
+  items?: TypeArrayItems;
+} & TypeInputProps<T>;
+
 export type TypeInputTypeMap = {
-  string: (props: TypeInputProps<string>) => ReactNode;
-  number: (props: TypeInputProps<number>) => ReactNode;
+  string: (props: TypeSelectInputProps<string>) => ReactNode;
+  number: (props: TypeSelectInputProps<number>) => ReactNode;
   textarea: (props: TypeInputProps<string>) => ReactNode;
   date: (props: TypeInputProps<Date | string | null>) => ReactNode;
   boolean: (props: TypeInputProps<boolean>) => ReactNode;
   color: (props: TypeInputProps<string>) => ReactNode;
   storage: (props: TypeInputProps<string>) => ReactNode;
-  multiselect: (props: TypeInputProps<(string | number)[]>) => ReactNode;
-  location: (props: TypeInputProps<TypeCoordinates | TypeSpicaLocation>) => ReactNode;
+  multiselect: (props: TypeMultiSelectInputProps<string | number>) => ReactNode;
+  location: (props: TypeInputProps<TypeCoordinates | apiUtils.TypeLocation>) => ReactNode;
   richtext: (props: TypeInputProps<string>) => ReactNode;
-  object: (props: TypeInputProps<any>) => ReactNode;
-  array: (props: TypeInputProps<any>) => ReactNode;
+  object: (props: TypeObjectInputProps<TypeRepresenterValue>) => ReactNode;
+  array: (props: TypeArrayInputProps<TypeValueType>) => ReactNode;
 };
 
 const types: TypeInputTypeMap = {
@@ -106,7 +123,7 @@ const types: TypeInputTypeMap = {
       description={props.description}
       inputContainerClassName={props.className}
       value={props.value}
-      options={props.options}
+      options={props.enum}
       onChange={(value) => props.onChange?.({ key: props.key, value })}
     />
   ),
@@ -116,6 +133,7 @@ const types: TypeInputTypeMap = {
       description={props.description}
       inputContainerClassName={props.className}
       value={props.value}
+      options={props.enum}
       onChange={(value) => props.onChange?.({ key: props.key, value })}
     />
   ),
@@ -141,6 +159,7 @@ const types: TypeInputTypeMap = {
     <BooleanInput
       checked={props.value}
       label={props.title}
+      description={props.description}
       containerProps={{ dimensionX: "fill" }}
       onChange={(value) => props.onChange?.({ key: props.key, value })}
     />
@@ -169,18 +188,19 @@ const types: TypeInputTypeMap = {
       description={props.description}
       inputContainerClassName={props.className}
       value={props.value}
+      options={props.enum}
       onChange={(value) => props.onChange?.({ key: props.key, value })}
     />
   ),
   location: (props) => {
-    if (isTypeSpicaLocation(props.value)) {
+    if (apiUtils.isTypeLocation(props.value)) {
       const coordinates = props?.value.coordinates;
       props.value = { lat: coordinates[1], lng: coordinates[0] };
     }
 
     const handleChangeLocation = (value: TypeCoordinates) => {
-      let normalizedValue: TypeSpicaLocation | TypeCoordinates = value;
-      if (isTypeSpicaLocation(props.value)) {
+      let normalizedValue: apiUtils.TypeLocation | TypeCoordinates = value;
+      if (apiUtils.isTypeLocation(props.value)) {
         normalizedValue = {
           type: "Point",
           coordinates: [value.lng, value.lng],
@@ -211,7 +231,9 @@ const types: TypeInputTypeMap = {
         properties={props.properties!}
         title={props.title}
         description={props.description}
+        //@ts-ignore
         value={props.value}
+        //@ts-ignore
         onChange={(value) => props.onChange?.({ key: props.key, value })}
       />
     );
@@ -221,6 +243,7 @@ const types: TypeInputTypeMap = {
       <ArrayInput
         title={props.title}
         description={props.description}
+        //@ts-ignore
         value={props.value}
         onChange={(value) => props.onChange?.({ key: props.title, value })}
         minItems={props.minItems}
@@ -233,9 +256,7 @@ const types: TypeInputTypeMap = {
 
 type TypeUseInputRepresenter = {
   properties: TypeProperties;
-  value: {
-    [key: string]: any;
-  };
+  value: TypeRepresenterValue;
   onChange?: (event: TypeChangeEvent<unknown>) => void;
 };
 
@@ -250,15 +271,17 @@ const useInputRepresenter = ({ properties, value, onChange }: TypeUseInputRepres
     return (
       <Fragment key={key}>
         {types[el.type]({
-          key: el.key,
+          key,
           title: el.title,
           description: el.description,
+          //@ts-ignore
           value: el.type === "object" ? value?.[key] : value,
           className: el.className,
           properties: el.properties,
-          options: el.enum,
+          enum: el.enum as any,
           minItems: el.minItems,
           maxItems: el.maxItems,
+          //@ts-ignore
           items: el.items,
           onChange: handleChange,
         })}

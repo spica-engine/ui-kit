@@ -52,9 +52,15 @@ const BooleanInput: FC<TypeBooleanInput> = ({
           children: label && <Text {...labelProps}>{label}</Text>,
           ...suffixProps,
         }}
+        className={`${containerProps?.className} ${styles.container}`}
         {...containerProps}
       />
-      <Text size="xsmall" className={`${styles.description}`} textClassName={`${styles.text}`}>
+      <Text
+        size="xsmall"
+        alignment="leftCenter"
+        className={`${styles.description}`}
+        textClassName={`${styles.text}`}
+      >
         {description}
       </Text>
     </FlexElement>
