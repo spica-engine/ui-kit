@@ -8,7 +8,6 @@ import styles from "./RichText.module.scss";
 type TypeRichTextMinimized = {
   value?: string;
   richTextProps?: TypeFlexElement;
-  popOverProps?: TypeFlexElement;
 } & TypeFlexElement;
 
 const MinimizedRichTextInput: FC<TypeRichTextMinimized> = ({ value, richTextProps, ...props }) => {
