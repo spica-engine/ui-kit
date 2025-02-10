@@ -1,12 +1,9 @@
-import { FC, memo } from "react";
+import { FC, memo, useEffect, useState } from "react";
 import styles from "./StorageFileSelect.module.scss";
-import FluidContainer from "components/atoms/fluid-container/FluidContainer";
-import Icon from "components/atoms/icon/Icon";
 import Modal from "components/atoms/modal/Modal";
-import Button from "components/atoms/button/Button";
 import StorageFileCard from "components/atoms/storage-file-card/StorageFileCard";
-import Popover from "components/atoms/popover/Popover";
-import SortPopoverContent, { TypeSortProp } from "./sort-popover-content/SortPopoverContent";
+import { TypeSortProp } from "./sort-popover-content/SortPopoverContent";
+import StorageModalHeading from "./storage-modal-heading/StorageModalHeading";
 
 type TypeFile = {
   id: string;
@@ -18,11 +15,21 @@ type TypeFile = {
 type TypeStorageFileSelect = {
   data: TypeFile[];
   className?: string;
+  onChangeSearch?: (search: string) => void;
   onClickSort?: (prop: TypeSortProp) => void;
   onChooseFiles?: (file: TypeFile) => void;
 };
 
-const StorageFileSelect: FC<TypeStorageFileSelect> = ({ data, onClickSort, onChooseFiles }) => {
+const StorageFileSelect: FC<TypeStorageFileSelect> = ({
+  data,
+  onChangeSearch,
+  onClickSort,
+  onChooseFiles,
+}) => {
+  const [directory, setDirectory] = useState(["/"]);
+  const [fileLength, setFileLength] = useState(0);
+  const [folderLength, setFolderLength] = useState(0);
+
   const handleClickSortProp = (prop: TypeSortProp) => {
     onClickSort?.(prop);
   };
@@ -31,47 +38,32 @@ const StorageFileSelect: FC<TypeStorageFileSelect> = ({ data, onClickSort, onCho
     onChooseFiles?.(file);
   };
 
+  const handleChangeDirectory = (index: number) => {
+    setDirectory(directory.slice(0, index + 1));
+  };
+
+  useEffect(() => {
+    // TODO Should calculate file and folder length
+  }, [data]);
+
   return (
     <Modal showCloseButton={false} className={styles.container} dimensionX="fill">
       <Modal.Header
-        suffix={{
+        dimensionY="hug"
+        root={{
           dimensionX: "fill",
           children: (
-            <FluidContainer
-              dimensionX="fill"
-              alignment="rightCenter"
-              className={styles.actions}
-              prefix={{
-                children: (
-                  <Button color="transparent" variant="filled">
-                    <Icon name="gridView" />
-                  </Button>
-                ),
-              }}
-              root={{
-                children: (
-                  <Button color="transparent" variant="filled">
-                    <Icon name="viewList" />
-                  </Button>
-                ),
-              }}
-              suffix={{
-                children: (
-                  <Popover
-                    content={<SortPopoverContent onClick={handleClickSortProp} />}
-                    placement="bottomEnd"
-                    trigger="click"
-                  >
-                    <Button color="transparent" variant="filled">
-                      <Icon name="sort" />
-                    </Button>
-                  </Popover>
-                ),
-              }}
+            <StorageModalHeading
+              fileLength={fileLength}
+              folderLength={folderLength}
+              onClickSort={handleClickSortProp}
+              directory={directory}
+              onChangeDirectory={handleChangeDirectory}
+              onChangeSearch={onChangeSearch}
             />
           ),
         }}
-      ></Modal.Header>
+      />
       <Modal.Body gap={12} className={styles.content}>
         {data.map((el) => (
           <StorageFileCard

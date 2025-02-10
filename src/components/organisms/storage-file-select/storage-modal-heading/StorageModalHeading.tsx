@@ -1,0 +1,100 @@
+import FlexElement from "components/atoms/flex-element/FlexElement";
+import { FC, memo } from "react";
+import styles from "./StorageModalHeading.module.scss";
+import FluidContainer from "components/atoms/fluid-container/FluidContainer";
+import InputWithIcon from "components/atoms/input-with-icon/InputWithIcon";
+import Icon from "components/atoms/icon/Icon";
+import Popover from "components/atoms/popover/Popover";
+import StorageFilter from "components/molecules/storage-filter/StorageFilter";
+import Button from "components/atoms/button/Button";
+import SortPopoverContent, { TypeSortProp } from "../sort-popover-content/SortPopoverContent";
+import Text from "components/atoms/text/Text";
+import Directory from "components/atoms/directory/Directory";
+
+type TypeStorageModalHeading = {
+  directory: string[];
+  fileLength?: number;
+  folderLength?: number;
+  onChangeSearch?: (search: string) => void;
+  onClickSort?: (prop: TypeSortProp) => void;
+  onChangeDirectory?: (index: number) => void;
+};
+
+const StorageModalHeading: FC<TypeStorageModalHeading> = ({
+  directory,
+  fileLength = 0,
+  folderLength = 0,
+  onClickSort,
+  onChangeDirectory,
+  onChangeSearch,
+}) => {
+  const handleClickSortProp = (prop: TypeSortProp) => {
+    onClickSort?.(prop);
+  };
+
+  return (
+    <FlexElement dimensionX="fill" direction="vertical" gap={20}>
+      <FluidContainer
+        dimensionX="fill"
+        prefix={{
+          children: <Directory directory={directory} onChangeDirectory={onChangeDirectory} />,
+        }}
+        root={{
+          dimensionX: "fill",
+          alignment: "rightCenter",
+          children: (
+            <FlexElement gap={10} className={styles.actions}>
+              {!!folderLength && <Text>{folderLength} Folder</Text>}
+              {!!fileLength && <Text>{fileLength} File</Text>}
+            </FlexElement>
+          ),
+        }}
+      />
+      <FluidContainer
+        dimensionX="fill"
+        prefix={{
+          children: (
+            <InputWithIcon
+              dimensionX={400}
+              className={styles.inputContainer}
+              prefix={{
+                children: <Icon name="magnify" />,
+              }}
+              inputProps={{
+                placeholder: "Search",
+                className: `${styles.input}`,
+                onChange: (e) => onChangeSearch?.(e.target.value),
+              }}
+            />
+          ),
+        }}
+        root={{
+          dimensionX: "fill",
+          alignment: "rightCenter",
+          children: (
+            <FlexElement gap={10} className={styles.actions}>
+              <Popover content={<StorageFilter />} placement="bottomEnd" trigger="click">
+                <Button color="transparent" variant="filled">
+                  <Icon name="filter" />
+                  Filter
+                </Button>
+              </Popover>
+              <Popover
+                content={<SortPopoverContent onClick={handleClickSortProp} />}
+                placement="bottomEnd"
+                trigger="click"
+              >
+                <Button color="transparent" variant="filled">
+                  <Icon name="sort" />
+                  Sort
+                </Button>
+              </Popover>
+            </FlexElement>
+          ),
+        }}
+      />
+    </FlexElement>
+  );
+};
+
+export default memo(StorageModalHeading);
