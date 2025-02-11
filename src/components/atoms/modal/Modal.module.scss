@@ -9,7 +9,7 @@
   // !TODO need to check if this is necessary
   // overflow: hidden;
   box-shadow: var(--box-shadow);
-  border-radius: var(--border-radius-lg);
+  border-radius: var(--border-radius-md);
 
   &.noOverflow {
     max-height: none;
