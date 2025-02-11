@@ -3,7 +3,7 @@ import styles from "./Accordion.module.scss";
 import { TypeFluidContainer } from "components/atoms/fluid-container/FluidContainer";
 
 import FlexElement, { TypeFlexElement } from "components/atoms/flex-element/FlexElement";
-import AccordionItem from "./AccordionItem";
+import AccordionElement from "./AccordionElement";
 
 export type TypeAccordionItem = {
   title: string;
@@ -49,7 +49,7 @@ const AccordionGroup: React.FC<TypeAccordionGroup> = ({
       className={`${styles.accordionGroup} ${props.className || ""}`}
     >
       {items.map((item, index) => (
-        <AccordionItem
+        <AccordionElement
           key={index + 1}
           title={item.title}
           isOpen={activeIndex === index + 1}
@@ -59,7 +59,7 @@ const AccordionGroup: React.FC<TypeAccordionGroup> = ({
           openClassName={openClassName}
         >
           {item.content}
-        </AccordionItem>
+        </AccordionElement>
       ))}
     </FlexElement>
   );
