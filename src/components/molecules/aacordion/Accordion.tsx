@@ -5,15 +5,18 @@ import FluidContainer, {
 } from "components/atoms/fluid-container/FluidContainer";
 import Icon from "components/atoms/icon/Icon";
 import FlexElement, { TypeFlexElement } from "components/atoms/flex-element/FlexElement";
+import { IconName } from "utils/iconList";
 
-type AccordionItemProps = TypeFlexElement & {
+type AccordionItemProps = {
   title: string;
   children: React.ReactNode;
-  icon?: React.ReactNode;
+  icon?: React.ReactNode | IconName;
   isOpen: boolean;
-  header?: TypeFluidContainer;
   bordered?: boolean;
   openClassName?: string;
+  itemClassName?: string;
+  contentClassName?: string;
+  headerClassName?: string;
   onClick: () => void;
 };
 
@@ -23,20 +26,29 @@ const AccordionItem: React.FC<AccordionItemProps> = ({
   isOpen,
   onClick,
   icon,
-  header,
   bordered = false,
   openClassName,
-  ...props
+  itemClassName,
+  contentClassName,
+  headerClassName,
 }) => {
+  const renderIcon = () => {
+    if (icon && typeof icon !== "string") {
+      return icon;
+    }
+    const iconName = icon || "chevronDown";
+    return (
+      <Icon
+        name={iconName as IconName}
+        className={`${styles.icon} ${isOpen ? styles.rotate : ""}`}
+      />
+    );
+  };
+
   return (
-    <FlexElement
-      dimensionX="fill"
-      direction="vertical"
-      alignment="leftCenter"
-      gap={0}
-      {...props}
+    <div
       className={`${styles.accordionItem} ${bordered ? styles.bordered : ""} ${
-        props.className || ""
+        itemClassName || ""
       }`}
     >
       <FluidContainer
@@ -47,22 +59,22 @@ const AccordionItem: React.FC<AccordionItemProps> = ({
           alignment: "leftCenter",
         }}
         suffix={{
-          children: icon || header?.suffix?.children || (
-            <Icon name="chevronDown" className={`${styles.icon} ${isOpen ? styles.rotate : ""}`} />
-          ),
-          ...header?.suffix,
+          children: renderIcon(),
         }}
-        {...header}
         onClick={onClick}
         className={`${styles.accordionTitle} ${isOpen ? openClassName || styles.open : ""} ${
-          header?.className || ""
+          headerClassName || ""
         }`}
       />
 
-      <div className={`${styles.accordionContent} ${isOpen ? styles.open : ""}`}>
+      <div
+        className={`${styles.accordionContent} ${isOpen ? styles.open : ""} ${
+          contentClassName || ""
+        }`}
+      >
         <div className={styles.accordionContentInner}>{children}</div>
       </div>
-    </FlexElement>
+    </div>
   );
 };
 
@@ -70,6 +82,7 @@ export type AccordionItem = {
   title: string;
   content: React.ReactNode;
   icon?: React.ReactNode;
+  className?: string;
 };
 
 type AccordionGroupProps = TypeFlexElement & {
@@ -116,7 +129,6 @@ const AccordionGroup: React.FC<AccordionGroupProps> = ({
           onClick={() => handleItemClick(index + 1)}
           icon={item.icon || icon}
           bordered={bordered}
-          header={header}
           openClassName={openClassName}
         >
           {item.content}
