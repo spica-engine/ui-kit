@@ -161,7 +161,7 @@ export type IconName =
   | "viewList"
   | "sort";
 
-export type IconSize = "small" | "medium" | "large" | number;
+export type IconSize = "sm" | "md" | "lg" | number;
 
 export const iconMap: {
   [key in IconName]: React.ComponentType<{ className?: string; style?: CSSProperties }>;
