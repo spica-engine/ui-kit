@@ -1,18 +1,22 @@
 @import "/src/styles/_mixins";
 
 .container {
-  //   padding: var(--padding-md) 0;
   background-color: var(--color-menu-background);
   border-radius: var(--border-radius-md);
   box-shadow: var(--box-shadow);
+  color: var(--color-font);
 }
 
-.container > * {
-  padding: var(--padding-md) 0;
-  width: 100%;
-  @include textEllipsis(1);
-  display: block;
-  white-space: nowrap;
+.menuSection {
+  padding: var(--padding-md);
+
+  .menuItem {
+    padding: 2px 0;
+  }
+  .root {
+    width: 100%;
+    @include textEllipsis(1);
+  }
 }
 
 .container > *:not(:last-child) {
