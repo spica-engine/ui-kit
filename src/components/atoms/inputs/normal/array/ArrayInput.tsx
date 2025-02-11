@@ -5,19 +5,24 @@ import InputHeader from "components/atoms/input-header/InputHeader";
 import Text from "components/atoms/text/Text";
 import FlexElement, { TypeFlexElement } from "components/atoms/flex-element/FlexElement";
 import InputGroup from "components/atoms/base-input/InputGroup";
-import useInputRepresenter from "custom-hooks/useInputRepresenter";
+import useInputRepresenter, {
+  TypeArrayItems,
+  TypeProperties,
+  TypeValueType,
+} from "custom-hooks/useInputRepresenter";
 import DropList from "components/atoms/drop-list/DropList";
 
 type TypeArrayInput = {
-  value: any[];
-  title: string;
-  description: string;
+  value?: TypeValueType[];
+  title?: string;
+  description?: string;
   errorMessage?: string;
   helperTextContainerProps?: TypeFlexElement;
   helperTextProps?: TypeFlexElement;
   minItems?: number;
   maxItems?: number;
-  items: any;
+  propertyKey: string;
+  items?: TypeArrayItems;
   onChange?: (value: any) => void;
 } & TypeFlexElement;
 
@@ -30,13 +35,14 @@ const ArrayInput: FC<TypeArrayInput> = ({
   helperTextContainerProps,
   helperTextProps,
   maxItems,
+  propertyKey,
   onChange,
   ...props
 }) => {
   const [active, setActive] = useState(0);
   const inputFields = useInputRepresenter({
-    properties: { array: items },
-    value: value[active],
+    properties: { [propertyKey]: items } as unknown as TypeProperties,
+    value: value?.[active],
     onChange,
   });
 
@@ -45,9 +51,11 @@ const ArrayInput: FC<TypeArrayInput> = ({
   };
 
   const handleCreateNewItem = () => {
-    value.push("");
-    onChange?.(value);
-    setActive(value.length - 1);
+    const localValue = value || [];
+
+    localValue?.push("");
+    onChange?.(localValue);
+    setActive(localValue.length - 1);
   };
 
   return (
@@ -58,12 +66,15 @@ const ArrayInput: FC<TypeArrayInput> = ({
       {...props}
       className={`${props.className} ${styles.container}`}
     >
-      <InputHeader
-        prefix={{ children: <Icon name="ballot" className={styles.icon} /> }}
-        root={{ children: <Text variant="secondary">{title}</Text> }}
-      />
+      {title && (
+        <InputHeader
+          prefix={{ children: <Icon name="ballot" className={styles.icon} /> }}
+          root={{ children: <Text variant="secondary">{title}</Text> }}
+        />
+      )}
+
       <DropList
-        length={value.length}
+        length={value?.length}
         active={active}
         maxItems={maxItems}
         onChange={handleChangeActiveIndex}
