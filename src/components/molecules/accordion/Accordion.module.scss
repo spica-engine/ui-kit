@@ -4,27 +4,25 @@
 }
 
 .accordionItem {
-  border-radius: 4px;
   width: 100%;
 
   .icon {
-    transition: all 0.3s ease-in-out;
+    transition: all var(--transition-duration) ease-in-out;
 
     &.rotate {
       transform: rotate(180deg);
-      transition: all 0.3s ease-in-out;
+      transition: all var(--transition-duration) ease-in-out;
     }
   }
 }
 
 .accordionTitle {
   width: 100%;
-  padding: 15px;
+  padding: var(--padding-lg);
   text-align: left;
   border: none;
 
   cursor: pointer;
-  font-size: 16px;
   display: flex;
   justify-content: space-between;
   align-items: center;
@@ -44,16 +42,16 @@
   display: grid;
   grid-template-rows: 0fr;
   opacity: 0;
-  transition: all 0.3s ease-in-out;
-  padding-left: 15px;
-  padding-right: 15px;
+  transition: all var(--transition-duration) ease-in-out;
+  padding-left: var(--padding-lg);
+  padding-right: var(--padding-lg);
 
   &.open {
     grid-template-rows: 1fr;
     opacity: 1;
-    transition: all 0.3s ease-in-out;
-    padding-bottom: 15px;
-    padding-top: 15px;
+    transition: all var(--transition-duration) ease-in-out;
+    padding-bottom: var(--padding-lg);
+    padding-top: var(--padding-lg);
   }
 }
 
@@ -62,5 +60,5 @@
 }
 
 .bordered {
-  border: 1px solid var(--color-border);
+  border: var(--border-default);
 }
