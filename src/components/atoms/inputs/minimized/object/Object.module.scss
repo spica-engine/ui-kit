@@ -1,0 +1,14 @@
+@import "src/styles/_mixins";
+
+.inputMinimized {
+  @include inputMinimizedContainer;
+}
+
+.contentContainer {
+  padding: 0 !important;
+}
+
+.value {
+  @include textEllipsis(1);
+  display: block;
+}

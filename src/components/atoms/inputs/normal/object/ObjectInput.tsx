@@ -12,10 +12,10 @@ import useInputRepresenter, {
 } from "custom-hooks/useInputRepresenter";
 
 type TypeObjectInput = {
-  value: TypeRepresenterValue;
+  value?: TypeRepresenterValue;
   properties: TypeProperties;
-  title: string;
-  description: string;
+  title?: string;
+  description?: string;
   errorMessage?: string;
   helperTextContainerProps?: TypeFlexElement;
   helperTextProps?: TypeFlexElement;
@@ -43,10 +43,12 @@ const ObjectInput: FC<TypeObjectInput> = ({
       {...props}
       className={`${props.className} ${styles.container}`}
     >
-      <InputHeader
-        prefix={{ children: <Icon name="dataObject" className={styles.icon} /> }}
-        root={{ children: <Text variant="secondary">{title}</Text> }}
-      />
+      {title && (
+        <InputHeader
+          prefix={{ children: <Icon name="dataObject" className={styles.icon} /> }}
+          root={{ children: <Text variant="secondary">{title}</Text> }}
+        />
+      )}
       {inputFields}
       <InputGroup.HelperText
         alignment="leftCenter"

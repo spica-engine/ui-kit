@@ -76,8 +76,8 @@ const Popover: FC<TypePopover> = ({
         <FlexElement
           ref={popoverRef}
           style={{ ...targetPosition }}
-          className={`${contentProps?.className} ${styles.content}`}
           {...contentProps}
+          className={`${contentProps?.className} ${styles.content}`}
         >
           {content}
         </FlexElement>
