@@ -3,7 +3,7 @@ import FluidContainer from "components/atoms/fluid-container/FluidContainer";
 import Icon from "components/atoms/icon/Icon";
 import { IconName } from "utils/iconList";
 
-export type AccordionItemProps = {
+export type TypeAccordionItemProps = {
   title: string;
   children: React.ReactNode;
   icon?: React.ReactNode | IconName;
@@ -16,7 +16,7 @@ export type AccordionItemProps = {
   onClick: () => void;
 };
 
-const AccordionItem: React.FC<AccordionItemProps> = ({
+const AccordionItem: React.FC<TypeAccordionItemProps> = ({
   title,
   children,
   isOpen,

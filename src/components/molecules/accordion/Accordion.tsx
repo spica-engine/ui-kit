@@ -5,15 +5,15 @@ import { TypeFluidContainer } from "components/atoms/fluid-container/FluidContai
 import FlexElement, { TypeFlexElement } from "components/atoms/flex-element/FlexElement";
 import AccordionItem from "./AccordionItem";
 
-export type AccordionItem = {
+export type TypeAccordionItem = {
   title: string;
   content: React.ReactNode;
   icon?: React.ReactNode;
   className?: string;
 };
 
-type AccordionGroupProps = TypeFlexElement & {
-  items: AccordionItem[];
+type TypeAccordionGroup = TypeFlexElement & {
+  items: TypeAccordionItem[];
   defaultActiveIndex?: number;
   icon?: React.ReactNode;
   bordered?: boolean;
@@ -21,7 +21,7 @@ type AccordionGroupProps = TypeFlexElement & {
   openClassName?: string;
 };
 
-const AccordionGroup: React.FC<AccordionGroupProps> = ({
+const AccordionGroup: React.FC<TypeAccordionGroup> = ({
   items,
   defaultActiveIndex = 1,
   icon,
