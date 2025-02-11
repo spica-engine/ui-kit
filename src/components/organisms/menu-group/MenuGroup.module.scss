@@ -1,0 +1,20 @@
+@import "/src/styles/_mixins";
+
+.container {
+  //   padding: var(--padding-md) 0;
+  background-color: var(--color-menu-background);
+  border-radius: var(--border-radius-md);
+  box-shadow: var(--box-shadow);
+}
+
+.container > * {
+  padding: var(--padding-md) 0;
+  width: 100%;
+  @include textEllipsis(1);
+  display: block;
+  white-space: nowrap;
+}
+
+.container > *:not(:last-child) {
+  border-bottom: 1px solid var(--color-border) !important;
+}
