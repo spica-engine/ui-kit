@@ -1,7 +1,7 @@
 @import "/src/styles/_mixins";
 
 .container {
-  border-radius: var(--border-radius-lg);
+  border-radius: var(--border-radius-md);
   padding: var(--padding-lg);
   border: var(--border-default);
   justify-content: space-between !important;

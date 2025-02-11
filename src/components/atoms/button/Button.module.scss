@@ -60,7 +60,7 @@ button {
 
   // Shape
   &.sDefault {
-    @include button-shape(var(--border-radius-md));
+    @include button-shape(var(--border-radius-sm));
   }
   &.sCircle {
     @include button-shape(var(--border-radius-circle));

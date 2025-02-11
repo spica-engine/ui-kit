@@ -3,7 +3,7 @@
 .container {
   background: var(--color-zebra);
   padding: var(--padding-md) var(--padding-lg);
-  border-radius: var(--border-radius-lg);
+  border-radius: var(--border-radius-md);
   cursor: pointer;
 
   &.disabled {
@@ -18,7 +18,7 @@
 
 .selectDropdown {
   position: fixed;
-  border-radius: var(--border-radius-lg);
+  border-radius: var(--border-radius-md);
   z-index: 1000;
   height: 100%;
   max-height: 200px;
