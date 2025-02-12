@@ -1,10 +1,11 @@
 import Button from "components/atoms/button/Button";
 import FluidContainer from "components/atoms/fluid-container/FluidContainer";
 import Icon from "components/atoms/icon/Icon";
-import React, { FC, memo, useEffect, useRef, useState } from "react";
+import React, { FC, memo, useRef, useState } from "react";
 import { IconName } from "utils/iconList";
 import styles from "./SSOButton.module.scss";
 import Text from "components/atoms/text/Text";
+import { useOnClickOutside } from "custom-hooks/useOnClickOutside";
 
 type TypeSSOButton = {
   icon: IconName;
@@ -15,32 +16,20 @@ type TypeSSOButton = {
 const SSOButton: FC<TypeSSOButton> = ({ icon, label, onClick }) => {
   const [isClicked, setIsClicked] = useState(false);
   const containerRef = useRef<HTMLDivElement | null>(null);
+  const rootRef = useRef<HTMLDivElement | null>(null);
+
+  const ICON_WIDTH = 14;
+  const rootWidth = 112;
 
   const handleClick = () => {
     setIsClicked(true);
     if (onClick) onClick();
   };
 
-  useEffect(() => {
-    const handleClickOutside = (event: MouseEvent) => {
-      if (containerRef.current && !containerRef.current.contains(event.target as Node)) {
-        setIsClicked(false);
-      }
-    };
-
-    document.addEventListener("mousedown", handleClickOutside);
-    return () => document.removeEventListener("mousedown", handleClickOutside);
-  }, []);
-
-  const rootRef = useRef<HTMLDivElement | null>(null);
-  const [rootWidth, setRootWidth] = useState(112);
-  const ICON_WIDTH = 14;
-
-  useEffect(() => {
-    if (rootRef.current) {
-      setRootWidth(rootRef.current.offsetWidth);
-    }
-  }, [label]);
+  useOnClickOutside({
+    refs: [containerRef],
+    onClickOutside: () => setIsClicked(false),
+  });
 
   return (
     <FluidContainer
