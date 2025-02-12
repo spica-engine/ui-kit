@@ -19,6 +19,9 @@ type TypeAccordionGroup = TypeFlexElement & {
   bordered?: boolean;
   header?: TypeFluidContainer;
   openClassName?: string;
+  itemClassName?: string;
+  contentClassName?: string;
+  headerClassName?: string;
 };
 
 const AccordionGroup: React.FC<TypeAccordionGroup> = ({
@@ -28,6 +31,9 @@ const AccordionGroup: React.FC<TypeAccordionGroup> = ({
   bordered = false,
   header,
   openClassName,
+  itemClassName,
+  contentClassName,
+  headerClassName,
   ...props
 }) => {
   const [activeIndex, setActiveIndex] = useState<number | null>(defaultActiveIndex || null);
@@ -57,6 +63,9 @@ const AccordionGroup: React.FC<TypeAccordionGroup> = ({
           icon={item.icon || icon}
           bordered={bordered}
           openClassName={openClassName}
+          itemClassName={itemClassName}
+          contentClassName={contentClassName}
+          headerClassName={headerClassName}
         >
           {item.content}
         </AccordionElement>

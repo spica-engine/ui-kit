@@ -1,0 +1,44 @@
+@import "../../../styles/mixins.scss";
+
+.container {
+  background-color: var(--color-background);
+  position: fixed;
+  top: 0;
+  left: 0;
+  width: 350px;
+  height: 100%;
+  display: flex;
+  padding: 10px 0;
+
+  .menuContainer {
+    height: 100%;
+    display: flex;
+    flex-direction: column;
+    justify-content: space-between;
+    align-items: center;
+    padding: 0 0 15px;
+  }
+
+  .menu {
+    display: flex;
+    flex-direction: column;
+    align-items: flex-end;
+    width: 100%;
+    .menuItem {
+      width: 50px;
+      height: 70px;
+      @include flexCenter;
+      border-top-left-radius: 8px;
+      border-bottom-left-radius: 8px;
+      cursor: pointer;
+    }
+
+    .active {
+      background-color: white;
+    }
+  }
+
+  .versionControl {
+    cursor: pointer;
+  }
+}
