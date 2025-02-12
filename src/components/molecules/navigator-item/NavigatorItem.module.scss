@@ -1,8 +1,8 @@
 @import "/src/styles/_mixins";
 
 .navigatorItem {
-  @include inputMinimizedContainer;
   padding: var(--padding-md);
+  color: var(--color-font);
 
   .suffixButton {
     border: 0;
@@ -15,6 +15,7 @@
   }
 
   &:hover {
+    cursor: pointer;
     .suffixButton {
       opacity: 1;
     }

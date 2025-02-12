@@ -7,9 +7,10 @@ import styles from "./NavigatorItem.module.scss";
 import { IconName } from "utils/iconList";
 import Text from "components/atoms/text/Text";
 import Button from "components/atoms/button/Button";
+import FlexElement from "components/atoms/flex-element/FlexElement";
 
 type SuffixIcon = {
-  IconName: IconName;
+  name: IconName;
   onClick?: () => void;
 };
 
@@ -31,11 +32,9 @@ const NavigatorItem: FC<TypeNavigatorItem> = ({
       dimensionY={36}
       mode="fill"
       prefix={
-        prefixIcon
-          ? {
-              children: <Icon name={prefixIcon} />,
-            }
-          : undefined
+        prefixIcon && {
+          children: <Icon name={prefixIcon} />,
+        }
       }
       root={{
         children: (
@@ -44,26 +43,22 @@ const NavigatorItem: FC<TypeNavigatorItem> = ({
           </Text>
         ),
       }}
-      suffix={
-        suffixIcons.length
-          ? {
-              children: (
-                <>
-                  {suffixIcons.map(({ IconName, onClick }, index) => (
-                    <Button
-                      key={index}
-                      color="transparent"
-                      className={styles.suffixButton}
-                      onClick={onClick}
-                    >
-                      <Icon name={IconName} />
-                    </Button>
-                  ))}
-                </>
-              ),
-            }
-          : undefined
-      }
+      suffix={{
+        children: suffixIcons.length > 0 && (
+          <>
+            {suffixIcons.map(({ name, onClick }, index) => (
+              <Button
+                key={index}
+                color="transparent"
+                className={styles.suffixButton}
+                onClick={onClick}
+              >
+                <Icon name={name} />
+              </Button>
+            ))}
+          </>
+        ),
+      }}
       {...props}
       className={`${styles.navigatorItem} ${props.className}`}
     />
