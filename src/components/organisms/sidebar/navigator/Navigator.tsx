@@ -8,6 +8,7 @@ import AccordionGroup, { TypeAccordionItem } from "components/molecules/accordio
 import { helperUtils } from "utils/helperUtils";
 import NavigatorItem from "components/molecules/navigator-item/NavigatorItem";
 import { icon } from "leaflet";
+import { memo } from "react";
 
 type TypeNavigatorProps = {
   header?: TypeNavigatorHeader;
@@ -146,4 +147,4 @@ const Navigator = ({ header, items, button }: TypeNavigatorProps) => {
   );
 };
 
-export default Navigator;
+export default memo(Navigator);

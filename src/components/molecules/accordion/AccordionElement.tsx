@@ -1,6 +1,7 @@
 import styles from "./Accordion.module.scss";
 import FluidContainer from "components/atoms/fluid-container/FluidContainer";
 import Icon from "components/atoms/icon/Icon";
+import { memo } from "react";
 import { IconName } from "utils/iconList";
 
 export type TypeAccordionElement = {
@@ -74,4 +75,4 @@ const AccordionElement: React.FC<TypeAccordionElement> = ({
   );
 };
 
-export default AccordionElement;
+export default memo(AccordionElement);

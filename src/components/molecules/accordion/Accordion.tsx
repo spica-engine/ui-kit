@@ -1,4 +1,4 @@
-import React, { useEffect, useState } from "react";
+import React, { memo, useEffect, useState } from "react";
 import styles from "./Accordion.module.scss";
 import { TypeFluidContainer } from "components/atoms/fluid-container/FluidContainer";
 
@@ -74,4 +74,4 @@ const AccordionGroup: React.FC<TypeAccordionGroup> = ({
   );
 };
 
-export default AccordionGroup;
+export default memo(AccordionGroup);
