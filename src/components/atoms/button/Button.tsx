@@ -4,6 +4,7 @@ import FluidContainer, { TypeFluidContainer } from "../fluid-container/FluidCont
 import Spinner, { TypeSpinner } from "../spinner/Spinner";
 
 type TypeButton = {
+  id?: string;
   fullWidth?: boolean;
   children: ReactNode;
   disabled?: boolean;
@@ -21,6 +22,7 @@ type TypeButton = {
 };
 
 const Button: FC<TypeButton> = ({
+  id,
   fullWidth,
   type = "button",
   disabled,
@@ -83,6 +85,7 @@ const Button: FC<TypeButton> = ({
 
   return (
     <button
+      id={id}
       ref={buttonRef}
       disabled={disabled}
       onClick={onClick}
