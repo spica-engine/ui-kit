@@ -77,6 +77,7 @@ import BallotIcon from "@mui/icons-material/Ballot";
 import GridViewIcon from "@mui/icons-material/GridView";
 import ViewListIcon from "@mui/icons-material/ViewList";
 import SortIcon from "@mui/icons-material/Sort";
+import ForkRightIcon from "@mui/icons-material/ForkRight";
 
 export type IconName =
   | "article"
@@ -159,7 +160,8 @@ export type IconName =
   | "ballot"
   | "gridView"
   | "viewList"
-  | "sort";
+  | "sort"
+  | "forkRight";
 
 export type IconSize = "sm" | "md" | "lg" | number;
 
@@ -244,4 +246,5 @@ export const iconMap: {
   gridView: GridViewIcon,
   viewList: ViewListIcon,
   sort: SortIcon,
+  forkRight: ForkRightIcon,
 };
