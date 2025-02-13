@@ -13,6 +13,8 @@ type TypePopover = {
   open?: boolean;
   containerProps?: TypeFlexElement;
   contentProps?: TypeFlexElement;
+  arrow?: boolean;
+  arrowPlacement?: Placement;
 };
 
 const Popover: FC<TypePopover> = ({
@@ -23,11 +25,28 @@ const Popover: FC<TypePopover> = ({
   open,
   containerProps,
   contentProps,
+  arrow = false,
+  arrowPlacement,
 }) => {
   const containerRef = useRef<HTMLDivElement | null>(null);
   const popoverRef = useRef<HTMLDivElement | null>(null);
   const childrenRef = useRef<HTMLDivElement | null>(null);
   const [isOpen, setIsOpen] = useState(open);
+
+  const arrowplc = {
+    top: "bottom",
+    topStart: "bottomStart",
+    topEnd: "bottomEnd",
+    bottom: "top",
+    bottomStart: "topStart",
+    bottomEnd: "topEnd",
+    left: "right",
+    leftStart: "rightStart",
+    leftEnd: "rightEnd",
+    right: "left",
+    rightStart: "leftStart",
+    rightEnd: "leftEnd",
+  } as const;
 
   useKeyDown("Escape", () => {
     if (isOpen) {
@@ -57,7 +76,9 @@ const Popover: FC<TypePopover> = ({
   }, [isOpen, calculatePosition]);
 
   const handleInteraction = {
-    onMouseEnter: () => trigger === "hover" && setIsOpen(true),
+    onMouseEnter: () => {
+      trigger === "hover" && setIsOpen(true);
+    },
     onMouseLeave: () => trigger === "hover" && setIsOpen(false),
     onClick: () => trigger === "click" && setIsOpen(true),
   };
@@ -69,9 +90,7 @@ const Popover: FC<TypePopover> = ({
       {...containerProps}
       className={styles.container}
     >
-      <FlexElement ref={childrenRef} {...containerProps}>
-        {children}
-      </FlexElement>
+      <FlexElement ref={childrenRef}>{children}</FlexElement>
       {isOpen && (
         <FlexElement
           ref={popoverRef}
@@ -79,6 +98,9 @@ const Popover: FC<TypePopover> = ({
           {...contentProps}
           className={`${contentProps?.className} ${styles.content}`}
         >
+          {arrow && (
+            <div className={`${styles.arrow} ${styles[arrowPlacement || arrowplc[placement]]}`} />
+          )}
           {content}
         </FlexElement>
       )}
