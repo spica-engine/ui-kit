@@ -1,6 +1,7 @@
 import { helperUtils } from "utils/helperUtils";
 import { TypePaletteTonalOffset, TypePalette, TypeTheme, TypeBorderRadius, TypeSpacing } from "./types";
 import { defaultPaletes } from "./defaultPalette";
+import { utils } from "utils";
 
 export let customTheme: Partial<TypeTheme> | null = null;
 
@@ -131,13 +132,13 @@ export const createTheme = (theme: Partial<TypeTheme>): TypeTheme => {
 };
 
 const generateColorVariants = (color: string, tonalOffset: TypePaletteTonalOffset = 0.2) => {
-    const { h, s, l } = helperUtils.hexToHSL(color);
+    const { h, s, l } = utils.color.hexToHSL(color);
     const lightOffset = typeof tonalOffset === "number" ? tonalOffset : tonalOffset.light;
     const darkOffset = typeof tonalOffset === "number" ? tonalOffset : tonalOffset.dark;
 
     return {
         base: color,
-        light: helperUtils.hslToHex(h, s, Math.min(1, l + lightOffset)),
-        dark: helperUtils.hslToHex(h, s, Math.max(0, l - darkOffset)),
+        light: utils.color.hslToHex(h, s, Math.min(1, l + lightOffset)),
+        dark: utils.color.hslToHex(h, s, Math.max(0, l - darkOffset)),
     };
 };
