@@ -17,10 +17,10 @@ const FlexElement: FC<TypeFlexElement> = ({
   dimensionX = "hug",
   dimensionY = "hug",
   gap = 5,
-  className = "",
   style,
   ref,
   onClick,
+  ...props
 }) => {
   const { classes, inlineStyles } = useFlexStyles<TypeFlexContainer & TypeFlexDimension>({
     alignment,
@@ -36,8 +36,9 @@ const FlexElement: FC<TypeFlexElement> = ({
     <div
       ref={ref}
       onClick={onClick}
+      {...props}
       style={{ ...style, ...inlineStyles }}
-      className={`${className} ${styles.flexElement} ${classes}`}
+      className={`${props.className} ${styles.flexElement} ${classes}`}
     >
       {children}
     </div>
