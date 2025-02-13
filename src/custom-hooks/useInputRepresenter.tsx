@@ -13,7 +13,7 @@ import RichTextInput from "../components/atoms/inputs/normal/rich-text/RichText"
 import Icon from "components/atoms/icon/Icon";
 import ObjectInput from "components/atoms/inputs/normal/object/ObjectInput";
 import ArrayInput from "components/atoms/inputs/normal/array/ArrayInput";
-import { apiUtils } from "utils/apiUtils";
+import { utils } from "utils";
 
 export type TypeProperties = {
   [key: string]: {
@@ -112,7 +112,7 @@ export type TypeInputTypeMap = {
   color: (props: TypeInputProps<string>) => ReactNode;
   storage: (props: TypeInputProps<string>) => ReactNode;
   multiselect: (props: TypeMultiSelectInputProps<string | number>) => ReactNode;
-  location: (props: TypeInputProps<TypeCoordinates | apiUtils.TypeLocation>) => ReactNode;
+  location: (props: TypeInputProps<TypeCoordinates | utils.api.TypeLocation>) => ReactNode;
   richtext: (props: TypeInputProps<string>) => ReactNode;
   object: (props: TypeObjectInputProps<TypeRepresenterValue>) => ReactNode;
   array: (props: TypeArrayInputProps<TypeValueType>) => ReactNode;
@@ -195,14 +195,14 @@ const types: TypeInputTypeMap = {
     />
   ),
   location: (props) => {
-    if (apiUtils.isTypeLocation(props.value)) {
+    if (utils.api.isTypeLocation(props.value)) {
       const coordinates = props?.value.coordinates;
       props.value = { lat: coordinates[1], lng: coordinates[0] };
     }
 
     const handleChangeLocation = (value: TypeCoordinates) => {
-      let normalizedValue: apiUtils.TypeLocation | TypeCoordinates = value;
-      if (apiUtils.isTypeLocation(props.value)) {
+      let normalizedValue: utils.api.TypeLocation | TypeCoordinates = value;
+      if (utils.api.isTypeLocation(props.value)) {
         normalizedValue = {
           type: "Point",
           coordinates: [value.lng, value.lng],
