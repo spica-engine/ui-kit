@@ -1,15 +1,9 @@
 import React, { FC, memo } from "react";
-import Popover from "../popover/Popover";
-import FluidContainer from "../fluid-container/FluidContainer";
 import Icon from "../icon/Icon";
-import Text from "../text/Text";
-import FlexElement from "../flex-element/FlexElement";
+import FlexElement, { TypeFlexElement } from "../flex-element/FlexElement";
 import { IconName } from "utils/iconList";
 import styles from "./BucketFieldPopup.module.scss";
-
-type TypeBucketFieldPopup = {
-  content: React.ReactNode;
-};
+import ListItem from "../list-item/ListItem";
 
 const fieldOptions: { icon: IconName; text: string }[] = [
   { icon: "formatQuoteClose", text: "String" },
@@ -25,28 +19,21 @@ const fieldOptions: { icon: IconName; text: string }[] = [
   { icon: "formatAlignCenter", text: "RichText" },
 ];
 
-const BucketFieldPopup: FC<TypeBucketFieldPopup> = ({ content }) => {
+const BucketFieldPopup: FC<TypeFlexElement> = () => {
   return (
-    <Popover
-      content={
-        <FlexElement dimensionX={200} direction="vertical" className={styles.container}>
-          {fieldOptions.map(({ icon, text }) => (
-            <FluidContainer
-              dimensionX="fill"
-              gap={10}
-              key={icon}
-              prefix={{ children: <Icon name={icon} /> }}
-              root={{ children: <Text>{text}</Text> }}
-              onClick={() => {}}
-              className={styles.item}
-            />
-          ))}
-        </FlexElement>
-      }
-      containerProps={{ className: styles.popover }}
-    >
-      {content}
-    </Popover>
+    <FlexElement dimensionX={200} direction="vertical" className={styles.container}>
+      {fieldOptions.map(({ icon, text }) => (
+        <ListItem
+          label={text}
+          dimensionX="fill"
+          dimensionY="hug"
+          gap={10}
+          prefix={{ children: <Icon name={icon} /> }}
+          onClick={() => {}}
+          className={styles.item}
+        />
+      ))}
+    </FlexElement>
   );
 };
 

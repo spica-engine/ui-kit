@@ -1,11 +1,10 @@
-.popover {
-  padding: var(--padding-md);
-}
-
 .container {
+  background-color: var(--color-menu-background);
+  padding: var(--padding-md);
+  border-radius: var(--border-radius-lg);
   .item {
     color: var(--color-font);
-    padding: 2px 0;
+    padding: var(--padding-xs) 0;
     cursor: pointer;
   }
 }
