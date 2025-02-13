@@ -1,4 +1,4 @@
-export namespace apiUtils {
+export namespace api {
     export type TypeLocation = { type: string; coordinates: [number, number] };
 
     export const isTypeLocation = (obj: any): obj is TypeLocation => {
