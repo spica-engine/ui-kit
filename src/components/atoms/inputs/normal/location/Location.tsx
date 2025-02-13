@@ -39,7 +39,7 @@ const LocationInput: FC<TypeLocationInput & TypeFlexElement> = ({
       <Map
         coordinates={coordinates}
         markerIcon={{
-          icon: <Icon name="mapMarker" size="large" className={styles.mapMarker} />,
+          icon: <Icon name="mapMarker" size="lg" className={styles.mapMarker} />,
         }}
         onChange={onChange}
       />
