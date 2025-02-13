@@ -12,6 +12,7 @@
     "antd": "^5.23.1",
     "chart.js": "^4.4.7",
     "chartjs-adapter-date-fns": "^3.0.0",
+    "chartjs-plugin-annotation": "^3.1.0",
     "chartjs-plugin-zoom": "^2.2.0",
     "cra-template-typescript": "1.2.0",
     "date-fns": "^4.1.0",
