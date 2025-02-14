@@ -165,6 +165,7 @@ export type IconName =
   | "forkRight"
   | "filterCenterFocus";
 
+
 export type IconSize = "xs" | "sm" | "md" | "lg" | number;
 
 export const iconMap: {
