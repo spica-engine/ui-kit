@@ -4,7 +4,7 @@ import FlexElement, { TypeFlexElement } from "components/atoms/flex-element/Flex
 import Icon from "components/atoms/icon/Icon";
 import Dropzone from "react-dropzone";
 import { TypeFluidContainer } from "components/atoms/fluid-container/FluidContainer";
-import Text from "components/atoms/text/Text";
+import Text, { TypeText } from "components/atoms/text/Text";
 import IconButton from "components/atoms/icon-button/IconButton";
 import { IconName } from "utils/iconList";
 import InputGroup from "components/atoms/base-input/InputGroup";
@@ -19,7 +19,7 @@ export type TypeStorageInput = {
   topContainerProps?: {
     container?: TypeFluidContainer;
     root?: TypeFlexElement;
-    rootChildren?: TypeFlexElement;
+    rootChildren?: TypeText;
     suffix?: TypeFlexElement;
     suffixChildren?: TypeFlexElement;
     editIcon?: IconName;
