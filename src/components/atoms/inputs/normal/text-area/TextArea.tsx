@@ -102,7 +102,7 @@ const TextAreaInput: FC<TypeTextArea> = ({
           ></textarea>
         </FlexElement>
       </>
-      <Text size="xsmall" className={`${styles.description}`} textClassName={`${styles.text}`}>
+      <Text size="xsmall" className={`${styles.description}`}>
         {description}
       </Text>
     </FlexElement>

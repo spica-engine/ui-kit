@@ -1,7 +1,7 @@
 import { FC, memo } from "react";
 import styles from "./StorageFileCard.module.scss";
 import FlexElement, { TypeFlexElement } from "../flex-element/FlexElement";
-import Text from "../text/Text";
+import Text, { TypeText } from "../text/Text";
 import Icon from "../icon/Icon";
 
 export type TypeStorageFileCard = {
@@ -9,7 +9,7 @@ export type TypeStorageFileCard = {
   contentType: string;
   url: string;
   viewProps?: TypeFlexElement;
-  nameProps?: TypeFlexElement;
+  nameProps?: TypeText;
 };
 
 const contentTypeMapping = [

@@ -1,15 +1,14 @@
 import React, { FC, memo, ReactNode, useState } from "react";
 import styles from "./Checkbox.module.scss";
 import FluidContainer, { TypeFluidContainer } from "../fluid-container/FluidContainer";
-import Text from "../text/Text";
-import { TypeFlexElement } from "../flex-element/FlexElement";
+import Text, { TypeText } from "../text/Text";
 
 type TypeCheckbox = {
   checked?: boolean;
   disabled?: boolean;
   label?: ReactNode;
   indeterminate?: boolean;
-  labelProps?: TypeFlexElement;
+  labelProps?: TypeText;
   onChange?: (checked: boolean) => void;
 };
 

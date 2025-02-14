@@ -2,7 +2,7 @@ import { FC, memo, useState } from "react";
 import styles from "./ArrayInput.module.scss";
 import Icon from "components/atoms/icon/Icon";
 import InputHeader from "components/atoms/input-header/InputHeader";
-import Text from "components/atoms/text/Text";
+import Text, { TypeText } from "components/atoms/text/Text";
 import FlexElement, { TypeFlexElement } from "components/atoms/flex-element/FlexElement";
 import InputGroup from "components/atoms/base-input/InputGroup";
 import useInputRepresenter, {
@@ -18,7 +18,7 @@ type TypeArrayInput = {
   description?: string;
   errorMessage?: string;
   helperTextContainerProps?: TypeFlexElement;
-  helperTextProps?: TypeFlexElement;
+  helperTextProps?: TypeText;
   minItems?: number;
   maxItems?: number;
   propertyKey: string;
