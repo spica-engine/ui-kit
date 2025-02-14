@@ -1,18 +1,20 @@
-import { FC, memo, ReactNode } from "react";
+import { CSSProperties, FC, memo, ReactNode } from "react";
 import styles from "./Storage.module.scss";
 import FlexElement, { TypeFlexElement } from "components/atoms/flex-element/FlexElement";
 import Icon from "components/atoms/icon/Icon";
 import Dropzone from "react-dropzone";
-import FluidContainer, {
-  TypeFluidContainer,
-} from "components/atoms/fluid-container/FluidContainer";
+import { TypeFluidContainer } from "components/atoms/fluid-container/FluidContainer";
 import Text from "components/atoms/text/Text";
 import IconButton from "components/atoms/icon-button/IconButton";
 import { IconName } from "utils/iconList";
+import InputGroup from "components/atoms/base-input/InputGroup";
+import InputHeader from "components/atoms/input-header/InputHeader";
+import useFileView from "custom-hooks/useFileView";
+import { TypeFile } from "utils/interface";
 
 export type TypeStorageInput = {
   label?: string;
-  fileLink?: string;
+  file?: TypeFile;
   containerProps?: TypeFlexElement;
   topContainerProps?: {
     container?: TypeFluidContainer;
@@ -32,22 +34,45 @@ export type TypeStorageInput = {
     previewIcon?: IconName;
     description?: ReactNode;
   };
-  onUpload: (file: File) => any;
+  description?: string;
+  errorMessage?: string;
+  helperTextContainerProps?: TypeFlexElement;
+  helperTextProps?: TypeFlexElement;
+  onUpload?: (file: File) => void;
   onDelete?: (event: React.MouseEvent<HTMLButtonElement, MouseEvent>) => void;
   onPreview?: () => void;
+  onClickShowFileSelect?: () => void;
 };
 
 const StorageInput: FC<TypeStorageInput> = ({
-  fileLink,
+  file,
   label,
   containerProps,
   topContainerProps,
   dropzoneContainerProps,
+  description,
+  errorMessage,
+  helperTextContainerProps,
+  helperTextProps,
+  onClickShowFileSelect,
   onUpload,
   onDelete,
   onPreview,
 }) => {
-  const handleClickEdit = (event: React.MouseEvent<HTMLButtonElement, MouseEvent>) => {};
+  const imgEmbedStyles: CSSProperties = {
+    position: "absolute",
+    height: "100%",
+    width: "100%",
+    objectFit: "contain",
+  };
+
+  const fileView = useFileView({
+    file,
+    styles: {
+      img: imgEmbedStyles,
+      embed: imgEmbedStyles,
+    },
+  });
 
   const handleClickDelete = (event: React.MouseEvent<HTMLButtonElement, MouseEvent>) => {
     onDelete?.(event);
@@ -55,32 +80,28 @@ const StorageInput: FC<TypeStorageInput> = ({
 
   return (
     <FlexElement
-      className={`${containerProps?.className} ${styles.container}`}
       direction="vertical"
+      dimensionX="fill"
       dimensionY={472}
-      dimensionX={"fill"}
       alignment="top"
       gap={10}
-      {...containerProps}
+      className={`${containerProps?.className}`}
     >
-      <>
-        <FluidContainer
-          dimensionX={"fill"}
-          dimensionY={36}
-          className={`${topContainerProps?.container?.className} ${styles.top}`}
-          {...topContainerProps?.container}
-          root={{
-            children: label && <Text {...topContainerProps?.rootChildren}>{label}</Text>,
-            dimensionX: "fill",
-            alignment: "leftCenter",
-            ...topContainerProps?.root,
-          }}
+      <FlexElement
+        direction="vertical"
+        dimensionX="fill"
+        gap={10}
+        className={`${containerProps?.className} ${styles.container}`}
+      >
+        <InputHeader
+          prefix={{ children: <Icon name="storage" className={styles.icon} /> }}
+          root={{ children: <Text variant="secondary">{label}</Text> }}
           suffix={{
             children: !topContainerProps?.hideActions ? (
               <>
                 <IconButton
                   buttonProps={{
-                    onClick: handleClickEdit,
+                    onClick: onClickShowFileSelect,
                     disabled: topContainerProps?.disableEditIcon,
                   }}
                   icon={topContainerProps?.editIcon || "pencil"}
@@ -99,19 +120,19 @@ const StorageInput: FC<TypeStorageInput> = ({
             gap: 0,
             ...topContainerProps?.suffix,
           }}
+          {...topContainerProps?.container}
         />
         <Dropzone
           multiple={false}
           onDrop={(acceptedFiles) => {
             if (!acceptedFiles.length) return;
-            onUpload(acceptedFiles[0]);
+            onUpload?.(acceptedFiles[0]);
           }}
         >
           {({ getRootProps, getInputProps }) => {
-            const rootProps = getRootProps();
             const handleClick = (event: any) => {
-              if (!fileLink) {
-                rootProps.onClick?.(event);
+              if (!file?.url) {
+                onClickShowFileSelect?.();
                 return;
               }
 
@@ -126,18 +147,24 @@ const StorageInput: FC<TypeStorageInput> = ({
                 dimensionY={407}
                 direction="vertical"
                 gap={10}
-                style={{ backgroundImage: `url(${fileLink})` }}
                 {...getRootProps()}
                 {...dropzoneContainerProps?.container}
                 onClick={handleClick}
               >
                 <>
-                  {fileLink ? (
-                    <Icon name={dropzoneContainerProps?.previewIcon || "eye"} />
+                  {file ? (
+                    <>
+                      {fileView}
+                      <Icon
+                        name={dropzoneContainerProps?.previewIcon || "filterCenterFocus"}
+                        size={32}
+                        className={styles.previewIcon}
+                      />
+                    </>
                   ) : (
                     <>
-                      <Icon name={dropzoneContainerProps?.uploadIcon || "storage"} />
-                      <Text>
+                      <Icon name={dropzoneContainerProps?.uploadIcon || "storage"} size={80} />
+                      <Text className={styles.text}>
                         {dropzoneContainerProps?.description || (
                           <span>
                             Upload your file or <br /> pick an file from storage
@@ -152,7 +179,22 @@ const StorageInput: FC<TypeStorageInput> = ({
             );
           }}
         </Dropzone>
-      </>
+      </FlexElement>
+      <InputGroup.HelperText
+        alignment="leftCenter"
+        dimensionX="fill"
+        {...helperTextContainerProps}
+        className={`${styles.helperText} ${helperTextContainerProps?.className}`}
+      >
+        <Text
+          {...helperTextProps}
+          size="small"
+          variant={errorMessage ? "danger" : "secondary"}
+          className={`${helperTextProps?.className}`}
+        >
+          {errorMessage || description}
+        </Text>
+      </InputGroup.HelperText>
     </FlexElement>
   );
 };
