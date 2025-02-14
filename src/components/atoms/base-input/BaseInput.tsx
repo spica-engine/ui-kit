@@ -2,7 +2,7 @@ import React, { useEffect, useRef, useState } from "react";
 import InputGroup from "./InputGroup";
 import { TypeFluidContainer } from "../fluid-container/FluidContainer";
 import styles from "./BaseInput.module.scss";
-import Text from "../text/Text";
+import Text, { TypeText } from "../text/Text";
 import FlexElement, { TypeFlexElement } from "../flex-element/FlexElement";
 import { useOnClickOutside } from "custom-hooks/useOnClickOutside";
 
@@ -12,7 +12,7 @@ type TypeBaseInputProps = {
   className?: string;
   inputContainerProps?: TypeFlexElement;
   helperTextContainerProps?: TypeFlexElement;
-  helperTextProps?: TypeFlexElement;
+  helperTextProps?: TypeText;
   labelProps?: TypeFluidContainer & {
     focusedClassName?: string;
     dividerClassName?: string;

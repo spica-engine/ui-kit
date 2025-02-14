@@ -29,7 +29,7 @@ export type TypeSelect = {
   optionProps?: TypeFluidContainer;
   selectRef?: Ref<TypeSelectRef>;
   disableClick?: boolean;
-  onChange: (value: TypeValue) => void;
+  onChange?: (value: TypeValue) => void;
 };
 
 const Select: FC<TypeSelect & TypeFluidContainer> = ({
@@ -89,12 +89,12 @@ const Select: FC<TypeSelect & TypeFluidContainer> = ({
         ? selectedOption.filter((el) => el !== option)
         : [...selectedOption, option];
       setSelectedOption(updatedOptions);
-      onChange(updatedOptions as unknown as string | number);
+      onChange?.(updatedOptions as unknown as string | number);
     };
 
     const updateSingleSelection = () => {
       setSelectedOption(option);
-      onChange(option);
+      onChange?.(option);
       setIsOpen(false);
     };
 
@@ -108,7 +108,7 @@ const Select: FC<TypeSelect & TypeFluidContainer> = ({
 
   const clear = () => {
     setSelectedOption([]);
-    onChange([]);
+    onChange?.([]);
     setIsOpen(false);
   };
 
