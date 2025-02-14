@@ -1,5 +1,6 @@
-import Button from "components/atoms/button/Button";
-import FluidContainer from "components/atoms/fluid-container/FluidContainer";
+import FluidContainer, {
+  TypeFluidContainer,
+} from "components/atoms/fluid-container/FluidContainer";
 import Icon from "components/atoms/icon/Icon";
 import React, { FC, memo, useRef, useState } from "react";
 import { IconName } from "utils/iconList";
@@ -11,9 +12,9 @@ type TypeSSOButton = {
   icon: IconName;
   label: string;
   onClick?: () => void;
-};
+} & TypeFluidContainer;
 
-const SSOButton: FC<TypeSSOButton> = ({ icon, label, onClick }) => {
+const SSOButton: FC<TypeSSOButton> = ({ icon, label, onClick, ...props }) => {
   const [isClicked, setIsClicked] = useState(false);
   const containerRef = useRef<HTMLDivElement | null>(null);
 
@@ -47,7 +48,8 @@ const SSOButton: FC<TypeSSOButton> = ({ icon, label, onClick }) => {
         children: isClicked ? <Icon name="check" size="sm" className={styles.active} /> : undefined,
       }}
       onClick={handleClick}
-      className={`${styles.ssoButton} ${isClicked ? styles.clicked : ""}`}
+      {...props}
+      className={` ${props.className} ${styles.ssoButton} ${isClicked ? styles.clicked : ""}`}
     />
   );
 };
