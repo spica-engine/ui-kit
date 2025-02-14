@@ -6,8 +6,6 @@ import { useFlexStyles } from "custom-hooks/useFlexStyles";
 export type TypeText = {
   variant?: "primary" | "secondary" | "danger";
   size?: "xsmall" | "small" | "medium" | "large" | "xlarge";
-  // textClassName?: string;
-  // children: ReactNode;
   ref?: RefObject<HTMLInputElement | null>;
 } & HTMLAttributes<HTMLSpanElement> &
   TypeFlexDimension;
@@ -19,7 +17,6 @@ const Text: FC<TypeText> = ({
   dimensionX,
   dimensionY,
   ref,
-  // textClassName,
   ...props
 }) => {
   const variantClass = styles[variant];
