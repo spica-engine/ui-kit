@@ -163,7 +163,7 @@ export type IconName =
   | "sort"
   | "forkRight";
 
-export type IconSize = "sm" | "md" | "lg" | number;
+export type IconSize = "xs" | "sm" | "md" | "lg" | number;
 
 export const iconMap: {
   [key in IconName]: React.ComponentType<{ className?: string; style?: CSSProperties }>;

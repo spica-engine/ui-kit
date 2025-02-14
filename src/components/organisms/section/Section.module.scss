@@ -1,8 +1,10 @@
+@import "styles/mixins";
 .sectionContainer {
+  background-color: var(--color-menu-background);
+
   .header,
   .content,
   .footer {
-    background-color: var(--color-input-background);
     padding: var(--padding-xl);
     color: var(--font-color);
     font-size: var(--font-size-md);
@@ -10,6 +12,7 @@
   }
 
   .header {
+    @include flexAlignCenterJustifyBetween;
     border-radius: var(--border-radius-md) var(--border-radius-md) 0 0;
     border-bottom: 1px solid var(--color-border);
   }
