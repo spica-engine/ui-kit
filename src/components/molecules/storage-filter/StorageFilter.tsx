@@ -171,9 +171,7 @@ const StorageFilter: FC<TypeStorageFilter> = ({ onApply, onCancel }) => {
             ),
           }}
         />
-        <Text dimensionX="fill" alignment="leftCenter">
-          Created At
-        </Text>
+        <Text dimensionX="fill">Created At</Text>
 
         <FlexElement direction="wrap" dimensionX="fill">
           {createdAtArr.map((el) => {

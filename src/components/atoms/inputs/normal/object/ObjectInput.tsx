@@ -2,7 +2,7 @@ import { FC, memo } from "react";
 import styles from "./ObjectInput.module.scss";
 import Icon from "components/atoms/icon/Icon";
 import InputHeader from "components/atoms/input-header/InputHeader";
-import Text from "components/atoms/text/Text";
+import Text, { TypeText } from "components/atoms/text/Text";
 import FlexElement, { TypeFlexElement } from "components/atoms/flex-element/FlexElement";
 import InputGroup from "components/atoms/base-input/InputGroup";
 import useInputRepresenter, {
@@ -12,13 +12,13 @@ import useInputRepresenter, {
 } from "custom-hooks/useInputRepresenter";
 
 type TypeObjectInput = {
-  value: TypeRepresenterValue;
+  value?: TypeRepresenterValue;
   properties: TypeProperties;
-  title: string;
-  description: string;
+  title?: string;
+  description?: string;
   errorMessage?: string;
   helperTextContainerProps?: TypeFlexElement;
-  helperTextProps?: TypeFlexElement;
+  helperTextProps?: TypeText;
   onChange?: ({ key, value }: TypeChangeEvent<unknown>) => void;
 } & TypeFlexElement;
 
@@ -43,10 +43,12 @@ const ObjectInput: FC<TypeObjectInput> = ({
       {...props}
       className={`${props.className} ${styles.container}`}
     >
-      <InputHeader
-        prefix={{ children: <Icon name="dataObject" className={styles.icon} /> }}
-        root={{ children: <Text variant="secondary">{title}</Text> }}
-      />
+      {title && (
+        <InputHeader
+          prefix={{ children: <Icon name="dataObject" className={styles.icon} /> }}
+          root={{ children: <Text variant="secondary">{title}</Text> }}
+        />
+      )}
       {inputFields}
       <InputGroup.HelperText
         alignment="leftCenter"

@@ -2,8 +2,8 @@
 
 .location {
   background: var(--color-input-background);
-  padding: var(--gap-lg);
-  border-radius: var(--border-radius-lg);
+  padding: var(--gap-md);
+  border-radius: var(--border-radius-md);
 
   .icon {
     color: var(--color-font);
@@ -12,7 +12,7 @@
   .map {
     height: 100%;
     width: 100%;
-    border-radius: var(--border-radius-lg);
+    border-radius: var(--border-radius-md);
   }
   .mapMarker {
     width: 35px;
@@ -20,8 +20,6 @@
   }
   .description {
     width: 100% !important;
-  }
-  .text {
     @include inputDescriptionContainer;
   }
 }

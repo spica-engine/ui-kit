@@ -13,7 +13,7 @@ import RichTextInput from "../components/atoms/inputs/normal/rich-text/RichText"
 import Icon from "components/atoms/icon/Icon";
 import ObjectInput from "components/atoms/inputs/normal/object/ObjectInput";
 import ArrayInput from "components/atoms/inputs/normal/array/ArrayInput";
-import { apiUtils } from "utils/apiUtils";
+import { utils } from "utils";
 
 export type TypeProperties = {
   [key: string]: {
@@ -23,7 +23,7 @@ export type TypeProperties = {
     options?: TypeOptions;
     enum?: (string | number)[];
     default?: TypeValueType;
-    items?: TypeMultipleItems | TypeArrayItems;
+    items?: TypeArrayItems;
     minItems?: number;
     maxItems?: number;
     locationType?: string;
@@ -32,10 +32,17 @@ export type TypeProperties = {
   };
 };
 
-export type TypeValueType = string | number | boolean | string[] | number[] | object;
+export type TypeValueType =
+  | string
+  | number
+  | boolean
+  | string[]
+  | number[]
+  | boolean[]
+  | TypeRepresenterValue;
 
 export type TypeRepresenterValue = {
-  [key: string]: TypeValueType;
+  [key: string]: TypeValueType | TypeRepresenterValue;
 };
 
 export type TypeInputType =
@@ -57,16 +64,11 @@ type TypeOptions = {
   index?: boolean;
 };
 
-type TypeMultipleItems = {
-  title?: string;
-  type: "string" | "number";
-  enum?: (number | string)[];
-};
-
 export type TypeArrayItems = {
   title?: string;
   type: TypeInputType;
   properties: TypeProperties;
+  enum?: (number | string)[];
 };
 
 export type TypeChangeEvent<T> = {
@@ -99,7 +101,7 @@ type TypeArrayInputProps<T> = {
   minItems?: number;
   maxItems?: number;
   items?: TypeArrayItems;
-} & TypeInputProps<T>;
+} & TypeInputProps<T[]>;
 
 export type TypeInputTypeMap = {
   string: (props: TypeSelectInputProps<string>) => ReactNode;
@@ -110,7 +112,7 @@ export type TypeInputTypeMap = {
   color: (props: TypeInputProps<string>) => ReactNode;
   storage: (props: TypeInputProps<string>) => ReactNode;
   multiselect: (props: TypeMultiSelectInputProps<string | number>) => ReactNode;
-  location: (props: TypeInputProps<TypeCoordinates | apiUtils.TypeLocation>) => ReactNode;
+  location: (props: TypeInputProps<TypeCoordinates | utils.api.TypeLocation>) => ReactNode;
   richtext: (props: TypeInputProps<string>) => ReactNode;
   object: (props: TypeObjectInputProps<TypeRepresenterValue>) => ReactNode;
   array: (props: TypeArrayInputProps<TypeValueType>) => ReactNode;
@@ -193,14 +195,14 @@ const types: TypeInputTypeMap = {
     />
   ),
   location: (props) => {
-    if (apiUtils.isTypeLocation(props.value)) {
+    if (utils.api.isTypeLocation(props.value)) {
       const coordinates = props?.value.coordinates;
       props.value = { lat: coordinates[1], lng: coordinates[0] };
     }
 
     const handleChangeLocation = (value: TypeCoordinates) => {
-      let normalizedValue: apiUtils.TypeLocation | TypeCoordinates = value;
-      if (apiUtils.isTypeLocation(props.value)) {
+      let normalizedValue: utils.api.TypeLocation | TypeCoordinates = value;
+      if (utils.api.isTypeLocation(props.value)) {
         normalizedValue = {
           type: "Point",
           coordinates: [value.lng, value.lng],
@@ -231,7 +233,6 @@ const types: TypeInputTypeMap = {
         properties={props.properties!}
         title={props.title}
         description={props.description}
-        //@ts-ignore
         value={props.value}
         //@ts-ignore
         onChange={(value) => props.onChange?.({ key: props.key, value })}
@@ -243,12 +244,12 @@ const types: TypeInputTypeMap = {
       <ArrayInput
         title={props.title}
         description={props.description}
-        //@ts-ignore
         value={props.value}
         onChange={(value) => props.onChange?.({ key: props.title, value })}
         minItems={props.minItems}
         maxItems={props.maxItems}
         items={props.items}
+        propertyKey={props.key}
       />
     );
   },
@@ -256,18 +257,19 @@ const types: TypeInputTypeMap = {
 
 type TypeUseInputRepresenter = {
   properties: TypeProperties;
-  value: TypeRepresenterValue;
+  value?: TypeValueType | TypeRepresenterValue;
   onChange?: (event: TypeChangeEvent<unknown>) => void;
 };
 
 const useInputRepresenter = ({ properties, value, onChange }: TypeUseInputRepresenter) => {
-  const handleChange = (event: TypeChangeEvent<unknown>) => {
-    if (onChange) {
-      onChange(event);
-    }
+  const handleChange = (value: any) => {
+    onChange?.(value);
   };
 
   return Object.entries(properties).map(([key, el]) => {
+    const isObject = typeof value === "object" && !Array.isArray(value);
+    const _value = isObject ? (value[key] ?? value) : value;
+
     return (
       <Fragment key={key}>
         {types[el.type]({
@@ -275,13 +277,12 @@ const useInputRepresenter = ({ properties, value, onChange }: TypeUseInputRepres
           title: el.title,
           description: el.description,
           //@ts-ignore
-          value: el.type === "object" ? value?.[key] : value,
+          value: _value,
           className: el.className,
           properties: el.properties,
           enum: el.enum as any,
           minItems: el.minItems,
           maxItems: el.maxItems,
-          //@ts-ignore
           items: el.items,
           onChange: handleChange,
         })}

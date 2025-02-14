@@ -77,16 +77,17 @@
 // FLEX END -------->
 
 @mixin textEllipsis($line, $important: "") {
-  display: -webkit-box;
+  display: -webkit-box#{$important};
   -webkit-box-orient: vertical;
   overflow: hidden;
   text-overflow: ellipsis;
+  width: unset;
   -webkit-line-clamp: $line#{$important};
 }
 
 @mixin inputContainer {
   background-color: var(--color-input-background);
-  border-radius: var(--border-radius-lg);
+  border-radius: var(--border-radius-md);
   color: var(--color-input-placeholder);
   padding: var(--padding-md) var(--padding-lg);
   input {
@@ -107,6 +108,6 @@
 }
 
 @mixin inputDescriptionContainer {
-  @include textEllipsis(2);
+  @include textEllipsis(2, !important);
   padding: 0 var(--padding-md);
 }

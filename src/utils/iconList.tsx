@@ -77,6 +77,8 @@ import BallotIcon from "@mui/icons-material/Ballot";
 import GridViewIcon from "@mui/icons-material/GridView";
 import ViewListIcon from "@mui/icons-material/ViewList";
 import SortIcon from "@mui/icons-material/Sort";
+import ForkRightIcon from "@mui/icons-material/ForkRight";
+import FilterCenterFocusIcon from "@mui/icons-material/FilterCenterFocus";
 
 export type IconName =
   | "article"
@@ -159,9 +161,12 @@ export type IconName =
   | "ballot"
   | "gridView"
   | "viewList"
-  | "sort";
+  | "sort"
+  | "forkRight"
+  | "filterCenterFocus";
 
-export type IconSize = "sm" | "md" | "lg" | number;
+
+export type IconSize = "xs" | "sm" | "md" | "lg" | number;
 
 export const iconMap: {
   [key in IconName]: React.ComponentType<{ className?: string; style?: CSSProperties }>;
@@ -244,4 +249,6 @@ export const iconMap: {
   gridView: GridViewIcon,
   viewList: ViewListIcon,
   sort: SortIcon,
+  forkRight: ForkRightIcon,
+  filterCenterFocus: FilterCenterFocusIcon,
 };
