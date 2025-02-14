@@ -78,6 +78,7 @@ import GridViewIcon from "@mui/icons-material/GridView";
 import ViewListIcon from "@mui/icons-material/ViewList";
 import SortIcon from "@mui/icons-material/Sort";
 import ForkRightIcon from "@mui/icons-material/ForkRight";
+import FilterCenterFocusIcon from "@mui/icons-material/FilterCenterFocus";
 
 export type IconName =
   | "article"
@@ -161,7 +162,8 @@ export type IconName =
   | "gridView"
   | "viewList"
   | "sort"
-  | "forkRight";
+  | "forkRight"
+  | "filterCenterFocus";
 
 export type IconSize = "sm" | "md" | "lg" | number;
 
@@ -247,4 +249,5 @@ export const iconMap: {
   viewList: ViewListIcon,
   sort: SortIcon,
   forkRight: ForkRightIcon,
+  filterCenterFocus: FilterCenterFocusIcon,
 };

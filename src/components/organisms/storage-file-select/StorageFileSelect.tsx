@@ -4,27 +4,21 @@ import Modal from "components/atoms/modal/Modal";
 import StorageFileCard from "components/atoms/storage-file-card/StorageFileCard";
 import { TypeSortProp } from "./sort-popover-content/SortPopoverContent";
 import StorageModalHeading from "./storage-modal-heading/StorageModalHeading";
-
-type TypeFile = {
-  id: string;
-  name: string;
-  contentType: string;
-  url: string;
-};
+import { TypeFile } from "utils/interface";
 
 type TypeStorageFileSelect = {
   data: TypeFile[];
   className?: string;
   onChangeSearch?: (search: string) => void;
   onClickSort?: (prop: TypeSortProp) => void;
-  onChooseFiles?: (file: TypeFile) => void;
+  onChooseFile?: (file: TypeFile) => void;
 };
 
 const StorageFileSelect: FC<TypeStorageFileSelect> = ({
   data,
   onChangeSearch,
   onClickSort,
-  onChooseFiles,
+  onChooseFile,
 }) => {
   const [directory, setDirectory] = useState(["/"]);
   const [fileLength, setFileLength] = useState(0);
@@ -35,7 +29,7 @@ const StorageFileSelect: FC<TypeStorageFileSelect> = ({
   };
 
   const handleClickFile = (file: TypeFile) => {
-    onChooseFiles?.(file);
+    onChooseFile?.(file);
   };
 
   const handleChangeDirectory = (index: number) => {
@@ -70,10 +64,8 @@ const StorageFileSelect: FC<TypeStorageFileSelect> = ({
             onClick={() => handleClickFile(el)}
             dimensionX="fill"
             dimensionY="fill"
-            key={el.id}
-            name={el.name}
-            contentType={el.contentType}
-            url={el.url}
+            key={el._id}
+            file={el}
             className={styles.file}
           />
         ))}

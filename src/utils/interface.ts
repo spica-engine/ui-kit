@@ -23,5 +23,15 @@ export type TypeFlexDimension = {
   dimensionY?: TypeDimension;
 };
 
+export type TypeFile = {
+  _id: string;
+  name: string;
+  content: {
+    type: string;
+    size: number;
+  };
+  url: string;
+};
+
 export type TypeInput = React.InputHTMLAttributes<HTMLInputElement>;
 export type TypeDiv = React.HTMLAttributes<HTMLDivElement>;
