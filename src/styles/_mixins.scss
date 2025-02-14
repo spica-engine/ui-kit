@@ -77,10 +77,11 @@
 // FLEX END -------->
 
 @mixin textEllipsis($line, $important: "") {
-  display: -webkit-box;
+  display: -webkit-box#{$important};
   -webkit-box-orient: vertical;
   overflow: hidden;
   text-overflow: ellipsis;
+  width: unset;
   -webkit-line-clamp: $line#{$important};
 }
 
@@ -107,6 +108,6 @@
 }
 
 @mixin inputDescriptionContainer {
-  @include textEllipsis(2);
+  @include textEllipsis(2, !important);
   padding: 0 var(--padding-md);
 }

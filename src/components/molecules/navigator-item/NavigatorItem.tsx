@@ -37,11 +37,7 @@ const NavigatorItem: FC<TypeNavigatorItem> = ({
         }
       }
       root={{
-        children: (
-          <Text alignment="leftCenter" dimensionX={"fill"}>
-            {label}
-          </Text>
-        ),
+        children: <Text dimensionX={"fill"}>{label}</Text>,
       }}
       suffix={{
         children: suffixIcons.length > 0 && (

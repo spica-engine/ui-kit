@@ -16,12 +16,9 @@
     position: absolute;
     bottom: -10px;
     background: white;
-
-    span {
-      color: #5187ed !important;
-      font-size: var(--font-size-sm) !important;
-      font-weight: 600;
-    }
+    color: #5187ed !important;
+    font-size: var(--font-size-sm) !important;
+    font-weight: 600;
 
     &.from {
       left: 30px;

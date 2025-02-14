@@ -1,6 +1,6 @@
 import { FC, memo } from "react";
 import styles from "./Boolean.module.scss";
-import Text from "components/atoms/text/Text";
+import Text, { TypeText } from "components/atoms/text/Text";
 import FluidContainer, {
   TypeFluidContainer,
 } from "components/atoms/fluid-container/FluidContainer";
@@ -15,7 +15,7 @@ export type TypeBooleanInput = {
   switchContainerProps?: TypeFlexElement;
   suffixProps?: TypeFlexElement;
   rootProps?: TypeFlexElement;
-  labelProps?: TypeFlexElement;
+  labelProps?: TypeText;
   description?: string;
   onChange?: (checked: boolean) => void;
 };
@@ -55,12 +55,7 @@ const BooleanInput: FC<TypeBooleanInput> = ({
         className={`${containerProps?.className} ${styles.container}`}
         {...containerProps}
       />
-      <Text
-        size="xsmall"
-        alignment="leftCenter"
-        className={`${styles.description}`}
-        textClassName={`${styles.text}`}
-      >
+      <Text size="xsmall" className={`${styles.description}`}>
         {description}
       </Text>
     </FlexElement>

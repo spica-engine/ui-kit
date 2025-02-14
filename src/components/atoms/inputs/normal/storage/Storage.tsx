@@ -6,7 +6,7 @@ import Dropzone from "react-dropzone";
 import FluidContainer, {
   TypeFluidContainer,
 } from "components/atoms/fluid-container/FluidContainer";
-import Text from "components/atoms/text/Text";
+import Text, { TypeText } from "components/atoms/text/Text";
 import IconButton from "components/atoms/icon-button/IconButton";
 import { IconName } from "utils/iconList";
 
@@ -17,7 +17,7 @@ export type TypeStorageInput = {
   topContainerProps?: {
     container?: TypeFluidContainer;
     root?: TypeFlexElement;
-    rootChildren?: TypeFlexElement;
+    rootChildren?: TypeText;
     suffix?: TypeFlexElement;
     suffixChildren?: TypeFlexElement;
     editIcon?: IconName;

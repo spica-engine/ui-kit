@@ -110,7 +110,7 @@ const RichTextInput: FC<TypeRichTextInput> = ({
       <LexicalComposer initialConfig={initialConfig}>
         <LexicalContent {...contentProps} onChange={handleChange} />
       </LexicalComposer>
-      <Text size="xsmall" className={`${styles.description}`} textClassName={`${styles.text}`}>
+      <Text size="xsmall" className={`${styles.description}`}>
         {description}
       </Text>
     </FlexElement>

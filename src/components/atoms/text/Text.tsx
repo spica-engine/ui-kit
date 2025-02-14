@@ -1,30 +1,41 @@
-import React, { FC, memo, ReactNode } from "react";
-import FlexElement, { TypeFlexElement } from "../flex-element/FlexElement";
+import { FC, HTMLAttributes, memo, RefObject } from "react";
 import styles from "./Text.module.scss";
+import { TypeFlexDimension } from "utils/interface";
+import { useFlexStyles } from "custom-hooks/useFlexStyles";
 
 export type TypeText = {
   variant?: "primary" | "secondary" | "danger";
   size?: "xsmall" | "small" | "medium" | "large" | "xlarge";
-  textClassName?: string;
-  children: ReactNode;
-} & TypeFlexElement;
+  ref?: RefObject<HTMLInputElement | null>;
+} & HTMLAttributes<HTMLSpanElement> &
+  TypeFlexDimension;
 
 const Text: FC<TypeText> = ({
   variant = "primary",
   size = "medium",
   children,
-  textClassName,
+  dimensionX,
+  dimensionY,
+  ref,
   ...props
 }) => {
   const variantClass = styles[variant];
   const sizeClass = styles[size];
 
+  const { classes, inlineStyles } = useFlexStyles<TypeFlexDimension>({
+    dimensionX: dimensionX,
+    dimensionY: dimensionY,
+  });
+
   return (
-    <FlexElement {...props}>
-      <span className={`${styles.text} ${variantClass} ${sizeClass} ${textClassName}`}>
-        {children}
-      </span>
-    </FlexElement>
+    <span
+      ref={ref}
+      {...props}
+      className={`${props.className} ${styles.text} ${variantClass} ${sizeClass} ${classes}`}
+      style={{ ...inlineStyles, ...props.style }}
+    >
+      {children}
+    </span>
   );
 };
 

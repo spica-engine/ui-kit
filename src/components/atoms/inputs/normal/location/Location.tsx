@@ -43,7 +43,7 @@ const LocationInput: FC<TypeLocationInput & TypeFlexElement> = ({
         }}
         onChange={onChange}
       />
-      <Text size="xsmall" className={`${styles.description}`} textClassName={`${styles.text}`}>
+      <Text size="xsmall" className={`${styles.description}`}>
         {description}
       </Text>
     </FlexElement>
