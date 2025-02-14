@@ -16,10 +16,6 @@ type TypeSSOButton = {
 const SSOButton: FC<TypeSSOButton> = ({ icon, label, onClick }) => {
   const [isClicked, setIsClicked] = useState(false);
   const containerRef = useRef<HTMLDivElement | null>(null);
-  const rootRef = useRef<HTMLDivElement | null>(null);
-
-  const ICON_WIDTH = 14;
-  const rootWidth = 112;
 
   const handleClick = () => {
     setIsClicked(true);
@@ -43,11 +39,8 @@ const SSOButton: FC<TypeSSOButton> = ({ icon, label, onClick }) => {
       }}
       root={{
         children: (
-          <Text ref={rootRef} className={`${styles.text} ${isClicked ? styles.active : ""}`}>
-            {label}
-          </Text>
+          <Text className={`${styles.text} ${isClicked ? styles.active : ""}`}>{label}</Text>
         ),
-        dimensionX: rootWidth + (isClicked ? -ICON_WIDTH : ICON_WIDTH),
         alignment: "leftCenter",
       }}
       suffix={{
