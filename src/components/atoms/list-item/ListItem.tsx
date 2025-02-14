@@ -20,11 +20,7 @@ const ListItem: FC<TypeListItem> = ({ label, active, disabled, onClick, ...props
       className={`${styles.item} ${active && styles.active} ${disabled && styles.disabled}`}
       root={{
         children: (
-          <Text
-            dimensionX="fill"
-            alignment="leftCenter"
-            className={`${props.root?.className} ${styles.displayer}`}
-          >
+          <Text dimensionX="fill" className={`${props.root?.className} ${styles.displayer}`}>
             {label}
           </Text>
         ),
