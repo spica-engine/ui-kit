@@ -1,11 +1,22 @@
 import React, { FC, useEffect, useRef } from "react";
 import GridLayout, { Layout } from "react-grid-layout";
 import styles from "./DashboardLayout.module.scss";
-import Select, { TypeSelectRef } from "components/molecules/select/Select";
+import { ChartData, ChartOptions, ChartType } from "chart.js";
+import Icon from "components/atoms/icon/Icon";
+import Text from "components/atoms/text/Text";
+import FlexElement from "components/atoms/flex-element/FlexElement";
+import FluidContainer, {
+  TypeFluidContainer,
+} from "components/atoms/fluid-container/FluidContainer";
+import DashboardItem from "components/atoms/dashboard-item/DashboardItem";
+import Popover from "components/atoms/popover/Popover";
 
 type TypeDashboardItem = {
   ratio: string;
   id: string;
+  headerProps?: TypeFluidContainer;
+  data?: ChartData<ChartType>;
+  options?: ChartOptions<ChartType>;
 };
 
 type TypeDashboardLayout = {
@@ -15,7 +26,7 @@ type TypeDashboardLayout = {
 const DashboardLayout: FC<TypeDashboardLayout> = ({ dashboards }) => {
   const [width, setWidth] = React.useState(window.innerWidth);
   const [layout, setLayout] = React.useState<Layout[]>([]);
-  const [dashboarItems, setDashboarItems] = React.useState<TypeDashboardItem[]>(dashboards || []);
+  const [dashboardItems, setDashboardItems] = React.useState<TypeDashboardItem[]>(dashboards || []);
 
   useEffect(() => {
     const handleResize = () => setWidth(window.innerWidth);
@@ -24,12 +35,20 @@ const DashboardLayout: FC<TypeDashboardLayout> = ({ dashboards }) => {
   }, []);
 
   useEffect(() => {
-    const layout = localStorage.getItem("dashboardLayout");
-    if (layout) {
-      return setLayout(JSON.parse(layout));
+    const layout = JSON.parse(localStorage.getItem("dashboardLayout") || "[]");
+
+    const dashboardItemIds = dashboardItems.map((item: TypeDashboardItem) => item.id);
+    const existDashboardItems = layout.filter((item: Layout) => dashboardItemIds.includes(item.i));
+    console.log("existDashboardItems", existDashboardItems);
+    if (existDashboardItems.length > 0) {
+      return setLayout(existDashboardItems);
     }
-    return setLayout(createLayout(dashboarItems));
-  }, [dashboarItems]);
+    // if (!!layout && dashboardItems.length > 0) {
+    //   console.log("layout", layout);
+    //   return setLayout(JSON.parse(layout));
+    // }
+    // return setLayout(createLayout(dashboardItems));
+  }, [dashboardItems]);
 
   const createLayout = (dashboardItems: TypeDashboardItem[]) => {
     const cols = 8;
@@ -70,10 +89,10 @@ const DashboardLayout: FC<TypeDashboardLayout> = ({ dashboards }) => {
   };
 
   const resizeItem = (id: string, newRatio: string) => {
-    const updatedDashboardItems = dashboarItems.map((item) =>
+    const updatedDashboardItems = dashboardItems.map((item) =>
       item.id === id ? { ...item, ratio: newRatio } : item
     );
-    setDashboarItems(updatedDashboardItems);
+    setDashboardItems(updatedDashboardItems);
     const updatedLayout = createLayout(updatedDashboardItems);
     saveLayoutToLS(updatedLayout);
   };
@@ -86,7 +105,7 @@ const DashboardLayout: FC<TypeDashboardLayout> = ({ dashboards }) => {
         width={width}
         cols={8}
         onLayoutChange={handleLayoutChange}
-        draggableCancel=".resizing"
+        draggableHandle=".dragHandle"
       >
         {layout.map((item) => (
           <div
@@ -96,17 +115,32 @@ const DashboardLayout: FC<TypeDashboardLayout> = ({ dashboards }) => {
               console.log(item);
             }}
           >
-            <div className="resizing">
-              <Select
-                options={["1/1", "2/2", "3/3", "4/4"]}
-                onChange={(value) => {
-                  resizeItem(item.i, value as string);
+            {item.i !== "addNewComponent" ? (
+              <DashboardItem
+                chartProps={{
+                  type: "bar",
+                  data: dashboardItems.find((dashboardItem) => dashboardItem.id === item.i)?.data!,
+                  options: dashboardItems.find((dashboardItem) => dashboardItem.id === item.i)
+                    ?.options!,
                 }}
-                value={`${item.w}/${item.h}`}
+                headerProps={{
+                  content: "Title",
+                  suffix: <Icon name="cog" className={styles.dragHandle} />,
+                }}
               />
-            </div>
-
-            {item.i}
+            ) : (
+              <FlexElement
+                className={styles.addNewComponent}
+                direction="vertical"
+                alignment="center"
+                dimensionX="fill"
+                gap={15}
+                dimensionY="fill"
+              >
+                <Icon name="plus" className={styles.plusIcon} />
+                <Text size="xlarge"> New Component</Text>
+              </FlexElement>
+            )}
           </div>
         ))}
       </GridLayout>

@@ -1,4 +1,9 @@
 .icon {
+  &.xs {
+    width: var(--icon-size-xs);
+    height: var(--icon-size-xs);
+  }
+
   &.sm {
     width: var(--icon-size-sm);
     height: var(--icon-size-sm);
