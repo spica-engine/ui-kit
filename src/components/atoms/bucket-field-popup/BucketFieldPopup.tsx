@@ -4,32 +4,38 @@ import FlexElement, { TypeFlexElement } from "../flex-element/FlexElement";
 import { IconName } from "utils/iconList";
 import styles from "./BucketFieldPopup.module.scss";
 import ListItem from "../list-item/ListItem";
+import { TypeInputType } from "custom-hooks/useInputRepresenter";
 
-const fieldOptions: { icon: IconName; text: string }[] = [
-  { icon: "formatQuoteClose", text: "String" },
-  { icon: "numericBox", text: "Number" },
-  { icon: "calendarBlank", text: "Date" },
-  { icon: "checkboxBlankOutline", text: "Boolean" },
-  { icon: "formatListChecks", text: "Multiple Selection" },
-  { icon: "callMerge", text: "Relation" },
-  { icon: "mapMarker", text: "Location" },
-  { icon: "ballot", text: "Array" },
-  { icon: "dataObject", text: "Object" },
-  { icon: "imageMultiple", text: "File" },
-  { icon: "formatAlignCenter", text: "RichText" },
+const fieldOptions: { icon: IconName; text: string; type: TypeInputType }[] = [
+  { icon: "formatQuoteClose", text: "String", type: "string" },
+  { icon: "numericBox", text: "Number", type: "number" },
+  { icon: "calendarBlank", text: "Date", type: "date" },
+  { icon: "checkboxBlankOutline", text: "Boolean", type: "boolean" },
+  { icon: "formatListChecks", text: "Multiple Selection", type: "multiselect" },
+  { icon: "callMerge", text: "Relation", type: "storage" },
+  { icon: "mapMarker", text: "Location", type: "location" },
+  { icon: "ballot", text: "Array", type: "array" },
+  { icon: "dataObject", text: "Object", type: "object" },
+  { icon: "imageMultiple", text: "File", type: "storage" },
+  { icon: "formatAlignCenter", text: "RichText", type: "richtext" },
 ];
 
 const BucketFieldPopup: FC<TypeFlexElement> = () => {
+  const handleClick = (type: TypeInputType) => {
+    return type;
+  };
+
   return (
     <FlexElement dimensionX={200} direction="vertical" className={styles.container}>
-      {fieldOptions.map(({ icon, text }) => (
+      {fieldOptions.map(({ icon, text, type }) => (
         <ListItem
+          key={text}
           label={text}
           dimensionX="fill"
           dimensionY="hug"
           gap={10}
           prefix={{ children: <Icon name={icon} /> }}
-          onClick={() => {}}
+          onClick={() => handleClick(type)}
           className={styles.item}
         />
       ))}
