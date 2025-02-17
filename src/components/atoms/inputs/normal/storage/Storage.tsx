@@ -37,7 +37,7 @@ export type TypeStorageInput = {
   description?: string;
   errorMessage?: string;
   helperTextContainerProps?: TypeFlexElement;
-  helperTextProps?: TypeFlexElement;
+  helperTextProps?: TypeText;
   onUpload?: (file: File) => void;
   onDelete?: (event: React.MouseEvent<HTMLButtonElement, MouseEvent>) => void;
   onPreview?: () => void;

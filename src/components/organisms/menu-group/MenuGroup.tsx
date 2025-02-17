@@ -33,7 +33,7 @@ const MenuGroup: FC<TypeMenuGroup> = ({
           alignment="leftCenter"
           className={`${styles.menuSection} ${!showDivider || index === array.length - 1 ? styles.noDivider : ""}`}
         >
-          {showTitle && <Text textClassName={styles.label}>{option.label}</Text>}
+          {showTitle && <Text className={styles.label}>{option.label}</Text>}
           {option.value}
         </FlexElement>
       ))}
