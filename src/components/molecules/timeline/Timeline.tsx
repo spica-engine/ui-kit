@@ -1,4 +1,4 @@
-import { memo, useRef, FC } from "react";
+import { memo, useRef, FC, useEffect, useState } from "react";
 import styles from "./Timeline.module.scss";
 import {
   Chart as ChartJS,
@@ -28,6 +28,7 @@ import FlexElement from "components/atoms/flex-element/FlexElement";
 import Text from "components/atoms/text/Text";
 import { utils } from "utils";
 import { _DeepPartialObject } from "chart.js/dist/types/utils";
+import DraggableBar from "components/atoms/draggable-bar/DraggableBar";
 
 ChartJS.register(
   CategoryScale,
@@ -48,6 +49,8 @@ type TypeScales =
 
 type TypePlugins = _DeepPartialObject<PluginOptionsByType<"bar">> | undefined;
 
+type TypeBarPosition = { x: number; y: number } | null;
+
 type TypeUnit =
   | "millisecond"
   | "second"
@@ -66,6 +69,7 @@ type TypeTimeline = {
   showArrows?: boolean;
   onPan?: (direction: "left" | "right", seconds: number) => void;
   onClickBar?: (date: Date) => void;
+  onChangeDateRange?: (date: { from: Date; to: Date }) => void;
 } & TypeFluidContainer;
 
 const Timeline: FC<TypeTimeline> = ({
@@ -75,9 +79,13 @@ const Timeline: FC<TypeTimeline> = ({
   showArrows = true,
   onPan,
   onClickBar,
+  onChangeDateRange,
   ...props
 }) => {
   const chartRef = useRef<Chart<"bar", number[], string> | null>(null);
+
+  const [startBarPosition, setStartBarPosition] = useState<TypeBarPosition>(null);
+  const [endBarPosition, setEndBarPosition] = useState<TypeBarPosition>(null);
 
   const getUnit = (): TypeUnit => {
     const diffInMinutes = utils.time.getDiffInMinutes(dateRange.from, dateRange.to);
@@ -136,8 +144,7 @@ const Timeline: FC<TypeTimeline> = ({
         display: false,
       },
       border: {
-        width: 1,
-        color: "#5187ed",
+        width: 0,
       },
       ticks: {
         padding: 10,
@@ -174,6 +181,26 @@ const Timeline: FC<TypeTimeline> = ({
     plugins,
   };
 
+  useEffect(() => {
+    if (!chartRef.current?.scales.y.right) return;
+    setStartBarPosition({ x: chartRef.current?.scales.y.right, y: 30 });
+    setEndBarPosition({ x: chartRef.current?.width, y: 30 });
+  }, []);
+
+  const handleBarUp = (positionKey: TypeBarPosition, updateKey: "from" | "to") => {
+    const scalesX = chartRef?.current?.scales?.x;
+    const value = scalesX?.getValueForPixel(positionKey?.x || 0);
+    if (!value) return;
+
+    onChangeDateRange?.({
+      ...dateRange,
+      [updateKey]: new Date(value),
+    });
+  };
+
+  const handleStartBarUp = () => handleBarUp(startBarPosition, "from");
+  const handleEndBarUp = () => handleBarUp(endBarPosition, "to");
+
   return (
     <FluidContainer
       dimensionX="fill"
@@ -199,7 +226,29 @@ const Timeline: FC<TypeTimeline> = ({
             <Text className={`${styles.date} ${styles.from}`}>
               {utils.time.formatDateToEnUs(dateRange.from)}
             </Text>
+            {startBarPosition && (
+              <DraggableBar
+                x={startBarPosition.x}
+                y={startBarPosition.y}
+                minX={chartRef.current?.scales.y.right}
+                maxX={endBarPosition?.x}
+                height={chartRef.current?.scales.y.height}
+                onChange={setStartBarPosition}
+                onUp={handleStartBarUp}
+              />
+            )}
             <Bar ref={chartRef} options={options} data={data} />
+            {endBarPosition && (
+              <DraggableBar
+                x={endBarPosition.x}
+                y={endBarPosition.y}
+                minX={startBarPosition?.x}
+                maxX={chartRef.current?.width}
+                height={chartRef.current?.scales.y.height}
+                onChange={setEndBarPosition}
+                onUp={handleEndBarUp}
+              />
+            )}
             <Text className={`${styles.date} ${styles.to}`}>
               {utils.time.formatDateToEnUs(dateRange.to)}
             </Text>
