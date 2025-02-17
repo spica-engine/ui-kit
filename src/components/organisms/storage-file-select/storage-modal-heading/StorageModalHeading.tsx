@@ -43,7 +43,7 @@ const StorageModalHeading: FC<TypeStorageModalHeading> = ({
           dimensionX: "fill",
           alignment: "rightCenter",
           children: (
-            <FlexElement gap={10} className={styles.actions}>
+            <FlexElement gap={10}>
               {!!folderLength && <Text>{folderLength} Folder</Text>}
               {!!fileLength && <Text>{fileLength} File</Text>}
             </FlexElement>
@@ -72,9 +72,9 @@ const StorageModalHeading: FC<TypeStorageModalHeading> = ({
           dimensionX: "fill",
           alignment: "rightCenter",
           children: (
-            <FlexElement gap={10} className={styles.actions}>
+            <FlexElement gap={10}>
               <Popover content={<StorageFilter />} placement="bottomEnd" trigger="click">
-                <Button color="transparent" variant="filled">
+                <Button variant="text">
                   <Icon name="filter" />
                   Filter
                 </Button>
@@ -84,7 +84,7 @@ const StorageModalHeading: FC<TypeStorageModalHeading> = ({
                 placement="bottomEnd"
                 trigger="click"
               >
-                <Button color="transparent" variant="filled">
+                <Button variant="text">
                   <Icon name="sort" />
                   Sort
                 </Button>
