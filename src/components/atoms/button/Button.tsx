@@ -1,42 +1,32 @@
-import { CSSProperties, FC, memo, ReactNode, useRef } from "react";
+import { ButtonHTMLAttributes, FC, memo, useRef } from "react";
 import styles from "./Button.module.scss";
 import FluidContainer, { TypeFluidContainer } from "../fluid-container/FluidContainer";
 import Spinner, { TypeSpinner } from "../spinner/Spinner";
+import { TypeFlexDimension } from "utils/interface";
 
 type TypeButton = {
-  id?: string;
   fullWidth?: boolean;
-  children: ReactNode;
-  disabled?: boolean;
   containerProps?: TypeFluidContainer;
-  className?: string;
-  style?: CSSProperties;
   shape?: "default" | "circle" | "round";
-  type?: "submit" | "reset" | "button";
-  variant?: "solid" | "outlined" | "dashed" | "filled" | "text" | "link";
+  variant?: "solid" | "outlined" | "dashed" | "filled" | "text" | "link" | "icon";
   color?: "primary" | "default" | "success" | "danger" | "soft" | "transparent";
   loading?: boolean;
   spinnerProps?: TypeSpinner;
   keepWidth?: boolean;
-  onClick?: React.MouseEventHandler<HTMLButtonElement>;
-};
+} & ButtonHTMLAttributes<HTMLButtonElement> &
+  TypeFlexDimension;
 
 const Button: FC<TypeButton> = ({
-  id,
   fullWidth,
-  type = "button",
-  disabled,
   containerProps,
   children,
-  className = "",
-  style,
   shape = "default",
   variant = "solid",
   color = "primary",
   loading,
   spinnerProps,
   keepWidth = true,
-  onClick,
+  ...props
 }) => {
   const buttonRef = useRef<HTMLButtonElement>(null);
 
@@ -56,6 +46,7 @@ const Button: FC<TypeButton> = ({
     filled: styles.vFilled,
     text: styles.vText,
     link: styles.vLink,
+    icon: styles.vIcon,
   };
 
   const shapes = {
@@ -66,7 +57,7 @@ const Button: FC<TypeButton> = ({
 
   const customStyle = {
     minWidth: keepWidth ? buttonRef?.current?.offsetWidth : "unset",
-    ...style,
+    ...props.style,
   };
 
   const getSpinnerColor = () => {
@@ -76,7 +67,7 @@ const Button: FC<TypeButton> = ({
       return isDefaultOrSoftColor ? "primary" : "default";
     }
 
-    if (["outlined", "dashed", "filled", "text", "link"].includes(variant)) {
+    if (["outlined", "dashed", "filled", "text", "link", "icon"].includes(variant)) {
       return isDefaultOrSoftColor ? "primary" : color;
     }
 
@@ -85,13 +76,10 @@ const Button: FC<TypeButton> = ({
 
   return (
     <button
-      id={id}
       ref={buttonRef}
-      disabled={disabled}
-      onClick={onClick}
-      type={type}
+      {...props}
       style={customStyle}
-      className={`${shapes[shape]} ${variants[variant]} ${colors[color]} ${className} ${fullWidth && styles.fullWidth}`}
+      className={`${shapes[shape]} ${variants[variant]} ${colors[color]} ${props.className} ${fullWidth && styles.fullWidth}`}
     >
       {loading ? (
         <Spinner size="small" color={getSpinnerColor()} {...spinnerProps} />

@@ -2,12 +2,12 @@
 
 @mixin button-base {
   cursor: pointer;
+  line-height: var(--font-size-md);
   outline: none;
   border: none;
   background: none;
   transition: all var(--transition-duration) ease-in-out;
-  height: 36px;
-  padding: 0 var(--padding-md);
+  padding: var(--padding-md);
   font-size: var(--font-size-md);
 
   &:disabled {
@@ -76,31 +76,34 @@ button {
       @include button-color(
         var(--color-primary),
         var(--color-primary),
-        var(--color-font-light),
-        var(--color-primary-hover)
+        var(--color-font-secondary),
+        var(--color-primary-light),
+        var(--color-primary-light)
       );
     }
     &.cDanger {
       @include button-color(
         var(--color-danger),
         var(--color-danger),
-        var(--color-font-light),
-        var(--color-danger-hover)
+        var(--color-font-secondary),
+        var(--color-danger-light),
+        var(--color-danger-light)
       );
     }
     &.cSuccess {
       @include button-color(
         var(--color-success),
         var(--color-success),
-        var(--color-font-light),
-        var(--color-success-hover)
+        var(--color-font-secondary),
+        var(--color-success-light),
+        var(--color-success-light)
       );
     }
     &.cDefault {
       @include button-color(
         var(--color-default),
         var(--color-default),
-        var(--color-font),
+        var(--color-font-primary),
         null,
         rgba(var(--color-primary-rgb), 0.3)
       );
@@ -109,13 +112,13 @@ button {
       @include button-color(
         var(--color-soft),
         var(--color-soft),
-        var(--color-font),
+        var(--color-font-primary),
         null,
         rgba(var(--color-primary-rgb), 0.3)
       );
     }
     &.cTransparent {
-      @include button-color(transparent, var(--color-border), var(--color-font));
+      @include button-color(transparent, var(--color-border), var(--color-font-primary));
     }
   }
 
@@ -127,7 +130,8 @@ button {
         var(--color-primary),
         var(--color-primary),
         null,
-        var(--color-primary-hover)
+        var(--color-primary-light),
+        var(--color-primary-light)
       );
     }
     &.cDanger {
@@ -136,7 +140,8 @@ button {
         var(--color-danger),
         var(--color-danger),
         null,
-        var(--color-danger-hover)
+        var(--color-danger-light),
+        var(--color-danger-light)
       );
     }
     &.cSuccess {
@@ -145,14 +150,15 @@ button {
         var(--color-success),
         var(--color-success),
         null,
-        var(--color-success-hover)
+        var(--color-success-light),
+        var(--color-success-light)
       );
     }
     &.cDefault {
       @include button-color(
         transparent,
         var(--color-border),
-        var(--color-font),
+        var(--color-font-primary),
         null,
         rgba(var(--color-primary-rgb), 0.3)
       );
@@ -161,7 +167,7 @@ button {
       @include button-color(
         transparent,
         var(--color-soft),
-        var(--color-font),
+        var(--color-font-primary),
         null,
         rgba(var(--color-primary-rgb), 0.3)
       );
@@ -176,7 +182,8 @@ button {
         var(--color-primary),
         var(--color-primary),
         null,
-        var(--color-primary-hover)
+        var(--color-primary-light),
+        var(--color-primary-light)
       );
     }
     &.cDanger {
@@ -185,7 +192,8 @@ button {
         var(--color-danger),
         var(--color-danger),
         null,
-        var(--color-danger-hover)
+        var(--color-danger-light),
+        var(--color-danger-light)
       );
     }
     &.cSuccess {
@@ -194,14 +202,15 @@ button {
         var(--color-success),
         var(--color-success),
         null,
-        var(--color-success-hover)
+        var(--color-success-light),
+        var(--color-success-light)
       );
     }
     &.cDefault {
       @include button-color(
         transparent,
         var(--color-border),
-        var(--color-font),
+        var(--color-font-primary),
         null,
         rgba(var(--color-primary-rgb), 0.3)
       );
@@ -210,7 +219,7 @@ button {
       @include button-color(
         transparent,
         var(--color-soft),
-        var(--color-font),
+        var(--color-font-primary),
         null,
         rgba(var(--color-primary-rgb), 0.3)
       );
@@ -246,8 +255,8 @@ button {
     &.cDefault {
       @include button-color(
         rgba(var(--color-default-rgb), 0.1),
-        var(--color-font),
-        var(--color-font),
+        var(--color-font-primary),
+        var(--color-font-primary),
         rgba(var(--color-default-rgb), 0.3)
       );
     }
@@ -255,7 +264,7 @@ button {
       @include button-color(
         rgba(var(--color-soft-rgb), 0.1),
         var(--color-soft),
-        var(--color-font),
+        var(--color-font-primary),
         rgba(var(--color-soft-rgb), 0.3)
       );
     }
@@ -292,12 +301,17 @@ button {
       @include button-color(
         transparent,
         null,
-        var(--color-font),
+        var(--color-font-primary),
         rgba(var(--color-default-rgb), 0.1)
       );
     }
     &.cSoft {
-      @include button-color(transparent, null, var(--color-font), rgba(var(--color-soft-rgb), 0.1));
+      @include button-color(
+        transparent,
+        null,
+        var(--color-font-primary),
+        rgba(var(--color-soft-rgb), 0.1)
+      );
     }
   }
 
@@ -307,29 +321,64 @@ button {
     &.cPrimary {
       color: var(--color-primary);
       &:hover {
-        color: var(--color-primary-hover);
+        color: var(--color-primary-light);
       }
     }
     &.cDanger {
       color: var(--color-danger);
       &:hover {
-        color: var(--color-danger-hover);
+        color: var(--color-danger-light);
       }
     }
     &.cSuccess {
       color: var(--color-success);
       &:hover {
-        color: var(--color-success-hover);
+        color: var(--color-success-light);
       }
     }
     &.cDefault {
-      color: var(--color-font);
+      color: var(--color-font-primary);
       &:hover {
         color: var(--color-primary);
       }
     }
     &.cSoft {
-      color: var(--color-font);
+      color: var(--color-font-primary);
+      &:hover {
+        color: var(--color-primary);
+      }
+    }
+  }
+
+  &.vIcon {
+    border: none;
+    background-color: transparent;
+    &.cPrimary {
+      color: var(--color-primary);
+      &:hover {
+        color: var(--color-primary-light);
+      }
+    }
+    &.cDanger {
+      color: var(--color-danger);
+      &:hover {
+        color: var(--color-danger-light);
+      }
+    }
+    &.cSuccess {
+      color: var(--color-success);
+      &:hover {
+        color: var(--color-success-light);
+      }
+    }
+    &.cDefault {
+      color: var(--color-font-primary);
+      &:hover {
+        color: var(--color-primary);
+      }
+    }
+    &.cSoft {
+      color: var(--color-font-primary);
       &:hover {
         color: var(--color-primary);
       }
