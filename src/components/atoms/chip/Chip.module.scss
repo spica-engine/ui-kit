@@ -2,7 +2,7 @@
 
 .chip {
   @include inputContainer;
-  color: var(--color-font);
+  color: var(--color-font-primary);
   border-radius: var(--border-radius-round);
   padding: 6px 6px 6px var(--padding-md);
   font-size: var(--font-size-md);

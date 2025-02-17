@@ -97,12 +97,12 @@
 
 @mixin inputMinimizedContainer {
   @include inputContainer;
-  color: var(--color-font);
+  color: var(--color-font-primary);
   border-radius: 0;
 }
 
 @mixin modalContentContainer {
-  color: var(--color-font);
+  color: var(--color-font-primary);
   font-size: var(--font-size-lg);
   padding: var(--padding-md);
 }
