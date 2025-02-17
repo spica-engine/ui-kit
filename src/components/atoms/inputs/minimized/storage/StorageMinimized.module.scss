@@ -1,0 +1,19 @@
+@import "/src/styles/_mixins";
+
+.storageMinimized {
+  @include inputMinimizedContainer;
+  padding: 0;
+
+  .storage {
+    padding: var(--padding-md);
+  }
+
+  .text {
+    @include textEllipsis(1);
+    width: 100%;
+  }
+
+  .closeIcon {
+    padding: 0;
+  }
+}
