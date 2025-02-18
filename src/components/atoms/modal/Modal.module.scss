@@ -1,16 +1,13 @@
 .modalContainer {
   position: absolute;
-  z-index: 1000;
   background-color: var(--color-menu-background);
   padding: var(--padding-md);
   min-height: 100px;
   max-width: 90%;
   max-height: 90%;
-  // !TODO need to check if this is necessary
-  // overflow: hidden;
   box-shadow: var(--box-shadow);
   border-radius: var(--border-radius-md);
-
+  top: 0;
   &.noOverflow {
     max-height: none;
     top: 0%;
@@ -26,22 +23,6 @@
     border: 0;
   }
 
-  &.leftToMiddle {
-    animation: slideFromLeft 0.8s forwards ease;
-  }
-
-  &.rightToMiddle {
-    animation: slideFromRight 0.8s forwards ease;
-  }
-
-  &.topToBottom {
-    animation: slideFromTop 0.4s forwards ease;
-  }
-
-  &.bottomToTop {
-    animation: slideFromBottom 0.4s forwards ease;
-  }
-
   &.growFromCenter {
     animation: growFromCenter 0.2s forwards ease;
   }
@@ -50,48 +31,8 @@
     animation: classicModalZoom 0.8s forwards cubic-bezier(0.25, 0.8, 0.25, 1);
   }
 
-  @keyframes slideFromLeft {
-    0% {
-      clip-path: inset(0 100% 0 0);
-      opacity: 0;
-    }
-    100% {
-      clip-path: inset(0 0 0 0);
-      opacity: 1;
-    }
-  }
-
-  @keyframes slideFromRight {
-    0% {
-      clip-path: inset(0 0 0 100%);
-      opacity: 0;
-    }
-    100% {
-      clip-path: inset(0 0 0 0);
-      opacity: 1;
-    }
-  }
-
-  @keyframes slideFromTop {
-    0% {
-      clip-path: inset(100% 0 0 0);
-      opacity: 0;
-    }
-    100% {
-      clip-path: inset(0 0 0 0);
-      opacity: 1;
-    }
-  }
-
-  @keyframes slideFromBottom {
-    0% {
-      clip-path: inset(0 0 100% 0);
-      opacity: 0;
-    }
-    100% {
-      clip-path: inset(0 0 0 0);
-      opacity: 1;
-    }
+  &.shake {
+    animation: shake 0.4s ease-in-out;
   }
 
   @keyframes growFromCenter {
@@ -115,25 +56,25 @@
       opacity: 1;
     }
   }
-}
 
-.modalBackdrop {
-  position: fixed;
-  top: 0;
-  left: 0;
-  width: 100vw;
-  height: 100vh;
-  z-index: 10;
-  opacity: 0;
-  background-color: rgba(53, 52, 52, 0.651);
-  animation: fadeIn 0.3s forwards ease;
-
-  @keyframes fadeIn {
+  @keyframes shake {
     0% {
-      opacity: 0;
+      transform: translateX(0);
+    }
+    20% {
+      transform: translateX(-10px);
+    }
+    40% {
+      transform: translateX(10px);
+    }
+    60% {
+      transform: translateX(-10px);
+    }
+    80% {
+      transform: translateX(10px);
     }
     100% {
-      opacity: 1;
+      transform: translateX(0);
     }
   }
 }
