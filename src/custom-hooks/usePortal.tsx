@@ -52,3 +52,13 @@ export const usePortal = (): TypePortalContextType => {
   }
   return context;
 };
+
+export const withPortalProvider = (Component: React.FC<any>) => {
+  return (props: React.PropsWithChildren<{}>) => {
+    return (
+      <PortalProvider>
+        <Component {...props} />
+      </PortalProvider>
+    );
+  };
+};
