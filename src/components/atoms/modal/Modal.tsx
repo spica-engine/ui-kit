@@ -1,5 +1,5 @@
 import { TypeFluidContainer } from "components/atoms/fluid-container/FluidContainer";
-import React, { FC, memo, useCallback, useRef, useState, useEffect } from "react";
+import React, { FC, useRef, useState, useEffect } from "react";
 import styles from "./Modal.module.scss";
 import FlexElement from "../flex-element/FlexElement";
 import ModalHeader from "./header/ModalHeader";
@@ -9,7 +9,7 @@ import Button from "../button/Button";
 import Icon from "../icon/Icon";
 import { useOnClickOutside } from "custom-hooks/useOnClickOutside";
 import Backdrop from "../backdrop/Backdrop";
-import { PortalProvider, usePortal, withPortalProvider } from "custom-hooks/usePortal";
+import { PortalProvider, usePortal } from "custom-hooks/usePortal";
 
 type TypeModal = {
   className?: string;
@@ -45,21 +45,21 @@ const ModalComponent: FC<TypeModal> = ({
   const [animationController, setIsAnimationEnded] = useState(false);
   const { openLayer, closeLayer } = usePortal();
 
-  useOnClickOutside({
-    refs: [modalRef],
-    onClickOutside: () => {
-      if (backdrop === "static") {
-        setIsShaking(true);
-        setIsAnimationEnded(false);
-        setTimeout(() => {
-          setIsShaking(false);
-          setIsAnimationEnded(true);
-        }, 400);
-      } else {
-        handleClose();
-      }
-    },
-  });
+  const handleClickOutside = () => {
+    if (backdrop !== "static") {
+      handleClose();
+      return;
+    }
+
+    setIsShaking(true);
+    setIsAnimationEnded(false);
+    setTimeout(() => {
+      setIsShaking(false);
+      setIsAnimationEnded(true);
+    }, 400);
+  };
+
+  useOnClickOutside({ refs: [modalRef], onClickOutside: handleClickOutside });
 
   const handleClose = () => {
     setIsVisible(false);
@@ -67,33 +67,36 @@ const ModalComponent: FC<TypeModal> = ({
   };
 
   useEffect(() => {
-    if (isVisible) {
-      openLayer(
-        portalId,
-        <>
-          {backdrop && <Backdrop {...backdropProps} className={backdropClassName} />}
+    if (!isVisible) {
+      closeLayer("modal");
+    }
+
+    openLayer(
+      portalId,
+      <>
+        {backdrop && <Backdrop {...backdropProps} className={backdropClassName} />}
+        <FlexElement className={styles.modalContainer}>
           <FlexElement
-            className={`${styles.modalContainer} ${animationController ? "" : styles[animation]} ${!overflow ? styles.noOverflow : ""} ${isShaking ? styles.shake : ""} `}
             alignment="top"
             direction="vertical"
             {...props}
             ref={modalRef}
+            className={`${styles.modalContent} ${animationController ? "" : styles[animation]} ${!overflow ? styles.noOverflow : ""} ${isShaking ? styles.shake : ""} `}
           >
             {showCloseButton && (
               <Button
                 className={styles.closeButton}
                 onClick={handleClose}
                 children={<Icon name="close" />}
-                color="transparent"
+                variant="icon"
               />
             )}
             {children}
           </FlexElement>
-        </>
-      );
-    } else {
-      closeLayer("modal");
-    }
+        </FlexElement>
+      </>
+    );
+
     return () => closeLayer("modal");
   }, [isVisible, isShaking]);
 

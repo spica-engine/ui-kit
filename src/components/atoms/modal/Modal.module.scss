@@ -1,13 +1,21 @@
 .modalContainer {
   position: absolute;
+  width: 100% !important;
+  height: 100% !important;
+  top: 0;
+}
+
+.modalContent {
   background-color: var(--color-menu-background);
-  padding: var(--padding-md);
-  min-height: 100px;
+  min-height: 50px;
+  min-width: 100px;
   max-width: 90%;
   max-height: 90%;
+
+  padding: var(--padding-md);
   box-shadow: var(--box-shadow);
   border-radius: var(--border-radius-md);
-  top: 0;
+
   &.noOverflow {
     max-height: none;
     top: 0%;
@@ -20,24 +28,23 @@
     right: 0;
     padding: var(--padding-md);
     cursor: pointer;
-    border: 0;
   }
 
   &.growFromCenter {
-    animation: growFromCenter 0.2s forwards ease;
+    animation: growFromCenter var(--transition-duration) forwards ease;
   }
 
   &.zoomIn {
-    animation: classicModalZoom 0.8s forwards cubic-bezier(0.25, 0.8, 0.25, 1);
+    animation: classicModalZoom var(--transition-duration) forwards linear;
   }
 
   &.shake {
-    animation: shake 0.4s ease-in-out;
+    animation: shake var(--transition-duration) ease-in-out;
   }
 
   @keyframes growFromCenter {
     0% {
-      transform: scale(0.2);
+      transform: scale(0.9);
       opacity: 0;
     }
     100% {
@@ -48,33 +55,27 @@
 
   @keyframes classicModalZoom {
     0% {
-      transform: scale(0.95) translateY(-20px);
+      transform: scale(1.1);
       opacity: 0;
     }
     100% {
-      transform: scale(1) translateY(0);
+      transform: scale(1);
       opacity: 1;
     }
   }
 
   @keyframes shake {
-    0% {
-      transform: translateX(0);
+    0%,
+    100% {
+      transform: 0;
     }
-    20% {
-      transform: translateX(-10px);
-    }
-    40% {
-      transform: translateX(10px);
-    }
+    20%,
     60% {
       transform: translateX(-10px);
     }
+    40%,
     80% {
       transform: translateX(10px);
-    }
-    100% {
-      transform: translateX(0);
     }
   }
 }
