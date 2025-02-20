@@ -1,5 +1,5 @@
 import { TypeFluidContainer } from "components/atoms/fluid-container/FluidContainer";
-import React, { FC, useRef, useState, useEffect } from "react";
+import React, { FC, useRef, useState, useEffect, memo } from "react";
 import styles from "./Modal.module.scss";
 import FlexElement from "../flex-element/FlexElement";
 import ModalHeader from "./header/ModalHeader";
@@ -23,6 +23,7 @@ type TypeModal = {
   backdropClassName?: string;
   backdropProps?: React.HTMLAttributes<HTMLDivElement>;
   portalId?: string;
+  isOpen?: boolean;
 } & TypeFluidContainer;
 
 const ModalComponent: FC<TypeModal> = ({
@@ -37,20 +38,24 @@ const ModalComponent: FC<TypeModal> = ({
   backdropClassName,
   backdropProps,
   portalId = "modal",
+  isOpen = false,
   ...props
 }) => {
-  const [isVisible, setIsVisible] = useState(true);
+  const [isVisible, setIsVisible] = useState(isOpen);
   const modalRef = useRef<HTMLDivElement>(null);
   const [isShaking, setIsShaking] = useState(false);
   const [animationController, setIsAnimationEnded] = useState(false);
   const { openLayer, closeLayer } = usePortal();
+
+  useEffect(() => {
+    setIsVisible(isOpen);
+  }, [isOpen]);
 
   const handleClickOutside = () => {
     if (backdrop !== "static") {
       handleClose();
       return;
     }
-
     setIsShaking(true);
     setIsAnimationEnded(false);
     setTimeout(() => {
@@ -63,13 +68,12 @@ const ModalComponent: FC<TypeModal> = ({
 
   const handleClose = () => {
     setIsVisible(false);
+    closeLayer(portalId);
     if (onClose) onClose();
   };
 
   useEffect(() => {
-    if (!isVisible) {
-      closeLayer("modal");
-    }
+    if (!isVisible) return;
 
     openLayer(
       portalId,
@@ -96,8 +100,6 @@ const ModalComponent: FC<TypeModal> = ({
         </FlexElement>
       </>
     );
-
-    return () => closeLayer("modal");
   }, [isVisible, isShaking]);
 
   return null;
@@ -114,6 +116,11 @@ const Modal: FC<TypeModal> & {
     </PortalProvider>
   );
 };
+// const Modal = memo(ModalComponent) as unknown as FC<TypeModal> & {
+//   Header: typeof ModalHeader;
+//   Body: typeof ModalBody;
+//   Footer: typeof ModalFooter;
+// };
 
 Modal.Header = ModalHeader;
 Modal.Body = ModalBody;

@@ -1,4 +1,4 @@
-import React, { createContext, useContext, useState, ReactNode } from "react";
+import React, { createContext, useContext, useState, ReactNode, useEffect } from "react";
 import ReactDOM from "react-dom";
 
 type TypePortalLayer = {
@@ -18,6 +18,7 @@ export const PortalProvider: React.FC<{ children: ReactNode }> = ({ children }) 
 
   const handlePortalCreation = (portalId: string) => {
     let portalNode = document.getElementById(portalId);
+    document.body.style.overflow = "hidden";
     if (!portalNode) {
       portalNode = document.createElement("div");
       portalNode.id = portalId;
@@ -32,8 +33,13 @@ export const PortalProvider: React.FC<{ children: ReactNode }> = ({ children }) 
   };
 
   const closeLayer = (portalId: string) => {
+    document.body.style.overflow = "auto";
     setPortalLayers((prev) => prev.filter((layer) => layer.portalId !== portalId));
   };
+
+  useEffect(() => {
+    console.log("Updated portalLayers state:", portalLayers);
+  }, [portalLayers]);
 
   return (
     <PortalContext.Provider value={{ openLayer, closeLayer }}>
