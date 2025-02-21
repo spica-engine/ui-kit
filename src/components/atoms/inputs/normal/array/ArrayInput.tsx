@@ -8,6 +8,7 @@ import InputGroup from "components/atoms/base-input/InputGroup";
 import useInputRepresenter, {
   TypeArrayItems,
   TypeProperties,
+  TypeRepresenterValue,
   TypeValueType,
 } from "custom-hooks/useInputRepresenter";
 import DropList from "components/atoms/drop-list/DropList";
@@ -40,10 +41,18 @@ const ArrayInput: FC<TypeArrayInput> = ({
   ...props
 }) => {
   const [active, setActive] = useState(0);
+
+  const handleChange = (_value: any) => {
+    const updatedValue = structuredClone(value);
+    if (!updatedValue?.length) return value;
+    updatedValue[active] = _value[propertyKey];
+    onChange?.(updatedValue);
+  };
+
   const inputFields = useInputRepresenter({
     properties: { [propertyKey]: items } as unknown as TypeProperties,
-    value: value?.[active],
-    onChange,
+    value: { [propertyKey]: value?.[active] } as TypeRepresenterValue,
+    onChange: handleChange,
   });
 
   const handleChangeActiveIndex = (index: number) => {
@@ -53,7 +62,7 @@ const ArrayInput: FC<TypeArrayInput> = ({
   const handleCreateNewItem = () => {
     const localValue = value || [];
 
-    localValue?.push("");
+    localValue?.push(value?.[active] || "");
     onChange?.(localValue);
     setActive(localValue.length - 1);
   };

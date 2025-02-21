@@ -39,7 +39,8 @@ export type TypeValueType =
   | string[]
   | number[]
   | boolean[]
-  | TypeRepresenterValue;
+  | TypeRepresenterValue
+  | TypeRepresenterValue[];
 
 export type TypeRepresenterValue = {
   [key: string]: TypeValueType | TypeRepresenterValue;
@@ -86,6 +87,7 @@ export type TypeInputProps<T> = {
 };
 
 type TypeObjectInputProps<T> = {
+  key?: string;
   properties?: TypeProperties;
 } & TypeInputProps<T>;
 
@@ -126,7 +128,9 @@ const types: TypeInputTypeMap = {
       inputContainerClassName={props.className}
       value={props.value}
       options={props.enum}
-      onChange={(value) => props.onChange?.({ key: props.key, value })}
+      onChange={(value) => {
+        props.onChange?.({ key: props.key, value });
+      }}
     />
   ),
   number: (props) => (
@@ -234,8 +238,9 @@ const types: TypeInputTypeMap = {
         title={props.title}
         description={props.description}
         value={props.value}
-        //@ts-ignore
-        onChange={(value) => props.onChange?.({ key: props.key, value })}
+        onChange={(value) => {
+          props.onChange?.({ key: props.key, value });
+        }}
       />
     );
   },
@@ -258,12 +263,14 @@ const types: TypeInputTypeMap = {
 type TypeUseInputRepresenter = {
   properties: TypeProperties;
   value?: TypeValueType | TypeRepresenterValue;
-  onChange?: (event: TypeChangeEvent<unknown>) => void;
+  onChange?: (value: any) => void;
 };
 
 const useInputRepresenter = ({ properties, value, onChange }: TypeUseInputRepresenter) => {
-  const handleChange = (value: any) => {
-    onChange?.(value);
+  const handleChange = (event: { key: string; value: any }) => {
+    const updatedValue: any = structuredClone(value);
+    updatedValue[event.key] = event.value;
+    onChange?.(updatedValue);
   };
 
   return Object.entries(properties).map(([key, el]) => {
@@ -284,7 +291,7 @@ const useInputRepresenter = ({ properties, value, onChange }: TypeUseInputRepres
           minItems: el.minItems,
           maxItems: el.maxItems,
           items: el.items,
-          onChange: handleChange,
+          onChange: (event) => handleChange(event),
         })}
       </Fragment>
     );
