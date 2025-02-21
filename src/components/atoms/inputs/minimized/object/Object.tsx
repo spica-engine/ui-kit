@@ -11,6 +11,7 @@ type TypeMinimizedObjectInput = {
   properties: TypeProperties;
   popoverProps?: TypeFlexElement;
   contentProps?: TypeFlexElement;
+  onChange?: (value: any) => void;
 } & TypeFlexElement;
 
 const MinimizedObjectInput: FC<TypeMinimizedObjectInput> = ({
@@ -18,6 +19,7 @@ const MinimizedObjectInput: FC<TypeMinimizedObjectInput> = ({
   popoverProps,
   contentProps,
   properties,
+  onChange,
   ...props
 }) => {
   return (
@@ -26,8 +28,7 @@ const MinimizedObjectInput: FC<TypeMinimizedObjectInput> = ({
         <ObjectInput
           properties={properties}
           value={value}
-          //@ts-ignore
-          onChange={(value) => props.onChange?.({ key: props.key, value })}
+          onChange={(value) => onChange?.(value)}
           {...contentProps}
         />
       }
