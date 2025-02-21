@@ -2,9 +2,8 @@
 
 .container {
   border-radius: var(--border-radius-md);
-  padding: var(--padding-lg);
-  border: var(--border-default);
   justify-content: space-between !important;
+  background: var(--color-menu-background);
 
   &:hover {
     cursor: pointer;
@@ -13,6 +12,8 @@
   .viewContainer {
     flex: 1;
     overflow: hidden;
+    padding: var(--padding-md);
+
     img,
     embed {
       width: 100%;
@@ -25,12 +26,14 @@
       height: 2rem;
     }
   }
+}
 
-  .name {
-    width: 100%;
-    border-top: var(--border-default);
-    text-align: center;
-    padding-top: var(--padding-md);
+.name {
+  border-top: var(--border-default);
+  padding: var(--padding-md);
+  text-align: center;
+
+  span {
     @include textEllipsis(1);
   }
 }
