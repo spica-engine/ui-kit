@@ -22,6 +22,8 @@ type TypeAccordionGroup = TypeFlexElement & {
   itemClassName?: string;
   contentClassName?: string;
   headerClassName?: string;
+  suffixOnHover?: boolean;
+  noBackgroundOnFocus?: boolean;
 };
 
 const AccordionGroup: React.FC<TypeAccordionGroup> = ({
@@ -34,18 +36,15 @@ const AccordionGroup: React.FC<TypeAccordionGroup> = ({
   itemClassName,
   contentClassName,
   headerClassName,
+  suffixOnHover,
+  noBackgroundOnFocus,
   ...props
 }) => {
   const [activeIndex, setActiveIndex] = useState<number | null>(defaultActiveIndex || null);
 
-  useEffect(() => {
-    setActiveIndex(activeIndex || null);
-  }, [activeIndex]);
-
   const handleItemClick = (index: number): void => {
     setActiveIndex(activeIndex === index ? null : index);
   };
-
   return (
     <FlexElement
       direction="vertical"
@@ -56,7 +55,7 @@ const AccordionGroup: React.FC<TypeAccordionGroup> = ({
     >
       {items.map((item, index) => (
         <AccordionElement
-          key={index + 1}
+          key={item.title + index}
           title={item.title}
           isOpen={activeIndex === index + 1}
           onClick={() => handleItemClick(index + 1)}
@@ -66,6 +65,8 @@ const AccordionGroup: React.FC<TypeAccordionGroup> = ({
           itemClassName={itemClassName}
           contentClassName={contentClassName}
           headerClassName={headerClassName}
+          suffixOnHover={suffixOnHover}
+          noBackgroundOnFocus={noBackgroundOnFocus}
         >
           {item.content}
         </AccordionElement>

@@ -14,6 +14,8 @@ export type TypeAccordionElement = {
   itemClassName?: string;
   contentClassName?: string;
   headerClassName?: string;
+  suffixOnHover?: boolean;
+  noBackgroundOnFocus?: boolean;
   onClick: () => void;
 };
 
@@ -28,6 +30,8 @@ const AccordionElement: React.FC<TypeAccordionElement> = ({
   itemClassName,
   contentClassName,
   headerClassName,
+  suffixOnHover = false,
+  noBackgroundOnFocus = false,
 }) => {
   const renderIcon = () => {
     if (icon && typeof icon !== "string") {
@@ -57,11 +61,12 @@ const AccordionElement: React.FC<TypeAccordionElement> = ({
         }}
         suffix={{
           children: renderIcon(),
+          className: suffixOnHover ? styles.suffixOnHover : "",
         }}
         onClick={onClick}
         className={`${styles.accordionTitle} ${isOpen ? openClassName || styles.open : ""} ${
           headerClassName || ""
-        }`}
+        } ${noBackgroundOnFocus ? styles.noBackgroundOnFocus : ""}`}
       />
 
       <div

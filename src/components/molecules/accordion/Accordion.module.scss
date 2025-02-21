@@ -11,7 +11,6 @@
 
     &.rotate {
       transform: rotate(180deg);
-      transition: all var(--transition-duration) ease-in-out;
     }
   }
 }
@@ -21,7 +20,6 @@
   padding: var(--padding-lg);
   text-align: left;
   border: none;
-
   cursor: pointer;
   display: flex;
   justify-content: space-between;
@@ -29,10 +27,24 @@
 
   &:hover {
     background: var(--color-soft);
+
+    .suffixOnHover {
+      opacity: 1;
+    }
   }
 
   &.open {
     background: var(--color-soft);
+
+    &:hover {
+      &.noBackgroundOnHover {
+        background: var(--color-soft);
+      }
+    }
+  }
+
+  &.noBackgroundOnFocus {
+    background: transparent;
   }
 }
 
@@ -49,7 +61,6 @@
   &.open {
     grid-template-rows: 1fr;
     opacity: 1;
-    transition: all var(--transition-duration) ease-in-out;
     padding-bottom: var(--padding-lg);
     padding-top: var(--padding-lg);
   }
@@ -61,4 +72,9 @@
 
 .bordered {
   border: var(--border-default);
+}
+
+.suffixOnHover {
+  opacity: 0;
+  transition: all var(--transition-duration) ease;
 }
