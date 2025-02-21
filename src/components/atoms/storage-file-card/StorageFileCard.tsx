@@ -37,9 +37,13 @@ const StorageFileCard: FC<TypeStorageFileCard & TypeFlexElement> = ({
       >
         {fileView}
       </FlexElement>
-      <Text dimensionX="fill" {...nameProps} className={`${nameProps?.className} ${styles.name}`}>
-        {file.name}
-      </Text>
+      <FlexElement
+        dimensionX="fill"
+        alignment="center"
+        className={`${nameProps?.className} ${styles.name}`}
+      >
+        <Text {...nameProps}>{file.name}</Text>
+      </FlexElement>
     </FlexElement>
   );
 };
