@@ -35,7 +35,6 @@ const Table: FC<TypeTable> = ({
   const [focusedCell, setFocusedCell] = useState<{ column: string; row: number } | null>(null);
 
   const updateColumnWidth = (key: string, newWidth: string) => {
-    console.log(key, newWidth);
     setDataColumns((prevColumns: any) =>
       prevColumns.map((col: any) => (col.key === key ? { ...col, width: newWidth } : col))
     );
@@ -225,7 +224,7 @@ const HeaderCell = ({
       dimensionX="fill"
       alignment={align[headerAlign]}
       {...props}
-      className={`${styles.header} ${border ? styles.border : ""}`}
+      className={`${styles.header} ${border ? styles.border : ""} ${props.className || ""}`}
     >
       {children}
     </FlexElement>
