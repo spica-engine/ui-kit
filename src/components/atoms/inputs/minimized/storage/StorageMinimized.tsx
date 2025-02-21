@@ -33,9 +33,8 @@ const StorageMinimized: FC<TypeStorageMinimized> = ({
       ref={ref}
       alignment="leftCenter"
       dimensionX="fill"
+      mode="fill"
       root={{
-        dimensionX: "fill",
-        alignment: "leftCenter",
         children: (
           <Dropzone
             multiple={false}
@@ -68,8 +67,6 @@ const StorageMinimized: FC<TypeStorageMinimized> = ({
         ),
       }}
       suffix={{
-        dimensionX: "hug",
-        alignment: "center",
         children: file && (
           <Button
             variant="icon"
