@@ -8,9 +8,10 @@ import { LexicalErrorBoundary } from "@lexical/react/LexicalErrorBoundary";
 import ToolbarPlugin from "./plugins/ToolbarPlugin";
 import { useLexicalComposerContext } from "@lexical/react/LexicalComposerContext";
 import MyOnChangePlugin from "./plugins/OnChangePlugin";
-import FlexElement, { TypeFlexElement } from "components/atoms/flex-element/FlexElement";
+import FlexElement, {
+  TypeFlexElement,
+} from "../../../../../components/atoms/flex-element/FlexElement";
 import { EditorState, LexicalEditor } from "lexical";
-import { TypeFlexDimension } from "utils/interface";
 
 type TypeLexicalContent = {
   onChange: (state: EditorState, editor: LexicalEditor) => void;

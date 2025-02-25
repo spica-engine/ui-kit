@@ -1,11 +1,11 @@
-import BaseInput from "components/atoms/base-input/BaseInput";
-import Icon from "components/atoms/icon/Icon";
-import Text from "components/atoms/text/Text";
+import BaseInput from "../../../../../components/atoms/base-input/BaseInput";
+import Icon from "../../../../../components/atoms/icon/Icon";
+import Text from "../../../../../components/atoms/text/Text";
 import React, { memo, useRef, useState } from "react";
 import styles from "./MultipleSelection.module.scss";
-import Select, { TypeSelectRef } from "components/molecules/select/Select";
-import { TypeFlexElement } from "components/atoms/flex-element/FlexElement";
-import { TypeFluidContainer } from "components/atoms/fluid-container/FluidContainer";
+import Select, { TypeSelectRef } from "../../../../../components/molecules/select/Select";
+import { TypeFlexElement } from "../../../../../components/atoms/flex-element/FlexElement";
+import { TypeFluidContainer } from "../../../../../components/atoms/fluid-container/FluidContainer";
 
 type TypeMultipleSelectionInput<T = string | number> = {
   label: string;

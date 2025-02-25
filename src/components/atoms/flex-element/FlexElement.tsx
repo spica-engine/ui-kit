@@ -1,8 +1,8 @@
 import React, { memo, CSSProperties, ReactNode, RefObject, FC } from "react";
 import styles from "./FlexElement.module.scss";
-import { TypeFlexContainer, TypeFlexDimension } from "utils/interface";
+import { TypeFlexContainer, TypeFlexDimension } from "../../../utils/interface";
 import { useFlexStyles } from "custom-hooks/useFlexStyles";
-import "../../../styles/shared/global.scss";
+// import "../../../styles/shared/global.scss";
 
 export type TypeFlexElement = {
   ref?: RefObject<HTMLDivElement | null>;

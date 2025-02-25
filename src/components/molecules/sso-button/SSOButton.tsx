@@ -1,12 +1,12 @@
 import FluidContainer, {
   TypeFluidContainer,
-} from "components/atoms/fluid-container/FluidContainer";
-import Icon from "components/atoms/icon/Icon";
+} from "../../../components/atoms/fluid-container/FluidContainer";
+import Icon from "../../../components/atoms/icon/Icon";
 import React, { FC, memo, useRef, useState } from "react";
-import { IconName } from "utils/iconList";
+import { IconName } from "../../../utils/iconList";
 import styles from "./SSOButton.module.scss";
-import Text from "components/atoms/text/Text";
-import { useOnClickOutside } from "custom-hooks/useOnClickOutside";
+import Text from "../../../components/atoms/text/Text";
+import { useOnClickOutside } from "../../../custom-hooks/useOnClickOutside";
 
 type TypeSSOButton = {
   icon: IconName;

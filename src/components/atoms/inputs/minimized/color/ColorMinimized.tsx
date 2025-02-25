@@ -3,9 +3,9 @@ import FluidContainer, {
 } from "components/atoms/fluid-container/FluidContainer";
 import React, { FC, useState } from "react";
 import styles from "./ColorMinimized.module.scss";
-import Color from "components/atoms/color/Color";
-import Button from "components/atoms/button/Button";
-import Icon from "components/atoms/icon/Icon";
+import Color from "../../../../../components/atoms/color/Color";
+import Button from "../../../../../components/atoms/button/Button";
+import Icon from "../../../../../components/atoms/icon/Icon";
 
 type TypeColorMinimized = {
   value?: string;

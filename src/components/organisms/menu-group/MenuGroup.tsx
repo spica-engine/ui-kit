@@ -1,6 +1,6 @@
 import React, { FC, memo } from "react";
-import FlexElement, { TypeFlexElement } from "components/atoms/flex-element/FlexElement";
-import Text from "components/atoms/text/Text";
+import FlexElement, { TypeFlexElement } from "../../../components/atoms/flex-element/FlexElement";
+import Text from "../../../components/atoms/text/Text";
 import styles from "./MenuGroup.module.scss";
 
 type TypeMenuGroup = {
