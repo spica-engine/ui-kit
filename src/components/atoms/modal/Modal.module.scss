@@ -1,13 +1,19 @@
 .modalContainer {
   position: absolute;
-  z-index: 1000;
+  width: 100% !important;
+  height: 100% !important;
+  top: 0;
+}
+
+.modalContent {
+  position: relative;
   background-color: var(--color-menu-background);
-  padding: var(--padding-md);
-  min-height: 100px;
+  min-height: 50px;
+  min-width: 100px;
   max-width: 90%;
   max-height: 90%;
-  // !TODO need to check if this is necessary
-  // overflow: hidden;
+
+  padding: var(--padding-md);
   box-shadow: var(--box-shadow);
   border-radius: var(--border-radius-md);
 
@@ -23,80 +29,23 @@
     right: 0;
     padding: var(--padding-md);
     cursor: pointer;
-    border: 0;
-  }
-
-  &.leftToMiddle {
-    animation: slideFromLeft 0.8s forwards ease;
-  }
-
-  &.rightToMiddle {
-    animation: slideFromRight 0.8s forwards ease;
-  }
-
-  &.topToBottom {
-    animation: slideFromTop 0.4s forwards ease;
-  }
-
-  &.bottomToTop {
-    animation: slideFromBottom 0.4s forwards ease;
   }
 
   &.growFromCenter {
-    animation: growFromCenter 0.2s forwards ease;
+    animation: growFromCenter var(--transition-duration) forwards ease;
   }
 
   &.zoomIn {
-    animation: classicModalZoom 0.8s forwards cubic-bezier(0.25, 0.8, 0.25, 1);
+    animation: classicModalZoom var(--transition-duration) forwards linear;
   }
 
-  @keyframes slideFromLeft {
-    0% {
-      clip-path: inset(0 100% 0 0);
-      opacity: 0;
-    }
-    100% {
-      clip-path: inset(0 0 0 0);
-      opacity: 1;
-    }
-  }
-
-  @keyframes slideFromRight {
-    0% {
-      clip-path: inset(0 0 0 100%);
-      opacity: 0;
-    }
-    100% {
-      clip-path: inset(0 0 0 0);
-      opacity: 1;
-    }
-  }
-
-  @keyframes slideFromTop {
-    0% {
-      clip-path: inset(100% 0 0 0);
-      opacity: 0;
-    }
-    100% {
-      clip-path: inset(0 0 0 0);
-      opacity: 1;
-    }
-  }
-
-  @keyframes slideFromBottom {
-    0% {
-      clip-path: inset(0 0 100% 0);
-      opacity: 0;
-    }
-    100% {
-      clip-path: inset(0 0 0 0);
-      opacity: 1;
-    }
+  &.shake {
+    animation: shake var(--transition-duration) ease-in-out;
   }
 
   @keyframes growFromCenter {
     0% {
-      transform: scale(0.2);
+      transform: scale(0.9);
       opacity: 0;
     }
     100% {
@@ -107,33 +56,27 @@
 
   @keyframes classicModalZoom {
     0% {
-      transform: scale(0.95) translateY(-20px);
+      transform: scale(1.1);
       opacity: 0;
     }
     100% {
-      transform: scale(1) translateY(0);
+      transform: scale(1);
       opacity: 1;
     }
   }
-}
 
-.modalBackdrop {
-  position: fixed;
-  top: 0;
-  left: 0;
-  width: 100vw;
-  height: 100vh;
-  z-index: 10;
-  opacity: 0;
-  background-color: rgba(53, 52, 52, 0.651);
-  animation: fadeIn 0.3s forwards ease;
-
-  @keyframes fadeIn {
-    0% {
-      opacity: 0;
-    }
+  @keyframes shake {
+    0%,
     100% {
-      opacity: 1;
+      transform: 0;
+    }
+    20%,
+    60% {
+      transform: translateX(-10px);
+    }
+    40%,
+    80% {
+      transform: translateX(10px);
     }
   }
 }
