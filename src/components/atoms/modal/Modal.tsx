@@ -8,7 +8,7 @@ import ModalFooter from "./footer/ModalFooter";
 import Button from "../button/Button";
 import Icon from "../icon/Icon";
 import Backdrop from "../backdrop/Backdrop";
-import Portal from "custom-hooks/usePortal";
+import Portal from "../portal/Portal";
 
 type TypeModal = {
   className?: string;
