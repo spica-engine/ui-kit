@@ -7,9 +7,8 @@ import ModalBody from "./body/ModalBody";
 import ModalFooter from "./footer/ModalFooter";
 import Button from "../button/Button";
 import Icon from "../icon/Icon";
-import { useOnClickOutside } from "custom-hooks/useOnClickOutside";
 import Backdrop from "../backdrop/Backdrop";
-import { PortalProvider, usePortal } from "custom-hooks/usePortal";
+import Portal from "custom-hooks/usePortal";
 
 type TypeModal = {
   className?: string;
@@ -19,10 +18,10 @@ type TypeModal = {
   overflow?: boolean;
   children: React.ReactNode;
   onClose?: () => void;
-  backdrop?: boolean | "static";
+  showBackdrop?: boolean;
+  backdropType?: "static" | "default";
   backdropClassName?: string;
   backdropProps?: React.HTMLAttributes<HTMLDivElement>;
-  portalId?: string;
   isOpen?: boolean;
 } & TypeFluidContainer;
 
@@ -34,25 +33,23 @@ const ModalComponent: FC<TypeModal> = ({
   overflow = true,
   children,
   onClose,
-  backdrop = true,
+  showBackdrop = true,
+  backdropType = "default",
   backdropClassName,
   backdropProps,
-  portalId = "modal",
   isOpen = false,
   ...props
 }) => {
   const [isVisible, setIsVisible] = useState(isOpen);
-  const modalRef = useRef<HTMLDivElement>(null);
   const [isShaking, setIsShaking] = useState(false);
   const [animationController, setIsAnimationEnded] = useState(false);
-  const { openLayer, closeLayer } = usePortal();
 
   useEffect(() => {
     setIsVisible(isOpen);
   }, [isOpen]);
 
   const handleClickOutside = () => {
-    if (backdrop !== "static") {
+    if (backdropType !== "static") {
       handleClose();
       return;
     }
@@ -63,64 +60,48 @@ const ModalComponent: FC<TypeModal> = ({
       setIsAnimationEnded(true);
     }, 400);
   };
-
-  useOnClickOutside({ refs: [modalRef], onClickOutside: handleClickOutside });
-
   const handleClose = () => {
     setIsVisible(false);
-    closeLayer(portalId);
     if (onClose) onClose();
   };
 
-  useEffect(() => {
-    if (!isVisible) return;
+  if (!isVisible) return null;
 
-    openLayer(
-      portalId,
-      <>
-        {backdrop && <Backdrop {...backdropProps} className={backdropClassName} />}
-        <FlexElement className={styles.modalContainer}>
-          <FlexElement
-            alignment="top"
-            direction="vertical"
-            {...props}
-            ref={modalRef}
-            className={`${styles.modalContent} ${animationController ? "" : styles[animation]} ${!overflow ? styles.noOverflow : ""} ${isShaking ? styles.shake : ""} `}
-          >
-            {showCloseButton && (
-              <Button
-                className={styles.closeButton}
-                onClick={handleClose}
-                children={<Icon name="close" />}
-                variant="icon"
-              />
-            )}
-            {children}
-          </FlexElement>
+  return (
+    <Portal>
+      <FlexElement className={styles.modalContainer}>
+        <Backdrop
+          showBackdrop={showBackdrop}
+          {...backdropProps}
+          className={backdropClassName}
+          onClick={handleClickOutside}
+        />
+        <FlexElement
+          alignment="top"
+          direction="vertical"
+          {...props}
+          className={`${styles.modalContent} ${animationController ? "" : styles[animation]} ${!overflow ? styles.noOverflow : ""} ${isShaking ? styles.shake : ""} `}
+        >
+          {showCloseButton && (
+            <Button
+              className={styles.closeButton}
+              onClick={handleClose}
+              children={<Icon name="close" />}
+              variant="icon"
+            />
+          )}
+          {children}
         </FlexElement>
-      </>
-    );
-  }, [isVisible, isShaking]);
-
-  return null;
+      </FlexElement>
+    </Portal>
+  );
 };
 
-const Modal: FC<TypeModal> & {
+const Modal = memo(ModalComponent) as unknown as FC<TypeModal> & {
   Header: typeof ModalHeader;
   Body: typeof ModalBody;
   Footer: typeof ModalFooter;
-} = ({ children, ...props }) => {
-  return (
-    <PortalProvider>
-      <ModalComponent {...props}>{children}</ModalComponent>
-    </PortalProvider>
-  );
 };
-// const Modal = memo(ModalComponent) as unknown as FC<TypeModal> & {
-//   Header: typeof ModalHeader;
-//   Body: typeof ModalBody;
-//   Footer: typeof ModalFooter;
-// };
 
 Modal.Header = ModalHeader;
 Modal.Body = ModalBody;
