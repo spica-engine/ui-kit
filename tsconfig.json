@@ -19,8 +19,6 @@
     "jsx": "react-jsx",
     "paths": {
       "style/*": ["styles/*"]
-      // "ui-kit": ["dist"],
-      // "ui-kit/*": ["dist/*"]
     },
     "baseUrl": "src"
   },

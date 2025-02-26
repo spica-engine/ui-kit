@@ -1,6 +1,5 @@
 import { useMemo } from "react";
 import { TypeFlexContainer, TypeFlexDimension } from "../utils/interface";
-// import "../styles/shared/global.scss";
 
 export function useFlexStyles<T extends Partial<TypeFlexContainer & TypeFlexDimension>>(
   options = {
