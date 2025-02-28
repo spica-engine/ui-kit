@@ -1,12 +1,12 @@
 .container {
   height: max-content;
-  .content {
-    position: fixed;
-    box-shadow: var(--box-shadow);
-    padding: var(--padding-md);
-    border-radius: var(--border-radius-md);
-    background: var(--color-menu-background);
-  }
+}
+.content {
+  position: absolute;
+  box-shadow: var(--box-shadow);
+  padding: var(--padding-md);
+  border-radius: var(--border-radius-md);
+  background: var(--color-menu-background);
 }
 
 .arrow {
