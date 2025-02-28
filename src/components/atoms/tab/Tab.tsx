@@ -1,14 +1,12 @@
 import React, { FC, memo, useEffect, useRef, useState } from "react";
-import FlexElement from "../flex-element/FlexElement";
+import FlexElement, { TypeFlexElement } from "../flex-element/FlexElement";
 import FluidContainer, { TypeFluidContainer } from "../fluid-container/FluidContainer";
 import styles from "./Tab.module.scss";
-import { TypeFlexContainer, TypeFlexDimension } from "utils/interface";
 
 type TypeTab = {
-  type?: "default" | "underline" | "code";
+  type?: "default" | "underline" | "window";
   items: TypeFluidContainer[];
-} & TypeFlexContainer &
-  TypeFlexDimension;
+} & TypeFlexElement;
 
 const Tab: FC<TypeTab> = ({ type = "default", items, ...props }) => {
   const [activeIndex, setActiveIndex] = useState<number>(0);
@@ -27,11 +25,11 @@ const Tab: FC<TypeTab> = ({ type = "default", items, ...props }) => {
     <FlexElement
       ref={containerRef}
       dimensionX="fill"
-      gap={type == "code" ? 0 : 5}
+      gap={type == "window" ? 0 : 5}
       {...props}
-      className={`${styles.container} ${styles[type]}`}
+      className={`${styles.container} ${styles[type]} ${props.className}`}
     >
-      {type !== "code" ? (
+      {type !== "window" ? (
         <div
           className={styles.indicator}
           style={{
