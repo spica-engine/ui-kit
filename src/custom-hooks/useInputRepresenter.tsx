@@ -19,7 +19,7 @@ export type TypeProperties = {
   [key: string]: {
     type: keyof typeof types;
     title: string;
-    description: string;
+    description?: string;
     options?: TypeOptions;
     enum?: (string | number)[];
     default?: TypeValueType;
@@ -282,7 +282,7 @@ const useInputRepresenter = ({ properties, value, onChange }: TypeUseInputRepres
         {types[el.type]({
           key,
           title: el.title,
-          description: el.description,
+          description: el.description!,
           //@ts-ignore
           value: _value,
           className: el.className,
