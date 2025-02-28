@@ -1,6 +1,6 @@
 {
   "name": "ozi-ui-kit-test",
-  "version": "0.1.0",
+  "version": "0.0.1",
   "private": false,
   "main": "dist/index.cjs.js",
   "module": "dist/index.mjs",
@@ -46,7 +46,8 @@
     "format": "prettier --write \"src/**/*.{ts,js,tsx,jsx,json,css,scss,html}\"",
     "rollup-clean-css": "sed -i '' '/@charset/d' build/dist/index.css",
     "rollup": "rollup -c && yarn run rollup-clean-css",
-    "prepublishOnly": "yarn run rollup"
+    "prepublishOnly": "yarn run rollup",
+    "publish": "npm publish"
   },
   "eslintConfig": {
     "extends": [
