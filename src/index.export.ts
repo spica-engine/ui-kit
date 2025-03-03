@@ -1,3 +1,6 @@
+import "./index.scss";
+import "./styles/shared/global.scss";
+
 export { default as Autocomplete } from "./components/atoms/autocomplete/Autocomplete";
 export { default as BaseInput } from "./components/atoms/base-input/BaseInput";
 export { default as BucketFieldPopup } from "./components/atoms/bucket-field-popup/BucketFieldPopup";
@@ -64,5 +67,3 @@ export { default as RichTextInput } from "./components/atoms/inputs/normal/rich-
 export { default as StorageInput } from "./components/atoms/inputs/normal/storage/Storage";
 export { default as StringInput } from "./components/atoms/inputs/normal/string/String";
 export { default as TextAreaInput } from "./components/atoms/inputs/normal/text-area/TextArea";
-import "./index.scss";
-import "./styles/shared/global.scss";
