@@ -1,5 +1,5 @@
 import { TypeFluidContainer } from "../../../components/atoms/fluid-container/FluidContainer";
-import React, { FC, memo, useRef, useState } from "react";
+import React, { FC, useRef, useState, useEffect, memo } from "react";
 import styles from "./Modal.module.scss";
 import FlexElement from "../flex-element/FlexElement";
 import ModalHeader from "./header/ModalHeader";
@@ -8,21 +8,23 @@ import ModalFooter from "./footer/ModalFooter";
 import Button from "../button/Button";
 import Icon from "../icon/Icon";
 import { useOnClickOutside } from "../../../custom-hooks/useOnClickOutside";
+import Backdrop from "../backdrop/Backdrop";
+import Portal from "../portal/Portal";
+
 
 type TypeModal = {
   className?: string;
-  animation?:
-    | "leftToMiddle"
-    | "rightToMiddle"
-    | "topToBottom"
-    | "bottomToTop"
-    | "growFromCenter"
-    | "zoomIn";
+  animation?: "growFromCenter" | "zoomIn";
   showCloseButton?: boolean;
   disableClose?: boolean;
   overflow?: boolean;
   children: React.ReactNode;
   onClose?: () => void;
+  showBackdrop?: boolean;
+  backdropType?: "static" | "default";
+  backdropClassName?: string;
+  backdropProps?: React.HTMLAttributes<HTMLDivElement>;
+  isOpen?: boolean;
 } & TypeFluidContainer;
 
 const ModalComponent: FC<TypeModal> = ({
@@ -33,18 +35,33 @@ const ModalComponent: FC<TypeModal> = ({
   overflow = true,
   children,
   onClose,
+  showBackdrop = true,
+  backdropType = "default",
+  backdropClassName,
+  backdropProps,
+  isOpen = false,
   ...props
 }) => {
-  const [isVisible, setIsVisible] = useState(true);
-  const modalRef = useRef<HTMLDivElement>(null);
+  const [isVisible, setIsVisible] = useState(isOpen);
+  const [isShaking, setIsShaking] = useState(false);
+  const [animationController, setIsAnimationEnded] = useState(false);
 
-  useOnClickOutside({
-    refs: [modalRef],
-    onClickOutside: () => {
+  useEffect(() => {
+    setIsVisible(isOpen);
+  }, [isOpen]);
+
+  const handleClickOutside = () => {
+    if (backdropType !== "static") {
       handleClose();
-    },
-  });
-
+      return;
+    }
+    setIsShaking(true);
+    setIsAnimationEnded(false);
+    setTimeout(() => {
+      setIsShaking(false);
+      setIsAnimationEnded(true);
+    }, 400);
+  };
   const handleClose = () => {
     setIsVisible(false);
     if (onClose) onClose();
@@ -53,25 +70,32 @@ const ModalComponent: FC<TypeModal> = ({
   if (!isVisible) return null;
 
   return (
-    <FlexElement className={`${styles.modalBackdrop}`} dimensionX={"fill"} dimensionY={"fill"}>
-      <FlexElement
-        className={`${styles.modalContainer} ${styles[animation]} ${!overflow ? styles.noOverflow : ""}`}
-        alignment="top"
-        direction="vertical"
-        {...props}
-        ref={modalRef}
-      >
-        {showCloseButton && (
-          <Button
-            className={styles.closeButton}
-            onClick={handleClose}
-            children={<Icon name="close" />}
-            color="transparent"
-          />
-        )}
-        {children}
+    <Portal>
+      <FlexElement className={styles.modalContainer}>
+        <Backdrop
+          showBackdrop={showBackdrop}
+          {...backdropProps}
+          className={backdropClassName}
+          onClick={handleClickOutside}
+        />
+        <FlexElement
+          alignment="top"
+          direction="vertical"
+          {...props}
+          className={`${styles.modalContent} ${animationController ? "" : styles[animation]} ${!overflow ? styles.noOverflow : ""} ${isShaking ? styles.shake : ""} `}
+        >
+          {showCloseButton && (
+            <Button
+              className={styles.closeButton}
+              onClick={handleClose}
+              children={<Icon name="close" />}
+              variant="icon"
+            />
+          )}
+          {children}
+        </FlexElement>
       </FlexElement>
-    </FlexElement>
+    </Portal>
   );
 };
 
