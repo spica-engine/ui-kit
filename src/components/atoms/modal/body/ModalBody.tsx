@@ -1,6 +1,8 @@
 import React, { FC, memo } from "react";
 import styles from "./ModalBody.module.scss";
-import FlexElement, { TypeFlexElement } from "components/atoms/flex-element/FlexElement";
+import FlexElement, {
+  TypeFlexElement,
+} from "../../../../components/atoms/flex-element/FlexElement";
 
 type TypeModalBody = {
   className?: string;

@@ -1,7 +1,7 @@
-import FlexElement from "components/atoms/flex-element/FlexElement";
+import FlexElement from "../../../../components/atoms/flex-element/FlexElement";
 import { FC, memo } from "react";
 import styles from "./SortPopoverContent.module.scss";
-import ListItem from "components/atoms/list-item/ListItem";
+import ListItem from "../../../../components/atoms/list-item/ListItem";
 
 export type TypeSortProp = "name_desc" | "name_asc" | "date_desc" | "date_asc";
 

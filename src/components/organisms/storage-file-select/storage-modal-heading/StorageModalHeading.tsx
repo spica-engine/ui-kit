@@ -1,15 +1,15 @@
-import FlexElement from "components/atoms/flex-element/FlexElement";
+import FlexElement from "../../../../components/atoms/flex-element/FlexElement";
 import { FC, memo } from "react";
 import styles from "./StorageModalHeading.module.scss";
-import FluidContainer from "components/atoms/fluid-container/FluidContainer";
-import InputWithIcon from "components/atoms/input-with-icon/InputWithIcon";
-import Icon from "components/atoms/icon/Icon";
-import Popover from "components/atoms/popover/Popover";
-import StorageFilter from "components/molecules/storage-filter/StorageFilter";
-import Button from "components/atoms/button/Button";
+import FluidContainer from "../../../../components/atoms/fluid-container/FluidContainer";
+import InputWithIcon from "../../../../components/atoms/input-with-icon/InputWithIcon";
+import Icon from "../../../../components/atoms/icon/Icon";
+import Popover from "../../../../components/atoms/popover/Popover";
+import StorageFilter from "../../../../components/molecules/storage-filter/StorageFilter";
+import Button from "../../../../components/atoms/button/Button";
 import SortPopoverContent, { TypeSortProp } from "../sort-popover-content/SortPopoverContent";
-import Text from "components/atoms/text/Text";
-import Directory from "components/atoms/directory/Directory";
+import Text from "../../../../components/atoms/text/Text";
+import Directory from "../../../../components/atoms/directory/Directory";
 
 type TypeStorageModalHeading = {
   directory: string[];

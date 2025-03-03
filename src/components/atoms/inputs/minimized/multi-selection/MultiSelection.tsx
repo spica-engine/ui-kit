@@ -1,12 +1,16 @@
 import React, { useRef } from "react";
 import FluidContainer, {
   TypeFluidContainer,
-} from "components/atoms/fluid-container/FluidContainer";
-import Icon from "components/atoms/icon/Icon";
-import Select, { TypeSelect, TypeSelectRef, TypeValue } from "components/molecules/select/Select";
+} from "../../../../../components/atoms/fluid-container/FluidContainer";
+import Icon from "../../../../../components/atoms/icon/Icon";
+import Select, {
+  TypeSelect,
+  TypeSelectRef,
+  TypeValue,
+} from "../../../../../components/molecules/select/Select";
 import styles from "./MultiSelection.module.scss";
-import { TypeLabeledValue } from "components/atoms/select-option/SelectOption";
-import Button from "components/atoms/button/Button";
+import { TypeLabeledValue } from "../../../../../components/atoms/select-option/SelectOption";
+import Button from "../../../../../components/atoms/button/Button";
 
 type TypeMultiSelectionInput = {
   options?: (string | number | TypeLabeledValue)[];
@@ -15,7 +19,7 @@ type TypeMultiSelectionInput = {
   selectProps?: TypeSelect;
 } & TypeFluidContainer;
 
-const MultiSelectionInput = ({
+const MultipleSelectionMinimizedInput = ({
   options,
   value,
   onChange,
@@ -61,4 +65,4 @@ const MultiSelectionInput = ({
   );
 };
 
-export default MultiSelectionInput;
+export default MultipleSelectionMinimizedInput;

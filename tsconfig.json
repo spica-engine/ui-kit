@@ -1,14 +1,27 @@
 {
   "compilerOptions": {
-    "jsx": "react-jsx",
-    "target": "es2016",
-    "module": "commonjs",
+    "target": "ESNext",
+    "lib": ["dom", "dom.iterable", "esnext"],
+    "allowJs": true,
+    "skipLibCheck": true,
     "esModuleInterop": true,
-    "forceConsistentCasingInFileNames": true,
+    "allowSyntheticDefaultImports": true,
     "strict": true,
-    "baseUrl": "src",
+    "forceConsistentCasingInFileNames": true,
+    "noFallthroughCasesInSwitch": true,
+    "module": "ESNext",
+    "moduleResolution": "node",
+    "resolveJsonModule": true,
+    "isolatedModules": true,
+    "declaration": true,
+    "declarationDir": "build/dist",
+    "emitDeclarationOnly": true,
+    "jsx": "react-jsx",
     "paths": {
       "style/*": ["styles/*"]
-    }
-  }
+    },
+    "baseUrl": "src"
+  },
+  "include": ["src", "declarations.d.ts"],
+  "exclude": ["src/index.tsx", "src/app.ts", "src/setupTests.ts", "**/*.test.ts"]
 }

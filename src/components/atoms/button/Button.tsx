@@ -2,7 +2,7 @@ import { ButtonHTMLAttributes, FC, memo, useRef } from "react";
 import styles from "./Button.module.scss";
 import FluidContainer, { TypeFluidContainer } from "../fluid-container/FluidContainer";
 import Spinner, { TypeSpinner } from "../spinner/Spinner";
-import { TypeFlexDimension } from "utils/interface";
+import { TypeFlexDimension } from "../../../utils/interface";
 
 type TypeButton = {
   fullWidth?: boolean;

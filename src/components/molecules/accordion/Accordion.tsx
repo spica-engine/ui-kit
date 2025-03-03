@@ -1,8 +1,8 @@
 import React, { memo, useEffect, useState } from "react";
 import styles from "./Accordion.module.scss";
-import { TypeFluidContainer } from "components/atoms/fluid-container/FluidContainer";
+import { TypeFluidContainer } from "../../../components/atoms/fluid-container/FluidContainer";
 
-import FlexElement, { TypeFlexElement } from "components/atoms/flex-element/FlexElement";
+import FlexElement, { TypeFlexElement } from "../../../components/atoms/flex-element/FlexElement";
 import AccordionElement from "./AccordionElement";
 
 export type TypeAccordionItem = {

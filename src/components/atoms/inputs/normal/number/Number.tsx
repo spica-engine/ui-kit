@@ -1,12 +1,12 @@
-import BaseInput from "components/atoms/base-input/BaseInput";
-import { TypeFlexElement } from "components/atoms/flex-element/FlexElement";
-import Icon from "components/atoms/icon/Icon";
-import Input, { TypeInput } from "components/atoms/input/Input";
-import Select, { TypeSelectRef } from "components/molecules/select/Select";
+import BaseInput from "../../../../../components/atoms/base-input/BaseInput";
+import { TypeFlexElement } from "../../../../../components/atoms/flex-element/FlexElement";
+import Icon from "../../../../../components/atoms/icon/Icon";
+import Input, { TypeInput } from "../../../../../components/atoms/input/Input";
+import Select, { TypeSelectRef } from "../../../../../components/molecules/select/Select";
 import { FC, memo, useRef, useState } from "react";
-import Text from "components/atoms/text/Text";
+import Text from "../../../../../components/atoms/text/Text";
 import styles from "./Number.module.scss";
-import { TypeFluidContainer } from "components/atoms/fluid-container/FluidContainer";
+import { TypeFluidContainer } from "../../../../../components/atoms/fluid-container/FluidContainer";
 
 type TypeNumberInput = {
   label: string;

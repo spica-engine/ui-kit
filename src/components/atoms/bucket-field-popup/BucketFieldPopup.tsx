@@ -1,7 +1,7 @@
 import React, { FC, memo } from "react";
 import Icon from "../icon/Icon";
 import FlexElement, { TypeFlexElement } from "../flex-element/FlexElement";
-import { IconName } from "utils/iconList";
+import { IconName } from "../../../utils/iconList";
 import styles from "./BucketFieldPopup.module.scss";
 import ListItem from "../list-item/ListItem";
 import { TypeInputType } from "custom-hooks/useInputRepresenter";
