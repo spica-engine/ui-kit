@@ -1,8 +1,8 @@
 import React, { FC, ReactNode, useState } from "react";
 import styles from "./SideBar.module.scss";
 import defaultLogo from "../../../assets/images/logo.png";
-import Icon from "components/atoms/icon/Icon";
-import { IconName } from "utils/iconList";
+import Icon from "../../../components/atoms/icon/Icon";
+import { IconName } from "../../../utils/iconList";
 import Navigator, { TypeNavigatorHeader } from "./navigator/Navigator";
 
 export type TypeMenuItems = {

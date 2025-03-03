@@ -2,14 +2,14 @@ import React, { FC, useEffect, useRef } from "react";
 import GridLayout, { Layout } from "react-grid-layout";
 import styles from "./DashboardLayout.module.scss";
 import { ChartData, ChartOptions, ChartType } from "chart.js";
-import Icon from "components/atoms/icon/Icon";
-import Text from "components/atoms/text/Text";
-import FlexElement from "components/atoms/flex-element/FlexElement";
+import Icon from "../../../../components/atoms/icon/Icon";
+import Text from "../../../../components/atoms/text/Text";
+import FlexElement from "../../../../components/atoms/flex-element/FlexElement";
 import FluidContainer, {
   TypeFluidContainer,
-} from "components/atoms/fluid-container/FluidContainer";
-import DashboardItem from "components/atoms/dashboard-item/DashboardItem";
-import Popover from "components/atoms/popover/Popover";
+} from "../../../../components/atoms/fluid-container/FluidContainer";
+import DashboardItem from "../../../../components/atoms/dashboard-item/DashboardItem";
+import Popover from "../../../../components/atoms/popover/Popover";
 
 type TypeDashboardItem = {
   ratio: string;

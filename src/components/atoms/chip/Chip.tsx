@@ -3,7 +3,7 @@ import FluidContainer, { TypeFluidContainer } from "../fluid-container/FluidCont
 import styles from "./Chip.module.scss";
 import Icon from "../icon/Icon";
 import Button from "../button/Button";
-import { IconName } from "utils/iconList";
+import { IconName } from "../../../utils/iconList";
 
 type TypeChip = {
   label?: string;

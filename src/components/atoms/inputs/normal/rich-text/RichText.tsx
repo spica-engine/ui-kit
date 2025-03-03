@@ -8,12 +8,14 @@ import { HeadingNode, QuoteNode } from "@lexical/rich-text";
 import { LexicalComposer } from "@lexical/react/LexicalComposer";
 import { $generateHtmlFromNodes, $generateNodesFromDOM } from "@lexical/html";
 import LexicalContent from "./LexicalContent";
-import FlexElement, { TypeFlexElement } from "components/atoms/flex-element/FlexElement";
-import InputHeader from "components/atoms/input-header/InputHeader";
-import Text from "components/atoms/text/Text";
-import Icon from "components/atoms/icon/Icon";
-import { IconName } from "utils/iconList";
-import { TypeFluidContainer } from "components/atoms/fluid-container/FluidContainer";
+import FlexElement, {
+  TypeFlexElement,
+} from "../../../../../components/atoms/flex-element/FlexElement";
+import InputHeader from "../../../../../components/atoms/input-header/InputHeader";
+import Text from "../../../../../components/atoms/text/Text";
+import Icon from "../../../../../components/atoms/icon/Icon";
+import { IconName } from "../../../../../utils/iconList";
+import { TypeFluidContainer } from "../../../../../components/atoms/fluid-container/FluidContainer";
 
 export type TypeRichTextInput = {
   headerProps?: {

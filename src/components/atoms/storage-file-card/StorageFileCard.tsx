@@ -1,10 +1,9 @@
 import { FC, memo } from "react";
 import styles from "./StorageFileCard.module.scss";
 import FlexElement, { TypeFlexElement } from "../flex-element/FlexElement";
-import useFileView from "custom-hooks/useFileView";
-import { TypeFile } from "utils/interface";
+import useFileView from "../../../custom-hooks/useFileView";
+import { TypeFile } from "../../../utils/interface";
 import Text, { TypeText } from "../text/Text";
-import Icon from "../icon/Icon";
 
 export type TypeStorageFileCard = {
   file: TypeFile;
