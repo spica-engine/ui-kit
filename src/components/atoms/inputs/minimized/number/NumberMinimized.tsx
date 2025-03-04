@@ -16,7 +16,7 @@ type TypeStringMinimized = {
   onChange?: (value: number) => void;
 } & TypeFluidContainer;
 
-const NumberMinimized: FC<TypeStringMinimized> = ({
+const MinimizedNumberInput: FC<TypeStringMinimized> = ({
   onClear,
   value,
   options,
@@ -88,4 +88,4 @@ const NumberMinimized: FC<TypeStringMinimized> = ({
   );
 };
 
-export default memo(NumberMinimized);
+export default memo(MinimizedNumberInput);

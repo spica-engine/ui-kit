@@ -12,7 +12,7 @@ type TypeEnum = {
   value?: TypeValue;
 } & TypeFlexElement;
 
-const Enum: FC<TypeEnum> = ({
+const EnumInput: FC<TypeEnum> = ({
   selectClassName = "",
   label = "",
   options = [],
@@ -31,4 +31,4 @@ const Enum: FC<TypeEnum> = ({
   );
 };
 
-export default memo(Enum);
+export default memo(EnumInput);

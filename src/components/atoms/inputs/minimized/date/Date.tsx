@@ -15,7 +15,7 @@ type DateInputProps = {
   datePickerClassName?: string;
 } & TypeFluidContainer;
 
-const DateMinimizedInput = ({
+const MinimizedDateInput = ({
   onChange,
   value,
   placeholder = "",
@@ -60,4 +60,4 @@ const DateMinimizedInput = ({
   );
 };
 
-export default DateMinimizedInput;
+export default MinimizedDateInput;

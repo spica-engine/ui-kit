@@ -13,7 +13,7 @@ type TypeColorMinimized = {
   onChange?: (value: string) => void;
 } & TypeFluidContainer;
 
-const ColorMinimized: FC<TypeColorMinimized> = ({
+const MinimizedColorInput: FC<TypeColorMinimized> = ({
   value = "#000000",
   onClear,
   onChange,
@@ -63,4 +63,4 @@ const ColorMinimized: FC<TypeColorMinimized> = ({
   );
 };
 
-export default ColorMinimized;
+export default MinimizedColorInput;

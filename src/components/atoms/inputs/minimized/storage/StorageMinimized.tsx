@@ -18,7 +18,7 @@ type TypeStorageMinimized = {
   onDelete?: () => void;
 } & TypeFluidContainer;
 
-const StorageMinimized: FC<TypeStorageMinimized> = ({
+const MinimizedStorageInput: FC<TypeStorageMinimized> = ({
   file,
   placeholder = "Click or Drag & Drop",
   onUpload,
@@ -82,4 +82,4 @@ const StorageMinimized: FC<TypeStorageMinimized> = ({
   );
 };
 
-export default StorageMinimized;
+export default MinimizedStorageInput;

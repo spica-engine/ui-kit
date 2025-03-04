@@ -16,7 +16,7 @@ type TypeStringMinimized = {
   enumOnChange?: (value: string) => void;
 } & TypeFluidContainer;
 
-const StringMinimized: FC<TypeStringMinimized> = ({
+const MinimizedStringInput: FC<TypeStringMinimized> = ({
   onClear,
   value,
   options,
@@ -62,4 +62,4 @@ const StringMinimized: FC<TypeStringMinimized> = ({
   );
 };
 
-export default memo(StringMinimized);
+export default memo(MinimizedStringInput);

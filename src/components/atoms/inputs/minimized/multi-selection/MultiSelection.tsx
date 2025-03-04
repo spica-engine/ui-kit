@@ -19,7 +19,7 @@ type TypeMultiSelectionInput = {
   selectProps?: TypeSelect;
 } & TypeFluidContainer;
 
-const MultipleSelectionMinimizedInput = ({
+const MinimizedMultipleSelectionInput = ({
   options,
   value,
   onChange,
@@ -65,4 +65,4 @@ const MultipleSelectionMinimizedInput = ({
   );
 };
 
-export default MultipleSelectionMinimizedInput;
+export default MinimizedMultipleSelectionInput;
