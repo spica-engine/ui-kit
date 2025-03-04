@@ -1,10 +1,8 @@
-import Popover from "../../../../../components/atoms/popover/Popover";
+import Popover from "@atoms/popover/Popover";
 import React, { FC } from "react";
 import RichText, { TypeRichTextInput } from "../../normal/rich-text/RichText";
-import FlexElement, {
-  TypeFlexElement,
-} from "../../../../../components/atoms/flex-element/FlexElement";
-import Text from "../../../../../components/atoms/text/Text";
+import FlexElement, { TypeFlexElement } from "@atoms/flex-element/FlexElement";
+import Text from "@atoms/text/Text";
 import styles from "./RichText.module.scss";
 
 type TypeRichTextMinimized = {

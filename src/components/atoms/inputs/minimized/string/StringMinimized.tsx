@@ -1,12 +1,10 @@
 import React, { FC, memo, useState } from "react";
 import styles from "./StringMinimized.module.scss";
-import FluidContainer, {
-  TypeFluidContainer,
-} from "../../../../../components/atoms/fluid-container/FluidContainer";
-import Input from "../../../../../components/atoms/input/Input";
+import FluidContainer, { TypeFluidContainer } from "@atoms/fluid-container/FluidContainer";
+import Input from "@atoms/input/Input";
 import Select from "../../../../../components/molecules/select/Select";
-import Button from "../../../../../components/atoms/button/Button";
-import Icon from "../../../../../components/atoms/icon/Icon";
+import Button from "@atoms/button/Button";
+import Icon from "@atoms/icon/Icon";
 
 type TypeStringMinimized = {
   onClear?: () => void;

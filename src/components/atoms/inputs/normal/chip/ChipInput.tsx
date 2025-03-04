@@ -1,10 +1,8 @@
-import Input from "../../../../../components/atoms/input/Input";
+import Input from "@atoms/input/Input";
 import React, { FC, memo, useState } from "react";
-import Chip from "../../../../../components/atoms/chip/Chip";
+import Chip from "@atoms/chip/Chip";
 import styles from "./ChipInput.module.scss";
-import FlexElement, {
-  TypeFlexElement,
-} from "../../../../../components/atoms/flex-element/FlexElement";
+import FlexElement, { TypeFlexElement } from "@atoms/flex-element/FlexElement";
 
 type TypeChipInput = {
   label?: string[];

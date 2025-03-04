@@ -1,9 +1,7 @@
-import Button from "../../../../../components/atoms/button/Button";
-import FluidContainer, {
-  TypeFluidContainer,
-} from "../../../../../components/atoms/fluid-container/FluidContainer";
-import Icon from "../../../../../components/atoms/icon/Icon";
-import Input from "../../../../../components/atoms/input/Input";
+import Button from "@atoms/button/Button";
+import FluidContainer, { TypeFluidContainer } from "@atoms/fluid-container/FluidContainer";
+import Icon from "@atoms/icon/Icon";
+import Input from "@atoms/input/Input";
 import Select, { TypeSelectRef } from "../../../../../components/molecules/select/Select";
 import React, { FC, memo, useRef } from "react";
 import styles from "./NumberMinimized.module.scss";

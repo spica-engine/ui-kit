@@ -1,6 +1,6 @@
 import { FC, HTMLAttributes, memo, RefObject } from "react";
 import styles from "./Text.module.scss";
-import { TypeFlexDimension } from "../../../utils/interface";
+import { TypeFlexDimension } from "@utils/interface";
 import { useFlexStyles } from "custom-hooks/useFlexStyles";
 
 export type TypeText = {

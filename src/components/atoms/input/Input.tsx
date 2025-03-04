@@ -1,7 +1,7 @@
 import { memo, useState, FC, RefObject, InputHTMLAttributes, useEffect } from "react";
 import styles from "./Input.module.scss";
 import { useDebounce } from "custom-hooks/useDebounce";
-import { TypeFlexDimension } from "../../../utils/interface";
+import { TypeFlexDimension } from "@utils/interface";
 import { useFlexStyles } from "custom-hooks/useFlexStyles";
 
 export type TypeInput = {

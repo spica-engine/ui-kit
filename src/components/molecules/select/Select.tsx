@@ -1,14 +1,10 @@
 import { FC, memo, Ref, useImperativeHandle, useLayoutEffect, useRef, useState } from "react";
 import styles from "./Select.module.scss";
-import FluidContainer, {
-  TypeFluidContainer,
-} from "../../../components/atoms/fluid-container/FluidContainer";
-import Icon from "../../../components/atoms/icon/Icon";
-import Text from "../../../components/atoms/text/Text";
-import SelectOption, {
-  TypeLabeledValue,
-} from "../../../components/atoms/select-option/SelectOption";
-import FlexElement from "../../../components/atoms/flex-element/FlexElement";
+import FluidContainer, { TypeFluidContainer } from "@atoms/fluid-container/FluidContainer";
+import Icon from "@atoms/icon/Icon";
+import Text from "@atoms/text/Text";
+import SelectOption, { TypeLabeledValue } from "@atoms/select-option/SelectOption";
+import FlexElement from "@atoms/flex-element/FlexElement";
 import { useOnClickOutside } from "../../../custom-hooks/useOnClickOutside";
 import useAdaptivePosition from "../../../custom-hooks/useAdaptivePosition";
 
