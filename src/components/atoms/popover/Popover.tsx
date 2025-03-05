@@ -67,7 +67,7 @@ const Popover: FC<TypePopover> = ({
   });
 
   useOnClickOutside({
-    refs: [containerRef],
+    refs: [containerRef, popoverRef],
     onClickOutside: () => trigger === "click" && setIsOpen(false),
   });
 
