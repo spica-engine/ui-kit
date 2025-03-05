@@ -7,6 +7,14 @@ import postcss from "rollup-plugin-postcss";
 import copy from "rollup-plugin-copy";
 import url from "@rollup/plugin-url";
 import path from "path";
+import { replaceTscAliasPaths } from "tsc-alias";
+
+const tscAlias = () => ({
+  name: "tsAlias",
+  writeBundle: async () => {
+    await replaceTscAliasPaths();
+  },
+});
 
 export default [
   {
@@ -24,6 +32,7 @@ export default [
       commonjs(),
       typescript({ tsconfig: "./tsconfig.json" }),
       terser(),
+      tscAlias(),
       url({
         include: ["**/*.png", "**/*.jpg", "**/*.jpeg", "**/*.svg", "**/*.gif"],
         limit: 8192,

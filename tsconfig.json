@@ -25,6 +25,7 @@
       "@custom-hooks/*": ["custom-hooks/*"],
       "@utils/*": ["utils/*"]
     },
+    "outDir": "./build",
     "baseUrl": "src"
   },
   "include": ["src", "declarations.d.ts"],
