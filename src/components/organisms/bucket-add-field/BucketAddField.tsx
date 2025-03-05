@@ -47,9 +47,15 @@ const BucketAddField: FC<TypeBucketAddField> = ({ name, type, isOpen }) => {
 
   const configurationSchema = configurationMapping[type] || {};
   const schema = createShema[type] || {};
-
+  const schemaWithDynamicTitle = {
+    ...schema,
+    title: {
+      ...schema.title,
+      title: name || "",
+    },
+  };
   const inputRepresenter = useInputRepresenter({
-    properties: schema,
+    properties: schemaWithDynamicTitle,
     value: {
       title: name || "",
       description: "",
@@ -70,7 +76,7 @@ const BucketAddField: FC<TypeBucketAddField> = ({ name, type, isOpen }) => {
         placement="left"
         contentProps={{ direction: "vertical", dimensionX: "hug" }}
         content={
-          <FlexElement direction="vertical" gap={10}>
+          <FlexElement direction="vertical" gap={10} className={styles.container}>
             {inputRepresenter}
 
             <Tab

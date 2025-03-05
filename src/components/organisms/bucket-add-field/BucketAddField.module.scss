@@ -1,3 +1,6 @@
+.container {
+  max-width: min-content;
+}
 .buttonWrapper {
   width: 100%;
   display: flex;
@@ -5,6 +8,6 @@
   flex-direction: row-reverse;
 
   .buttonInnerFields {
-    background: var(--color-soft-grey) !important;
+    background: var(--color-soft) !important;
   }
 }

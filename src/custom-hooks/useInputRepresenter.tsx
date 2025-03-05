@@ -14,6 +14,7 @@ import Icon from "components/atoms/icon/Icon";
 import ObjectInput from "components/atoms/inputs/normal/object/ObjectInput";
 import ArrayInput from "components/atoms/inputs/normal/array/ArrayInput";
 import { utils } from "utils";
+import ChipInput from "components/atoms/inputs/normal/chip/ChipInput";
 
 export type TypeProperties = {
   [key: string]: {
@@ -118,6 +119,7 @@ export type TypeInputTypeMap = {
   richtext: (props: TypeInputProps<string>) => ReactNode;
   object: (props: TypeObjectInputProps<TypeRepresenterValue>) => ReactNode;
   array: (props: TypeArrayInputProps<TypeValueType>) => ReactNode;
+  chip: (props: TypeInputProps<string>) => ReactNode;
 };
 
 const types: TypeInputTypeMap = {
@@ -257,6 +259,9 @@ const types: TypeInputTypeMap = {
         propertyKey={props.key}
       />
     );
+  },
+  chip: (props) => {
+    return <ChipInput label={props.value ? [props.value] : []} />;
   },
 };
 

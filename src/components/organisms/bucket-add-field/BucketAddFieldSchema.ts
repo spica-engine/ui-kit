@@ -1,7 +1,7 @@
 const schema = {
   title: {
     type: "string",
-    title: "Name",
+    title: "",
   },
   description: {
     type: "textarea",
@@ -71,7 +71,7 @@ const schema = {
   },
   multipleSelectionType: {
     type: "string",
-    title: "",
+    title: "Type",
     enum: ["string", "number"],
   },
   arrayType: {
@@ -95,6 +95,10 @@ const schema = {
     type: "string",
     title: "Title",
   },
+  chip: {
+    type: "chip",
+    title: "",
+  },
 };
 
 const {
@@ -117,6 +121,7 @@ const {
   defaultDate,
   multipleSelectionType,
   arrayType,
+  chip,
 } = schema;
 
 export const createShema: any = {
@@ -126,7 +131,7 @@ export const createShema: any = {
   boolean: { title, description, defaultBoolean },
   textarea: { title, description },
   array: { title, description, arrayType, defaultString, presets, minNumber, maxNumber },
-  multiselect: { title, description, multipleSelectionType, maxNumber }, //Todo add enum input
+  multiselect: { title, description, multipleSelectionType, maxNumber, chip },
   object: { title, description },
   color: { title, description },
   storage: { title, description },
@@ -176,5 +181,5 @@ export const createShema: any = {
     readonly,
     requiredField,
     index,
-  }, // Used in array
+  },
 };

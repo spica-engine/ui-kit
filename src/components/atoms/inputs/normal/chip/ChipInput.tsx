@@ -40,7 +40,7 @@ const ChipInput: FC<TypeChipInput> = ({
       className={`${styles.chipInputContainer} ${props.className}`}
     >
       {chips.map((chip, index) => (
-        <Chip key={index} label={chip} onDelete={() => handleDelete(index)} />
+        <Chip variant="outlined" key={index} label={chip} onDelete={() => handleDelete(index)} />
       ))}
       <Input
         placeholder={placeholder}
