@@ -4,7 +4,7 @@ import Input, { TypeInput } from "components/atoms/input/Input";
 import React, { FC, memo, useState, useRef } from "react";
 import Text from "@atoms/text/Text";
 import styles from "./String.module.scss";
-import Select, { TypeSelectRef } from "../../../../../components/molecules/select/Select";
+import Select, { TypeSelectRef } from "@molecules/select/Select";
 import { TypeFlexElement } from "@atoms/flex-element/FlexElement";
 import { TypeFluidContainer } from "@atoms/fluid-container/FluidContainer";
 

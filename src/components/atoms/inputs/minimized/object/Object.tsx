@@ -4,10 +4,7 @@ import FlexElement, { TypeFlexElement } from "@atoms/flex-element/FlexElement";
 import Text from "@atoms/text/Text";
 import styles from "./Object.module.scss";
 import ObjectInput from "../../normal/object/ObjectInput";
-import {
-  TypeProperties,
-  TypeRepresenterValue,
-} from "../../../../../custom-hooks/useInputRepresenter";
+import { TypeProperties, TypeRepresenterValue } from "@custom-hooks/useInputRepresenter";
 
 type TypeMinimizedObjectInput = {
   value?: TypeRepresenterValue;

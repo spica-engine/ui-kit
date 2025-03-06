@@ -4,11 +4,9 @@ import Text from "@atoms/text/Text";
 import { IconName } from "@utils/iconList";
 import styles from "./Navigator.module.scss";
 import Button from "@atoms/button/Button";
-import AccordionGroup, {
-  TypeAccordionItem,
-} from "../../../../components/molecules/accordion/Accordion";
+import AccordionGroup, { TypeAccordionItem } from "@molecules/accordion/Accordion";
 import { helperUtils } from "@utils/helperUtils";
-import NavigatorItem from "../../../../components/molecules/navigator-item/NavigatorItem";
+import NavigatorItem from "@molecules/navigator-item/NavigatorItem";
 import { icon } from "leaflet";
 import { memo } from "react";
 

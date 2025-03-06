@@ -5,7 +5,7 @@ import FluidContainer from "@atoms/fluid-container/FluidContainer";
 import InputWithIcon from "@atoms/input-with-icon/InputWithIcon";
 import Icon from "@atoms/icon/Icon";
 import Popover from "@atoms/popover/Popover";
-import StorageFilter from "../../../../components/molecules/storage-filter/StorageFilter";
+import StorageFilter from "@molecules/storage-filter/StorageFilter";
 import Button from "@atoms/button/Button";
 import SortPopoverContent, { TypeSortProp } from "../sort-popover-content/SortPopoverContent";
 import Text from "@atoms/text/Text";

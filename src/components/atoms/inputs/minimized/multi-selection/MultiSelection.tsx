@@ -1,11 +1,7 @@
 import React, { useRef } from "react";
 import FluidContainer, { TypeFluidContainer } from "@atoms/fluid-container/FluidContainer";
 import Icon from "@atoms/icon/Icon";
-import Select, {
-  TypeSelect,
-  TypeSelectRef,
-  TypeValue,
-} from "../../../../../components/molecules/select/Select";
+import Select, { TypeSelect, TypeSelectRef, TypeValue } from "@molecules/select/Select";
 import styles from "./MultiSelection.module.scss";
 import { TypeLabeledValue } from "@atoms/select-option/SelectOption";
 import Button from "@atoms/button/Button";

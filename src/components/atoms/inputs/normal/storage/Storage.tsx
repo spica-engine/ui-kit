@@ -8,7 +8,7 @@ import Text, { TypeText } from "@atoms/text/Text";
 import { IconName } from "@utils/iconList";
 import InputGroup from "@atoms/base-input/InputGroup";
 import InputHeader from "@atoms/input-header/InputHeader";
-import useFileView from "../../../../../custom-hooks/useFileView";
+import useFileView from "@custom-hooks/useFileView";
 import { TypeFile } from "@utils/interface";
 import Button from "@atoms/button/Button";
 

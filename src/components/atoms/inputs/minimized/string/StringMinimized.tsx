@@ -2,7 +2,7 @@ import React, { FC, memo, useState } from "react";
 import styles from "./StringMinimized.module.scss";
 import FluidContainer, { TypeFluidContainer } from "@atoms/fluid-container/FluidContainer";
 import Input from "@atoms/input/Input";
-import Select from "../../../../../components/molecules/select/Select";
+import Select from "@molecules/select/Select";
 import Button from "@atoms/button/Button";
 import Icon from "@atoms/icon/Icon";
 

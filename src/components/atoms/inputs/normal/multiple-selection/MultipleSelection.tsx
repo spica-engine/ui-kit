@@ -3,7 +3,7 @@ import Icon from "@atoms/icon/Icon";
 import Text from "@atoms/text/Text";
 import React, { memo, useRef, useState } from "react";
 import styles from "./MultipleSelection.module.scss";
-import Select, { TypeSelectRef } from "../../../../../components/molecules/select/Select";
+import Select, { TypeSelectRef } from "@molecules/select/Select";
 import { TypeFlexElement } from "@atoms/flex-element/FlexElement";
 import { TypeFluidContainer } from "@atoms/fluid-container/FluidContainer";
 

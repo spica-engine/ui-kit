@@ -8,7 +8,7 @@ import InputGroup from "@atoms/base-input/InputGroup";
 import useInputRepresenter, {
   TypeProperties,
   TypeRepresenterValue,
-} from "../../../../../custom-hooks/useInputRepresenter";
+} from "@custom-hooks/useInputRepresenter";
 
 type TypeObjectInput = {
   value?: TypeRepresenterValue;

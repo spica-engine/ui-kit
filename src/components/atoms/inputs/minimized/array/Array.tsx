@@ -4,7 +4,7 @@ import FlexElement, { TypeFlexElement } from "@atoms/flex-element/FlexElement";
 import Text from "@atoms/text/Text";
 import styles from "./Array.module.scss";
 import ArrayInput from "../../normal/array/ArrayInput";
-import { TypeArrayItems, TypeValueType } from "../../../../../custom-hooks/useInputRepresenter";
+import { TypeArrayItems, TypeValueType } from "@custom-hooks/useInputRepresenter";
 
 type TypeMinimizedArrayInput = {
   propertyKey: string;

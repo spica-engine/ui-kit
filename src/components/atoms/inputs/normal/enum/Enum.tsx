@@ -1,5 +1,5 @@
 import FlexElement, { TypeFlexElement } from "@atoms/flex-element/FlexElement";
-import Select, { TypeValue } from "../../../../../components/molecules/select/Select";
+import Select, { TypeValue } from "@molecules/select/Select";
 import React, { FC, memo } from "react";
 
 type TypeEnum = {

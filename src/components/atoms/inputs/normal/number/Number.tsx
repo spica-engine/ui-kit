@@ -2,7 +2,7 @@ import BaseInput from "@atoms/base-input/BaseInput";
 import { TypeFlexElement } from "@atoms/flex-element/FlexElement";
 import Icon from "@atoms/icon/Icon";
 import Input, { TypeInput } from "@atoms/input/Input";
-import Select, { TypeSelectRef } from "../../../../../components/molecules/select/Select";
+import Select, { TypeSelectRef } from "@molecules/select/Select";
 import { FC, memo, useRef, useState } from "react";
 import Text from "@atoms/text/Text";
 import styles from "./Number.module.scss";

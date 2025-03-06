@@ -4,7 +4,7 @@ import React, { FC, memo, useRef, useState } from "react";
 import { IconName } from "@utils/iconList";
 import styles from "./SSOButton.module.scss";
 import Text from "@atoms/text/Text";
-import { useOnClickOutside } from "../../../custom-hooks/useOnClickOutside";
+import { useOnClickOutside } from "@custom-hooks/useOnClickOutside";
 
 type TypeSSOButton = {
   icon: IconName;

@@ -5,8 +5,8 @@ import Icon from "@atoms/icon/Icon";
 import Text from "@atoms/text/Text";
 import SelectOption, { TypeLabeledValue } from "@atoms/select-option/SelectOption";
 import FlexElement from "@atoms/flex-element/FlexElement";
-import { useOnClickOutside } from "../../../custom-hooks/useOnClickOutside";
-import useAdaptivePosition from "../../../custom-hooks/useAdaptivePosition";
+import { useOnClickOutside } from "@custom-hooks/useOnClickOutside";
+import useAdaptivePosition from "@custom-hooks/useAdaptivePosition";
 
 export type TypeValue = string | number | (string | number)[];
 

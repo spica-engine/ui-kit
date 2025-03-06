@@ -2,7 +2,7 @@ import Button from "@atoms/button/Button";
 import FluidContainer, { TypeFluidContainer } from "@atoms/fluid-container/FluidContainer";
 import Icon from "@atoms/icon/Icon";
 import Input from "@atoms/input/Input";
-import Select, { TypeSelectRef } from "../../../../../components/molecules/select/Select";
+import Select, { TypeSelectRef } from "@molecules/select/Select";
 import React, { FC, memo, useRef } from "react";
 import styles from "./NumberMinimized.module.scss";
 

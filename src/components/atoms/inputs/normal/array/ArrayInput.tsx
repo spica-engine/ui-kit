@@ -10,7 +10,7 @@ import useInputRepresenter, {
   TypeProperties,
   TypeRepresenterValue,
   TypeValueType,
-} from "../../../../../custom-hooks/useInputRepresenter";
+} from "@custom-hooks/useInputRepresenter";
 import DropList from "@atoms/drop-list/DropList";
 
 type TypeArrayInput = {
