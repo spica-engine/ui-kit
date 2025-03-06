@@ -41,6 +41,10 @@ const setCSSVariables = (theme: TypeTheme) => {
   const setVariables = (themeObj: Record<string, any>, prefix: string) => {
     Object.entries(themeObj).forEach(([key, value]) => {
       const formattedKey = helperUtils.camelToKebab(key);
+      if (typeof value === "string" && value.startsWith("#")) {
+        const rgbValue = hexToRgb(value);
+        root.style.setProperty(`--${prefix}-${formattedKey}-rgb`, rgbValue);
+      }
       root.style.setProperty(`--${prefix}-${formattedKey}`, value);
     });
   };
@@ -94,7 +98,6 @@ export const createTheme = (theme: Partial<TypeTheme>): TypeTheme => {
   const finalTheme: TypeTheme = {
     palette: {
       primary: getPaletteValue("primary", primaryColors.base),
-
       primaryLight: getPaletteValue("primaryLight", primaryColors.light),
       primaryDark: getPaletteValue("primaryDark", primaryColors.dark),
 
@@ -169,4 +172,16 @@ const generateColorVariants = (color: string, tonalOffset: TypePaletteTonalOffse
     light: utils.color.hslToHex(h, s, Math.min(1, l + lightOffset)),
     dark: utils.color.hslToHex(h, s, Math.max(0, l - darkOffset)),
   };
+};
+
+const hexToRgb = (hex: string) => {
+  let r = 0,
+    g = 0,
+    b = 0;
+  if (hex.length === 7) {
+    r = parseInt(hex.slice(1, 3), 16);
+    g = parseInt(hex.slice(3, 5), 16);
+    b = parseInt(hex.slice(5, 7), 16);
+  }
+  return `${r}, ${g}, ${b}`;
 };
