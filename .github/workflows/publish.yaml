@@ -1,10 +1,9 @@
 name: Publish to npm
 
 on:
-  workflow_run:
-    workflows: ["Build"]
-    types:
-      - completed
+  push:
+    tags:
+      - "v*"
 
 jobs:
   publish:
@@ -22,6 +21,19 @@ jobs:
 
       - name: Install dependencies
         run: yarn install --frozen-lockfile
+
+      - name: Check if version is higher than the latest npm version
+        run: |
+          PACKAGE_NAME=$(jq -r '.name' package.json)
+          CURRENT_VERSION=$(jq -r '.version' package.json)
+          LATEST_NPM_VERSION=$(npm show $PACKAGE_NAME version || echo "0.0.0")
+
+          if [ "$(printf '%s\n' "$LATEST_NPM_VERSION" "$CURRENT_VERSION" | sort -V | tail -n1)" != "$CURRENT_VERSION" ]; then
+            echo "❌ Error: Version $CURRENT_VERSION is not higher than the latest published version $LATEST_NPM_VERSION"
+            exit 1
+          fi
+        env:
+          NODE_AUTH_TOKEN: ${{ secrets.NPM_TOKEN }}
 
       - name: Publish to npm
         run: yarn publish
