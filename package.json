@@ -47,7 +47,7 @@
     "rollup-clean-css": "sed -i '' '/@charset/d' build/dist/index.css",
     "rollup": "rollup -c && yarn run rollup-clean-css",
     "prepublishOnly": "yarn run rollup",
-    "publish": "npm publish"
+    "publish": "cd build && npm publish"
   },
   "eslintConfig": {
     "extends": [
