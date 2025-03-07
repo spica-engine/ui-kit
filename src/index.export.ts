@@ -46,7 +46,7 @@ export { default as ArrayMinimizedInput } from "./components/atoms/inputs/minimi
 export { default as BooleanMinimizedInput } from "./components/atoms/inputs/minimized/boolean/Boolean";
 export { default as ColorMinimizedInput } from "./components/atoms/inputs/minimized/color/ColorMinimized";
 export { default as DateMinimizedInput } from "./components/atoms/inputs/minimized/date/Date";
-export { default as LocationMinimizedInput } from "components/atoms/inputs/minimized/location/Location";
+export { default as LocationMinimizedInput } from "./components/atoms/inputs/minimized/location/Location";
 export { default as MultipleSelectionMinimizedInput } from "./components/atoms/inputs/minimized/multi-selection/MultiSelection";
 export { default as NumberMinimizedInput } from "./components/atoms/inputs/minimized/number/NumberMinimized";
 export { default as ObjectMinimizedInput } from "./components/atoms/inputs/minimized/object/Object";
