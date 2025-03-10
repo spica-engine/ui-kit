@@ -1,4 +1,3 @@
-import Popover from "components/atoms/popover/Popover";
 import React, { FC, memo, useState } from "react";
 import { createShema } from "./BucketAddFieldSchema";
 import Button from "components/atoms/button/Button";
@@ -9,14 +8,17 @@ import FluidContainer from "components/atoms/fluid-container/FluidContainer";
 import Icon from "components/atoms/icon/Icon";
 import styles from "./BucketAddField.module.scss";
 import { TypeInputType } from "../../../custom-hooks/useInputRepresenter";
+import Modal from "components/atoms/modal/Modal";
+import { TypeModal } from "utils/interface";
 
 type TypeBucketAddField = {
   name: string;
   type: TypeInputType;
   isOpen?: boolean;
+  modalProps?: TypeModal;
 };
 
-const BucketAddField: FC<TypeBucketAddField> = ({ name, type, isOpen }) => {
+const BucketAddField: FC<TypeBucketAddField> = ({ name, type, isOpen, modalProps }) => {
   const isInnerFieldsType = type === "object" || type === "array";
   const initialTab = isInnerFieldsType ? 0 : 1;
   const [activeTab, setActiveTab] = useState(initialTab);
@@ -71,73 +73,66 @@ const BucketAddField: FC<TypeBucketAddField> = ({ name, type, isOpen }) => {
   });
 
   return (
-    isOpen && (
-      <Popover
-        placement="left"
-        contentProps={{ direction: "vertical", dimensionX: "hug" }}
-        content={
-          <FlexElement direction="vertical" gap={10} className={styles.container}>
-            {inputRepresenter}
-
-            <Tab
-              type="underline"
-              dimensionX="fill"
-              items={[
-                ...(isInnerFieldsType
-                  ? [
-                      {
-                        prefix: {
-                          children: "Inner Fields",
-                          onClick: () => setActiveTab(0),
-                        },
+    <Modal overflow={true} showCloseButton={false} {...modalProps}>
+      <Modal.Body className={styles.modalBody}>
+        <FlexElement direction="vertical" gap={10} className={styles.contentContainer}>
+          {inputRepresenter}
+          <Tab
+            type="underline"
+            dimensionX="fill"
+            items={[
+              ...(isInnerFieldsType
+                ? [
+                    {
+                      prefix: {
+                        children: "Inner Fields",
+                        onClick: () => setActiveTab(0),
                       },
-                    ]
-                  : []),
-                {
-                  root: {
-                    children: "Configuration",
-                    onClick: () => setActiveTab(1),
-                  },
+                    },
+                  ]
+                : []),
+              {
+                root: {
+                  children: "Configuration",
+                  onClick: () => setActiveTab(1),
                 },
-                {
-                  suffix: {
-                    children: "Properties",
-                    onClick: () => setActiveTab(2),
-                  },
+              },
+              {
+                suffix: {
+                  children: "Properties",
+                  onClick: () => setActiveTab(2),
                 },
-              ]}
-            />
-            {activeTab === 1 && configuration}
-            <div className={styles.buttonWrapper}>
-              <Button>
+              },
+            ]}
+          />
+          {activeTab === 1 && configuration}
+          <div className={styles.buttonWrapper}>
+            <Button>
+              <FluidContainer
+                prefix={{
+                  children: <Icon name="save" />,
+                }}
+                root={{
+                  children: "Save and close",
+                }}
+              />
+            </Button>
+            {isInnerFieldsType && (
+              <Button color="default" variant="dashed" className={styles.buttonInnerFields}>
                 <FluidContainer
                   prefix={{
-                    children: <Icon name="save" />,
+                    children: <Icon name="plus" />,
                   }}
                   root={{
-                    children: "Save and close",
+                    children: "Add New Inner Field",
                   }}
                 />
               </Button>
-              {isInnerFieldsType && (
-                <Button color="default" variant="dashed" className={styles.buttonInnerFields}>
-                  <FluidContainer
-                    prefix={{
-                      children: <Icon name="plus" />,
-                    }}
-                    root={{
-                      children: "Add New Inner Field",
-                    }}
-                  />
-                </Button>
-              )}
-            </div>
-          </FlexElement>
-        }
-      >
-        <Button children={undefined} />
-      </Popover>
-    )
+            )}
+          </div>
+        </FlexElement>
+      </Modal.Body>
+    </Modal>
   );
 };
 

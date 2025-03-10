@@ -35,3 +35,17 @@ export type TypeFile = {
 
 export type TypeInput = React.InputHTMLAttributes<HTMLInputElement>;
 export type TypeDiv = React.HTMLAttributes<HTMLDivElement>;
+
+export type TypeModal = {
+  className?: string;
+  animation?: "growFromCenter" | "zoomIn";
+  showCloseButton?: boolean;
+  disableClose?: boolean;
+  overflow?: boolean;
+  onClose?: () => void;
+  showBackdrop?: boolean;
+  backdropType?: "static" | "default";
+  backdropClassName?: string;
+  backdropProps?: React.HTMLAttributes<HTMLDivElement>;
+  isOpen?: boolean;
+};
