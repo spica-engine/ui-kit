@@ -32,7 +32,12 @@ jobs:
         run: |
           npm version $LATEST_TAG --no-git-tag-version
 
+      - name: Bundle build
+        run: yarn rollup
+
       - name: Publish to npm
-        run: yarn publish
+        run: |
+          cd build
+          yarn publish
         env:
           NODE_AUTH_TOKEN: ${{ secrets.NPM_TOKEN }}
