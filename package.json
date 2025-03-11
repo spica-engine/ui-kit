@@ -45,8 +45,7 @@
     "eject": "react-scripts eject",
     "format": "prettier --write \"src/**/*.{ts,js,tsx,jsx,json,css,scss,html}\"",
     "rollup-clean-css": "sed -i.bak '/@charset/d' build/dist/index.css && rm -f build/dist/index.css.bak",
-    "rollup": "rollup -c && yarn run rollup-clean-css",
-    "publish": "cd build && npm publish"
+    "rollup": "rollup -c && yarn run rollup-clean-css"
   },
   "eslintConfig": {
     "extends": [
