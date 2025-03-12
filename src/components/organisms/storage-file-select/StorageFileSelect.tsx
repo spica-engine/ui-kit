@@ -12,6 +12,7 @@ type TypeStorageFileSelect = {
   onChangeSearch?: (search: string) => void;
   onClickSort?: (prop: TypeSortProp) => void;
   onChooseFile?: (file: TypeFile) => void;
+  isOpen?: boolean;
 };
 
 const StorageFileSelect: FC<TypeStorageFileSelect> = ({
@@ -19,6 +20,7 @@ const StorageFileSelect: FC<TypeStorageFileSelect> = ({
   onChangeSearch,
   onClickSort,
   onChooseFile,
+  isOpen = false,
 }) => {
   const [directory, setDirectory] = useState(["/"]);
   const [fileLength, setFileLength] = useState(0);
@@ -41,7 +43,7 @@ const StorageFileSelect: FC<TypeStorageFileSelect> = ({
   }, [data]);
 
   return (
-    <Modal showCloseButton={false} className={styles.container} dimensionX="fill">
+    <Modal isOpen={isOpen} showCloseButton={false} className={styles.container} dimensionX="fill">
       <Modal.Header
         dimensionY="hug"
         root={{

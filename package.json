@@ -1,10 +1,10 @@
 {
-  "name": "ozi-ui-kit-test",
-  "version": "0.0.1",
+  "name": "oziko-ui-kit",
+  "version": "0.0.4",
   "private": false,
   "main": "dist/index.cjs.js",
   "module": "dist/index.mjs",
-  "types": "dist/index.d.ts",
+  "types": "dist/index.export.d.ts",
   "files": [
     "dist",
     "dist/index.css"
@@ -91,6 +91,7 @@
     "rollup-plugin-postcss": "^4.0.2",
     "rollup-plugin-styles": "^4.0.0",
     "tsc-alias": "^1.8.11",
+    "sass-migrator": "^2.3.1",
     "typescript": "^5.7.3",
     "web-vitals": "^4.2.4"
   },

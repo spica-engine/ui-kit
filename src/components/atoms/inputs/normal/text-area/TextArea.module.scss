@@ -1,14 +1,14 @@
-@import "../../../../../styles/mixins";
+@use "../../../../../styles/mixins";
 
-.textAreaInputContainer {
-  @include inputContainer;
+.container {
+  @include mixins.inputContainer;
   padding: var(--padding-md);
 
-  .textAreaTitle {
+  .titleContainer {
     font-size: var(--font-size-md);
     color: var(--color-input-placeholder);
   }
-  .textArea {
+  .textAreaInput {
     width: 100%;
     padding: var(--padding-md);
     font-size: var(--font-size-md);
@@ -27,6 +27,6 @@
   }
   .description {
     width: 100% !important;
-    @include inputDescriptionContainer;
+    @include mixins.inputDescriptionContainer;
   }
 }

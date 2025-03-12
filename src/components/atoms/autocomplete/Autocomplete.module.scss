@@ -1,8 +1,8 @@
-@import "../../../styles/mixins";
+@use "../../../styles/mixins";
 
 .input {
   input {
-    @include textEllipsis(1);
+    @include mixins.textEllipsis(1);
   }
 }
 
