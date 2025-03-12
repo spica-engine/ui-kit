@@ -1,7 +1,7 @@
-@import "src/styles/_mixins";
+@use "../../../../../styles/mixins";
 
 .inputMinimized {
-  @include inputMinimizedContainer;
+  @include mixins.inputMinimizedContainer;
 }
 
 .contentContainer {
@@ -9,6 +9,6 @@
 }
 
 .value {
-  @include textEllipsis(1);
+  @include mixins.textEllipsis(1);
   display: block;
 }

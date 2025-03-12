@@ -1,5 +1,5 @@
-@import "src/styles/_mixins";
+@use "../../../../../styles/mixins";
 
 .richTextMinimized {
-  @include inputMinimizedContainer;
+  @include mixins.inputMinimizedContainer;
 }

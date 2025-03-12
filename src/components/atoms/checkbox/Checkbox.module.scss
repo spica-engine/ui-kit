@@ -1,4 +1,4 @@
-@import "../../../styles/mixins";
+@use "../../../styles/mixins";
 
 .container {
   cursor: pointer;
@@ -32,7 +32,7 @@
     }
 
     label {
-      @include flexCenter;
+      @include mixins.flexCenter;
       width: 14px;
       height: 14px;
       border: var(--border-default);

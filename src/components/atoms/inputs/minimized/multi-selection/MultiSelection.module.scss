@@ -1,7 +1,7 @@
-@import "../../../../../styles/mixins";
+@use "../../../../../styles/mixins";
 
 .multiSelectionContainer {
-  @include inputContainer;
+  @include mixins.inputContainer;
   padding: 0;
 
   .multiSelect {

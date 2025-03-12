@@ -1,7 +1,7 @@
-@import "/src/styles/_mixins";
+@use "../../../../../styles/mixins";
 
 .storageMinimized {
-  @include inputMinimizedContainer;
+  @include mixins.inputMinimizedContainer;
   padding: 0;
 
   .storage {
@@ -9,7 +9,7 @@
   }
 
   .text {
-    @include textEllipsis(1);
+    @include mixins.textEllipsis(1);
     width: 100%;
   }
 
