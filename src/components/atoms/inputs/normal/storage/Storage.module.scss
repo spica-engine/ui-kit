@@ -1,7 +1,7 @@
-@import "../../../../../styles/mixins";
+@use "../../../../../styles/mixins";
 
 .container {
-  @include inputContainer;
+  @include mixins.inputContainer;
   padding: var(--padding-md);
 
   .top {
