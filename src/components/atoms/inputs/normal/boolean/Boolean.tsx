@@ -1,13 +1,9 @@
 import { FC, memo } from "react";
 import styles from "./Boolean.module.scss";
-import Text, { TypeText } from "../../../../../components/atoms/text/Text";
-import FluidContainer, {
-  TypeFluidContainer,
-} from "../../../../../components/atoms/fluid-container/FluidContainer";
-import Switch from "../../../../../components/atoms/switch/Switch";
-import FlexElement, {
-  TypeFlexElement,
-} from "../../../../../components/atoms/flex-element/FlexElement";
+import Text, { TypeText } from "@atoms/text/Text";
+import FluidContainer, { TypeFluidContainer } from "@atoms/fluid-container/FluidContainer";
+import Switch from "@atoms/switch/Switch";
+import FlexElement, { TypeFlexElement } from "@atoms/flex-element/FlexElement";
 
 export type TypeBooleanInput = {
   checked?: boolean;

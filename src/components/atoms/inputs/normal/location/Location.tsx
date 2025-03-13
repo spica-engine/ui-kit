@@ -1,13 +1,11 @@
 import React, { FC, memo } from "react";
 import styles from "./Location.module.scss";
 import "../../../../../../node_modules/leaflet/dist/leaflet.css";
-import FlexElement, {
-  TypeFlexElement,
-} from "../../../../../components/atoms/flex-element/FlexElement";
-import Icon from "../../../../../components/atoms/icon/Icon";
-import Text from "../../../../../components/atoms/text/Text";
-import InputHeader from "../../../../../components/atoms/input-header/InputHeader";
-import Map, { TypeCoordinates } from "../../../../../components/atoms/map/Map";
+import FlexElement, { TypeFlexElement } from "@atoms/flex-element/FlexElement";
+import Icon from "@atoms/icon/Icon";
+import Text from "@atoms/text/Text";
+import InputHeader from "@atoms/input-header/InputHeader";
+import Map, { TypeCoordinates } from "@atoms/map/Map";
 
 type TypeLocationInput = {
   coordinates?: TypeCoordinates;

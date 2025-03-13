@@ -1,6 +1,6 @@
 import React, { memo } from "react";
 import styles from "./Icon.module.scss";
-import { iconMap, IconName, IconSize } from "../../../utils/iconList";
+import { iconMap, IconName, IconSize } from "@utils/iconList";
 
 export type TypeIcon = {
   name: IconName;

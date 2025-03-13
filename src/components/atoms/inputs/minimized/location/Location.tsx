@@ -1,13 +1,11 @@
 import React, { ReactNode } from "react";
-import FlexElement, {
-  TypeFlexElement,
-} from "../../../../../components/atoms/flex-element/FlexElement";
+import FlexElement, { TypeFlexElement } from "@atoms/flex-element/FlexElement";
 import styles from "./Location.module.scss";
-import Popover from "../../../../../components/atoms/popover/Popover";
-import FluidContainer from "../../../../../components/atoms/fluid-container/FluidContainer";
+import Popover from "@atoms/popover/Popover";
+import FluidContainer from "@atoms/fluid-container/FluidContainer";
 import locationIcon from "../../../../../assets/images/location.png";
-import Text from "../../../../../components/atoms/text/Text";
-import Map, { TypeMapProps } from "../../../../../components/atoms/map/Map";
+import Text from "@atoms/text/Text";
+import Map, { TypeMapProps } from "@atoms/map/Map";
 
 type TypeMinimizedLocationInput = TypeFlexElement & {
   contentProps?: TypeFlexElement;

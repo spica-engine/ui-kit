@@ -18,8 +18,14 @@
     "emitDeclarationOnly": true,
     "jsx": "react-jsx",
     "paths": {
-      "style/*": ["styles/*"]
+      "style/*": ["styles/*"],
+      "@atoms/*": ["components/atoms/*"],
+      "@molecules/*": ["components/molecules/*"],
+      "@organizms/*": ["components/organizms/*"],
+      "@custom-hooks/*": ["custom-hooks/*"],
+      "@utils/*": ["utils/*"]
     },
+    "outDir": "./build",
     "baseUrl": "src"
   },
   "include": ["src", "declarations.d.ts"],

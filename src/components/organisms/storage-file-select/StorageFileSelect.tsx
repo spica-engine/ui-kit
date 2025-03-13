@@ -1,10 +1,10 @@
 import { FC, memo, useEffect, useState } from "react";
 import styles from "./StorageFileSelect.module.scss";
-import Modal from "../../../components/atoms/modal/Modal";
-import StorageFileCard from "../../../components/atoms/storage-file-card/StorageFileCard";
+import Modal from "@atoms/modal/Modal";
+import StorageFileCard from "@atoms/storage-file-card/StorageFileCard";
 import { TypeSortProp } from "./sort-popover-content/SortPopoverContent";
 import StorageModalHeading from "./storage-modal-heading/StorageModalHeading";
-import { TypeFile } from "../../../utils/interface";
+import { TypeFile } from "@utils/interface";
 
 type TypeStorageFileSelect = {
   data: TypeFile[];

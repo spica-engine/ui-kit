@@ -1,11 +1,9 @@
 import React from "react";
-import DatePicker from "../../../../../components/atoms/date-picker/DatePicker";
-import FluidContainer, {
-  TypeFluidContainer,
-} from "../../../../../components/atoms/fluid-container/FluidContainer";
+import DatePicker from "@atoms/date-picker/DatePicker";
+import FluidContainer, { TypeFluidContainer } from "@atoms/fluid-container/FluidContainer";
 import styles from "./Date.module.scss";
-import Button from "../../../../../components/atoms/button/Button";
-import Icon from "../../../../../components/atoms/icon/Icon";
+import Button from "@atoms/button/Button";
+import Icon from "@atoms/icon/Icon";
 
 type DateInputProps = {
   onChange?: (value: Date) => void;

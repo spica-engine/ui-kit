@@ -1,8 +1,6 @@
 import React, { useState } from "react";
-import FluidContainer, {
-  TypeFluidContainer,
-} from "../../../../../components/atoms/fluid-container/FluidContainer";
-import Icon from "../../../../../components/atoms/icon/Icon";
+import FluidContainer, { TypeFluidContainer } from "@atoms/fluid-container/FluidContainer";
+import Icon from "@atoms/icon/Icon";
 import styles from "./TextArea.module.scss";
 
 type MinimizedTextAreaProps = {

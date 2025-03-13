@@ -1,16 +1,10 @@
 import React, { useRef } from "react";
-import FluidContainer, {
-  TypeFluidContainer,
-} from "../../../../../components/atoms/fluid-container/FluidContainer";
-import Icon from "../../../../../components/atoms/icon/Icon";
-import Select, {
-  TypeSelect,
-  TypeSelectRef,
-  TypeValue,
-} from "../../../../../components/molecules/select/Select";
+import FluidContainer, { TypeFluidContainer } from "@atoms/fluid-container/FluidContainer";
+import Icon from "@atoms/icon/Icon";
+import Select, { TypeSelect, TypeSelectRef, TypeValue } from "@molecules/select/Select";
 import styles from "./MultiSelection.module.scss";
-import { TypeLabeledValue } from "../../../../../components/atoms/select-option/SelectOption";
-import Button from "../../../../../components/atoms/button/Button";
+import { TypeLabeledValue } from "@atoms/select-option/SelectOption";
+import Button from "@atoms/button/Button";
 
 type TypeMultiSelectionInput = {
   options?: (string | number | TypeLabeledValue)[];
