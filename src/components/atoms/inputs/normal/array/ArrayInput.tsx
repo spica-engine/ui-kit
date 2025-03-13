@@ -1,19 +1,17 @@
 import { FC, memo, useState } from "react";
 import styles from "./ArrayInput.module.scss";
-import Icon from "../../../../../components/atoms/icon/Icon";
-import InputHeader from "../../../../../components/atoms/input-header/InputHeader";
-import Text, { TypeText } from "../../../../../components/atoms/text/Text";
-import FlexElement, {
-  TypeFlexElement,
-} from "../../../../../components/atoms/flex-element/FlexElement";
-import InputGroup from "../../../../../components/atoms/base-input/InputGroup";
+import Icon from "@atoms/icon/Icon";
+import InputHeader from "@atoms/input-header/InputHeader";
+import Text, { TypeText } from "@atoms/text/Text";
+import FlexElement, { TypeFlexElement } from "@atoms/flex-element/FlexElement";
+import InputGroup from "@atoms/base-input/InputGroup";
 import useInputRepresenter, {
   TypeArrayItems,
   TypeProperties,
   TypeRepresenterValue,
   TypeValueType,
-} from "../../../../../custom-hooks/useInputRepresenter";
-import DropList from "../../../../../components/atoms/drop-list/DropList";
+} from "@custom-hooks/useInputRepresenter";
+import DropList from "@atoms/drop-list/DropList";
 
 type TypeArrayInput = {
   value?: TypeValueType[];

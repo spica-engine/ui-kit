@@ -39,9 +39,9 @@
     "tslib": "^2.8.1"
   },
   "scripts": {
-    "start": "react-scripts start",
-    "build": "react-scripts build",
-    "test": "react-scripts test",
+    "start": "react-app-rewired start",
+    "build": "react-app-rewired build",
+    "test": "react-app-rewired test",
     "eject": "react-scripts eject",
     "format": "prettier --write \"src/**/*.{ts,js,tsx,jsx,json,css,scss,html}\"",
     "rollup-clean-css": "sed -i '' '/@charset/d' build/dist/index.css",
@@ -83,12 +83,14 @@
     "postcss-discard-comments": "^7.0.3",
     "prettier": "3.4.2",
     "react": "^19.0.0",
+    "react-app-rewired": "^2.2.1",
     "react-dom": "^19.0.0",
     "rollup-plugin-copy": "^3.5.0",
     "rollup-plugin-dts": "^6.1.1",
     "rollup-plugin-peer-deps-external": "^2.2.4",
     "rollup-plugin-postcss": "^4.0.2",
     "rollup-plugin-styles": "^4.0.0",
+    "tsc-alias": "^1.8.11",
     "sass-migrator": "^2.3.1",
     "typescript": "^5.7.3",
     "web-vitals": "^4.2.4"

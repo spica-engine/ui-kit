@@ -1,11 +1,11 @@
 import { ChangeEventHandler, FC, memo } from "react";
 import FlexElement, { TypeFlexElement } from "../../../flex-element/FlexElement";
 import styles from "./TextArea.module.scss";
-import { TypeFluidContainer } from "../../../../../components/atoms/fluid-container/FluidContainer";
-import Icon from "../../../../../components/atoms/icon/Icon";
-import { IconName } from "../../../../../utils/iconList";
-import InputHeader from "../../../../../components/atoms/input-header/InputHeader";
-import Text from "../../../../../components/atoms/text/Text";
+import { TypeFluidContainer } from "@atoms/fluid-container/FluidContainer";
+import Icon from "@atoms/icon/Icon";
+import { IconName } from "@utils/iconList";
+import InputHeader from "@atoms/input-header/InputHeader";
+import Text from "@atoms/text/Text";
 
 type TypeTextArea = {
   value?: string;

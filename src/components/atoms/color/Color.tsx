@@ -1,10 +1,8 @@
 import { ChangeEvent, FC, memo } from "react";
 import styles from "./Color.module.scss";
-import Text from "../../../components/atoms/text/Text";
-import FluidContainer, {
-  TypeFluidContainer,
-} from "../../../components/atoms/fluid-container/FluidContainer";
-import { TypeFlexElement } from "../../../components/atoms/flex-element/FlexElement";
+import Text from "@atoms/text/Text";
+import FluidContainer, { TypeFluidContainer } from "@atoms/fluid-container/FluidContainer";
+import { TypeFlexElement } from "@atoms/flex-element/FlexElement";
 
 type TypeColor = {
   value: string;
