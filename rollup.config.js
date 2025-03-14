@@ -44,7 +44,14 @@ export default [
         modules: {
           auto: /\.module\.(scss|css)$/i,
         },
-        use: ["sass"],
+        use: [
+          [
+            "sass",
+            {
+              includePaths: [path.resolve(__dirname, "src")],
+            },
+          ],
+        ],
         inject: true,
       }),
       copy({
