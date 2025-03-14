@@ -41,6 +41,10 @@ const setCSSVariables = (theme: TypeTheme) => {
   const setVariables = (themeObj: Record<string, any>, prefix: string) => {
     Object.entries(themeObj).forEach(([key, value]) => {
       const formattedKey = helperUtils.camelToKebab(key);
+      if (typeof value === "string" && value.startsWith("#")) {
+        const rgbValue = utils.color.hexToRgb(value);
+        root.style.setProperty(`--${prefix}-${formattedKey}-rgb`, rgbValue);
+      }
       root.style.setProperty(`--${prefix}-${formattedKey}`, value);
     });
   };
@@ -94,7 +98,6 @@ export const createTheme = (theme: Partial<TypeTheme>): TypeTheme => {
   const finalTheme: TypeTheme = {
     palette: {
       primary: getPaletteValue("primary", primaryColors.base),
-
       primaryLight: getPaletteValue("primaryLight", primaryColors.light),
       primaryDark: getPaletteValue("primaryDark", primaryColors.dark),
 
