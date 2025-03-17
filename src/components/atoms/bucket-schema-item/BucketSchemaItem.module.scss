@@ -1,0 +1,20 @@
+@use "styles/mixins";
+
+.label {
+  @include mixins.textEllipsis(1);
+  display: block;
+  white-space: nowrap;
+  width: 100px;
+}
+
+.buttons {
+  padding: 0;
+  min-width: none;
+}
+
+.iconEllipsis {
+  cursor: pointer;
+  @include mixins.textEllipsis(1);
+  display: block;
+  white-space: nowrap;
+}
