@@ -1,6 +1,6 @@
 {
   "name": "oziko-ui-kit",
-  "version": "0.0.4",
+  "version": "0.0.5",
   "private": false,
   "main": "dist/index.cjs.js",
   "module": "dist/index.mjs",
@@ -44,10 +44,8 @@
     "test": "react-app-rewired test",
     "eject": "react-scripts eject",
     "format": "prettier --write \"src/**/*.{ts,js,tsx,jsx,json,css,scss,html}\"",
-    "rollup-clean-css": "sed -i '' '/@charset/d' build/dist/index.css",
-    "rollup": "rollup -c && yarn run rollup-clean-css",
-    "prepublishOnly": "yarn run rollup",
-    "publish": "npm publish"
+    "rollup-clean-css": "sed -i.bak '/@charset/d' build/dist/index.css && rm -f build/dist/index.css.bak",
+    "rollup": "rollup -c && yarn run rollup-clean-css"
   },
   "eslintConfig": {
     "extends": [
