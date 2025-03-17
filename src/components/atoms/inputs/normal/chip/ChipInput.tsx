@@ -1,5 +1,5 @@
 import Input from "components/atoms/input/Input";
-import React, { FC, memo, useState } from "react";
+import React, { FC, memo, useState, useEffect } from "react";
 import Chip from "components/atoms/chip/Chip";
 import styles from "./ChipInput.module.scss";
 import FlexElement, { TypeFlexElement } from "components/atoms/flex-element/FlexElement";
@@ -7,15 +7,23 @@ import FlexElement, { TypeFlexElement } from "components/atoms/flex-element/Flex
 type TypeChipInput = {
   label?: string[];
   placeholder?: string;
+  onChange?: (value: string[]) => void;
 } & TypeFlexElement;
 
 const ChipInput: FC<TypeChipInput> = ({
   label,
   placeholder = "Enter a value than press enter",
+  onChange,
   ...props
 }) => {
   const [chips, setChips] = useState<string[]>(label || []);
   const [inputValue, setInputValue] = useState<string>("");
+
+  useEffect(() => {
+    if (onChange) {
+      onChange(chips);
+    }
+  }, [chips, onChange]);
 
   const handleKeyDown = (e: React.KeyboardEvent<HTMLInputElement>) => {
     if (e.key === "Enter" && inputValue.trim() !== "") {

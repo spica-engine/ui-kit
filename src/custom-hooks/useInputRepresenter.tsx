@@ -261,7 +261,14 @@ const types: TypeInputTypeMap = {
     );
   },
   chip: (props) => {
-    return <ChipInput label={props.value ? [props.value] : []} />;
+    return (
+      <ChipInput
+        label={props.value ? [props.value] : []}
+        onChange={([value]) => {
+          props.onChange?.({ key: props.key, value });
+        }}
+      />
+    );
   },
 };
 

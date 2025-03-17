@@ -18,8 +18,8 @@ type TypeBucketAddField = {
   modalProps?: TypeModal;
 };
 
-const BucketAddField: FC<TypeBucketAddField> = ({ name, type, isOpen, modalProps }) => {
-  const isInnerFieldsType = type === "object" || type === "array";
+const BucketAddField: FC<TypeBucketAddField> = ({ name = "", type, isOpen, modalProps }) => {
+  const isInnerFieldsType = ["object", "array"].includes(type);
   const initialTab = isInnerFieldsType ? 0 : 1;
   const [activeTab, setActiveTab] = useState(initialTab);
   const [configurationValue, setConfigurationValue] = useState({
@@ -53,13 +53,13 @@ const BucketAddField: FC<TypeBucketAddField> = ({ name, type, isOpen, modalProps
     ...schema,
     title: {
       ...schema.title,
-      title: name || "",
+      title: name,
     },
   };
   const inputRepresenter = useInputRepresenter({
     properties: schemaWithDynamicTitle,
     value: {
-      title: name || "",
+      title: name,
       description: "",
       ...Object.fromEntries(Object.keys(schema).map((key) => [key, ""])),
     },
@@ -72,39 +72,37 @@ const BucketAddField: FC<TypeBucketAddField> = ({ name, type, isOpen, modalProps
     onChange: setConfigurationValue,
   });
 
+  const tabItems = [
+    ...(isInnerFieldsType
+      ? [
+          {
+            prefix: {
+              children: "Inner Fields",
+              onClick: () => setActiveTab(0),
+            },
+          },
+        ]
+      : []),
+    {
+      root: {
+        children: "Configuration",
+        onClick: () => setActiveTab(1),
+      },
+    },
+    {
+      suffix: {
+        children: "Properties",
+        onClick: () => setActiveTab(2),
+      },
+    },
+  ];
+
   return (
     <Modal overflow={true} showCloseButton={false} {...modalProps}>
       <Modal.Body className={styles.modalBody}>
         <FlexElement direction="vertical" gap={10} className={styles.contentContainer}>
           {inputRepresenter}
-          <Tab
-            type="underline"
-            dimensionX="fill"
-            items={[
-              ...(isInnerFieldsType
-                ? [
-                    {
-                      prefix: {
-                        children: "Inner Fields",
-                        onClick: () => setActiveTab(0),
-                      },
-                    },
-                  ]
-                : []),
-              {
-                root: {
-                  children: "Configuration",
-                  onClick: () => setActiveTab(1),
-                },
-              },
-              {
-                suffix: {
-                  children: "Properties",
-                  onClick: () => setActiveTab(2),
-                },
-              },
-            ]}
-          />
+          <Tab type="underline" dimensionX="fill" items={tabItems} />
           {activeTab === 1 && configuration}
           <div className={styles.buttonWrapper}>
             <Button>
