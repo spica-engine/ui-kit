@@ -1,3 +1,4 @@
+import { TypeFluidContainer } from "@atoms/fluid-container/FluidContainer";
 import React, { FC, useRef, useState, useEffect, memo } from "react";
 import styles from "./Modal.module.scss";
 import FlexElement, { TypeFlexElement } from "../flex-element/FlexElement";

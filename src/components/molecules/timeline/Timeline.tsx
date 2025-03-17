@@ -19,13 +19,11 @@ import { Bar } from "react-chartjs-2";
 import zoomPlugin from "chartjs-plugin-zoom";
 import annotationPlugin from "chartjs-plugin-annotation";
 import "chartjs-adapter-date-fns";
-import Icon from "../../../components/atoms/icon/Icon";
-import Button from "../../../components/atoms/button/Button";
-import FluidContainer, {
-  TypeFluidContainer,
-} from "../../../components/atoms/fluid-container/FluidContainer";
-import FlexElement from "../../../components/atoms/flex-element/FlexElement";
-import Text from "../../../components/atoms/text/Text";
+import Icon from "@atoms/icon/Icon";
+import Button from "@atoms/button/Button";
+import FluidContainer, { TypeFluidContainer } from "@atoms/fluid-container/FluidContainer";
+import FlexElement from "@atoms/flex-element/FlexElement";
+import Text from "@atoms/text/Text";
 import { utils } from "../../../utils";
 import { _DeepPartialObject } from "chart.js/dist/types/utils";
 import DraggableBar from "components/atoms/draggable-bar/DraggableBar";

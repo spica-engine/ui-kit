@@ -1,14 +1,12 @@
-import FluidContainer from "../../../../components/atoms/fluid-container/FluidContainer";
-import Icon from "../../../../components/atoms/icon/Icon";
-import Text from "../../../../components/atoms/text/Text";
-import { IconName } from "../../../../utils/iconList";
+import FluidContainer from "@atoms/fluid-container/FluidContainer";
+import Icon from "@atoms/icon/Icon";
+import Text from "@atoms/text/Text";
+import { IconName } from "@utils/iconList";
 import styles from "./Navigator.module.scss";
-import Button from "../../../../components/atoms/button/Button";
-import AccordionGroup, {
-  TypeAccordionItem,
-} from "../../../../components/molecules/accordion/Accordion";
-import { helperUtils } from "../../../../utils/helperUtils";
-import NavigatorItem from "../../../../components/molecules/navigator-item/NavigatorItem";
+import Button from "@atoms/button/Button";
+import AccordionGroup, { TypeAccordionItem } from "@molecules/accordion/Accordion";
+import { helperUtils } from "@utils/helperUtils";
+import NavigatorItem from "@molecules/navigator-item/NavigatorItem";
 import { icon } from "leaflet";
 import { memo } from "react";
 
