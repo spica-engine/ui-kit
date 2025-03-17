@@ -1,6 +1,4 @@
-import FluidContainer, {
-  TypeFluidContainer,
-} from "../../../../components/atoms/fluid-container/FluidContainer";
+import FluidContainer, { TypeFluidContainer } from "@atoms/fluid-container/FluidContainer";
 import React, { FC, memo } from "react";
 import styles from "./ModalFooter.module.scss";
 

@@ -1,4 +1,4 @@
-import { TypeFluidContainer } from "../../../components/atoms/fluid-container/FluidContainer";
+import { TypeFluidContainer } from "@atoms/fluid-container/FluidContainer";
 import React, { FC, useRef, useState, useEffect, memo } from "react";
 import styles from "./Modal.module.scss";
 import FlexElement from "../flex-element/FlexElement";
@@ -10,7 +10,6 @@ import Icon from "../icon/Icon";
 import { useOnClickOutside } from "../../../custom-hooks/useOnClickOutside";
 import Backdrop from "../backdrop/Backdrop";
 import Portal from "../portal/Portal";
-
 
 type TypeModal = {
   className?: string;

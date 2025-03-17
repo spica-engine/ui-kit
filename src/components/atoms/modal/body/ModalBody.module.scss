@@ -1,7 +1,7 @@
-@import "../../../../styles/mixins";
+@use "styles/mixins";
 
 .modalBody {
-  @include modalContentContainer;
+  @include mixins.modalContentContainer;
   flex: 1;
   overflow-y: auto;
 }

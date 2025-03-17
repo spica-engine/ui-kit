@@ -1,4 +1,4 @@
-@import "../../../styles/mixins";
+@use "styles/mixins";
 
 .container {
   background-color: var(--color-menu-background);
@@ -12,7 +12,7 @@
 
   .label {
     width: 100%;
-    @include textEllipsis(1);
+    @include mixins.textEllipsis(1);
     color: var(--color-input-placeholder);
   }
 }

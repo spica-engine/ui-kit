@@ -1,7 +1,7 @@
-@import "../../../styles/mixins";
+@use "styles/mixins";
 
 .chip {
-  @include inputContainer;
+  @include mixins.inputContainer;
   color: var(--color-font-primary);
   border-radius: var(--border-radius-round);
   padding: 6px 6px 6px var(--padding-md);

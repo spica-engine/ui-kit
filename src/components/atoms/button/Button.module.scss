@@ -1,4 +1,4 @@
-@import "../../../styles/mixins";
+@use "styles/mixins";
 
 @mixin button-base {
   cursor: pointer;
@@ -52,7 +52,7 @@
 
 button {
   @include button-base;
-  @include flexCenter;
+  @include mixins.flexCenter;
 
   &.fullWidth {
     width: 100%;

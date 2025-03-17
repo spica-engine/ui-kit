@@ -1,4 +1,4 @@
-@import "../../../styles/mixins";
+@use "styles/mixins";
 
 .container {
   background: var(--color-zebra);
@@ -12,7 +12,7 @@
   }
 
   .displayer {
-    @include textEllipsis(1);
+    @include mixins.textEllipsis(1);
   }
 }
 
