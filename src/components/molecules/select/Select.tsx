@@ -1,5 +1,6 @@
 import { FC, memo, Ref, useImperativeHandle, useLayoutEffect, useRef, useState } from "react";
 import styles from "./Select.module.scss";
+import Portal from "components/atoms/portal/Portal";
 import FluidContainer, { TypeFluidContainer } from "@atoms/fluid-container/FluidContainer";
 import Icon from "@atoms/icon/Icon";
 import Text from "@atoms/text/Text";
@@ -181,41 +182,43 @@ const Select: FC<TypeSelect & TypeFluidContainer> = ({
         className={`${props.className} ${styles.container} ${disabled && styles.disabled}`}
       />
       {isOpen && (
-        <FlexElement
-          ref={dropdownRef}
-          style={{ ...targetPosition }}
-          className={`${popupClassName} ${styles.selectDropdown}`}
-          direction="vertical"
-          alignment="leftTop"
-          gap={0}
-        >
-          {options.map((option) => {
-            const optionValue = typeof option === "object" ? option.value : option;
-            const selected = multiple
-              ? Array.isArray(selectedOption) && selectedOption.includes(optionValue)
-              : selectedOption === optionValue;
+        <Portal>
+          <FlexElement
+            ref={dropdownRef}
+            style={{ ...targetPosition }}
+            className={`${popupClassName} ${styles.selectDropdown}`}
+            direction="vertical"
+            alignment="leftTop"
+            gap={0}
+          >
+            {options.map((option) => {
+              const optionValue = typeof option === "object" ? option.value : option;
+              const selected = multiple
+                ? Array.isArray(selectedOption) && selectedOption.includes(optionValue)
+                : selectedOption === optionValue;
 
-            const isDisabled =
-              multiple &&
-              !!maxCount &&
-              Array.isArray(selectedOption) &&
-              selectedOption.length >= maxCount &&
-              !selected;
+              const isDisabled =
+                multiple &&
+                !!maxCount &&
+                Array.isArray(selectedOption) &&
+                selectedOption.length >= maxCount &&
+                !selected;
 
-            return (
-              <SelectOption
-                disabled={isDisabled}
-                dimensionX={containerRef.current?.offsetWidth}
-                key={optionValue.toString()}
-                multiple={multiple}
-                option={option}
-                selected={selected}
-                onClick={() => handleOptionSelect(optionValue)}
-                {...optionProps}
-              />
-            );
-          })}
-        </FlexElement>
+              return (
+                <SelectOption
+                  disabled={isDisabled}
+                  dimensionX={containerRef.current?.offsetWidth}
+                  key={optionValue.toString()}
+                  multiple={multiple}
+                  option={option}
+                  selected={selected}
+                  onClick={() => handleOptionSelect(optionValue)}
+                  {...optionProps}
+                />
+              );
+            })}
+          </FlexElement>
+        </Portal>
       )}
     </>
   );
