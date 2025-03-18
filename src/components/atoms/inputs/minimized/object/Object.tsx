@@ -1,10 +1,10 @@
-import Popover from "components/atoms/popover/Popover";
+import Popover from "@atoms/popover/Popover";
 import React, { FC } from "react";
-import FlexElement, { TypeFlexElement } from "components/atoms/flex-element/FlexElement";
-import Text from "components/atoms/text/Text";
+import FlexElement, { TypeFlexElement } from "@atoms/flex-element/FlexElement";
+import Text from "@atoms/text/Text";
 import styles from "./Object.module.scss";
 import ObjectInput from "../../normal/object/ObjectInput";
-import { TypeProperties, TypeRepresenterValue } from "custom-hooks/useInputRepresenter";
+import { TypeProperties, TypeRepresenterValue } from "@custom-hooks/useInputRepresenter";
 
 type TypeMinimizedObjectInput = {
   value?: TypeRepresenterValue;

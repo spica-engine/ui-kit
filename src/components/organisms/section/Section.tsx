@@ -1,5 +1,5 @@
 import React, { FC, memo } from "react";
-import FlexElement, { TypeFlexElement } from "components/atoms/flex-element/FlexElement";
+import FlexElement, { TypeFlexElement } from "@atoms/flex-element/FlexElement";
 import styles from "./Section.module.scss";
 
 type TypeSection = {

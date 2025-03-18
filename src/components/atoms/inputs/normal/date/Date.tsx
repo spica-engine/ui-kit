@@ -1,9 +1,9 @@
 import React, { memo } from "react";
-import Icon from "components/atoms/icon/Icon";
+import Icon from "@atoms/icon/Icon";
 import styles from "./Date.module.scss";
-import BaseInput from "components/atoms/base-input/BaseInput";
-import Text from "components/atoms/text/Text";
-import DatePicker from "components/atoms/date-picker/DatePicker";
+import BaseInput from "@atoms/base-input/BaseInput";
+import Text from "@atoms/text/Text";
+import DatePicker from "@atoms/date-picker/DatePicker";
 
 type DateRangePickerProps = {
   label?: string;

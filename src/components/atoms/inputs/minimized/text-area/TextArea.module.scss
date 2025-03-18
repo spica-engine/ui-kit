@@ -1,7 +1,7 @@
-@import "/src/styles/_mixins";
+@use "styles/mixins";
 
 .textArea {
-  @include inputContainer;
+  @include mixins.inputContainer;
 
   textarea {
     border: none;

@@ -1,5 +1,5 @@
-@import "/src/styles/_mixins";
+@use "styles/mixins";
 
 .chipInputContainer {
-  @include inputContainer;
+  @include mixins.inputContainer;
 }

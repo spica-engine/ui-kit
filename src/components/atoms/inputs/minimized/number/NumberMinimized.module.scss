@@ -1,7 +1,7 @@
-@import "/src/styles/_mixins";
+@use "styles/mixins";
 
 .numberMinimized {
-  @include inputMinimizedContainer;
+  @include mixins.inputMinimizedContainer;
   padding: 0 var(--padding-md);
   font-size: var(--font-size-md);
 

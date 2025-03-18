@@ -1,14 +1,14 @@
 import { FC, memo } from "react";
 import styles from "./StorageFilter.module.scss";
-import FlexElement from "components/atoms/flex-element/FlexElement";
-import FluidContainer from "components/atoms/fluid-container/FluidContainer";
-import Text from "components/atoms/text/Text";
+import FlexElement from "@atoms/flex-element/FlexElement";
+import FluidContainer from "@atoms/fluid-container/FluidContainer";
+import Text from "@atoms/text/Text";
 import Select from "../select/Select";
-import Input from "components/atoms/input/Input";
-import Chip from "components/atoms/chip/Chip";
-import DatePicker from "components/atoms/date-picker/DatePicker";
-import Icon from "components/atoms/icon/Icon";
-import Button from "components/atoms/button/Button";
+import Input from "@atoms/input/Input";
+import Chip from "@atoms/chip/Chip";
+import DatePicker from "@atoms/date-picker/DatePicker";
+import Icon from "@atoms/icon/Icon";
+import Button from "@atoms/button/Button";
 import { useFormik } from "formik";
 
 type TypeFilterValue = {

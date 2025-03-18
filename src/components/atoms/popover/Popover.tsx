@@ -1,9 +1,10 @@
 import { FC, memo, ReactNode, useEffect, useLayoutEffect, useRef, useState } from "react";
 import FlexElement, { TypeFlexElement } from "../flex-element/FlexElement";
 import styles from "./Popover.module.scss";
-import useAdaptivePosition, { Placement } from "custom-hooks/useAdaptivePosition";
-import { useOnClickOutside } from "custom-hooks/useOnClickOutside";
-import useKeyDown from "custom-hooks/useKeyDown";
+import useAdaptivePosition, { Placement } from "@custom-hooks/useAdaptivePosition";
+import { useOnClickOutside } from "@custom-hooks/useOnClickOutside";
+import useKeyDown from "@custom-hooks/useKeyDown";
+import Portal from "../portal/Portal";
 
 type TypePopover = {
   placement?: Placement;
@@ -65,7 +66,7 @@ const Popover: FC<TypePopover> = ({
   });
 
   useOnClickOutside({
-    refs: [containerRef],
+    refs: [containerRef, popoverRef],
     onClickOutside: () => trigger === "click" && setIsOpen(false),
   });
 
@@ -92,17 +93,19 @@ const Popover: FC<TypePopover> = ({
     >
       <FlexElement ref={childrenRef}>{children}</FlexElement>
       {isOpen && (
-        <FlexElement
-          ref={popoverRef}
-          style={{ ...targetPosition }}
-          {...contentProps}
-          className={`${contentProps?.className} ${styles.content}`}
-        >
-          {arrow && (
-            <div className={`${styles.arrow} ${styles[arrowPlacement || arrowplc[placement]]}`} />
-          )}
-          {content}
-        </FlexElement>
+        <Portal>
+          <FlexElement
+            ref={popoverRef}
+            style={{ ...targetPosition }}
+            {...contentProps}
+            className={`${contentProps?.className} ${styles.content}`}
+          >
+            {arrow && (
+              <div className={`${styles.arrow} ${styles[arrowPlacement || arrowplc[placement]]}`} />
+            )}
+            {content}
+          </FlexElement>
+        </Portal>
       )}
     </FlexElement>
   );

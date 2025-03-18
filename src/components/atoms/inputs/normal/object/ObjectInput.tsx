@@ -1,14 +1,14 @@
 import { FC, memo } from "react";
 import styles from "./ObjectInput.module.scss";
-import Icon from "components/atoms/icon/Icon";
-import InputHeader from "components/atoms/input-header/InputHeader";
-import Text, { TypeText } from "components/atoms/text/Text";
-import FlexElement, { TypeFlexElement } from "components/atoms/flex-element/FlexElement";
-import InputGroup from "components/atoms/base-input/InputGroup";
+import Icon from "@atoms/icon/Icon";
+import InputHeader from "@atoms/input-header/InputHeader";
+import Text, { TypeText } from "@atoms/text/Text";
+import FlexElement, { TypeFlexElement } from "@atoms/flex-element/FlexElement";
+import InputGroup from "@atoms/base-input/InputGroup";
 import useInputRepresenter, {
   TypeProperties,
   TypeRepresenterValue,
-} from "custom-hooks/useInputRepresenter";
+} from "@custom-hooks/useInputRepresenter";
 
 type TypeObjectInput = {
   value?: TypeRepresenterValue;

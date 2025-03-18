@@ -1,7 +1,7 @@
 import { FC, memo } from "react";
 import styles from "./Boolean.module.scss";
-import { TypeFlexElement } from "components/atoms/flex-element/FlexElement";
-import Switch from "components/atoms/switch/Switch";
+import { TypeFlexElement } from "@atoms/flex-element/FlexElement";
+import Switch from "@atoms/switch/Switch";
 
 export type TypeInputBooleanMinimized = {
   checked: boolean;

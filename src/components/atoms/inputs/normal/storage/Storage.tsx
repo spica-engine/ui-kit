@@ -1,16 +1,16 @@
 import { CSSProperties, FC, memo, ReactNode } from "react";
 import styles from "./Storage.module.scss";
-import FlexElement, { TypeFlexElement } from "components/atoms/flex-element/FlexElement";
-import Icon from "components/atoms/icon/Icon";
+import FlexElement, { TypeFlexElement } from "@atoms/flex-element/FlexElement";
+import Icon from "@atoms/icon/Icon";
 import Dropzone from "react-dropzone";
-import { TypeFluidContainer } from "components/atoms/fluid-container/FluidContainer";
-import Text, { TypeText } from "components/atoms/text/Text";
-import { IconName } from "utils/iconList";
-import InputGroup from "components/atoms/base-input/InputGroup";
-import InputHeader from "components/atoms/input-header/InputHeader";
-import useFileView from "custom-hooks/useFileView";
-import { TypeFile } from "utils/interface";
-import Button from "components/atoms/button/Button";
+import { TypeFluidContainer } from "@atoms/fluid-container/FluidContainer";
+import Text, { TypeText } from "@atoms/text/Text";
+import { IconName } from "@utils/iconList";
+import InputGroup from "@atoms/base-input/InputGroup";
+import InputHeader from "@atoms/input-header/InputHeader";
+import useFileView from "@custom-hooks/useFileView";
+import { TypeFile } from "@utils/interface";
+import Button from "@atoms/button/Button";
 
 export type TypeStorageInput = {
   label?: string;

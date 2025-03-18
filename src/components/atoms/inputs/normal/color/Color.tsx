@@ -1,11 +1,11 @@
 import { FC, memo } from "react";
 import styles from "./Color.module.scss";
-import { TypeFluidContainer } from "components/atoms/fluid-container/FluidContainer";
-import BaseInput from "components/atoms/base-input/BaseInput";
-import Color from "components/atoms/color/Color";
-import Icon from "components/atoms/icon/Icon";
-import Text from "components/atoms/text/Text";
-import { TypeFlexElement } from "components/atoms/flex-element/FlexElement";
+import { TypeFluidContainer } from "@atoms/fluid-container/FluidContainer";
+import BaseInput from "@atoms/base-input/BaseInput";
+import Color from "@atoms/color/Color";
+import Icon from "@atoms/icon/Icon";
+import Text from "@atoms/text/Text";
+import { TypeFlexElement } from "@atoms/flex-element/FlexElement";
 
 type TypeColorInput = {
   label: string;

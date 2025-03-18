@@ -1,7 +1,7 @@
-@import "/src/styles/_mixins";
+@use "styles/mixins";
 
-.inputHeaderContainer{
-    @include inputContainer;
-    padding: var(--padding-md);
-    font-size: var(--font-size-md);
+.inputHeaderContainer {
+  @include mixins.inputContainer;
+  padding: var(--padding-md);
+  font-size: var(--font-size-md);
 }

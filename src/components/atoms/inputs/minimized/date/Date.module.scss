@@ -1,7 +1,7 @@
-@import "/src/styles/_mixins";
+@use "styles/mixins";
 
 .minimizedDatePicker {
-  @include inputContainer;
+  @include mixins.inputContainer;
 
   .clearButton {
     cursor: pointer;

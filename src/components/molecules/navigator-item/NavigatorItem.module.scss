@@ -1,4 +1,4 @@
-@import "/src/styles/_mixins";
+@use "styles/mixins";
 
 .navigatorItem {
   padding: var(--padding-md);

@@ -1,13 +1,10 @@
-import FluidContainer, {
-  TypeFluidContainer,
-} from "components/atoms/fluid-container/FluidContainer";
-import Icon from "components/atoms/icon/Icon";
+import FluidContainer, { TypeFluidContainer } from "@atoms/fluid-container/FluidContainer";
+import Icon from "@atoms/icon/Icon";
 import React, { FC, memo } from "react";
 import styles from "./NavigatorItem.module.scss";
-import { IconName } from "utils/iconList";
-import Text from "components/atoms/text/Text";
-import Button from "components/atoms/button/Button";
-import FlexElement from "components/atoms/flex-element/FlexElement";
+import { IconName } from "@utils/iconList";
+import Text from "@atoms/text/Text";
+import Button from "@atoms/button/Button";
 
 type SuffixIcon = {
   name: IconName;

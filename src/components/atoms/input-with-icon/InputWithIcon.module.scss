@@ -1,7 +1,7 @@
-@import "/src/styles/_mixins";
+@use "styles/mixins";
 
 .container {
-  @include inputContainer;
+  @include mixins.inputContainer;
   border: var(--border-default);
 
   &.disabled {

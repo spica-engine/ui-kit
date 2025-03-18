@@ -1,10 +1,10 @@
-import Popover from "components/atoms/popover/Popover";
+import Popover from "@atoms/popover/Popover";
 import React, { FC } from "react";
-import FlexElement, { TypeFlexElement } from "components/atoms/flex-element/FlexElement";
-import Text from "components/atoms/text/Text";
+import FlexElement, { TypeFlexElement } from "@atoms/flex-element/FlexElement";
+import Text from "@atoms/text/Text";
 import styles from "./Array.module.scss";
 import ArrayInput from "../../normal/array/ArrayInput";
-import { TypeArrayItems, TypeValueType } from "custom-hooks/useInputRepresenter";
+import { TypeArrayItems, TypeValueType } from "@custom-hooks/useInputRepresenter";
 
 type TypeMinimizedArrayInput = {
   propertyKey: string;

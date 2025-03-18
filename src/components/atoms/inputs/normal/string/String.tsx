@@ -1,12 +1,12 @@
-import BaseInput from "components/atoms/base-input/BaseInput";
-import Icon from "components/atoms/icon/Icon";
+import BaseInput from "@atoms/base-input/BaseInput";
+import Icon from "@atoms/icon/Icon";
 import Input, { TypeInput } from "components/atoms/input/Input";
 import React, { FC, memo, useState, useRef } from "react";
-import Text from "components/atoms/text/Text";
+import Text from "@atoms/text/Text";
 import styles from "./String.module.scss";
-import Select, { TypeSelectRef } from "components/molecules/select/Select";
-import { TypeFlexElement } from "components/atoms/flex-element/FlexElement";
-import { TypeFluidContainer } from "components/atoms/fluid-container/FluidContainer";
+import Select, { TypeSelectRef } from "@molecules/select/Select";
+import { TypeFlexElement } from "@atoms/flex-element/FlexElement";
+import { TypeFluidContainer } from "@atoms/fluid-container/FluidContainer";
 
 type TypeStringInput = {
   label?: string;

@@ -1,6 +1,6 @@
 import React, { ReactNode, FC, useEffect } from "react";
 import ReactDOM from "react-dom";
-
+import styles from "./Portal.module.scss";
 type TypePortalProps = {
   children: ReactNode;
 };
@@ -13,7 +13,7 @@ const Portal: FC<TypePortalProps> = ({ children }) => {
       document.body.style.overflow = originalOverflow;
     };
   }, []);
-  return ReactDOM.createPortal(<div>{children}</div>, document.body);
+  return ReactDOM.createPortal(<div className={styles.container}>{children}</div>, document.body);
 };
 
 export default Portal;

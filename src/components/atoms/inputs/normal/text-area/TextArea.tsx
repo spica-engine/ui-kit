@@ -1,11 +1,11 @@
 import { ChangeEventHandler, FC, memo } from "react";
 import FlexElement, { TypeFlexElement } from "../../../flex-element/FlexElement";
 import styles from "./TextArea.module.scss";
-import { TypeFluidContainer } from "components/atoms/fluid-container/FluidContainer";
-import Icon from "components/atoms/icon/Icon";
-import { IconName } from "utils/iconList";
-import InputHeader from "components/atoms/input-header/InputHeader";
-import Text from "components/atoms/text/Text";
+import { TypeFluidContainer } from "@atoms/fluid-container/FluidContainer";
+import Icon from "@atoms/icon/Icon";
+import { IconName } from "@utils/iconList";
+import InputHeader from "@atoms/input-header/InputHeader";
+import Text from "@atoms/text/Text";
 
 type TypeTextArea = {
   value?: string;
@@ -22,6 +22,7 @@ type TypeTextArea = {
   title?: string;
   icon?: IconName;
   description?: string;
+  placeholder?: string;
   onChange?: ChangeEventHandler<HTMLTextAreaElement>;
 };
 
@@ -37,68 +38,57 @@ const TextAreaInput: FC<TypeTextArea> = ({
   titleSuffixProps,
   containerProps,
   description,
+  placeholder,
   onChange,
 }) => {
-  const mergedTextAreaContainerProps = {
-    dimensionX: "fill",
-    alignment: "leftCenter",
-    ...textAreaContainerProps,
-  } as const;
-  const mergedTitleContainerProps = {
-    dimensionX: "fill",
-    dimensionY: 36,
-    alignment: "leftCenter",
-    ...titleContainerProps,
-  } as const;
-  const mergedTitlePrefixProps = {
-    dimensionX: "hug",
-    alignment: "leftCenter",
-    ...titlePrefixProps,
-  } as const;
-  const mergedTitleRootProps = {
-    dimensionX: "fill",
-    alignment: "leftCenter",
-    ...titleRootProps,
-  } as const;
-  const mergedTitleSuffixProps = {
-    dimensionX: "hug",
-    alignment: "rightCenter",
-    ...titleSuffixProps,
-  } as const;
-  const mergedContainerProps = {
-    dimensionX: "fill",
-    alignment: "leftCenter",
-    direction: "vertical",
-    ...containerProps,
-  } as const;
-
   return (
-    <FlexElement className={styles.textAreaInputContainer} {...mergedContainerProps}>
+    <FlexElement
+      dimensionX="fill"
+      alignment="leftCenter"
+      direction="vertical"
+      {...containerProps}
+      className={`${styles.container} ${containerProps?.className || ""}`}
+    >
       <>
         {(title || icon || titlePrefixProps || titleSuffixProps) && (
           <InputHeader
-            {...mergedTitleContainerProps}
+            dimensionX={"fill"}
+            dimensionY={36}
+            alignment={"leftCenter"}
+            {...titleContainerProps}
+            className={`${styles.titleContainer} ${titleContainerProps?.className || ""}`}
             prefix={{
               children: icon ? <Icon name={`${icon}`} /> : null,
-              ...mergedTitlePrefixProps,
+              dimensionX: "hug",
+              alignment: "leftCenter",
+              ...titlePrefixProps,
             }}
             root={{
               children: title,
-              ...mergedTitleRootProps,
+              dimensionX: "fill",
+              alignment: "leftCenter",
+              ...titleRootProps,
             }}
             suffix={{
               children: titleSuffixProps?.children,
-              ...mergedTitleSuffixProps,
+              dimensionX: "hug",
+              alignment: "rightCenter",
+              ...titleSuffixProps,
             }}
-            className={styles.textAreaTitle}
           />
         )}
-        <FlexElement className={styles.textAreaInput} {...mergedTextAreaContainerProps}>
+        <FlexElement
+          dimensionX="fill"
+          alignment="leftCenter"
+          {...textAreaContainerProps}
+          className={`${textAreaContainerProps?.className || ""}`}
+        >
           <textarea
             {...textAreaProps}
-            className={styles.textArea}
+            className={styles.textAreaInput}
             value={value}
             onChange={onChange}
+            placeholder={placeholder || ""}
           ></textarea>
         </FlexElement>
       </>

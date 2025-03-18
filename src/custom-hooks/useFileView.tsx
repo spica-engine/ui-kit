@@ -1,6 +1,6 @@
 import Icon from "components/atoms/icon/Icon";
 import { CSSProperties } from "react";
-import { TypeFile } from "utils/interface";
+import { TypeFile } from "../utils/interface";
 
 type TypeStyle = {
   img?: CSSProperties;

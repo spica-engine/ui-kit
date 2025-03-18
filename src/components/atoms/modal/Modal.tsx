@@ -1,7 +1,7 @@
-import { TypeFluidContainer } from "components/atoms/fluid-container/FluidContainer";
+import { TypeFluidContainer } from "@atoms/fluid-container/FluidContainer";
 import React, { FC, useRef, useState, useEffect, memo } from "react";
 import styles from "./Modal.module.scss";
-import FlexElement from "../flex-element/FlexElement";
+import FlexElement, { TypeFlexElement } from "../flex-element/FlexElement";
 import ModalHeader from "./header/ModalHeader";
 import ModalBody from "./body/ModalBody";
 import ModalFooter from "./footer/ModalFooter";
@@ -11,7 +11,6 @@ import Backdrop from "../backdrop/Backdrop";
 import Portal from "../portal/Portal";
 
 type TypeModal = {
-  className?: string;
   animation?: "growFromCenter" | "zoomIn";
   showCloseButton?: boolean;
   disableClose?: boolean;
@@ -23,10 +22,9 @@ type TypeModal = {
   backdropClassName?: string;
   backdropProps?: React.HTMLAttributes<HTMLDivElement>;
   isOpen?: boolean;
-} & TypeFluidContainer;
+} & TypeFlexElement;
 
 const ModalComponent: FC<TypeModal> = ({
-  className,
   animation = "growFromCenter",
   showCloseButton = true,
   disableClose = false,
@@ -80,7 +78,7 @@ const ModalComponent: FC<TypeModal> = ({
           alignment="top"
           direction="vertical"
           {...props}
-          className={`${styles.modalContent} ${animationController ? "" : styles[animation]} ${!overflow ? styles.noOverflow : ""} ${isShaking ? styles.shake : ""} `}
+          className={`${styles.modalContent} ${animationController ? "" : styles[animation]} ${!overflow ? styles.noOverflow : ""} ${isShaking ? styles.shake : ""} ${props.className}`}
         >
           {showCloseButton && (
             <Button
