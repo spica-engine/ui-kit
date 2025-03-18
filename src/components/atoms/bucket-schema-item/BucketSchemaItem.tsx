@@ -8,8 +8,11 @@ type TypeBucketSchemaItem = {
   label?: string;
   type?: TypeInputType | "id";
   addIcon?: boolean;
+  addOnClick?: () => void;
   editIcon?: boolean;
+  editOnClick?: () => void;
   deleteIcon?: boolean;
+  deleteOnClick?: () => void;
   itemDepth?: number;
 } & TypeFluidContainer;
 
@@ -17,32 +20,35 @@ const BucketSchemaItem: FC<TypeBucketSchemaItem> = ({
   label,
   type,
   addIcon = false,
+  addOnClick,
   editIcon = true,
+  editOnClick,
   deleteIcon = true,
+  deleteOnClick,
   itemDepth,
   ...props
 }) => {
   const renderPrefixIcon = () => {
     if (!itemDepth) return null;
 
-    const maxVisibleIcons = 3;
-    const showEllipsis = itemDepth > maxVisibleIcons;
-    const IconsToShow = showEllipsis ? maxVisibleIcons : itemDepth;
+    const showEllipsis = itemDepth > 2;
 
     return (
       <>
-        {Array(IconsToShow)
+        {showEllipsis && <Text style={{ marginLeft: "2px" }}>...</Text>}
+        {Array(showEllipsis ? 1 : itemDepth)
           .fill("")
           .map((_, index) => (
             <Icon key={`chevron-${index}`} name="chevronRight" />
           ))}
-        {showEllipsis && <Text style={{ marginLeft: "-10px" }}>...</Text>}
       </>
     );
   };
+
   return (
     <FluidContainer
       mode="fill"
+      dimensionX={"fill"}
       gap={20}
       prefix={{
         children: (
@@ -53,29 +59,36 @@ const BucketSchemaItem: FC<TypeBucketSchemaItem> = ({
         ),
       }}
       root={{
+        alignment: "leftCenter",
         children: <Text>{type}</Text>,
       }}
       suffix={{
         children: (
           <FluidContainer
+            className={styles.suffixIcons}
             gap={10}
             prefix={{
               children: addIcon ? (
-                <Button variant="icon" className={styles.buttons}>
+                <Button variant="icon" className={styles.buttons} onClick={addOnClick}>
                   <Icon name="plus"></Icon>
                 </Button>
               ) : null,
             }}
             root={{
               children: editIcon ? (
-                <Button variant="icon" color="danger" className={styles.buttons}>
+                <Button variant="icon" className={styles.buttons} onClick={editOnClick}>
                   <Icon name="pencil"></Icon>
                 </Button>
               ) : null,
             }}
             suffix={{
               children: deleteIcon ? (
-                <Button variant="icon" className={styles.buttons}>
+                <Button
+                  variant="icon"
+                  color="danger"
+                  className={styles.buttons}
+                  onClick={deleteOnClick}
+                >
                   <Icon name="delete"></Icon>
                 </Button>
               ) : null,
@@ -84,7 +97,7 @@ const BucketSchemaItem: FC<TypeBucketSchemaItem> = ({
         ),
       }}
       {...props}
-      className={props.className}
+      className={`${styles.bucketSchemaItem} ${props.className}`}
     />
   );
 };
