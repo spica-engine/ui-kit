@@ -7,15 +7,23 @@ import FlexElement, { TypeFlexElement } from "@atoms/flex-element/FlexElement";
 type TypeChipInput = {
   label?: string[];
   placeholder?: string;
+  onChange?: (value: string[]) => void;
 } & TypeFlexElement;
 
 const ChipInput: FC<TypeChipInput> = ({
   label,
   placeholder = "Enter a value than press enter",
+  onChange,
   ...props
 }) => {
   const [chips, setChips] = useState<string[]>(label || []);
   const [inputValue, setInputValue] = useState<string>("");
+
+  useEffect(() => {
+    if (onChange) {
+      onChange(chips);
+    }
+  }, [chips, onChange]);
 
   const handleKeyDown = (e: React.KeyboardEvent<HTMLInputElement>) => {
     if (e.key === "Enter" && inputValue.trim() !== "") {
@@ -40,7 +48,7 @@ const ChipInput: FC<TypeChipInput> = ({
       className={`${styles.chipInputContainer} ${props.className}`}
     >
       {chips.map((chip, index) => (
-        <Chip key={index} label={chip} onDelete={() => handleDelete(index)} />
+        <Chip variant="outlined" key={index} label={chip} onDelete={() => handleDelete(index)} />
       ))}
       <Input
         placeholder={placeholder}

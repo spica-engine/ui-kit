@@ -14,12 +14,13 @@ import Icon from "components/atoms/icon/Icon";
 import ObjectInput from "components/atoms/inputs/normal/object/ObjectInput";
 import ArrayInput from "components/atoms/inputs/normal/array/ArrayInput";
 import { utils } from "utils";
+import ChipInput from "components/atoms/inputs/normal/chip/ChipInput";
 
 export type TypeProperties = {
   [key: string]: {
     type: keyof typeof types;
     title: string;
-    description: string;
+    description?: string;
     options?: TypeOptions;
     enum?: (string | number)[];
     default?: TypeValueType;
@@ -118,6 +119,7 @@ export type TypeInputTypeMap = {
   richtext: (props: TypeInputProps<string>) => ReactNode;
   object: (props: TypeObjectInputProps<TypeRepresenterValue>) => ReactNode;
   array: (props: TypeArrayInputProps<TypeValueType>) => ReactNode;
+  chip: (props: TypeInputProps<string>) => ReactNode;
 };
 
 const types: TypeInputTypeMap = {
@@ -258,6 +260,16 @@ const types: TypeInputTypeMap = {
       />
     );
   },
+  chip: (props) => {
+    return (
+      <ChipInput
+        label={props.value ? [props.value] : []}
+        onChange={([value]) => {
+          props.onChange?.({ key: props.key, value });
+        }}
+      />
+    );
+  },
 };
 
 type TypeUseInputRepresenter = {
@@ -282,7 +294,7 @@ const useInputRepresenter = ({ properties, value, onChange }: TypeUseInputRepres
         {types[el.type]({
           key,
           title: el.title,
-          description: el.description,
+          description: el.description!,
           //@ts-ignore
           value: _value,
           className: el.className,
