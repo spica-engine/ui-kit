@@ -1,8 +1,9 @@
 import { TypeInputType } from "@custom-hooks/useInputRepresenter";
-import { Button, FlexElement, FluidContainer, Icon, Text } from "index.export";
-import React, { FC, HtmlHTMLAttributes, JSX, memo } from "react";
+import { FlexElement } from "index.export";
+import React, { FC, JSX, memo } from "react";
 import styles from "./BucketSchemaList.module.scss";
 import BucketSchemaItem from "@atoms/bucket-schema-item/BucketSchemaItem";
+import { TypeFlexElement } from "@atoms/flex-element/FlexElement";
 
 type TypeSchema = {
   type: TypeInputType;
@@ -19,7 +20,7 @@ type TypeSchema = {
 type TypeBucketSchemaList = {
   schema?: Record<string, TypeSchema>;
   itemDepth?: number;
-} & HtmlHTMLAttributes<HTMLDivElement>;
+} & TypeFlexElement;
 
 const BucketSchemaList: FC<TypeBucketSchemaList> = ({ schema, itemDepth = 0, ...props }) => {
   if (!schema) return null;
@@ -52,7 +53,12 @@ const BucketSchemaList: FC<TypeBucketSchemaList> = ({ schema, itemDepth = 0, ...
   };
 
   return (
-    <FlexElement direction="vertical" gap={10} {...props} className={styles.container}>
+    <FlexElement
+      direction="vertical"
+      gap={10}
+      {...props}
+      className={`${styles.container} ${props.className}`}
+    >
       {renderSchemaItems(schema, itemDepth)}
     </FlexElement>
   );
