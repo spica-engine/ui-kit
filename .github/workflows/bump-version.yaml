@@ -30,9 +30,13 @@ jobs:
           new_version="v$major.$minor.$((patch + 1))"
           echo "New version: $new_version"
 
+        env:
+          GH_TOKEN: ${{ secrets.SPICA_BOT_PAT }}
+        run: |
+          # Create new tag and push
           git tag "$new_version"
           git push origin "$new_version"
-          #test
+
       # - name: Setup Node.js
       #   uses: actions/setup-node@v4
       #   with:
@@ -58,9 +62,9 @@ jobs:
       #     echo "New version: $new_version"
 
       # - name: Authenticate with PAT
-      #   env:
-      #     GH_TOKEN: ${{ secrets.SPICA_BOT_PAT }}
-      #   run: |
-      #     # Create new tag and push
-      #     git tag "$new_version"
-      #     git push origin "$new_version"
+        # env:
+        #   GH_TOKEN: ${{ secrets.SPICA_BOT_PAT }}
+        # run: |
+        #   # Create new tag and push
+        #   git tag "$new_version"
+        #   git push origin "$new_version"
