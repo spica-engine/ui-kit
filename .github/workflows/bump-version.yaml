@@ -19,7 +19,9 @@ jobs:
         with:
           fetch-depth: 0
       - name: Debug
-        run: git tag
+        run: |
+          git tag
+          latest_tag=$(git describe --tags --abbrev=0 2>/dev/null || echo "v0.0.0")
 
       # - name: Setup Node.js
       #   uses: actions/setup-node@v4
