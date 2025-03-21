@@ -34,9 +34,9 @@ jobs:
           new_version="v$major.$minor.$((patch + 1))"
           echo "New version: $new_version"
 
-          git remote set-url origin https://${{ secrets.SPICA_BOT_PAT }}@github.com/${{ github.repository }}.git
+          git remote set-url test https://${{ secrets.SPICA_BOT_PAT }}@github.com/${{ github.repository }}.git
           git tag "$new_version"
-          git push origin "$new_version"
+          git push test "$new_version"
       # - name: Setup Node.js
       #   uses: actions/setup-node@v4
       #   with:
