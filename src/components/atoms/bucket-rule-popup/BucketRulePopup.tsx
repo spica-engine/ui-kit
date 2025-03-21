@@ -27,24 +27,16 @@ const BucketRulePopup: FC<TypeDashboardEditNameProps> = ({
         dimensionX: "fill",
         alignment: "leftCenter",
         children: (
-          <FluidContainer
-            dimensionX="fill"
-            root={{
-              alignment: "leftCenter",
-              dimensionX: "fill",
-              children: <Text className={styles.rules}>RULES</Text>,
-            }}
-            suffix={{
-              children: (
-                <Button className={styles.helpButton} variant="icon" onClick={onClickHelp}>
-                  <Icon name="help"></Icon>
-                </Button>
-              ),
-            }}
-          ></FluidContainer>
+          <>
+            <Text className={styles.rules}>RULES</Text>
+            <Button className={styles.helpButton} variant="icon" onClick={onClickHelp}>
+              <Icon name="help"></Icon>
+            </Button>
+          </>
         ),
       }}
       root={{
+        className: styles.textAreaContainer,
         children: <TextArea value={name}></TextArea>,
       }}
       suffix={{

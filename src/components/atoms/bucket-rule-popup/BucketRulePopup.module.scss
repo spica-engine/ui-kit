@@ -4,7 +4,8 @@
   border-radius: var(--border-radius-md);
 
   .prefix {
-    padding-bottom: var(--padding-md);
+    padding-bottom: var(--padding-xl);
+    border-bottom: var(--border-default);
     .rules {
       font-weight: 600;
       color: var(--color-font-primary);
@@ -13,6 +14,9 @@
       padding: 0;
       min-height: max-content;
     }
+  }
+  .textAreaContainer {
+    padding-top: var(--padding-md);
   }
   .iconCancel {
     color: var(--color-font-primary);
