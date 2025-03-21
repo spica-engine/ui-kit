@@ -22,7 +22,7 @@ jobs:
         run: |
           git tag
           latest_tag=$(git describe --tags --abbrev=0 2>/dev/null || echo "v0.0.0")
-
+          echo "Latest tag: $latest_tag"
       # - name: Setup Node.js
       #   uses: actions/setup-node@v4
       #   with:
