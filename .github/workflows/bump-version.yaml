@@ -32,7 +32,7 @@ jobs:
 
           git tag "$new_version"
           git push origin "$new_version"
-
+          #test
       # - name: Setup Node.js
       #   uses: actions/setup-node@v4
       #   with:
