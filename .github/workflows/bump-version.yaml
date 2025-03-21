@@ -19,8 +19,8 @@ jobs:
         with:
           fetch-depth: 0
       - name: Debug
-        env:
-          GH_TOKEN: ${{ secrets.SPICA_BOT_PAT }}
+        # env:
+        #   GH_TOKEN: ${{ secrets.SPICA_BOT_PAT }}
         run: |
           git tag
           # latest_tag=$(git describe --tags --abbrev=0 2>/dev/null || echo "v0.0.0")
