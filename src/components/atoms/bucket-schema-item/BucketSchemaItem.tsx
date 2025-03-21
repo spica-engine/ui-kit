@@ -14,6 +14,7 @@ type TypeBucketSchemaItem = {
   deleteIcon?: boolean;
   deleteOnClick?: () => void;
   itemDepth?: number;
+  options?: Record<string, any>;
 } & TypeFluidContainer;
 
 const BucketSchemaItem: FC<TypeBucketSchemaItem> = ({
@@ -51,6 +52,7 @@ const BucketSchemaItem: FC<TypeBucketSchemaItem> = ({
       dimensionX={"fill"}
       gap={20}
       prefix={{
+        className: styles.prefixDiv,
         children: (
           <>
             <FlexElement className={styles.prefixIconDiv}>{renderPrefixIcon()}</FlexElement>
