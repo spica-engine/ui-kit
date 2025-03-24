@@ -15,6 +15,11 @@ type TypeBucketSchemaItem = {
   deleteOnClick?: () => void;
   itemDepth?: number;
   options?: Record<string, any>;
+  index: number;
+  onDragStart: (e: React.DragEvent, index: number) => void;
+  onDrop: (e: React.DragEvent, targetIndex: number) => void;
+  onDragOver: (e: React.DragEvent) => void;
+  immovable?: boolean;
 } & TypeFluidContainer;
 
 const BucketSchemaItem: FC<TypeBucketSchemaItem> = ({
@@ -27,6 +32,10 @@ const BucketSchemaItem: FC<TypeBucketSchemaItem> = ({
   deleteIcon = true,
   deleteOnClick,
   itemDepth,
+  index,
+  onDragStart,
+  onDrop,
+  onDragOver,
   ...props
 }) => {
   const renderPrefixIcon = () => {
@@ -51,6 +60,10 @@ const BucketSchemaItem: FC<TypeBucketSchemaItem> = ({
       mode="fill"
       dimensionX={"fill"}
       gap={20}
+      draggable
+      onDragStart={(e) => onDragStart(e, index)}
+      onDrop={(e) => onDrop(e, index)}
+      onDragOver={onDragOver}
       prefix={{
         className: styles.prefixDiv,
         children: (
@@ -78,14 +91,14 @@ const BucketSchemaItem: FC<TypeBucketSchemaItem> = ({
             prefix={{
               children: addIcon ? (
                 <Button variant="icon" className={styles.buttons} onClick={addOnClick}>
-                  <Icon name="plus"></Icon>
+                  <Icon name="plus" />
                 </Button>
               ) : null,
             }}
             root={{
               children: editIcon ? (
                 <Button variant="icon" className={styles.buttons} onClick={editOnClick}>
-                  <Icon name="pencil"></Icon>
+                  <Icon name="pencil" />
                 </Button>
               ) : null,
             }}
@@ -97,7 +110,7 @@ const BucketSchemaItem: FC<TypeBucketSchemaItem> = ({
                   className={styles.buttons}
                   onClick={deleteOnClick}
                 >
-                  <Icon name="delete"></Icon>
+                  <Icon name="delete" />
                 </Button>
               ) : null,
             }}
