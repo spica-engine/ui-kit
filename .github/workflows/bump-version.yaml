@@ -16,6 +16,7 @@ jobs:
     steps:
       - name: Checkout repository
         uses: actions/checkout@v4
+          token: ${{ secrets.SPICA_BOT_PAT }}
         with:
           fetch-depth: 0
       - name: Debug
