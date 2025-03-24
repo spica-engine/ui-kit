@@ -16,9 +16,10 @@ jobs:
     steps:
       - name: Checkout repository
         uses: actions/checkout@v4
-          token: ${{ secrets.SPICA_BOT_PAT }}
         with:
           fetch-depth: 0
+          token: ${{ secrets.SPICA_BOT_PAT }}
+
       - name: Debug
         # env:
         #   GH_TOKEN: ${{ secrets.SPICA_BOT_PAT }}
@@ -35,7 +36,6 @@ jobs:
           new_version="v$major.$minor.$((patch + 1))"
           echo "New version: $new_version"
 
-          git remote set-url origin https://x-access-token:${{ secrets.SPICA_BOT_PAT }}@github.com/${{ github.repository }}.git
           git tag "$new_version"
           git push origin "$new_version"
       # - name: Setup Node.js
