@@ -53,19 +53,25 @@ const BucketSchemaList: FC<TypeBucketSchemaList> = ({ schema, itemDepth = 0, ...
       const addIcon = isObject || isArray;
 
       return (
-        <BucketSchemaItem
-          key={key}
-          label={title}
-          type={type}
-          itemDepth={depth}
-          defaultValue={defaultValue}
-          options={options}
-          addIcon={addIcon}
-          index={index}
-          onDragStart={(e) => handleDragStart(e, index)}
-          onDrop={(e) => handleDrop(e, index)}
-          onDragOver={handleDragOver}
-        />
+        <>
+          <BucketSchemaItem
+            key={key}
+            label={title}
+            type={type}
+            itemDepth={depth}
+            defaultValue={defaultValue}
+            options={options}
+            addIcon={addIcon}
+            index={index}
+            onDragStart={(e) => handleDragStart(e, index)}
+            onDrop={(e) => handleDrop(e, index)}
+            onDragOver={handleDragOver}
+          />
+
+          {isObject && properties && renderSchemaItems(properties, depth + 1)}
+
+          {isArray && items && renderSchemaItems({ Item: items }, depth + 1)}
+        </>
       );
     });
   };

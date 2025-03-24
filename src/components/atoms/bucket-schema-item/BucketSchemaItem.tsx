@@ -1,6 +1,6 @@
 import { TypeInputType } from "@custom-hooks/useInputRepresenter";
 import { Button, FlexElement, FluidContainer, Icon, Text } from "index.export";
-import React, { FC, memo } from "react";
+import React, { FC, memo, useState } from "react";
 import styles from "./BucketSchemaItem.module.scss";
 import { TypeFluidContainer } from "@atoms/fluid-container/FluidContainer";
 
@@ -19,7 +19,6 @@ type TypeBucketSchemaItem = {
   onDragStart: (e: React.DragEvent, index: number) => void;
   onDrop: (e: React.DragEvent, targetIndex: number) => void;
   onDragOver: (e: React.DragEvent) => void;
-  immovable?: boolean;
 } & TypeFluidContainer;
 
 const BucketSchemaItem: FC<TypeBucketSchemaItem> = ({
@@ -38,6 +37,8 @@ const BucketSchemaItem: FC<TypeBucketSchemaItem> = ({
   onDragOver,
   ...props
 }) => {
+  const [isHovered, setIsHovered] = useState(false);
+
   const renderPrefixIcon = () => {
     if (!itemDepth) return null;
 
@@ -64,11 +65,13 @@ const BucketSchemaItem: FC<TypeBucketSchemaItem> = ({
       onDragStart={(e) => onDragStart(e, index)}
       onDrop={(e) => onDrop(e, index)}
       onDragOver={onDragOver}
+      onMouseEnter={() => setIsHovered(true)}
+      onMouseLeave={() => setIsHovered(false)}
       prefix={{
         className: styles.prefixDiv,
         children: (
           <>
-            {itemDepth === 0 && (
+            {itemDepth === 0 && isHovered && (
               <Button variant="icon" className={`${styles.buttons} ${styles.dragDropButton}`}>
                 <Icon name="dragHorizontalVariant" />
               </Button>
