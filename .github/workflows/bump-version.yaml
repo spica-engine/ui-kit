@@ -16,7 +16,7 @@ jobs:
           fetch-depth: 0
           token: ${{ secrets.SPICA_UI_KIT_BOT_PAT }}
 
-      - name: Debug
+      - name: Get latest tag and bump version
         run: |
           latest_tag=$(git tag -l | sort -V | tail -n 1)
           echo "Latest tag: $latest_tag"
