@@ -55,6 +55,12 @@ const BucketSchemaItem: FC<TypeBucketSchemaItem> = ({
         className: styles.prefixDiv,
         children: (
           <>
+            {itemDepth === 0 && (
+              <Button variant="icon" className={`${styles.buttons} ${styles.dragDropButton}`}>
+                <Icon name="dragHorizontalVariant" />
+              </Button>
+            )}
+
             <FlexElement className={styles.prefixIconDiv}>{renderPrefixIcon()}</FlexElement>
             <Text className={styles.label}>{label}</Text>
           </>
