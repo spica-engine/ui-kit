@@ -23,6 +23,11 @@ type TypeBucketSchemaList = {
 
 const BucketSchemaList: FC<TypeBucketSchemaList> = ({ schema, itemDepth = 0, ...props }) => {
   const [items, setItems] = useState(Object.entries(schema || {}));
+  const [expandedKeys, setExpandedKeys] = useState<Record<string, boolean>>({});
+
+  const toggleExpand = (key: string) => {
+    setExpandedKeys((prev) => ({ ...prev, [key]: !prev[key] }));
+  };
 
   const handleDragStart = (e: React.DragEvent, index: number) => {
     e.dataTransfer.setData("index", index.toString());
@@ -51,6 +56,8 @@ const BucketSchemaList: FC<TypeBucketSchemaList> = ({ schema, itemDepth = 0, ...
       const isObject = type === "object";
       const isArray = type === "array";
       const addIcon = isObject || isArray;
+      const hasChildren = isObject || isArray;
+      const expanded = expandedKeys[key] ?? false;
 
       return (
         <>
@@ -66,11 +73,15 @@ const BucketSchemaList: FC<TypeBucketSchemaList> = ({ schema, itemDepth = 0, ...
             onDragStart={(e) => handleDragStart(e, index)}
             onDrop={(e) => handleDrop(e, index)}
             onDragOver={handleDragOver}
+            onClick={hasChildren ? () => toggleExpand(key) : undefined}
           />
 
-          {isObject && properties && renderSchemaItems(properties, depth + 1)}
-
-          {isArray && items && renderSchemaItems({ Item: items }, depth + 1)}
+          {expanded && (
+            <>
+              {isObject && properties && renderSchemaItems(properties, depth + 1)}
+              {isArray && items && renderSchemaItems({ Item: items }, depth + 1)}
+            </>
+          )}
         </>
       );
     });

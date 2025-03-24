@@ -39,6 +39,9 @@ const BucketSchemaItem: FC<TypeBucketSchemaItem> = ({
 }) => {
   const [isHovered, setIsHovered] = useState(false);
 
+  const handleButtonClick = (e: React.MouseEvent) => {
+    e.stopPropagation();
+  };
   const renderPrefixIcon = () => {
     if (!itemDepth) return null;
 
@@ -72,7 +75,11 @@ const BucketSchemaItem: FC<TypeBucketSchemaItem> = ({
         children: (
           <>
             {itemDepth === 0 && isHovered && (
-              <Button variant="icon" className={`${styles.buttons} ${styles.dragDropButton}`}>
+              <Button
+                variant="icon"
+                color="default"
+                className={`${styles.buttons} ${styles.dragDropButton}`}
+              >
                 <Icon name="dragHorizontalVariant" />
               </Button>
             )}
@@ -93,14 +100,28 @@ const BucketSchemaItem: FC<TypeBucketSchemaItem> = ({
             gap={10}
             prefix={{
               children: addIcon ? (
-                <Button variant="icon" className={styles.buttons} onClick={addOnClick}>
+                <Button
+                  variant="icon"
+                  className={styles.buttons}
+                  onClick={(e) => {
+                    handleButtonClick(e);
+                    addOnClick?.();
+                  }}
+                >
                   <Icon name="plus" />
                 </Button>
               ) : null,
             }}
             root={{
               children: editIcon ? (
-                <Button variant="icon" className={styles.buttons} onClick={editOnClick}>
+                <Button
+                  variant="icon"
+                  className={styles.buttons}
+                  onClick={(e) => {
+                    handleButtonClick(e);
+                    editOnClick?.();
+                  }}
+                >
                   <Icon name="pencil" />
                 </Button>
               ) : null,
@@ -111,7 +132,10 @@ const BucketSchemaItem: FC<TypeBucketSchemaItem> = ({
                   variant="icon"
                   color="danger"
                   className={styles.buttons}
-                  onClick={deleteOnClick}
+                  onClick={(e) => {
+                    handleButtonClick(e);
+                    deleteOnClick?.();
+                  }}
                 >
                   <Icon name="delete" />
                 </Button>
