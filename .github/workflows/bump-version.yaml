@@ -18,12 +18,18 @@ jobs:
         uses: actions/checkout@v4
         with:
           fetch-depth: 0
-          token: ${{ secrets.SPICA_BOT_PAT }}
+          # token: ${{ secrets.SPICA_BOT_PAT }}
 
       - name: Debug
         # env:
         #   GH_TOKEN: ${{ secrets.SPICA_BOT_PAT }}
         run: |
+          if [[ -z "${{ secrets.SPICA_BOT_PAT }}" ]]; then
+            echo "SPICA_BOT_PAT is missing!"
+            exit 1
+          else
+            echo "SPICA_BOT_PAT is available."
+          fi
           git tag
           # latest_tag=$(git describe --tags --abbrev=0 2>/dev/null || echo "v0.0.0")
           # echo "Latest tag: $latest_tag"
