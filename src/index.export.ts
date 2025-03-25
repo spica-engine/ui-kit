@@ -67,3 +67,6 @@ export { default as RichTextInput } from "./components/atoms/inputs/normal/rich-
 export { default as StorageInput } from "./components/atoms/inputs/normal/storage/Storage";
 export { default as StringInput } from "./components/atoms/inputs/normal/string/String";
 export { default as TextAreaInput } from "./components/atoms/inputs/normal/text-area/TextArea";
+export { default as Drawer } from "./components/atoms/drawer/Drawer";
+export { default as Backdrop } from "./components/atoms/backdrop/Backdrop";
+export { default as Portal } from "./components/atoms/portal/Portal";
