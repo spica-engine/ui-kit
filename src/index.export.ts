@@ -70,3 +70,4 @@ export { default as TextAreaInput } from "./components/atoms/inputs/normal/text-
 export { default as Drawer } from "./components/atoms/drawer/Drawer";
 export { default as Backdrop } from "./components/atoms/backdrop/Backdrop";
 export { default as Portal } from "./components/atoms/portal/Portal";
+export { default as Tab } from "./components/atoms/tab/Tab";
