@@ -6,14 +6,14 @@ import { TypeFluidContainer } from "@atoms/fluid-container/FluidContainer";
 
 type TypeDashboardEditNameProps = {
   name?: string;
-  onClickAddNew?: () => void;
+  onClickApply?: () => void;
   onClickCancel?: () => void;
   onClickHelp?: () => void;
 } & TypeFluidContainer;
 
 const BucketRulePopup: FC<TypeDashboardEditNameProps> = ({
   name,
-  onClickAddNew,
+  onClickApply,
   onClickCancel,
   onClickHelp,
   ...props
@@ -49,9 +49,9 @@ const BucketRulePopup: FC<TypeDashboardEditNameProps> = ({
               <Icon className={styles.iconCancel} name="close"></Icon>
               <Text>Cancel</Text>
             </Button>
-            <Button onClick={onClickAddNew}>
+            <Button onClick={onClickApply}>
               <Icon name="filter"></Icon>
-              <Text className={styles.buttonTextApply}>Add New</Text>
+              <Text className={styles.buttonTextApply}>Apply</Text>
             </Button>
           </>
         ),
