@@ -39,8 +39,19 @@ const BucketSchemaItem: FC<TypeBucketSchemaItem> = ({
 }) => {
   const [isHovered, setIsHovered] = useState(false);
 
-  const handleButtonClick = (e: React.MouseEvent) => {
+  const handleButtonClick = (e: React.MouseEvent, action: "add" | "edit" | "delete") => {
     e.stopPropagation();
+    switch (action) {
+      case "add":
+        addOnClick?.();
+        break;
+      case "edit":
+        editOnClick?.();
+        break;
+      case "delete":
+        deleteOnClick?.();
+        break;
+    }
   };
   const renderPrefixIcon = () => {
     if (!itemDepth) return null;
@@ -103,10 +114,7 @@ const BucketSchemaItem: FC<TypeBucketSchemaItem> = ({
                 <Button
                   variant="icon"
                   className={styles.buttons}
-                  onClick={(e) => {
-                    handleButtonClick(e);
-                    addOnClick?.();
-                  }}
+                  onClick={(e) => handleButtonClick(e, "add")}
                 >
                   <Icon name="plus" />
                 </Button>
@@ -117,10 +125,7 @@ const BucketSchemaItem: FC<TypeBucketSchemaItem> = ({
                 <Button
                   variant="icon"
                   className={styles.buttons}
-                  onClick={(e) => {
-                    handleButtonClick(e);
-                    editOnClick?.();
-                  }}
+                  onClick={(e) => handleButtonClick(e, "edit")}
                 >
                   <Icon name="pencil" />
                 </Button>
@@ -132,10 +137,7 @@ const BucketSchemaItem: FC<TypeBucketSchemaItem> = ({
                   variant="icon"
                   color="danger"
                   className={styles.buttons}
-                  onClick={(e) => {
-                    handleButtonClick(e);
-                    deleteOnClick?.();
-                  }}
+                  onClick={(e) => handleButtonClick(e, "delete")}
                 >
                   <Icon name="delete" />
                 </Button>
