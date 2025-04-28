@@ -12,6 +12,7 @@ type TypeChip = {
   onDelete?: () => void;
   suffixIcon?: IconName;
   suffixOnClick?: () => void;
+  onClick?: () => void;
 } & TypeFluidContainer;
 
 const Chip: FC<TypeChip> = ({
@@ -21,6 +22,7 @@ const Chip: FC<TypeChip> = ({
   onDelete,
   suffixIcon,
   suffixOnClick,
+  onClick,
   ...props
 }) => {
   return (
@@ -53,6 +55,7 @@ const Chip: FC<TypeChip> = ({
           ...props.suffix,
         }
       }
+      onClick={onClick}
       {...props}
       className={`${props.className} ${styles.chip} ${styles[variant]} ${!onDelete && !suffixIcon ? styles.noButton : ""}`}
     />

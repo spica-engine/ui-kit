@@ -8,15 +8,19 @@ type TypeChipInput = {
   label?: string[];
   placeholder?: string;
   onChange?: (value: string[]) => void;
+  mode?: "editable" | "readonly";
+  staticChips?: string[];
 } & TypeFlexElement;
 
 const ChipInput: FC<TypeChipInput> = ({
-  label,
-  placeholder = "Enter a value than press enter",
+  label = [],
+  placeholder = "Enter a value then press enter",
   onChange,
+  mode = "editable",
+  staticChips = [],
   ...props
 }) => {
-  const [chips, setChips] = useState<string[]>(label || []);
+  const [chips, setChips] = useState<string[]>(mode === "readonly" ? staticChips : label);
   const [inputValue, setInputValue] = useState<string>("");
 
   useEffect(() => {
@@ -26,7 +30,7 @@ const ChipInput: FC<TypeChipInput> = ({
   }, [chips, onChange]);
 
   const handleKeyDown = (e: React.KeyboardEvent<HTMLInputElement>) => {
-    if (e.key === "Enter" && inputValue.trim() !== "") {
+    if (mode === "editable" && e.key === "Enter" && inputValue.trim() !== "") {
       e.preventDefault();
       const newChips = [...chips, inputValue.trim()];
       setChips(newChips);
@@ -50,12 +54,14 @@ const ChipInput: FC<TypeChipInput> = ({
       {chips.map((chip, index) => (
         <Chip variant="outlined" key={index} label={chip} onDelete={() => handleDelete(index)} />
       ))}
-      <Input
-        placeholder={placeholder}
-        value={inputValue}
-        onChange={(e) => setInputValue(e.target.value)}
-        onKeyDown={handleKeyDown}
-      />
+      {mode === "editable" && (
+        <Input
+          placeholder={placeholder}
+          value={inputValue}
+          onChange={(e) => setInputValue(e.target.value)}
+          onKeyDown={handleKeyDown}
+        />
+      )}
     </FlexElement>
   );
 };

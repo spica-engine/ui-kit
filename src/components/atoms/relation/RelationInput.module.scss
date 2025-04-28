@@ -1,0 +1,13 @@
+.icon {
+  color: var(--color-font-primary) !important;
+}
+.text {
+  color: var(--color-input-placeholder) !important;
+}
+.deleteButton {
+  padding: 0;
+}
+.chipInput {
+  max-height: calc(3 * 32px + 20px);
+  overflow-y: auto;
+}
