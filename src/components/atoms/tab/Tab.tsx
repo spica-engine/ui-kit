@@ -33,7 +33,7 @@ const Tab: FC<TypeTab> = ({ type = "default", items, ...props }) => {
         <div
           className={styles.indicator}
           style={{
-            width: itemWidth,
+            width: itemWidth - 2,
             left: activeIndex * itemWidth,
           }}
         />
