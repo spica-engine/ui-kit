@@ -8,6 +8,7 @@ import copy from "rollup-plugin-copy";
 import url from "@rollup/plugin-url";
 import path from "path";
 import { replaceTscAliasPaths } from "tsc-alias";
+import prefixSelector from "postcss-prefix-selector";
 
 const tscAlias = () => ({
   name: "tsAlias",
@@ -53,6 +54,14 @@ export default [
           ],
         ],
         inject: true,
+        plugins: [
+          prefixSelector({
+            prefix: ".oziko",
+            transform(prefix, selector, prefixedSelector) {
+              return prefixedSelector;
+            },
+          }),
+        ],
       }),
       copy({
         targets: [
