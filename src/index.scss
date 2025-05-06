@@ -1,97 +1,97 @@
 @use "styles/shared/global.scss";
 
 :root {
-  --font-size-base: 16px;
-  --font-size-xs: 0.625rem; /* 10px */
-  --font-size-sm: 0.75rem; /* 12px */
-  --font-size-md: 0.875rem; /* 14px */
-  --font-size-lg: 1rem; /* 16px */
-  --font-size-xl: 1.125rem; /* 18px */
+  --oziko-font-size-base: 16px;
+  --oziko-font-size-xs: 0.625rem; /* 10px */
+  --oziko-font-size-sm: 0.75rem; /* 12px */
+  --oziko-font-size-md: 0.875rem; /* 14px */
+  --oziko-font-size-lg: 1rem; /* 16px */
+  --oziko-font-size-xl: 1.125rem; /* 18px */
 
-  --font-family-base: "Inter", -apple-system, BlinkMacSystemFont, "Segoe UI", "Roboto", "Oxygen",
+  --oziko-font-family-base: "Inter", -apple-system, BlinkMacSystemFont, "Segoe UI", "Roboto", "Oxygen",
     "Ubuntu", "Cantarell", "Fira Sans", "Droid Sans", "Helvetica Neue", sans-serif;
 
-  --color-primary: #1c1c50;
-  --color-primary-rgb: 28, 28, 80;
-  --color-primary-light: #36369c;
-  --color-primary-light-rgb: 54, 54, 156;
-  --color-primary-dark: #020204;
-  --color-primary-dark-rgb: 2, 2, 4;
+  --oziko-color-primary: #1c1c50;
+  --oziko-color-primary-rgb: 28, 28, 80;
+  --oziko-color-primary-light: #36369c;
+  --oziko-color-primary-light-rgb: 54, 54, 156;
+  --oziko-color-primary-dark: #020204;
+  --oziko-color-primary-dark-rgb: 2, 2, 4;
 
-  --color-danger: #f41212;
-  --color-danger-rgb: 244, 18, 18;
-  --color-danger-light: #f97373;
-  --color-danger-light-rgb: 249, 115, 115;
-  --color-danger-dark: #990707;
-  --color-danger-dark-rgb: 153, 7, 7;
+  --oziko-color-danger: #f41212;
+  --oziko-color-danger-rgb: 244, 18, 18;
+  --oziko-color-danger-light: #f97373;
+  --oziko-color-danger-light-rgb: 249, 115, 115;
+  --oziko-color-danger-dark: #990707;
+  --oziko-color-danger-dark-rgb: 153, 7, 7;
 
-  --color-success: #21f412;
-  --color-success-rgb: 33, 244, 18;
-  --color-success-light: #7cf973;
-  --color-success-light-rgb: 124, 249, 115;
-  --color-success-dark: #119907;
-  --color-success-dark-rgb: 17, 153, 7;
+  --oziko-color-success: #21f412;
+  --oziko-color-success-rgb: 33, 244, 18;
+  --oziko-color-success-light: #7cf973;
+  --oziko-color-success-light-rgb: 124, 249, 115;
+  --oziko-color-success-dark: #119907;
+  --oziko-color-success-dark-rgb: 17, 153, 7;
 
-  --color-soft: #f2f2f2;
-  --color-soft-rgb: 242, 242, 242;
-  --color-soft-light: #ffffff;
-  --color-soft-light-rgb: 255, 255, 255;
-  --color-soft-dark: #c2c2c2;
-  --color-soft-dark-rgb: 194, 194, 194;
+  --oziko-color-soft: #f2f2f2;
+  --oziko-color-soft-rgb: 242, 242, 242;
+  --oziko-color-soft-light: #ffffff;
+  --oziko-color-soft-light-rgb: 255, 255, 255;
+  --oziko-color-soft-dark: #c2c2c2;
+  --oziko-color-soft-dark-rgb: 194, 194, 194;
 
-  --color-default: #ffffff;
-  --color-default-rgb: 255, 255, 255;
+  --oziko-color-default: #ffffff;
+  --oziko-color-default-rgb: 255, 255, 255;
 
-  --color-transparent: transparent;
+  --oziko-color-transparent: transparent;
 
-  --color-input-background: #fafafa;
-  --color-input-background-rgb: 250, 250, 250;
-  --color-input-placeholder: #9b9b9b;
-  --color-input-placeholder-rgb: 155, 155, 155;
+  --oziko-color-input-background: #fafafa;
+  --oziko-color-input-background-rgb: 250, 250, 250;
+  --oziko-color-input-placeholder: #9b9b9b;
+  --oziko-color-input-placeholder-rgb: 155, 155, 155;
 
-  --color-font-primary: #525252;
-  --color-font-primary-rgb: 82, 82, 82;
-  --color-font-secondary: #ffffff;
-  --color-font-secondary-rgb: 255, 255, 255;
-  --color-border: #d4d0d0;
-  --color-border-rgb: 212, 208, 208;
-  --color-zebra: #f6f6f9;
-  --color-zebra-rgb: 246, 246, 249;
-  --color-background: #f5f5f5;
-  --color-background-rgb: 245, 245, 245;
-  --color-menu-background: #ffffff;
-  --color-menu-background-rgb: 255, 255, 255;
-  --color-box-shadow: #0000000d;
+  --oziko-color-font-primary: #525252;
+  --oziko-color-font-primary-rgb: 82, 82, 82;
+  --oziko-color-font-secondary: #ffffff;
+  --oziko-color-font-secondary-rgb: 255, 255, 255;
+  --oziko-color-border: #d4d0d0;
+  --oziko-color-border-rgb: 212, 208, 208;
+  --oziko-color-zebra: #f6f6f9;
+  --oziko-color-zebra-rgb: 246, 246, 249;
+  --oziko-color-background: #f5f5f5;
+  --oziko-color-background-rgb: 245, 245, 245;
+  --oziko-color-menu-background: #ffffff;
+  --oziko-color-menu-background-rgb: 255, 255, 255;
+  --oziko-color-box-shadow: #0000000d;
 
-  --box-shadow: 0px 0px 10px 5px var(--color-box-shadow);
+  --box-shadow: 0px 0px 10px 5px var(--oziko-color-box-shadow);
 
-  --border-radius-sm: 3px;
-  --border-radius-md: 5px;
-  --border-radius-lg: 10px;
-  --border-radius-circle: 50%;
-  --border-radius-round: 40px;
+  --oziko-border-radius-sm: 3px;
+  --oziko-border-radius-md: 5px;
+  --oziko-border-radius-lg: 10px;
+  --oziko-border-radius-circle: 50%;
+  --oziko-border-radius-round: 40px;
 
-  --padding-xs: 2.5px;
-  --padding-sm: 5px;
-  --padding-md: 10px;
-  --padding-lg: 15px;
-  --padding-xl: 20px;
+  --oziko-padding-xs: 2.5px;
+  --oziko-padding-sm: 5px;
+  --oziko-padding-md: 10px;
+  --oziko-padding-lg: 15px;
+  --oziko-padding-xl: 20px;
 
-  --gap-xs: 2.5px;
-  --gap-sm: 5px;
-  --gap-md: 10px;
-  --gap-lg: 15px;
-  --gap-xl: 20px;
+  --oziko-gap-xs: 2.5px;
+  --oziko-gap-sm: 5px;
+  --oziko-gap-md: 10px;
+  --oziko-gap-lg: 15px;
+  --oziko-gap-xl: 20px;
 
-  --icon-size-xs: 12px;
-  --icon-size-sm: 14px;
-  --icon-size-md: 16px;
-  --icon-size-lg: 20px;
+  --oziko-icon-size-xs: 12px;
+  --oziko-icon-size-sm: 14px;
+  --oziko-icon-size-md: 16px;
+  --oziko-icon-size-lg: 20px;
 
-  --border-default: 1px solid #d4d0d0;
+  --oziko-border-default: 1px solid #d4d0d0;
 
-  --transition-duration: 0.3s;
-  --disabled-opacity: 0.6;
+  --oziko-transition-duration: 0.3s;
+  --oziko-disabled-opacity: 0.6;
 }
 
 @font-face {
@@ -103,12 +103,12 @@
 }
 
 html {
-  font-size: var(--font-size-base);
+  font-size: var(--oziko-font-size-base);
 }
 
 body {
   margin: 0;
-  font-family: var(--font-family-base);
+  font-family: var(--oziko-font-family-base);
   -webkit-font-smoothing: antialiased;
   -moz-osx-font-smoothing: grayscale;
 }
@@ -119,8 +119,4 @@ code {
 
 * {
   box-sizing: border-box;
-}
-
-.objectInput {
-  border: var(--border-default);
 }

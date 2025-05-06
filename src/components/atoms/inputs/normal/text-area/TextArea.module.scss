@@ -2,27 +2,27 @@
 
 .container {
   @include mixins.inputContainer;
-  padding: var(--padding-md);
+  padding: var(--oziko-padding-md);
 
   .titleContainer {
-    font-size: var(--font-size-md);
-    color: var(--color-input-placeholder);
+    font-size: var(--oziko-font-size-md);
+    color: var(--oziko-color-input-placeholder);
   }
   .textAreaInput {
     width: 100%;
-    padding: var(--padding-md);
-    font-size: var(--font-size-md);
-    border-radius: var(--border-radius-md);
-    color: var(--color-font-primary);
-    background-color: var(--color-input-background);
+    padding: var(--oziko-padding-md);
+    font-size: var(--oziko-font-size-md);
+    border-radius: var(--oziko-border-radius-md);
+    color: var(--oziko-color-font-primary);
+    background-color: var(--oziko-color-input-background);
     outline: none;
     resize: vertical;
     overflow: auto;
     border: 0;
     line-height: 1rem;
     &::placeholder {
-      color: var(--color-input-placeholder);
-      font-size: var(--font-size-md);
+      color: var(--oziko-color-input-placeholder);
+      font-size: var(--oziko-font-size-md);
     }
   }
   .description {

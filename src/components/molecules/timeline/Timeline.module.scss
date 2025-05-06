@@ -11,13 +11,13 @@
   .date {
     min-width: 120px;
     border: 1.5px solid #5187ed;
-    border-radius: var(--border-radius-round);
-    padding: var(--padding-sm) var(--padding-md);
+    border-radius: var(--oziko-border-radius-round);
+    padding: var(--oziko-padding-sm) var(--oziko-padding-md);
     position: absolute;
     bottom: -10px;
     background: white;
     color: #5187ed !important;
-    font-size: var(--font-size-sm) !important;
+    font-size: var(--oziko-font-size-sm) !important;
     font-weight: 600;
 
     &.from {

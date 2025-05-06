@@ -2,9 +2,9 @@
   z-index: 1000;
   display: block;
   position: fixed;
-  border-radius: var(--border-radius-md);
+  border-radius: var(--oziko-border-radius-md);
   min-height: 40px;
-  background-color: var(--color-menu-background);
+  background-color: var(--oziko-color-menu-background);
   box-shadow: var(--box-shadow);
 
   .item {
@@ -12,7 +12,7 @@
     cursor: pointer;
     line-height: 12px;
     font-weight: 300;
-    font-size: var(--font-size-md);
+    font-size: var(--oziko-font-size-md);
     display: flex;
     align-content: center;
     flex-direction: row;
@@ -21,10 +21,10 @@
     border: 0;
     max-width: 250px;
     min-width: 100px;
-    background-color: var(--color-menu-background);
+    background-color: var(--oziko-color-menu-background);
 
     &:hover {
-      background-color: var(--color-zebra);
+      background-color: var(--oziko-color-zebra);
     }
   }
 }
@@ -105,7 +105,7 @@ button.toolbar-item.active i {
   display: flex;
   align-items: center;
   flex-wrap: wrap;
-  gap: var(--gap-sm);
+  gap: var(--oziko-gap-sm);
 }
 
 .toolbar-item {
@@ -116,12 +116,12 @@ button.toolbar-item.active i {
   border: 0px;
   cursor: pointer;
   padding: 8px;
-  border-radius: var(--border-radius-md);
+  border-radius: var(--oziko-border-radius-md);
 }
 
 .toolbar-item {
   &:hover {
-    background: var(--color-zebra);
+    background: var(--oziko-color-zebra);
   }
 
   .toolbar-icon {
@@ -131,17 +131,17 @@ button.toolbar-item.active i {
 
   &.dropdownButton {
     width: auto;
-    border-radius: var(--border-radius-md);
+    border-radius: var(--oziko-border-radius-md);
     height: 30px;
     display: flex;
-    gap: var(--gap-sm);
-    padding-left: var(--padding-md);
+    gap: var(--oziko-gap-sm);
+    padding-left: var(--oziko-padding-md);
   }
 }
 
 .divider {
   width: 1px;
-  background-color: var(--color-input-placeholder);
+  background-color: var(--oziko-color-input-placeholder);
   margin: 0 4px;
   height: 20px;
 }
