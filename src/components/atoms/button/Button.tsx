@@ -79,7 +79,7 @@ const Button: FC<TypeButton> = ({
       ref={buttonRef}
       {...props}
       style={customStyle}
-      className={`${shapes[shape]} ${variants[variant]} ${colors[color]} ${props.className} ${fullWidth && styles.fullWidth}`}
+      className={`${shapes[shape]} ${variants[variant]} ${colors[color]} ${props.className} ${fullWidth && styles.fullWidth} ${styles.button}`}
     >
       {loading ? (
         <Spinner size="small" color={getSpinnerColor()} {...spinnerProps} />

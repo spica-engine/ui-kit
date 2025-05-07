@@ -2,16 +2,16 @@
 
 @mixin button-base {
   cursor: pointer;
-  line-height: var(--font-size-md);
+  line-height: var(--oziko-font-size-md);
   outline: none;
   border: none;
   background: none;
-  transition: all var(--transition-duration) ease-in-out;
-  padding: var(--padding-md);
-  font-size: var(--font-size-md);
+  transition: all var(--oziko-transition-duration) ease-in-out;
+  padding: var(--oziko-padding-md);
+  font-size: var(--oziko-font-size-md);
 
   &:disabled {
-    opacity: var(--disabled-opacity);
+    opacity: var(--oziko-disabled-opacity);
     cursor: default;
   }
 }
@@ -50,7 +50,7 @@
   }
 }
 
-button {
+.button {
   @include button-base;
   @include mixins.flexCenter;
 
@@ -60,13 +60,13 @@ button {
 
   // Shape
   &.sDefault {
-    @include button-shape(var(--border-radius-sm));
+    @include button-shape(var(--oziko-border-radius-sm));
   }
   &.sCircle {
-    @include button-shape(var(--border-radius-circle));
+    @include button-shape(var(--oziko-border-radius-circle));
   }
   &.sRound {
-    @include button-shape(var(--border-radius-round));
+    @include button-shape(var(--oziko-border-radius-round));
   }
 
   // Variants
@@ -74,51 +74,51 @@ button {
     border: 1px solid;
     &.cPrimary {
       @include button-color(
-        var(--color-primary),
-        var(--color-primary),
-        var(--color-font-secondary),
-        var(--color-primary-light),
-        var(--color-primary-light)
+        var(--oziko-color-primary),
+        var(--oziko-color-primary),
+        var(--oziko-color-font-secondary),
+        var(--oziko-color-primary-light),
+        var(--oziko-color-primary-light)
       );
     }
     &.cDanger {
       @include button-color(
-        var(--color-danger),
-        var(--color-danger),
-        var(--color-font-secondary),
-        var(--color-danger-light),
-        var(--color-danger-light)
+        var(--oziko-color-danger),
+        var(--oziko-color-danger),
+        var(--oziko-color-font-secondary),
+        var(--oziko-color-danger-light),
+        var(--oziko-color-danger-light)
       );
     }
     &.cSuccess {
       @include button-color(
-        var(--color-success),
-        var(--color-success),
-        var(--color-font-secondary),
-        var(--color-success-light),
-        var(--color-success-light)
+        var(--oziko-color-success),
+        var(--oziko-color-success),
+        var(--oziko-color-font-secondary),
+        var(--oziko-color-success-light),
+        var(--oziko-color-success-light)
       );
     }
     &.cDefault {
       @include button-color(
-        var(--color-default),
-        var(--color-default),
-        var(--color-font-primary),
+        var(--oziko-color-default),
+        var(--oziko-color-default),
+        var(--oziko-color-font-primary),
         null,
-        rgba(var(--color-primary-rgb), 0.3)
+        rgba(var(--oziko-color-primary-rgb), 0.3)
       );
     }
     &.cSoft {
       @include button-color(
-        var(--color-soft),
-        var(--color-soft),
-        var(--color-font-primary),
+        var(--oziko-color-soft),
+        var(--oziko-color-soft),
+        var(--oziko-color-font-primary),
         null,
-        rgba(var(--color-primary-rgb), 0.3)
+        rgba(var(--oziko-color-primary-rgb), 0.3)
       );
     }
     &.cTransparent {
-      @include button-color(transparent, var(--color-border), var(--color-font-primary));
+      @include button-color(transparent, var(--oziko-color-border), var(--oziko-color-font-primary));
     }
   }
 
@@ -127,49 +127,49 @@ button {
     &.cPrimary {
       @include button-color(
         transparent,
-        var(--color-primary),
-        var(--color-primary),
+        var(--oziko-color-primary),
+        var(--oziko-color-primary),
         null,
-        var(--color-primary-light),
-        var(--color-primary-light)
+        var(--oziko-color-primary-light),
+        var(--oziko-color-primary-light)
       );
     }
     &.cDanger {
       @include button-color(
         transparent,
-        var(--color-danger),
-        var(--color-danger),
+        var(--oziko-color-danger),
+        var(--oziko-color-danger),
         null,
-        var(--color-danger-light),
-        var(--color-danger-light)
+        var(--oziko-color-danger-light),
+        var(--oziko-color-danger-light)
       );
     }
     &.cSuccess {
       @include button-color(
         transparent,
-        var(--color-success),
-        var(--color-success),
+        var(--oziko-color-success),
+        var(--oziko-color-success),
         null,
-        var(--color-success-light),
-        var(--color-success-light)
+        var(--oziko-color-success-light),
+        var(--oziko-color-success-light)
       );
     }
     &.cDefault {
       @include button-color(
         transparent,
-        var(--color-border),
-        var(--color-font-primary),
+        var(--oziko-color-border),
+        var(--oziko-color-font-primary),
         null,
-        rgba(var(--color-primary-rgb), 0.3)
+        rgba(var(--oziko-color-primary-rgb), 0.3)
       );
     }
     &.cSoft {
       @include button-color(
         transparent,
-        var(--color-soft),
-        var(--color-font-primary),
+        var(--oziko-color-soft),
+        var(--oziko-color-font-primary),
         null,
-        rgba(var(--color-primary-rgb), 0.3)
+        rgba(var(--oziko-color-primary-rgb), 0.3)
       );
     }
   }
@@ -179,49 +179,49 @@ button {
     &.cPrimary {
       @include button-color(
         transparent,
-        var(--color-primary),
-        var(--color-primary),
+        var(--oziko-color-primary),
+        var(--oziko-color-primary),
         null,
-        var(--color-primary-light),
-        var(--color-primary-light)
+        var(--oziko-color-primary-light),
+        var(--oziko-color-primary-light)
       );
     }
     &.cDanger {
       @include button-color(
         transparent,
-        var(--color-danger),
-        var(--color-danger),
+        var(--oziko-color-danger),
+        var(--oziko-color-danger),
         null,
-        var(--color-danger-light),
-        var(--color-danger-light)
+        var(--oziko-color-danger-light),
+        var(--oziko-color-danger-light)
       );
     }
     &.cSuccess {
       @include button-color(
         transparent,
-        var(--color-success),
-        var(--color-success),
+        var(--oziko-color-success),
+        var(--oziko-color-success),
         null,
-        var(--color-success-light),
-        var(--color-success-light)
+        var(--oziko-color-success-light),
+        var(--oziko-color-success-light)
       );
     }
     &.cDefault {
       @include button-color(
         transparent,
-        var(--color-border),
-        var(--color-font-primary),
+        var(--oziko-color-border),
+        var(--oziko-color-font-primary),
         null,
-        rgba(var(--color-primary-rgb), 0.3)
+        rgba(var(--oziko-color-primary-rgb), 0.3)
       );
     }
     &.cSoft {
       @include button-color(
         transparent,
-        var(--color-soft),
-        var(--color-font-primary),
+        var(--oziko-color-soft),
+        var(--oziko-color-font-primary),
         null,
-        rgba(var(--color-primary-rgb), 0.3)
+        rgba(var(--oziko-color-primary-rgb), 0.3)
       );
     }
   }
@@ -230,42 +230,42 @@ button {
     border: none;
     &.cPrimary {
       @include button-color(
-        rgba(var(--color-primary-rgb), 0.1),
-        var(--color-primary),
-        var(--color-primary),
-        rgba(var(--color-primary-rgb), 0.3)
+        rgba(var(--oziko-color-primary-rgb), 0.1),
+        var(--oziko-color-primary),
+        var(--oziko-color-primary),
+        rgba(var(--oziko-color-primary-rgb), 0.3)
       );
     }
     &.cDanger {
       @include button-color(
-        rgba(var(--color-danger-rgb), 0.1),
-        var(--color-danger),
-        var(--color-danger),
-        rgba(var(--color-danger-rgb), 0.3)
+        rgba(var(--oziko-color-danger-rgb), 0.1),
+        var(--oziko-color-danger),
+        var(--oziko-color-danger),
+        rgba(var(--oziko-color-danger-rgb), 0.3)
       );
     }
     &.cSuccess {
       @include button-color(
-        rgba(var(--color-success-rgb), 0.1),
-        var(--color-success),
-        var(--color-success),
-        rgba(var(--color-success-rgb), 0.3)
+        rgba(var(--oziko-color-success-rgb), 0.1),
+        var(--oziko-color-success),
+        var(--oziko-color-success),
+        rgba(var(--oziko-color-success-rgb), 0.3)
       );
     }
     &.cDefault {
       @include button-color(
-        rgba(var(--color-default-rgb), 0.1),
-        var(--color-font-primary),
-        var(--color-font-primary),
-        rgba(var(--color-default-rgb), 0.3)
+        rgba(var(--oziko-color-default-rgb), 0.1),
+        var(--oziko-color-font-primary),
+        var(--oziko-color-font-primary),
+        rgba(var(--oziko-color-default-rgb), 0.3)
       );
     }
     &.cSoft {
       @include button-color(
-        rgba(var(--color-soft-rgb), 0.1),
-        var(--color-soft),
-        var(--color-font-primary),
-        rgba(var(--color-soft-rgb), 0.3)
+        rgba(var(--oziko-color-soft-rgb), 0.1),
+        var(--oziko-color-soft),
+        var(--oziko-color-font-primary),
+        rgba(var(--oziko-color-soft-rgb), 0.3)
       );
     }
   }
@@ -277,40 +277,40 @@ button {
       @include button-color(
         transparent,
         transparent,
-        var(--color-primary),
-        rgba(var(--color-primary-rgb), 0.1)
+        var(--oziko-color-primary),
+        rgba(var(--oziko-color-primary-rgb), 0.1)
       );
     }
     &.cDanger {
       @include button-color(
         transparent,
         transparent,
-        var(--color-danger),
-        rgba(var(--color-danger-rgb), 0.1)
+        var(--oziko-color-danger),
+        rgba(var(--oziko-color-danger-rgb), 0.1)
       );
     }
     &.cSuccess {
       @include button-color(
         transparent,
         transparent,
-        var(--color-success),
-        rgba(var(--color-success-rgb), 0.1)
+        var(--oziko-color-success),
+        rgba(var(--oziko-color-success-rgb), 0.1)
       );
     }
     &.cDefault {
       @include button-color(
         transparent,
         transparent,
-        var(--color-font-primary),
-        rgba(var(--color-default-rgb), 0.1)
+        var(--oziko-color-font-primary),
+        rgba(var(--oziko-color-default-rgb), 0.1)
       );
     }
     &.cSoft {
       @include button-color(
         transparent,
         transparent,
-        var(--color-font-primary),
-        rgba(var(--color-soft-rgb), 0.1)
+        var(--oziko-color-font-primary),
+        rgba(var(--oziko-color-soft-rgb), 0.1)
       );
     }
   }
@@ -319,33 +319,33 @@ button {
     border: none;
     background-color: transparent;
     &.cPrimary {
-      color: var(--color-primary);
+      color: var(--oziko-color-primary);
       &:hover {
-        color: var(--color-primary-light);
+        color: var(--oziko-color-primary-light);
       }
     }
     &.cDanger {
-      color: var(--color-danger);
+      color: var(--oziko-color-danger);
       &:hover {
-        color: var(--color-danger-light);
+        color: var(--oziko-color-danger-light);
       }
     }
     &.cSuccess {
-      color: var(--color-success);
+      color: var(--oziko-color-success);
       &:hover {
-        color: var(--color-success-light);
+        color: var(--oziko-color-success-light);
       }
     }
     &.cDefault {
-      color: var(--color-font-primary);
+      color: var(--oziko-color-font-primary);
       &:hover {
-        color: var(--color-primary);
+        color: var(--oziko-color-primary);
       }
     }
     &.cSoft {
-      color: var(--color-font-primary);
+      color: var(--oziko-color-font-primary);
       &:hover {
-        color: var(--color-primary);
+        color: var(--oziko-color-primary);
       }
     }
   }
@@ -354,33 +354,33 @@ button {
     border: none;
     background-color: transparent;
     &.cPrimary {
-      color: var(--color-primary);
+      color: var(--oziko-color-primary);
       &:hover {
-        color: var(--color-primary-light);
+        color: var(--oziko-color-primary-light);
       }
     }
     &.cDanger {
-      color: var(--color-danger);
+      color: var(--oziko-color-danger);
       &:hover {
-        color: var(--color-danger-light);
+        color: var(--oziko-color-danger-light);
       }
     }
     &.cSuccess {
-      color: var(--color-success);
+      color: var(--oziko-color-success);
       &:hover {
-        color: var(--color-success-light);
+        color: var(--oziko-color-success-light);
       }
     }
     &.cDefault {
-      color: var(--color-font-primary);
+      color: var(--oziko-color-font-primary);
       &:hover {
-        color: var(--color-primary);
+        color: var(--oziko-color-primary);
       }
     }
     &.cSoft {
-      color: var(--color-font-primary);
+      color: var(--oziko-color-font-primary);
       &:hover {
-        color: var(--color-primary);
+        color: var(--oziko-color-primary);
       }
     }
   }

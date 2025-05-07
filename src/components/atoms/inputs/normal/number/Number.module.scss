@@ -1,19 +1,19 @@
 .icon {
-  color: var(--color-font-primary) !important;
+  color: var(--oziko-color-font-primary) !important;
 }
 .text {
-  color: var(--color-input-placeholder) !important;
+  color: var(--oziko-color-input-placeholder) !important;
 }
 .select {
   background: none !important;
-  padding: var(--padding-md) 0 !important;
+  padding: var(--oziko-padding-md) 0 !important;
   height: 100% !important;
 }
 
 .baseInput {
-  padding: 0 var(--padding-lg) !important;
+  padding: 0 var(--oziko-padding-lg) !important;
 }
 
 .input {
-  padding: var(--padding-md) 0 !important;
+  padding: var(--oziko-padding-md) 0 !important;
 }

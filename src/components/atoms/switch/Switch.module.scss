@@ -39,16 +39,16 @@
     top: 3px;
     left: 3px;
     transition: transform 0.3s ease;
-    background: var(--color-font-primary);
+    background: var(--oziko-color-font-primary);
     border-radius: 100%;
   }
 }
 
 input:checked + .slider {
-  background-color: rgba(var(--color-primary-rgb), 0.3);
+  background-color: rgba(var(--oziko-color-primary-rgb), 0.3);
 }
 
 input:checked + .slider::before {
   transform: translateX(20px);
-  background: var(--color-primary);
+  background: var(--oziko-color-primary);
 }

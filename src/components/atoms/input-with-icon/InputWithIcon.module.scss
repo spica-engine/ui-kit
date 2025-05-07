@@ -2,11 +2,11 @@
 
 .container {
   @include mixins.inputContainer;
-  border: var(--border-default);
+  border: var(--oziko-border-default);
 
   &.disabled {
     cursor: default;
-    opacity: var(--disabled-opacity);
+    opacity: var(--oziko-disabled-opacity);
   }
 
   .input {
@@ -14,10 +14,10 @@
     outline: none;
     width: 100%;
     background: none;
-    color: var(--color-font-primary);
+    color: var(--oziko-color-font-primary);
 
     &::placeholder {
-      color: var(--color-input-placeholder);
+      color: var(--oziko-color-input-placeholder);
     }
   }
 }

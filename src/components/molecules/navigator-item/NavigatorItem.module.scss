@@ -1,14 +1,14 @@
 @use "styles/mixins";
 
 .navigatorItem {
-  padding: var(--padding-md);
-  color: var(--color-font-primary);
+  padding: var(--oziko-padding-md);
+  color: var(--oziko-color-font-primary);
 
   .suffixButton {
     border: 0;
     padding: 0;
-    width: var(--icon-size-sm);
-    height: var(--icon-size-sm);
+    width: var(--oziko-icon-size-sm);
+    height: var(--oziko-icon-size-sm);
 
     opacity: 0;
     transition: opacity 0.1s ease-in-out;
