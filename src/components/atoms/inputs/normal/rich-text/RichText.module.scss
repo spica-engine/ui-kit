@@ -3,7 +3,7 @@
 .container {
   @include mixins.inputContainer;
   color: #000;
-  padding: var(--padding-md);
+  padding: var(--oziko-padding-md);
 
   .description {
     width: 100% !important;

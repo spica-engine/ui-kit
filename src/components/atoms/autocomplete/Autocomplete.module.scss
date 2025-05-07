@@ -8,11 +8,11 @@
 
 .menuItems {
   position: fixed;
-  border-radius: var(--border-radius-md);
+  border-radius: var(--oziko-border-radius-md);
   z-index: 1000;
   height: 100%;
   max-height: 200px;
   overflow-y: auto;
   box-shadow: var(--box-shadow);
-  background: var(--color-menu-background);
+  background: var(--oziko-color-menu-background);
 }

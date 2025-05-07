@@ -1,12 +1,12 @@
 .stringMinimized {
   border-radius: 0;
-  padding: 0 var(--padding-md);
-  font-size: var(--font-size-md);
-  color: var(--color-font-primary);
-  background: var(--color-input-background);
+  padding: 0 var(--oziko-padding-md);
+  font-size: var(--oziko-font-size-md);
+  color: var(--oziko-color-font-primary);
+  background: var(--oziko-color-input-background);
 
   .select {
-    background: var(--color-input-background);
+    background: var(--oziko-color-input-background);
   }
   .closeIcon {
     border: 0;

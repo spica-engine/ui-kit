@@ -6,13 +6,13 @@
     border: none;
     width: 12px;
     height: 12px;
-    border-radius: var(--border-radius-circle);
-    border: var(--border-default);
+    border-radius: var(--oziko-border-radius-circle);
+    border: var(--oziko-border-default);
 
     &::-webkit-color-swatch,
     &::-webkit-color-swatch-wrapper {
       border: none;
-      border-radius: var(--border-radius-circle);
+      border-radius: var(--oziko-border-radius-circle);
       padding: 0;
     }
   }

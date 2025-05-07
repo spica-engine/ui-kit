@@ -1,18 +1,18 @@
 @use "styles/mixins";
 
 .location {
-  background: var(--color-input-background);
-  padding: var(--gap-md);
-  border-radius: var(--border-radius-md);
+  background: var(--oziko-color-input-background);
+  padding: var(--oziko-gap-md);
+  border-radius: var(--oziko-border-radius-md);
 
   .icon {
-    color: var(--color-font-primary);
+    color: var(--oziko-color-font-primary);
   }
 
   .map {
     height: 100%;
     width: 100%;
-    border-radius: var(--border-radius-md);
+    border-radius: var(--oziko-border-radius-md);
   }
   .mapMarker {
     width: 35px;

@@ -54,8 +54,8 @@ const setCSSVariables = (theme: TypeTheme) => {
   setVariables(theme.padding, "padding");
   setVariables(theme.gap, "gap");
 
-  root.style.setProperty("--font-size-base", `${theme.fontSize}px`);
-  root.style.setProperty("--font-family-base", theme.fontFamily);
+  root.style.setProperty("--oziko-font-size-base", `${theme.fontSize}px`);
+  root.style.setProperty("--oziko-font-family-base", theme.fontFamily);
 };
 
 export const createTheme = (theme: Partial<TypeTheme>): TypeTheme => {

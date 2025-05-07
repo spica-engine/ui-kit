@@ -21,7 +21,7 @@
       width: 100%;
       height: 100%;
       background: rgb(255, 255, 255);
-      opacity: var(--disabled-opacity);
+      opacity: var(--oziko-disabled-opacity);
     }
   }
 }
@@ -39,23 +39,23 @@
 
   // Color
   &.primary {
-    @include borderColor(var(--color-primary));
+    @include borderColor(var(--oziko-color-primary));
   }
 
   &.default {
-    @include borderColor(var(--color-default));
+    @include borderColor(var(--oziko-color-default));
   }
 
   &.success {
-    @include borderColor(var(--color-success));
+    @include borderColor(var(--oziko-color-success));
   }
 
   &.danger {
-    @include borderColor(var(--color-danger));
+    @include borderColor(var(--oziko-color-danger));
   }
 
   &.soft {
-    @include borderColor(var(--color-soft));
+    @include borderColor(var(--oziko-color-soft));
   }
 
   &.transparent {
