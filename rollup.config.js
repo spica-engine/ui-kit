@@ -54,14 +54,14 @@ export default [
           ],
         ],
         inject: true,
-        plugins: [
-          prefixSelector({
-            prefix: ".oziko",
-            transform(prefix, selector, prefixedSelector) {
-              return prefixedSelector;
-            },
-          }),
-        ],
+        // plugins: [
+        //   prefixSelector({
+        //     prefix: ".oziko",
+        //     transform(prefix, selector, prefixedSelector) {
+        //       return prefixedSelector;
+        //     },
+        //   }),
+        // ],
       }),
       copy({
         targets: [
