@@ -36,15 +36,16 @@
     border-bottom: var(--oziko-border-default);
 
     .indicator {
-      bottom: 0;
+      bottom: -1px;
       height: 2px;
     }
   }
 
-  &.code {
+  &.window {
     background-color: transparent;
     .item {
-      border-left: var(--oziko-border-default);
+      border-right: var(--oziko-border-default);
+
       .root {
         opacity: 0.25;
       }
