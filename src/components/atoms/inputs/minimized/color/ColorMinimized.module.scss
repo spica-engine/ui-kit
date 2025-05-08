@@ -2,8 +2,8 @@
 
 .colorMinimized {
   @include mixins.inputMinimizedContainer;
-  padding: 0 var(--padding-md);
-  font-size: var(--font-size-md);
+  padding: 0 var(--oziko-padding-md);
+  font-size: var(--oziko-font-size-md);
 
   .closeIcon {
     border: 0;

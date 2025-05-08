@@ -4,7 +4,7 @@
   cursor: pointer;
 
   &.disabled {
-    opacity: var(--disabled-opacity);
+    opacity: var(--oziko-disabled-opacity);
     cursor: default;
 
     label {
@@ -13,7 +13,7 @@
   }
 
   &:not(.disabled):hover .checkbox label {
-    border-color: var(--color-primary);
+    border-color: var(--oziko-color-primary);
   }
 
   .checkbox {
@@ -35,23 +35,23 @@
       @include mixins.flexCenter;
       width: 14px;
       height: 14px;
-      border: var(--border-default);
-      border-radius: var(--border-radius-sm);
+      border: var(--oziko-border-default);
+      border-radius: var(--oziko-border-radius-sm);
       cursor: pointer;
-      transition: all var(--transition-duration) ease;
+      transition: all var(--oziko-transition-duration) ease;
 
       &::after {
         content: "✓";
-        font-size: var(--font-size-md);
+        font-size: var(--oziko-font-size-md);
         color: white;
         opacity: 0;
-        transition: opacity var(--transition-duration) ease;
+        transition: opacity var(--oziko-transition-duration) ease;
       }
     }
 
     input[type="checkbox"]:checked + label {
-      background-color: var(--color-primary);
-      border-color: var(--color-primary);
+      background-color: var(--oziko-color-primary);
+      border-color: var(--oziko-color-primary);
 
       &::after {
         opacity: 1;

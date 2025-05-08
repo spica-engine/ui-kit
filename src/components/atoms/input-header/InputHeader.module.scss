@@ -2,6 +2,6 @@
 
 .inputHeaderContainer {
   @include mixins.inputContainer;
-  padding: var(--padding-md);
-  font-size: var(--font-size-md);
+  padding: var(--oziko-padding-md);
+  font-size: var(--oziko-font-size-md);
 }

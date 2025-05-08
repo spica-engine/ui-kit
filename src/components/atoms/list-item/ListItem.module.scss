@@ -2,19 +2,19 @@
 
 .item {
   cursor: pointer;
-  padding: var(--padding-md) var(--padding-lg);
+  padding: var(--oziko-padding-md) var(--oziko-padding-lg);
 
   &:not(.disabled):hover {
-    background: var(--color-zebra);
+    background: var(--oziko-color-zebra);
   }
 
   &.active {
-    background: var(--color-zebra);
+    background: var(--oziko-color-zebra);
   }
 
   &.disabled {
     cursor: default;
-    opacity: var(--disabled-opacity);
+    opacity: var(--oziko-disabled-opacity);
   }
 
   .displayer {

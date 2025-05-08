@@ -86,10 +86,10 @@
 }
 
 @mixin inputContainer {
-  background-color: var(--color-input-background);
-  border-radius: var(--border-radius-md);
-  color: var(--color-input-placeholder);
-  padding: var(--padding-md) var(--padding-lg);
+  background-color: var(--oziko-color-input-background);
+  border-radius: var(--oziko-border-radius-md);
+  color: var(--oziko-color-input-placeholder);
+  padding: var(--oziko-padding-md) var(--oziko-padding-lg);
   input {
     padding: 0;
   }
@@ -97,17 +97,17 @@
 
 @mixin inputMinimizedContainer {
   @include inputContainer;
-  color: var(--color-font-primary);
+  color: var(--oziko-color-font-primary);
   border-radius: 0;
 }
 
 @mixin modalContentContainer {
-  color: var(--color-font-primary);
-  font-size: var(--font-size-lg);
-  padding: var(--padding-md);
+  color: var(--oziko-color-font-primary);
+  font-size: var(--oziko-font-size-lg);
+  padding: var(--oziko-padding-md);
 }
 
 @mixin inputDescriptionContainer {
   @include textEllipsis(2, !important);
-  padding: 0 var(--padding-md);
+  padding: 0 var(--oziko-padding-md);
 }

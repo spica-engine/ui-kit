@@ -2,23 +2,23 @@
 
 .container {
   @include mixins.inputContainer;
-  padding: var(--padding-md);
+  padding: var(--oziko-padding-md);
 
   .top {
-    padding: var(--padding-md);
+    padding: var(--oziko-padding-md);
   }
 
   .storage {
     position: relative;
     cursor: pointer;
     opacity: 0.8;
-    transition: all var(--transition-duration) ease-in-out;
+    transition: all var(--oziko-transition-duration) ease-in-out;
 
     .previewIcon {
       position: absolute;
       z-index: 1;
       color: #ffd740;
-      transition: all var(--transition-duration) ease-in-out;
+      transition: all var(--oziko-transition-duration) ease-in-out;
     }
 
     .text {

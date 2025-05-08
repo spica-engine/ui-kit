@@ -3,16 +3,16 @@
   display: flex;
   align-items: center;
   justify-content: space-between;
-  padding: var(--padding-xs);
+  padding: var(--oziko-padding-xs);
 
   .indicator {
     position: absolute;
     height: 100%;
-    background-color: var(--color-primary);
-    border-radius: var(--border-radius-sm);
+    background-color: var(--oziko-color-primary);
+    border-radius: var(--oziko-border-radius-sm);
     transition:
-      transform var(--transition-duration) ease-out,
-      left var(--transition-duration) ease-out;
+      transform var(--oziko-transition-duration) ease-out,
+      left var(--oziko-transition-duration) ease-out;
     z-index: 1;
   }
 
@@ -21,19 +21,19 @@
   }
 
   &.default {
-    background-color: var(--color-default);
-    border: var(--border-default);
+    background-color: var(--oziko-color-default);
+    border: var(--oziko-border-default);
     .active {
-      color: var(--color-default);
+      color: var(--oziko-color-default);
     }
     .indicator {
-      height: calc(100% - 2 * var(--padding-xs));
+      height: calc(100% - 2 * var(--oziko-padding-xs));
     }
   }
 
   &.underline {
     background: transparent;
-    border-bottom: var(--border-default);
+    border-bottom: var(--oziko-border-default);
 
     .indicator {
       bottom: -1px;
@@ -44,13 +44,14 @@
   &.window {
     background-color: transparent;
     .item {
-      border-right: var(--border-default);
+      border-right: var(--oziko-border-default);
+
       .root {
         opacity: 0.25;
       }
     }
     .active {
-      background-color: var(--color-default);
+      background-color: var(--oziko-color-default);
       opacity: 1;
     }
   }
