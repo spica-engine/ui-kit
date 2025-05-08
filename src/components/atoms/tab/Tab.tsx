@@ -6,9 +6,10 @@ import styles from "./Tab.module.scss";
 type TypeTab = {
   type?: "default" | "underline" | "window";
   items: TypeFluidContainer[];
+  indicatorClassName?: string;
 } & TypeFlexElement;
 
-const Tab: FC<TypeTab> = ({ type = "default", items, ...props }) => {
+const Tab: FC<TypeTab> = ({ type = "default", items, indicatorClassName, ...props }) => {
   const [activeIndex, setActiveIndex] = useState<number>(0);
   const [itemWidth, setItemWidth] = useState<number>(0);
   const containerRef = useRef<HTMLDivElement | null>(null);
@@ -31,9 +32,9 @@ const Tab: FC<TypeTab> = ({ type = "default", items, ...props }) => {
     >
       {type !== "window" ? (
         <div
-          className={styles.indicator}
+          className={`${styles.indicator} ${indicatorClassName}`}
           style={{
-            width: itemWidth,
+            width: itemWidth - 2,
             left: activeIndex * itemWidth,
           }}
         />
