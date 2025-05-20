@@ -40,8 +40,7 @@ export { default as Timeline } from "./components/molecules/timeline/Timeline";
 export { default as Dashboard } from "./components/organisms/dashboard/layout/DashboardLayout";
 export { default as MenuGroup } from "./components/organisms/menu-group/MenuGroup";
 export { default as Section } from "./components/organisms/section/Section";
-export { default as Sidebar } from "./components/organisms/sidebar/SideBar";
-export { default as StorageFileSelect } from "./components/organisms/storage-file-select/StorageFileSelect";
+export { default as Table } from "./components/organisms/table/Table";
 export { default as ArrayMinimizedInput } from "./components/atoms/inputs/minimized/array/Array";
 export { default as BooleanMinimizedInput } from "./components/atoms/inputs/minimized/boolean/Boolean";
 export { default as ColorMinimizedInput } from "./components/atoms/inputs/minimized/color/ColorMinimized";
@@ -75,6 +74,9 @@ export { default as Tab } from "./components/atoms/tab/Tab";
 export { default as useInputRepresenter } from "./custom-hooks/useInputRepresenter";
 export { default as useKeyDown } from "./custom-hooks/useKeyDown";
 export { default as useOnClickOutside } from "./custom-hooks/useInputRepresenter";
+//Theme export
+export { createTheme } from "./theme/createTheme";
+export { useTheme } from "./theme/ThemeContext";
 //Type export
 export { type TypeChartComponentProps } from "./components/atoms/chart/Chart";
 export { type TypeFlexElement } from "./components/atoms/flex-element/FlexElement";
@@ -105,9 +107,8 @@ export {
   type TypeSelect,
 } from "./components/molecules/select/Select";
 export { type TypeBarChartData } from "./components/molecules/timeline/Timeline";
-export {
-  type TypeMenuItems,
-  type TypeNavigatorItems,
-} from "./components/organisms/sidebar/SideBar";
-export { type TypeNavigatorHeader } from "./components/organisms/sidebar/navigator/Navigator";
-export { type TypeSortProp } from "./components/organisms/storage-file-select/sort-popover-content/SortPopoverContent";
+//Utilities export
+export { api as apiUtil } from "./utils/api";
+export { color as colorUtil } from "./utils/color";
+export { helperUtils } from "./utils/helperUtils";
+export { time as timeUtil } from "./utils/time";
