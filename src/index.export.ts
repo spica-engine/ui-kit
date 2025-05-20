@@ -74,6 +74,9 @@ export { default as Tab } from "./components/atoms/tab/Tab";
 export { default as useInputRepresenter } from "./custom-hooks/useInputRepresenter";
 export { default as useKeyDown } from "./custom-hooks/useKeyDown";
 export { default as useOnClickOutside } from "./custom-hooks/useInputRepresenter";
+//Theme export
+export { createTheme } from "./theme/createTheme";
+export { useTheme } from "./theme/ThemeContext";
 //Type export
 export { type TypeChartComponentProps } from "./components/atoms/chart/Chart";
 export { type TypeFlexElement } from "./components/atoms/flex-element/FlexElement";
