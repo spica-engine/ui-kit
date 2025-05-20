@@ -42,6 +42,7 @@ export { default as MenuGroup } from "./components/organisms/menu-group/MenuGrou
 export { default as Section } from "./components/organisms/section/Section";
 export { default as Sidebar } from "./components/organisms/sidebar/SideBar";
 export { default as StorageFileSelect } from "./components/organisms/storage-file-select/StorageFileSelect";
+export { default as Table } from "./components/organisms/table/Table";
 export { default as ArrayMinimizedInput } from "./components/atoms/inputs/minimized/array/Array";
 export { default as BooleanMinimizedInput } from "./components/atoms/inputs/minimized/boolean/Boolean";
 export { default as ColorMinimizedInput } from "./components/atoms/inputs/minimized/color/ColorMinimized";
@@ -111,3 +112,8 @@ export {
 } from "./components/organisms/sidebar/SideBar";
 export { type TypeNavigatorHeader } from "./components/organisms/sidebar/navigator/Navigator";
 export { type TypeSortProp } from "./components/organisms/storage-file-select/sort-popover-content/SortPopoverContent";
+//Utilities export
+export { api as apiUtil } from "./utils/api";
+export { color as colorUtil } from "./utils/color";
+export { helperUtils } from "./utils/helperUtils";
+export { time as timeUtil } from "./utils/time";
