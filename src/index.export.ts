@@ -73,7 +73,7 @@ export { default as Tab } from "./components/atoms/tab/Tab";
 //Custom Hooks export
 export { default as useInputRepresenter } from "./custom-hooks/useInputRepresenter";
 export { default as useKeyDown } from "./custom-hooks/useKeyDown";
-export { default as useOnClickOutside } from "./custom-hooks/useInputRepresenter";
+export { useOnClickOutside } from "./custom-hooks/useOnClickOutside";
 //Theme export
 export { createTheme } from "./theme/createTheme";
 export { useTheme } from "./theme/ThemeContext";
@@ -179,6 +179,8 @@ export { type TypeColumn } from "./components/organisms/table/Table";
 export { type TypeColumnComponent } from "./components/organisms/table/Table";
 export { type TypeHeaderCell } from "./components/organisms/table/Table";
 export { type TypeCell } from "./components/organisms/table/Table";
+export { type IconName } from "./utils/iconList";
+export { type TypeInputType } from "./custom-hooks/useInputRepresenter";
 //Utilities export
 export { api as apiUtil } from "./utils/api";
 export { color as colorUtil } from "./utils/color";
