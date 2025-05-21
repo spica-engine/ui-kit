@@ -7,7 +7,7 @@ import Select, { TypeSelectRef } from "@molecules/select/Select";
 import { TypeFlexElement } from "@atoms/flex-element/FlexElement";
 import { TypeFluidContainer } from "@atoms/fluid-container/FluidContainer";
 
-type TypeMultipleSelectionInput<T = string | number> = {
+export type TypeMultipleSelectionInput<T = string | number> = {
   label: string;
   description?: string;
   value?: T[];

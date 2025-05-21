@@ -6,7 +6,7 @@ import styles from "./Object.module.scss";
 import ObjectInput from "../../normal/object/ObjectInput";
 import { TypeProperties, TypeRepresenterValue } from "@custom-hooks/useInputRepresenter";
 
-type TypeMinimizedObjectInput = {
+export type TypeMinimizedObjectInput = {
   value?: TypeRepresenterValue;
   properties: TypeProperties;
   popoverProps?: TypeFlexElement;

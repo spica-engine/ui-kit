@@ -8,7 +8,7 @@ import Select, { TypeSelectRef } from "@molecules/select/Select";
 import { TypeFlexElement } from "@atoms/flex-element/FlexElement";
 import { TypeFluidContainer } from "@atoms/fluid-container/FluidContainer";
 
-type TypeStringInput = {
+export type TypeStringInput = {
   label?: string;
   description?: string;
   value?: string;

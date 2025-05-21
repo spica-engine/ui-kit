@@ -11,7 +11,7 @@ type SuffixIcon = {
   onClick?: () => void;
 };
 
-type TypeNavigatorItem = {
+export type TypeNavigatorItem = {
   label: string;
   prefixIcon?: IconName;
   suffixIcons?: SuffixIcon[];

@@ -7,7 +7,7 @@ import locationIcon from "../../../../../assets/images/location.png";
 import Text from "@atoms/text/Text";
 import Map, { TypeMapProps } from "@atoms/map/Map";
 
-type TypeMinimizedLocationInput = TypeFlexElement & {
+export type TypeMinimizedLocationInput = TypeFlexElement & {
   contentProps?: TypeFlexElement;
   mapProps?: TypeMapProps;
   icon?: ReactNode;

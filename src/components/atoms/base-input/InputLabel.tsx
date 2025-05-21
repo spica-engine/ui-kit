@@ -3,7 +3,7 @@ import styles from "./InputLabel.module.scss";
 import FluidContainer, { TypeFluidContainer } from "../fluid-container/FluidContainer";
 import Text from "../text/Text";
 
-type TypeInputLabel = {
+export type TypeInputLabel = {
   reverse?: boolean;
   divider?: boolean;
   dividerClassName?: string;

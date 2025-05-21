@@ -2,7 +2,7 @@ import React, { memo } from "react";
 import Text from "../text/Text";
 import styles from "./Json.module.scss";
 
-type TypeJson = {
+export type TypeJson = {
   data: Record<string, unknown>;
 };
 

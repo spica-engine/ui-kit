@@ -1,7 +1,7 @@
 import React, { ReactNode, FC, useEffect } from "react";
 import ReactDOM from "react-dom";
 import styles from "./Portal.module.scss";
-type TypePortalProps = {
+export type TypePortalProps = {
   children: ReactNode;
 };
 

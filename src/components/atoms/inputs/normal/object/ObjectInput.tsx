@@ -10,7 +10,7 @@ import useInputRepresenter, {
   TypeRepresenterValue,
 } from "@custom-hooks/useInputRepresenter";
 
-type TypeObjectInput = {
+export type TypeObjectInput = {
   value?: TypeRepresenterValue;
   properties: TypeProperties;
   title?: string;

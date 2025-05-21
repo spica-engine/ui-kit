@@ -10,7 +10,7 @@ import Icon from "../icon/Icon";
 import Backdrop from "../backdrop/Backdrop";
 import Portal from "../portal/Portal";
 
-type TypeModal = {
+export type TypeModal = {
   animation?: "growFromCenter" | "zoomIn";
   showCloseButton?: boolean;
   disableClose?: boolean;

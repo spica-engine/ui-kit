@@ -41,15 +41,15 @@ ChartJS.register(
 );
 
 export type TypeBarChartData = ChartData<"bar", (number | [number, number] | null)[], unknown>;
-type TypeScales =
+export type TypeScales =
   | _DeepPartialObject<{ [key: string]: ScaleOptionsByType<keyof CartesianScaleTypeRegistry> }>
   | undefined;
 
-type TypePlugins = _DeepPartialObject<PluginOptionsByType<"bar">> | undefined;
+export type TypePlugins = _DeepPartialObject<PluginOptionsByType<"bar">> | undefined;
 
-type TypeBarPosition = { x: number; y: number } | null;
+export type TypeBarPosition = { x: number; y: number } | null;
 
-type TypeUnit =
+export type TypeUnit =
   | "millisecond"
   | "second"
   | "minute"
@@ -60,7 +60,7 @@ type TypeUnit =
   | "quarter"
   | "year";
 
-type TypeTimeline = {
+export type TypeTimeline = {
   dateRange: { from: Date; to: Date };
   annotationRange?: { from: Date; to: Date };
   data: TypeBarChartData;

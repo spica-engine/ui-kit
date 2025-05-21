@@ -11,7 +11,7 @@ import MyOnChangePlugin from "./plugins/OnChangePlugin";
 import FlexElement, { TypeFlexElement } from "@atoms/flex-element/FlexElement";
 import { EditorState, LexicalEditor } from "lexical";
 
-type TypeLexicalContent = {
+export type TypeLexicalContent = {
   onChange: (state: EditorState, editor: LexicalEditor) => void;
 } & TypeFlexElement;
 

@@ -7,7 +7,7 @@ import Text from "@atoms/text/Text";
 import InputHeader from "@atoms/input-header/InputHeader";
 import Map, { TypeCoordinates } from "@atoms/map/Map";
 
-type TypeLocationInput = {
+export type TypeLocationInput = {
   coordinates?: TypeCoordinates;
   title?: string;
   onChange?: (coordinates: TypeCoordinates) => void;
