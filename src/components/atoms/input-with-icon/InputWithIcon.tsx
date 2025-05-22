@@ -3,7 +3,7 @@ import FluidContainer, { TypeFluidContainer } from "../fluid-container/FluidCont
 import styles from "./InputWithIcon.module.scss";
 import Input, { TypeInput } from "../input/Input";
 
-type TypeInputWithIcon = {
+export type TypeInputWithIcon = {
   inputProps?: TypeInput;
 } & TypeFluidContainer;
 

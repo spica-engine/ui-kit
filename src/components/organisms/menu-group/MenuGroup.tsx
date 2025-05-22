@@ -3,7 +3,7 @@ import FlexElement, { TypeFlexElement } from "@atoms/flex-element/FlexElement";
 import Text from "@atoms/text/Text";
 import styles from "./MenuGroup.module.scss";
 
-type TypeMenuGroup = {
+export type TypeMenuGroup = {
   options?: Record<string, { label: string; value?: React.ReactNode }>;
   showDivider?: boolean;
   showTitle?: boolean;

@@ -2,7 +2,7 @@ import React, { FC, memo, useEffect, useRef, useState } from "react";
 import FlexElement, { TypeFlexElement } from "components/atoms/flex-element/FlexElement";
 import styles from "./Table.module.scss";
 import { TypeAlignment } from "utils/interface";
-type TypeTable = {
+export type TypeTable = {
   columns: any[];
   data: any[];
   saveToLocalStorage?: {
@@ -137,7 +137,7 @@ const Table: FC<TypeTable> = ({
 
 export default memo(Table);
 
-type TypeColumn = {
+export type TypeColumn = {
   columnKey?: string;
   children?: React.ReactNode;
   ref?: React.Ref<HTMLDivElement>;
@@ -148,7 +148,7 @@ type TypeColumn = {
   style?: React.CSSProperties;
 };
 
-type TypeColumnComponent = React.FC<TypeColumn> & {
+export type TypeColumnComponent = React.FC<TypeColumn> & {
   Header: typeof HeaderCell;
   Cell: typeof Cell;
 };
@@ -202,7 +202,7 @@ const ColumnComponent = ({
   );
 };
 
-type TypeHeaderCell = TypeFlexElement & {
+export type TypeHeaderCell = TypeFlexElement & {
   border?: boolean;
   headerAlign?: "left" | "center" | "right";
 };
@@ -231,7 +231,7 @@ const HeaderCell = ({
   );
 };
 
-type TypeCell = React.HTMLAttributes<HTMLDivElement> & {
+export type TypeCell = React.HTMLAttributes<HTMLDivElement> & {
   focused?: boolean;
 };
 

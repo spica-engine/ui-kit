@@ -2,17 +2,17 @@ import React, { memo } from "react";
 import InputLabel from "./InputLabel";
 import FlexElement, { TypeFlexElement } from "../flex-element/FlexElement";
 
-type TypeBaseInputProps = {
+export type TypeInputGroupProps = {
   children: React.ReactNode;
   ref?: React.Ref<HTMLDivElement>;
 } & TypeFlexElement;
 
-type TypeBaseInputComponent = React.FC<TypeBaseInputProps> & {
+export type TypeBaseInputComponent = React.FC<TypeInputGroupProps> & {
   Label: typeof InputLabel;
   HelperText: typeof FlexElement;
 };
 
-const InputGroupComponent: React.FC<TypeBaseInputProps> = ({ ref, children, ...props }) => {
+const InputGroupComponent: React.FC<TypeInputGroupProps> = ({ ref, children, ...props }) => {
   return (
     <FlexElement {...props} ref={ref}>
       {children}

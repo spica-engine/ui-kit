@@ -4,7 +4,7 @@ import FluidContainer, { TypeFluidContainer } from "../fluid-container/FluidCont
 import Spinner, { TypeSpinner } from "../spinner/Spinner";
 import { TypeFlexDimension } from "@utils/interface";
 
-type TypeButton = {
+export type TypeButton = {
   fullWidth?: boolean;
   containerProps?: TypeFluidContainer;
   shape?: "default" | "circle" | "round";

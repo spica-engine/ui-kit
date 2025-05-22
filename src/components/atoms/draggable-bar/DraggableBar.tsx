@@ -1,7 +1,7 @@
 import { useRef, FC, CSSProperties } from "react";
 import styles from "./DraggableBar.module.scss";
 
-type TypeDraggableBar = {
+export type TypeDraggableBar = {
   x: number;
   y: number;
   maxX?: number;

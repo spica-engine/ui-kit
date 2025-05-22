@@ -2,7 +2,7 @@ import FluidContainer, { TypeFluidContainer } from "@atoms/fluid-container/Fluid
 import React, { FC, memo } from "react";
 import styles from "./ModalFooter.module.scss";
 
-type TypeModalFooter = {
+export type TypeModalFooter = {
   className?: string;
 } & TypeFluidContainer;
 

@@ -3,7 +3,7 @@ import styles from "./Checkbox.module.scss";
 import FluidContainer, { TypeFluidContainer } from "../fluid-container/FluidContainer";
 import Text, { TypeText } from "../text/Text";
 
-type TypeCheckbox = {
+export type TypeCheckbox = {
   checked?: boolean;
   disabled?: boolean;
   label?: ReactNode;

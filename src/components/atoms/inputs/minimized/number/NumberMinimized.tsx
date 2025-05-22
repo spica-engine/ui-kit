@@ -6,7 +6,7 @@ import Select, { TypeSelectRef } from "@molecules/select/Select";
 import React, { FC, memo, useRef } from "react";
 import styles from "./NumberMinimized.module.scss";
 
-type TypeStringMinimized = {
+export type TypeNumberMinimized = {
   onClear?: () => void;
   value?: number;
   options?: number[];
@@ -14,7 +14,7 @@ type TypeStringMinimized = {
   onChange?: (value: number) => void;
 } & TypeFluidContainer;
 
-const NumberMinimized: FC<TypeStringMinimized> = ({
+const NumberMinimized: FC<TypeNumberMinimized> = ({
   onClear,
   value,
   options,

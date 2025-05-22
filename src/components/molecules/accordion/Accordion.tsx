@@ -12,7 +12,7 @@ export type TypeAccordionItem = {
   className?: string;
 };
 
-type TypeAccordionGroup = TypeFlexElement & {
+export type TypeAccordionGroup = TypeFlexElement & {
   items: TypeAccordionItem[];
   defaultActiveIndex?: number;
   icon?: React.ReactNode;

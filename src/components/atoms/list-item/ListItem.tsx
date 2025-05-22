@@ -3,7 +3,7 @@ import styles from "./ListItem.module.scss";
 import FluidContainer, { TypeFluidContainer } from "../fluid-container/FluidContainer";
 import Text from "../text/Text";
 
-type TypeListItem = {
+export type TypeListItem = {
   label: string;
   active?: boolean;
   disabled?: boolean;

@@ -4,7 +4,7 @@ import Text from "@atoms/text/Text";
 import FluidContainer, { TypeFluidContainer } from "@atoms/fluid-container/FluidContainer";
 import { TypeFlexElement } from "@atoms/flex-element/FlexElement";
 
-type TypeColor = {
+export type TypeColor = {
   value: string;
   prefixProps?: TypeFlexElement;
   rootProps?: TypeFlexElement;

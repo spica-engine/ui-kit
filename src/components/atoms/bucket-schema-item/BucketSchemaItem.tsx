@@ -4,7 +4,7 @@ import React, { FC, memo, useState } from "react";
 import styles from "./BucketSchemaItem.module.scss";
 import { TypeFluidContainer } from "@atoms/fluid-container/FluidContainer";
 
-type TypeBucketSchemaItem = {
+export type TypeBucketSchemaItem = {
   label?: string;
   type?: TypeInputType | "id";
   addIcon?: boolean;

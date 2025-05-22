@@ -9,7 +9,7 @@ import FluidContainer, { TypeFluidContainer } from "@atoms/fluid-container/Fluid
 import DashboardItem from "@atoms/dashboard-item/DashboardItem";
 import Popover from "@atoms/popover/Popover";
 
-type TypeDashboardItem = {
+export type TypeDashboardItem = {
   ratio: string;
   id: string;
   headerProps?: TypeFluidContainer;
@@ -17,7 +17,7 @@ type TypeDashboardItem = {
   options?: ChartOptions<ChartType>;
 };
 
-type TypeDashboardLayout = {
+export type TypeDashboardLayout = {
   dashboards?: TypeDashboardItem[] | undefined;
 };
 
