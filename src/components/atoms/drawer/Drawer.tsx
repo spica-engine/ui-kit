@@ -8,7 +8,7 @@ import Portal from "../portal/Portal";
 
 const drawerSizes = ["xs", "sm", "md", "lg", "xl", "full"];
 
-type TypeDrawer = {
+export type TypeDrawer = {
   placement: "top" | "right" | "bottom" | "left";
   size?: (typeof drawerSizes)[number] | number | string;
   children?: React.ReactNode;

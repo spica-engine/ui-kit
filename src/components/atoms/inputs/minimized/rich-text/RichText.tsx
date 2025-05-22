@@ -5,7 +5,7 @@ import FlexElement, { TypeFlexElement } from "@atoms/flex-element/FlexElement";
 import Text from "@atoms/text/Text";
 import styles from "./RichText.module.scss";
 
-type TypeRichTextMinimized = {
+export type TypeRichTextMinimized = {
   value?: string;
   richTextProps?: TypeFlexElement;
 } & TypeFlexElement;

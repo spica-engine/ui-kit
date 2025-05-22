@@ -6,7 +6,7 @@ import styles from "./MultiSelection.module.scss";
 import { TypeLabeledValue } from "@atoms/select-option/SelectOption";
 import Button from "@atoms/button/Button";
 
-type TypeMultiSelectionInput = {
+export type TypeMultiSelectionInput = {
   options?: (string | number | TypeLabeledValue)[];
   onChange?: (value: TypeValue) => void;
   value?: TypeValue;

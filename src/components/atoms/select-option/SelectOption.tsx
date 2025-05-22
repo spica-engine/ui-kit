@@ -8,7 +8,7 @@ export type TypeLabeledValue = {
   label: string;
 };
 
-type TypeSelectOption = {
+export type TypeSelectOption = {
   option: string | number | TypeLabeledValue;
   selected?: boolean;
   multiple?: boolean;

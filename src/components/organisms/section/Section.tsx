@@ -2,11 +2,11 @@ import React, { FC, memo } from "react";
 import FlexElement, { TypeFlexElement } from "@atoms/flex-element/FlexElement";
 import styles from "./Section.module.scss";
 
-type TypeSection = {
+export type TypeSection = {
   ref?: React.Ref<HTMLDivElement>;
 } & TypeFlexElement;
 
-type TypeSectionComponent = React.FC<TypeSection> & {
+export type TypeSectionComponent = React.FC<TypeSection> & {
   Header: typeof FlexElement;
   Content: typeof FlexElement;
   Footer: typeof FlexElement;

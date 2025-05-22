@@ -261,7 +261,7 @@ function Divider() {
   return <div className="divider" />;
 }
 
-type TypeToolbarPlugin = {
+export type TypeToolbarPlugin = {
   editor: LexicalEditor;
 };
 

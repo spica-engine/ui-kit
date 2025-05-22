@@ -4,7 +4,7 @@ import Chip from "@atoms/chip/Chip";
 import styles from "./ChipInput.module.scss";
 import FlexElement, { TypeFlexElement } from "@atoms/flex-element/FlexElement";
 
-type TypeChipInput = {
+export type TypeChipInput = {
   label?: string[];
   placeholder?: string;
   onChange?: (value: string[]) => void;

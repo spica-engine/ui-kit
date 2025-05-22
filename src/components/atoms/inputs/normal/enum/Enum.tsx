@@ -2,7 +2,7 @@ import FlexElement, { TypeFlexElement } from "@atoms/flex-element/FlexElement";
 import Select, { TypeValue } from "@molecules/select/Select";
 import React, { FC, memo } from "react";
 
-type TypeEnum = {
+export type TypeEnum = {
   selectClassName?: string;
   label: string;
   options: { label: string; value: string }[];

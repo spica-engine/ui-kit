@@ -6,7 +6,7 @@ import Text, { TypeText } from "../text/Text";
 import FlexElement, { TypeFlexElement } from "../flex-element/FlexElement";
 import { useOnClickOutside } from "custom-hooks/useOnClickOutside";
 
-type TypeBaseInputProps = {
+export type TypeBaseInputProps = {
   errorMessage?: string;
   description?: string;
   className?: string;

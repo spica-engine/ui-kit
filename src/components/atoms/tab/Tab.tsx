@@ -3,7 +3,7 @@ import FlexElement, { TypeFlexElement } from "../flex-element/FlexElement";
 import FluidContainer, { TypeFluidContainer } from "../fluid-container/FluidContainer";
 import styles from "./Tab.module.scss";
 
-type TypeTab = {
+export type TypeTab = {
   type?: "default" | "underline" | "window";
   items: TypeFluidContainer[];
   indicatorClassName?: string;

@@ -2,7 +2,7 @@ import FluidContainer, { TypeFluidContainer } from "@atoms/fluid-container/Fluid
 import React, { FC, memo } from "react";
 import styles from "./ModalHeader.module.scss";
 
-type TypeModalHeader = {
+export type TypeModalHeader = {
   className?: string;
 } & TypeFluidContainer;
 

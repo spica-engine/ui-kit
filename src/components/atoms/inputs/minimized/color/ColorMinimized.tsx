@@ -7,7 +7,7 @@ import Color from "@atoms/color/Color";
 import Button from "@atoms/button/Button";
 import Icon from "@atoms/icon/Icon";
 
-type TypeColorMinimized = {
+export type TypeColorMinimized = {
   value?: string;
   onClear?: () => void;
   onChange?: (value: string) => void;

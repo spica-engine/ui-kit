@@ -7,7 +7,7 @@ import { IconName } from "@utils/iconList";
 import InputHeader from "@atoms/input-header/InputHeader";
 import Text from "@atoms/text/Text";
 
-type TypeTextArea = {
+export type TypeTextArea = {
   value?: string;
   textAreaProps?: React.TextareaHTMLAttributes<HTMLTextAreaElement> & {
     rows?: number;

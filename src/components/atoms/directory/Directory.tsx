@@ -6,7 +6,7 @@ import Popover from "components/atoms/popover/Popover";
 import Text from "components/atoms/text/Text";
 import ListItem from "components/atoms/list-item/ListItem";
 
-type TypeDirectory = {
+export type TypeDirectory = {
   directory: string[];
   onChangeDirectory?: (index: number) => void;
 };

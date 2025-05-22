@@ -6,7 +6,7 @@ import { useOnClickOutside } from "@custom-hooks/useOnClickOutside";
 import useKeyDown from "@custom-hooks/useKeyDown";
 import Portal from "../portal/Portal";
 
-type TypePopover = {
+export type TypePopover = {
   placement?: Placement;
   content: ReactNode;
   children?: ReactNode;

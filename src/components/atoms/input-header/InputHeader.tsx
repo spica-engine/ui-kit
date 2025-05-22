@@ -2,7 +2,7 @@ import React, { FC, memo } from 'react'
 import FluidContainer, { TypeFluidContainer } from '../fluid-container/FluidContainer'
 import styles from './InputHeader.module.scss'
 
-type TypeInputHeader = {
+export type TypeInputHeader = {
     className?: string;
 } & TypeFluidContainer;
 

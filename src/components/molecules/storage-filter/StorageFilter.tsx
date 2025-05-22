@@ -11,7 +11,7 @@ import Icon from "@atoms/icon/Icon";
 import Button from "@atoms/button/Button";
 import { useFormik } from "formik";
 
-type TypeFilterValue = {
+export type TypeFilterValue = {
   type: string[];
   fileSize: {
     min: {
@@ -30,7 +30,7 @@ type TypeFilterValue = {
   };
 };
 
-type TypeStorageFilter = {
+export type TypeStorageFilter = {
   onApply?: (filter: TypeFilterValue) => void;
   onCancel?: () => void;
 };

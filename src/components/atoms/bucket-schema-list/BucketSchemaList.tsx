@@ -4,7 +4,7 @@ import FlexElement, { TypeFlexElement } from "@atoms/flex-element/FlexElement";
 import styles from "./BucketSchemaList.module.scss";
 import { TypeInputType } from "@custom-hooks/useInputRepresenter";
 
-type TypeSchema = {
+export type TypeSchema = {
   type: TypeInputType;
   title: string;
   properties?: Record<string, TypeSchema>;
@@ -16,7 +16,7 @@ type TypeSchema = {
   options?: Record<string, any>;
 };
 
-type TypeBucketSchemaList = {
+export type TypeBucketSchemaList = {
   schema?: Record<string, TypeSchema>;
   itemDepth?: number;
 } & TypeFlexElement;

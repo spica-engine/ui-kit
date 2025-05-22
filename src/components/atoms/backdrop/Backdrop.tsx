@@ -1,7 +1,7 @@
 import React, { FC } from "react";
 import styles from "./Backdrop.module.scss";
 
-type TypeBackdrop = {
+export type TypeBackdrop = {
   className?: string;
   children?: React.ReactNode;
   showBackdrop?: boolean;

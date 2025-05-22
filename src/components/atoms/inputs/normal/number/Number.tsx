@@ -8,7 +8,7 @@ import Text from "@atoms/text/Text";
 import styles from "./Number.module.scss";
 import { TypeFluidContainer } from "@atoms/fluid-container/FluidContainer";
 
-type TypeNumberInput = {
+export type TypeNumberInput = {
   label: string;
   description?: string;
   value?: number;

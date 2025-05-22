@@ -8,7 +8,7 @@ import { useOnClickOutside } from "custom-hooks/useOnClickOutside";
 import useAdaptivePosition from "custom-hooks/useAdaptivePosition";
 import { TypeInput } from "../input/Input";
 
-type TypeAutocomplete = {
+export type TypeAutocomplete = {
   options: string[];
   placement?: "bottom" | "top";
   popupClassName?: string;

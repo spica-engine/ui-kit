@@ -10,7 +10,7 @@ import Dropzone from "react-dropzone";
 import FlexElement from "components/atoms/flex-element/FlexElement";
 import { TypeFile } from "utils/interface";
 
-type TypeStorageMinimized = {
+export type TypeStorageMinimized = {
   file?: TypeFile;
   placeholder?: string;
   onUpload?: (file: File) => void;

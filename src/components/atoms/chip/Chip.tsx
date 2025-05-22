@@ -5,7 +5,7 @@ import Icon from "../icon/Icon";
 import Button from "../button/Button";
 import { IconName } from "@utils/iconList";
 
-type TypeChip = {
+export type TypeChip = {
   label?: string;
   variant?: "outlined" | "filled";
   icon?: IconName;

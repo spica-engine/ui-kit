@@ -10,7 +10,7 @@ import ChartComponent, { TypeChartComponentProps } from "../chart/Chart";
 
 import Section from "components/organisms/section/Section";
 
-type TypeDashboardItem = {
+export type TypeDashboardItem = {
   headerProps?: {
     content?: ReactNode;
     suffix?: ReactNode;

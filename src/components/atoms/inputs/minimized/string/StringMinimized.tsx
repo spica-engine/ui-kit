@@ -6,7 +6,7 @@ import Select from "@molecules/select/Select";
 import Button from "@atoms/button/Button";
 import Icon from "@atoms/icon/Icon";
 
-type TypeStringMinimized = {
+export type TypeStringMinimized = {
   onClear?: () => void;
   value?: string;
   options?: { label: string; value: string }[];

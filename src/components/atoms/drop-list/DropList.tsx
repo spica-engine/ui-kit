@@ -3,7 +3,7 @@ import styles from "./DropList.module.scss";
 import FlexElement from "../flex-element/FlexElement";
 import Button from "../button/Button";
 
-type TypeDropList = {
+export type TypeDropList = {
   active?: number;
   length?: number;
   maxItems?: number;

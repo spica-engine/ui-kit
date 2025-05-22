@@ -7,7 +7,7 @@ import Icon from "@atoms/icon/Icon";
 import Text from "@atoms/text/Text";
 import { TypeFlexElement } from "@atoms/flex-element/FlexElement";
 
-type TypeColorInput = {
+export type TypeColorInput = {
   label: string;
   description?: string;
   value?: string;

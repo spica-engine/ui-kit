@@ -2,11 +2,11 @@ import React, { FC, memo, ReactNode } from "react";
 import FlexElement, { TypeFlexElement } from "../flex-element/FlexElement";
 import styles from "./ListRow.module.scss";
 
-type TypeListRow = {
+export type TypeListRow = {
   ref?: React.Ref<HTMLDivElement>;
 } & TypeFlexElement;
 
-type TypeListRowComponent = React.FC<TypeListRow> & {
+export type TypeListRowComponent = React.FC<TypeListRow> & {
   Cell: typeof FlexElement;
 };
 

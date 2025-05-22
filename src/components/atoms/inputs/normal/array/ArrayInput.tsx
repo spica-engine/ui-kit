@@ -13,7 +13,7 @@ import useInputRepresenter, {
 } from "@custom-hooks/useInputRepresenter";
 import DropList from "@atoms/drop-list/DropList";
 
-type TypeArrayInput = {
+export type TypeArrayInput = {
   value?: TypeValueType[];
   title?: string;
   description?: string;

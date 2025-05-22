@@ -6,7 +6,7 @@ import styles from "./Array.module.scss";
 import ArrayInput from "../../normal/array/ArrayInput";
 import { TypeArrayItems, TypeValueType } from "@custom-hooks/useInputRepresenter";
 
-type TypeMinimizedArrayInput = {
+export type TypeMinimizedArrayInput = {
   propertyKey: string;
   value?: TypeValueType[];
   items?: TypeArrayItems;

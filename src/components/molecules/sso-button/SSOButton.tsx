@@ -6,7 +6,7 @@ import styles from "./SSOButton.module.scss";
 import Text from "@atoms/text/Text";
 import { useOnClickOutside } from "@custom-hooks/useOnClickOutside";
 
-type TypeSSOButton = {
+export type TypeSSOButton = {
   icon: IconName;
   label: string;
   onClick?: () => void;
