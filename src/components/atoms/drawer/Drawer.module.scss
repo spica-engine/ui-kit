@@ -49,6 +49,9 @@
     &.full {
       #{$property}: 100%;
     }
+    &.hug {
+      #{$property}: max-content;
+    }
   }
 
   &.top,
