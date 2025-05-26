@@ -11,7 +11,7 @@ export type DrawerSize = (typeof drawerSizes)[number];
 
 export type TypeDrawer = {
   placement: "top" | "right" | "bottom" | "left";
-  size?: [number] | number | string | "xs" | "sm" | "md" | "lg" | "xl" | "full" | "hug";
+  size?: DrawerSize | number | string;
   children?: React.ReactNode;
   className?: string;
   showBackdrop?: boolean;
