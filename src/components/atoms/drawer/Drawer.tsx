@@ -10,7 +10,7 @@ const drawerSizes = ["xs", "sm", "md", "lg", "xl", "full"];
 
 export type TypeDrawer = {
   placement: "top" | "right" | "bottom" | "left";
-  size?: (typeof drawerSizes)[number] | number | string;
+  size?: [number] | number | string | "xs" | "sm" | "md" | "lg" | "xl" | "full" | "hug";
   children?: React.ReactNode;
   className?: string;
   showBackdrop?: boolean;
@@ -24,7 +24,7 @@ export type TypeDrawer = {
 
 const Drawer: FC<TypeDrawer> = ({
   placement,
-  size,
+  size = "hug",
   children,
   showBackdrop = true,
   backdropType = "default",
