@@ -186,3 +186,12 @@ export { api as apiUtil } from "./utils/api";
 export { color as colorUtil } from "./utils/color";
 export { helperUtils } from "./utils/helperUtils";
 export { time as timeUtil } from "./utils/time";
+//Global interfaces export
+export {
+  type TypeDimension,
+  type TypeAlignment,
+  type TypeDirection,
+  type TypeFlexContainer,
+  type TypeFlexDimension,
+  type TypeFile,
+} from "./utils/interface";
