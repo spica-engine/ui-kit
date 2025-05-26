@@ -6,11 +6,12 @@ import Button from "../button/Button";
 import Icon from "../icon/Icon";
 import Portal from "../portal/Portal";
 
-const drawerSizes = ["xs", "sm", "md", "lg", "xl", "full"];
+export const drawerSizes = ["xs", "sm", "md", "lg", "xl", "full", "hug"] as const;
+export type DrawerSize = (typeof drawerSizes)[number];
 
 export type TypeDrawer = {
   placement: "top" | "right" | "bottom" | "left";
-  size?: (typeof drawerSizes)[number] | number | string;
+  size?: DrawerSize | number | string;
   children?: React.ReactNode;
   className?: string;
   showBackdrop?: boolean;
@@ -24,7 +25,7 @@ export type TypeDrawer = {
 
 const Drawer: FC<TypeDrawer> = ({
   placement,
-  size,
+  size = "hug",
   children,
   showBackdrop = true,
   backdropType = "default",
@@ -73,7 +74,8 @@ const Drawer: FC<TypeDrawer> = ({
   const animationClass = animationClassMap[placement];
 
   const isCustomSize =
-    typeof size === "number" || (typeof size === "string" && !drawerSizes.includes(size));
+    typeof size === "number" ||
+    (typeof size === "string" && !drawerSizes.includes(size as DrawerSize));
 
   const sizeStyle = isCustomSize
     ? placement === "left" || placement === "right"
