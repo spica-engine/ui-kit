@@ -6,7 +6,7 @@ import FlexElement, { TypeFlexElement } from "@atoms/flex-element/FlexElement";
 import AccordionElement from "./AccordionElement";
 
 export type TypeAccordionItem = {
-  title: string;
+  title: React.ReactNode;
   content: React.ReactNode;
   icon?: React.ReactNode;
   className?: string;
@@ -24,6 +24,7 @@ export type TypeAccordionGroup = TypeFlexElement & {
   headerClassName?: string;
   suffixOnHover?: boolean;
   noBackgroundOnFocus?: boolean;
+  disableSuffixIcon?: boolean;
 };
 
 const AccordionGroup: React.FC<TypeAccordionGroup> = ({
@@ -38,6 +39,7 @@ const AccordionGroup: React.FC<TypeAccordionGroup> = ({
   headerClassName,
   suffixOnHover,
   noBackgroundOnFocus,
+  disableSuffixIcon,
   ...props
 }) => {
   const [activeIndex, setActiveIndex] = useState<number | null>(defaultActiveIndex || null);
@@ -55,7 +57,7 @@ const AccordionGroup: React.FC<TypeAccordionGroup> = ({
     >
       {items.map((item, index) => (
         <AccordionElement
-          key={item.title + index}
+          key={index}
           title={item.title}
           isOpen={activeIndex === index + 1}
           onClick={() => handleItemClick(index + 1)}
@@ -67,6 +69,7 @@ const AccordionGroup: React.FC<TypeAccordionGroup> = ({
           headerClassName={headerClassName}
           suffixOnHover={suffixOnHover}
           noBackgroundOnFocus={noBackgroundOnFocus}
+          disableSuffixIcon={disableSuffixIcon}
         >
           {item.content}
         </AccordionElement>
