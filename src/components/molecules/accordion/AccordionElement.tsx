@@ -5,7 +5,7 @@ import { memo } from "react";
 import { IconName } from "@utils/iconList";
 
 export type TypeAccordionElement = {
-  title: string;
+  title: React.ReactNode;
   children: React.ReactNode;
   icon?: React.ReactNode | IconName;
   isOpen: boolean;
@@ -17,6 +17,7 @@ export type TypeAccordionElement = {
   suffixOnHover?: boolean;
   noBackgroundOnFocus?: boolean;
   onClick: () => void;
+  disableSuffixIcon?: boolean;
 };
 
 const AccordionElement: React.FC<TypeAccordionElement> = ({
@@ -32,8 +33,12 @@ const AccordionElement: React.FC<TypeAccordionElement> = ({
   headerClassName,
   suffixOnHover = false,
   noBackgroundOnFocus = false,
+  disableSuffixIcon = false,
 }) => {
   const renderIcon = () => {
+    if (disableSuffixIcon) {
+      return null;
+    }
     if (icon && typeof icon !== "string") {
       return icon;
     }
