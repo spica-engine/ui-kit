@@ -3,20 +3,20 @@ import FluidContainer, { TypeFluidContainer } from "@atoms/fluid-container/Fluid
 import Icon from "@atoms/icon/Icon";
 import Input from "@atoms/input/Input";
 import Select, { TypeSelectRef } from "@molecules/select/Select";
-import React, { FC, memo, useRef } from "react";
+import React, { FC, memo, useRef, useState } from "react";
 import styles from "./NumberMinimized.module.scss";
 
 export type TypeNumberMinimized = {
   onClear?: () => void;
-  value?: number;
+  value?: number | undefined;
   options?: number[];
   inputProps?: React.InputHTMLAttributes<HTMLInputElement>;
-  onChange?: (value: number) => void;
+  onChange?: (value: number | undefined) => void;
 } & TypeFluidContainer;
 
 const NumberMinimized: FC<TypeNumberMinimized> = ({
   onClear,
-  value,
+  value = undefined,
   options,
   inputProps,
   onChange,
@@ -24,20 +24,11 @@ const NumberMinimized: FC<TypeNumberMinimized> = ({
 }) => {
   const selectRef = useRef<TypeSelectRef>(null);
   const inputRef = useRef<HTMLInputElement>(null);
+  const [isFocused, setIsFocused] = useState(false);
 
-  const handleClear = (event: React.MouseEvent<HTMLButtonElement>) => {
-    event.preventDefault();
-    event.stopPropagation();
-
+  const handleClear = () => {
     onClear?.();
-
-    if (selectRef.current) {
-      selectRef.current.clear();
-    }
-
-    if (inputRef.current) {
-      inputRef.current.value = "";
-    }
+    inputRef.current?.focus();
   };
 
   return (
@@ -45,6 +36,7 @@ const NumberMinimized: FC<TypeNumberMinimized> = ({
       alignment="leftCenter"
       dimensionX="fill"
       className={styles.numberMinimized}
+      dimensionY={32}
       {...props}
       root={{
         dimensionX: "fill",
@@ -63,6 +55,8 @@ const NumberMinimized: FC<TypeNumberMinimized> = ({
             ref={inputRef}
             value={value ?? ""}
             type="number"
+            onFocus={() => setIsFocused(true)}
+            onBlur={() => setIsFocused(false)}
             {...inputProps}
             onChange={(event) => onChange?.(Number(event.target.value))}
           />
@@ -72,11 +66,14 @@ const NumberMinimized: FC<TypeNumberMinimized> = ({
       suffix={{
         dimensionX: "hug",
         alignment: "center",
-        children: (
+        children: isFocused && (
           <Button
             children={<Icon name="close" />}
             color="transparent"
             onClick={handleClear}
+            onMouseDown={(e) => {
+              e.preventDefault();
+            }}
             className={styles.closeIcon}
           />
         ),
