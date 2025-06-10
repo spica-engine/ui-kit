@@ -4,7 +4,7 @@ import Text from "@atoms/text/Text";
 import styles from "./MenuGroup.module.scss";
 
 export type TypeMenuGroup = {
-  options?: Record<string, { label?: string; value?: React.ReactNode }>;
+  options?: Record<string, { label?: string; value?: React.ReactNode; className?: string }>;
   showDivider?: boolean;
 } & TypeFlexElement;
 
@@ -25,7 +25,7 @@ const MenuGroup: FC<TypeMenuGroup> = ({ options = {}, showDivider = true, ...pro
           direction="vertical"
           gap={10}
           alignment="leftCenter"
-          className={`${styles.menuSection} ${!showDivider || index === array.length - 1 ? styles.noDivider : ""}`}
+          className={`${styles.menuSection} ${!showDivider || index === array.length - 1 ? styles.noDivider : ""} ${option.className || ""}`}
         >
           {option.label && <Text className={styles.label}>{option.label}</Text>}
           {option.value}
