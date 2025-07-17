@@ -9,7 +9,7 @@ export type TypeIcon = {
 };
 
 const Icon: React.FC<TypeIcon> = ({ name, className, size = "md" }) => {
-  const IconItem = iconMap[name];
+  const IconItem = iconMap[name] ?? iconMap["help"];
   return (
     <IconItem
       className={`${styles.icon} ${typeof size !== "number" && styles[size]} ${className}`}
