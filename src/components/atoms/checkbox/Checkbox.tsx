@@ -1,7 +1,15 @@
-import React, { FC, memo, ReactNode, useState } from "react";
+import React, {
+  type ChangeEventHandler,
+  type FC,
+  memo,
+  type ReactNode,
+  useRef,
+  useEffect,
+  useId
+} from "react";
+import clsx from "clsx";
 import styles from "./Checkbox.module.scss";
-import FluidContainer, { TypeFluidContainer } from "../fluid-container/FluidContainer";
-import Text, { TypeText } from "../text/Text";
+import {type TypeFluidContainer, FluidContainer, Text, type TypeText} from "oziko-ui-kit";
 
 export type TypeCheckbox = {
   checked?: boolean;
@@ -9,42 +17,72 @@ export type TypeCheckbox = {
   label?: ReactNode;
   indeterminate?: boolean;
   labelProps?: TypeText;
-  onChange?: (checked: boolean) => void;
+  onChange?: ChangeEventHandler<HTMLInputElement>;
+  id?: string;
 };
 
 const Checkbox: FC<TypeCheckbox & TypeFluidContainer> = ({
-  checked,
-  disabled,
+  checked = false,
+  disabled = false,
   label,
-  indeterminate,
+  indeterminate = false,
   labelProps,
   onChange,
+  id,
+  prefix: incomingPrefix = {},
+  root: incomingRoot = {},
   ...props
 }) => {
-  const [value, setValue] = useState(checked);
+  const inputRef = useRef<HTMLInputElement | null>(null);
+  const generatedId = useId();
 
-  const handleClick = () => {
+  useEffect(() => {
+    if (inputRef.current) {
+      inputRef.current.indeterminate = indeterminate;
+    }
+  }, [indeterminate]);
+
+  const handleContainerClick = (e: React.MouseEvent) => {
     if (disabled) return;
-    setValue(!value);
-    onChange?.(!value);
+    const target = e.target as HTMLElement;
+    if (target.closest("input")) return;
+    inputRef.current?.click();
+  };
+
+  const handleChange: ChangeEventHandler<HTMLInputElement> = e => {
+    onChange?.(e);
   };
 
   return (
     <FluidContainer
       {...props}
+      onClick={e => {
+        handleContainerClick(e);
+        if (typeof props.onClick === "function") props.onClick(e);
+      }}
       dimensionY={36}
-      onClick={handleClick}
-      className={`${props.className} ${styles.container} ${disabled && styles.disabled}`}
+      className={clsx(props.className, styles.container, disabled && styles.disabled)}
       prefix={{
         children: (
-          <div className={`${styles.checkbox} ${indeterminate && styles.indeterminate}`}>
-            <input type="checkbox" checked={value} />
-            <label htmlFor="checkbox" />
+          <div className={clsx(styles.checkbox, indeterminate && styles.indeterminate)}>
+            <input
+              id={id ?? generatedId}
+              ref={inputRef}
+              type="checkbox"
+              checked={checked}
+              onChange={handleChange}
+              disabled={disabled}
+              aria-checked={indeterminate ? "mixed" : checked}
+            />
+            <label htmlFor={id ?? generatedId} onClick={e => e.stopPropagation()} />
           </div>
         ),
-        ...props.prefix,
+        ...incomingPrefix
       }}
-      root={{ children: <Text {...labelProps}>{label}</Text>, ...props.root }}
+      root={{
+        children: <Text {...labelProps}>{label}</Text>,
+        ...incomingRoot
+      }}
     />
   );
 };
