@@ -5,10 +5,11 @@ import React, {
   type ReactNode,
   useRef,
   useEffect,
-  useId
+  useId,
 } from "react";
 import styles from "./Checkbox.module.scss";
-import {type TypeFluidContainer, FluidContainer, Text, type TypeText} from "oziko-ui-kit";
+import FluidContainer, { TypeFluidContainer } from "../fluid-container/FluidContainer";
+import Text, { TypeText } from "../text/Text";
 
 export type TypeCheckbox = {
   checked?: boolean;
@@ -28,8 +29,6 @@ const Checkbox: FC<TypeCheckbox & TypeFluidContainer> = ({
   labelProps,
   onChange,
   id,
-  prefix: incomingPrefix = {},
-  root: incomingRoot = {},
   ...props
 }) => {
   const inputRef = useRef<HTMLInputElement | null>(null);
@@ -48,17 +47,14 @@ const Checkbox: FC<TypeCheckbox & TypeFluidContainer> = ({
     inputRef.current?.click();
   };
 
-  const handleChange: ChangeEventHandler<HTMLInputElement> = e => {
+  const handleChange: ChangeEventHandler<HTMLInputElement> = (e) => {
     onChange?.(e);
   };
 
   return (
     <FluidContainer
       {...props}
-      onClick={e => {
-        handleContainerClick(e);
-        if (typeof props.onClick === "function") props.onClick(e);
-      }}
+      onClick={handleContainerClick}
       dimensionY={36}
       className={`${props.className} ${styles.container} ${disabled && styles.disabled}`}
       prefix={{
@@ -73,14 +69,14 @@ const Checkbox: FC<TypeCheckbox & TypeFluidContainer> = ({
               disabled={disabled}
               aria-checked={indeterminate ? "mixed" : checked}
             />
-            <label htmlFor={id ?? generatedId} onClick={e => e.stopPropagation()} />
+            <label htmlFor={id ?? generatedId} onClick={(e) => e.stopPropagation()} />
           </div>
         ),
-        ...incomingPrefix
+        ...props.prefix,
       }}
       root={{
         children: <Text {...labelProps}>{label}</Text>,
-        ...incomingRoot
+        ...props.root,
       }}
     />
   );
