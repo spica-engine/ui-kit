@@ -7,7 +7,6 @@ import React, {
   useEffect,
   useId
 } from "react";
-import clsx from "clsx";
 import styles from "./Checkbox.module.scss";
 import {type TypeFluidContainer, FluidContainer, Text, type TypeText} from "oziko-ui-kit";
 
@@ -61,10 +60,10 @@ const Checkbox: FC<TypeCheckbox & TypeFluidContainer> = ({
         if (typeof props.onClick === "function") props.onClick(e);
       }}
       dimensionY={36}
-      className={clsx(props.className, styles.container, disabled && styles.disabled)}
+      className={`${props.className} ${styles.container} ${disabled && styles.disabled}`}
       prefix={{
         children: (
-          <div className={clsx(styles.checkbox, indeterminate && styles.indeterminate)}>
+          <div className={`${styles.checkbox} ${indeterminate && styles.indeterminate}`}>
             <input
               id={id ?? generatedId}
               ref={inputRef}
