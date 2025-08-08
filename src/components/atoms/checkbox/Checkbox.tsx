@@ -64,7 +64,7 @@ const Checkbox: FC<TypeCheckbox & TypeFluidContainer> = ({
               aria-checked={indeterminate ? "mixed" : checked}
               readOnly
             />
-            <label htmlFor={id ?? generatedId} />
+            <label htmlFor={id ?? generatedId} onClick={(e) => e.stopPropagation()} />
           </div>
         ),
         ...props.prefix,
