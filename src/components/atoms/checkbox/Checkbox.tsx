@@ -6,6 +6,7 @@ import React, {
   useRef,
   useEffect,
   useId,
+  type ChangeEvent,
 } from "react";
 import styles from "./Checkbox.module.scss";
 import FluidContainer, { TypeFluidContainer } from "../fluid-container/FluidContainer";
@@ -42,13 +43,9 @@ const Checkbox: FC<TypeCheckbox & TypeFluidContainer> = ({
 
   const handleContainerClick = (e: React.MouseEvent) => {
     if (disabled) return;
+    onChange?.(e as unknown as ChangeEvent<HTMLInputElement>);
     const target = e.target as HTMLElement;
     if (target.closest("input")) return;
-    inputRef.current?.click();
-  };
-
-  const handleChange: ChangeEventHandler<HTMLInputElement> = (e) => {
-    onChange?.(e);
   };
 
   return (
@@ -65,11 +62,11 @@ const Checkbox: FC<TypeCheckbox & TypeFluidContainer> = ({
               ref={inputRef}
               type="checkbox"
               checked={checked}
-              onChange={handleChange}
               disabled={disabled}
               aria-checked={indeterminate ? "mixed" : checked}
+              readOnly
             />
-            <label htmlFor={id ?? generatedId} onClick={(e) => e.stopPropagation()} />
+            <label htmlFor={id ?? generatedId} />
           </div>
         ),
         ...props.prefix,
