@@ -44,8 +44,6 @@ const Checkbox: FC<TypeCheckbox & TypeFluidContainer> = ({
   const handleContainerClick = (e: React.MouseEvent) => {
     if (disabled) return;
     onChange?.(e as unknown as ChangeEvent<HTMLInputElement>);
-    const target = e.target as HTMLElement;
-    if (target.closest("input")) return;
   };
 
   return (
