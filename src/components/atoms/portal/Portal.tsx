@@ -1,11 +1,27 @@
-import React, { ReactNode, FC, useEffect } from "react";
+import React, { type ReactNode, type FC, useEffect, useRef } from "react";
 import ReactDOM from "react-dom";
 import styles from "./Portal.module.scss";
+
+const portalRegistry = new Set<HTMLElement>();
+
+export const isClickInsideAnyPortal = (target: EventTarget) => {
+  return [...portalRegistry].some((el) => el.contains(target as Node));
+};
+
 export type TypePortalProps = {
   children: ReactNode;
 };
 
 const Portal: FC<TypePortalProps> = ({ children }) => {
+  const portalElRef = useRef<HTMLDivElement | null>(null);
+  useEffect(() => {
+    const el = portalElRef.current;
+    if (el) portalRegistry.add(el.firstChild as HTMLElement);
+    return () => {
+      if (el) portalRegistry.delete(el);
+    };
+  }, []);
+
   useEffect(() => {
     const originalOverflow = document.body.style.overflow;
     document.body.style.overflow = "hidden";
@@ -13,7 +29,13 @@ const Portal: FC<TypePortalProps> = ({ children }) => {
       document.body.style.overflow = originalOverflow;
     };
   }, []);
-  return ReactDOM.createPortal(<div className={styles.container}>{children}</div>, document.body);
+
+  return ReactDOM.createPortal(
+    <div ref={portalElRef} className={styles.container}>
+      {children}
+    </div>,
+    document.body
+  );
 };
 
 export default Portal;
