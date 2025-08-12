@@ -1,4 +1,4 @@
-import React, { FC, memo, useEffect, useRef, useState } from "react";
+import React, { FC, memo, RefObject, useEffect, useRef, useState } from "react";
 import FlexElement, { TypeFlexElement } from "../flex-element/FlexElement";
 import FluidContainer, { TypeFluidContainer } from "../fluid-container/FluidContainer";
 import styles from "./Tab.module.scss";
@@ -7,65 +7,84 @@ export type TypeTab = {
   type?: "default" | "underline" | "window";
   items: TypeFluidContainer[];
   indicatorClassName?: string;
+  indicatorMode?: "equal" | "fit";
 } & TypeFlexElement;
 
-const Tab: FC<TypeTab> = ({ type = "default", items, indicatorClassName, ...props }) => {
+const Tab: FC<TypeTab> = ({
+  type = "default",
+  items,
+  indicatorClassName,
+  indicatorMode = "equal",
+  ...props
+}) => {
   const [activeIndex, setActiveIndex] = useState<number>(0);
-  const [itemWidth, setItemWidth] = useState<number>(0);
+  const [tabWidths, setTabWidths] = useState<number[]>([]);
+
   const containerRef = useRef<HTMLDivElement | null>(null);
+  const itemRefs = useRef<(HTMLDivElement | null)[]>([]);
 
   const handleItemClick = (index: number) => {
     setActiveIndex(index);
   };
 
   useEffect(() => {
-    setItemWidth((containerRef.current?.offsetWidth || 1) / items.length);
-  }, [items]);
+    const widths = itemRefs.current.map(
+      (el) => (el?.offsetWidth || 0) + (type === "window" ? 5 : 20)
+    );
+    setTabWidths(widths);
+  }, [items, indicatorMode, type]);
+
+  const indicatorWidth =
+    indicatorMode === "fit" ? tabWidths[activeIndex] || 0 : tabWidths[activeIndex] - 2;
+
+  const indicatorLeft = tabWidths.slice(0, activeIndex).reduce((a, b) => a + b - 5, 0);
 
   return (
     <FlexElement
       ref={containerRef}
       dimensionX="fill"
-      gap={type == "window" ? 0 : 5}
+      gap={type === "window" ? 0 : 20}
       {...props}
-      className={`${styles.container} ${styles[type]} ${props.className}`}
+      className={`${styles.container} ${styles[type]} ${props.className || ""}`}
     >
-      {type !== "window" ? (
+      {type !== "window" && (
         <div
-          className={`${styles.indicator} ${indicatorClassName}`}
-          style={{
-            width: itemWidth - 2,
-            left: activeIndex * itemWidth,
-          }}
+          className={`${styles.indicator} ${indicatorClassName || ""}`}
+          style={{ width: indicatorWidth, left: indicatorLeft }}
         />
-      ) : undefined}
+      )}
 
       {items.map((item, index) => {
         return (
           <FluidContainer
             key={index}
-            ref={item.ref}
-            dimensionX="fill"
+            ref={
+              ((el: HTMLDivElement | null) =>
+                (itemRefs.current[index] = el)) as unknown as RefObject<HTMLDivElement>
+            }
+            dimensionX={indicatorMode === "equal" ? "fill" : "hug"}
             dimensionY="fill"
             mode="middle"
             prefix={{
               children: item.prefix?.children,
               ...item.prefix,
-              className: `${item.prefix?.className}`,
+              className: `${item.prefix?.className || ""}`,
             }}
             root={{
               children: item.root?.children,
               ...item.root,
-              className: `${styles.root} ${item.root?.className}`,
+              className: `${styles.root} ${item.root?.className || ""}`,
             }}
             suffix={{
               children: item.suffix?.children,
               ...item.suffix,
-              className: `${item.suffix?.className}`,
+              className: `${item.suffix?.className || ""}`,
             }}
             onClick={() => handleItemClick(index)}
             {...item}
-            className={`${styles.item} ${styles[type]} ${index === activeIndex ? styles.active : ""}`}
+            className={`${styles.item} ${styles[type]} ${
+              index === activeIndex ? styles.active : ""
+            }`}
           />
         );
       })}
