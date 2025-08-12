@@ -1,4 +1,5 @@
-import { useEffect, RefObject } from "react";
+import { useEffect, type RefObject } from "react";
+import { isClickInsideAnyPortal } from "../components/atoms/portal/Portal";
 
 type TypeUseOnClickOutside = {
   refs: RefObject<HTMLElement | null>[];
@@ -8,7 +9,10 @@ type TypeUseOnClickOutside = {
 export const useOnClickOutside = ({ refs, onClickOutside }: TypeUseOnClickOutside) => {
   useEffect(() => {
     const handleClickOutside = (event: MouseEvent) => {
-      if (refs.every((ref) => ref.current && !ref.current.contains(event.target as Node))) {
+      if (!event.target) return;
+      const clickedInsideRefs = refs.some((ref) => ref.current?.contains(event.target as Node));
+
+      if (!clickedInsideRefs && !isClickInsideAnyPortal(event.target)) {
         onClickOutside();
       }
     };
