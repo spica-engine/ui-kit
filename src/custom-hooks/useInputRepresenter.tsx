@@ -1,5 +1,5 @@
 import { TypeCoordinates } from "components/atoms/map/Map";
-import { Fragment, ReactNode } from "react";
+import { ReactNode } from "react";
 import StringInput from "../components/atoms/inputs/normal/string/String";
 import NumberInput from "../components/atoms/inputs/normal/number/Number";
 import TextAreaInput from "../components/atoms/inputs/normal/text-area/TextArea";
@@ -15,6 +15,7 @@ import ObjectInput from "components/atoms/inputs/normal/object/ObjectInput";
 import ArrayInput from "components/atoms/inputs/normal/array/ArrayInput";
 import { utils } from "utils";
 import ChipInput from "components/atoms/inputs/normal/chip/ChipInput";
+import Text from "components/atoms/text/Text";
 
 export type TypeProperties = {
   [key: string]: {
@@ -87,6 +88,8 @@ export type TypeInputProps<T> = {
   onChange?: ({ key, value }: TypeChangeEvent<T>) => void;
 };
 
+export type TypeInputRepresenterError = { [key: string]: string | null };
+
 type TypeObjectInputProps<T> = {
   key?: string;
   properties?: TypeProperties;
@@ -119,7 +122,7 @@ export type TypeInputTypeMap = {
   richtext: (props: TypeInputProps<string>) => ReactNode;
   object: (props: TypeObjectInputProps<TypeRepresenterValue>) => ReactNode;
   array: (props: TypeArrayInputProps<TypeValueType>) => ReactNode;
-  chip: (props: TypeInputProps<string>) => ReactNode;
+  chip: (props: TypeInputProps<string[]>) => ReactNode;
 };
 
 const types: TypeInputTypeMap = {
@@ -263,8 +266,8 @@ const types: TypeInputTypeMap = {
   chip: (props) => {
     return (
       <ChipInput
-        label={props.value ? [props.value] : []}
-        onChange={([value]) => {
+        value={props.value ?? []}
+        onChange={(value) => {
           props.onChange?.({ key: props.key, value });
         }}
       />
@@ -275,10 +278,11 @@ const types: TypeInputTypeMap = {
 type TypeUseInputRepresenter = {
   properties: TypeProperties;
   value?: TypeValueType | TypeRepresenterValue;
+  error?: TypeInputRepresenterError;
   onChange?: (value: any) => void;
 };
 
-const useInputRepresenter = ({ properties, value, onChange }: TypeUseInputRepresenter) => {
+const useInputRepresenter = ({ properties, value, error, onChange }: TypeUseInputRepresenter) => {
   const handleChange = (event: { key: string; value: any }) => {
     const updatedValue: any = structuredClone(value);
     updatedValue[event.key] = event.value;
@@ -288,9 +292,10 @@ const useInputRepresenter = ({ properties, value, onChange }: TypeUseInputRepres
   return Object.entries(properties).map(([key, el]) => {
     const isObject = typeof value === "object" && !Array.isArray(value);
     const _value = isObject ? (value[key] ?? value) : value;
+    const _error = error?.[key];
 
     return (
-      <Fragment key={key}>
+      <div style={{ position: "relative", width: "100%" }} key={key}>
         {types[el.type]({
           key,
           title: el.title,
@@ -299,13 +304,28 @@ const useInputRepresenter = ({ properties, value, onChange }: TypeUseInputRepres
           value: _value,
           className: el.className,
           properties: el.properties,
-          enum: el.enum as any,
+          enum: el.enum ?? (el.items?.enum as any),
           minItems: el.minItems,
           maxItems: el.maxItems,
           items: el.items,
-          onChange: (event) => handleChange(event),
+          onChange: (event: any) => handleChange(event),
         })}
-      </Fragment>
+        {_error && (
+          <Text
+            style={{
+              position: "absolute",
+              top: "100%",
+              left: 0,
+              pointerEvents: "none",
+              whiteSpace: "nowrap",
+            }}
+            size="xsmall"
+            variant="danger"
+          >
+            {_error}
+          </Text>
+        )}
+      </div>
     );
   });
 };

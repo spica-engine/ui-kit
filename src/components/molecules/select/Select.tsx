@@ -48,10 +48,9 @@ const Select: FC<TypeSelect & TypeFluidContainer> = ({
 }) => {
   const [displayerWidth, setDisplayerWidth] = useState(0);
   const [isOpen, setIsOpen] = useState(false);
-  const [selectedOption, setSelectedOption] = useState<TypeValue | null>(
-    value || (multiple ? [] : null)
-  );
-
+  //const [selectedOption, setSelectedOption] = useState<TypeValue | null>(
+  //  value || (multiple ? [] : null)
+  //);
   const containerRef = useRef<HTMLDivElement | null>(null);
   const dropdownRef = useRef<HTMLDivElement | null>(null);
 
@@ -83,16 +82,16 @@ const Select: FC<TypeSelect & TypeFluidContainer> = ({
 
   const handleOptionSelect = (option: string | number) => {
     const updateMultipleSelection = () => {
-      if (!Array.isArray(selectedOption)) return;
-      const updatedOptions = selectedOption.includes(option)
-        ? selectedOption.filter((el) => el !== option)
-        : [...selectedOption, option];
-      setSelectedOption(updatedOptions);
+      if (!Array.isArray(value)) return;
+      const updatedOptions = value.includes(option)
+        ? value.filter((el) => el !== option)
+        : [...value, option];
+      //setSelectedOption(updatedOptions);
       onChange?.(updatedOptions as unknown as string | number);
     };
 
     const updateSingleSelection = () => {
-      setSelectedOption(option);
+      //setSelectedOption(option);
       onChange?.(option);
       setIsOpen(false);
     };
@@ -101,12 +100,12 @@ const Select: FC<TypeSelect & TypeFluidContainer> = ({
   };
 
   useImperativeHandle(selectRef, () => ({
-    toggleDropdown,
+    toggleDropdown, //
     clear,
   }));
 
   const clear = () => {
-    setSelectedOption([]);
+    //setSelectedOption([]);
     onChange?.([]);
     setIsOpen(false);
   };
@@ -125,28 +124,28 @@ const Select: FC<TypeSelect & TypeFluidContainer> = ({
   };
 
   const getDisplayer = (): string => {
-    if (!selectedOption) return placeholder;
+    if (!value) return placeholder;
 
     if (multiple) {
-      return handleMultipleSelection(selectedOption as (string | number)[]);
+      return handleMultipleSelection(value as (string | number)[]);
     }
 
-    return handleSingleSelection(selectedOption as string | number);
+    return handleSingleSelection(value as string | number);
   };
 
-  const handleSingleSelection = (selectedOption: string | number): string => {
-    if (typeof options[0] !== "object") return String(selectedOption);
-    return getLabelByValue(selectedOption) as string;
+  const handleSingleSelection = (value: string | number): string => {
+    if (typeof options[0] !== "object") return String(value);
+    return getLabelByValue(value) as string;
   };
 
-  const handleMultipleSelection = (selectedOption: (string | number)[]): string => {
-    if (!selectedOption.length) return placeholder;
+  const handleMultipleSelection = (value: (string | number)[]): string => {
+    if (!value.length) return placeholder;
 
     if (typeof options[0] === "object") {
-      return selectedOption.map((option) => getLabelByValue(option)).join(", ");
+      return value.map((option) => getLabelByValue(option)).join(", ");
     }
 
-    return selectedOption.join(", ");
+    return value.join(", ");
   };
 
   const getLabelByValue = (value: string | number) => {
@@ -194,14 +193,14 @@ const Select: FC<TypeSelect & TypeFluidContainer> = ({
             {options.map((option) => {
               const optionValue = typeof option === "object" ? option.value : option;
               const selected = multiple
-                ? Array.isArray(selectedOption) && selectedOption.includes(optionValue)
-                : selectedOption === optionValue;
+                ? Array.isArray(value) && value.includes(optionValue)
+                : value === optionValue;
 
               const isDisabled =
                 multiple &&
                 !!maxCount &&
-                Array.isArray(selectedOption) &&
-                selectedOption.length >= maxCount &&
+                Array.isArray(value) &&
+                value.length >= maxCount &&
                 !selected;
 
               return (

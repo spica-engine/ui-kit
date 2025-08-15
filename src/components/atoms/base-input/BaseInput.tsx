@@ -57,8 +57,11 @@ const BaseInput = ({
     },
   });
 
-  const handleClick = () => {
+  const handleClick = (e: any) => {
     if (disabled || readonly) return;
+    if (!containerRef.current?.contains(e.target as Node)) {
+      return; // ignore portal clicks
+    }
     setIsFocused(true);
   };
 
@@ -73,7 +76,7 @@ const BaseInput = ({
       direction="vertical"
       gap={2}
       {...props}
-      className={`${disabled ? styles.disabled : ""} ${props.className}`}
+      className={`${disabled ? styles.disabled : ""} ${props.className} test123emre`}
     >
       <FlexElement
         dimensionX="fill"

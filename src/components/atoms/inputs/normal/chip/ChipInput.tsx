@@ -1,5 +1,5 @@
 import Input from "@atoms/input/Input";
-import React, { FC, memo, useEffect, useState } from "react";
+import React, { FC, memo, useState } from "react";
 import Chip from "@atoms/chip/Chip";
 import styles from "./ChipInput.module.scss";
 import FlexElement, { TypeFlexElement } from "@atoms/flex-element/FlexElement";
@@ -7,36 +7,40 @@ import FlexElement, { TypeFlexElement } from "@atoms/flex-element/FlexElement";
 export type TypeChipInput = {
   label?: string[];
   placeholder?: string;
-  onChange?: (value: string[]) => void;
+  onChange: (value: string[]) => void;
+  value: string[];
+  allowDuplicateValues?: boolean;
 } & TypeFlexElement;
 
 const ChipInput: FC<TypeChipInput> = ({
   label,
   placeholder = "Enter a value than press enter",
   onChange,
+  value,
+  allowDuplicateValues = false,
   ...props
 }) => {
-  const [chips, setChips] = useState<string[]>(label || []);
   const [inputValue, setInputValue] = useState<string>("");
-
-  useEffect(() => {
-    if (onChange) {
-      onChange(chips);
-    }
-  }, [chips, onChange]);
 
   const handleKeyDown = (e: React.KeyboardEvent<HTMLInputElement>) => {
     if (e.key === "Enter" && inputValue.trim() !== "") {
       e.preventDefault();
-      const newChips = [...chips, inputValue.trim()];
-      setChips(newChips);
+      const newValue = inputValue.trim();
+      if (!allowDuplicateValues && value.includes(newValue)) return;
+      const newChips = [...value, newValue];
+      onChange(newChips);
       setInputValue("");
+    } else if (e.key === "Backspace" && inputValue.length === 0) {
+      const newChips = [...value];
+      const lastValue = newChips.pop();
+      setInputValue(lastValue ?? "");
+      onChange(newChips);
     }
   };
 
   const handleDelete = (index: number) => {
-    const updatedChips = chips.filter((_, i) => i !== index);
-    setChips(updatedChips);
+    const updatedChips = value.filter((_, i) => i !== index);
+    onChange(updatedChips);
   };
 
   return (
@@ -47,7 +51,7 @@ const ChipInput: FC<TypeChipInput> = ({
       {...props}
       className={`${styles.chipInputContainer} ${props.className}`}
     >
-      {chips.map((chip, index) => (
+      {value.map((chip, index) => (
         <Chip variant="outlined" key={index} label={chip} onDelete={() => handleDelete(index)} />
       ))}
       <Input
