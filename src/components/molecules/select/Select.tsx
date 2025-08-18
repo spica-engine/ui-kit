@@ -48,9 +48,6 @@ const Select: FC<TypeSelect & TypeFluidContainer> = ({
 }) => {
   const [displayerWidth, setDisplayerWidth] = useState(0);
   const [isOpen, setIsOpen] = useState(false);
-  //const [selectedOption, setSelectedOption] = useState<TypeValue | null>(
-  //  value || (multiple ? [] : null)
-  //);
   const containerRef = useRef<HTMLDivElement | null>(null);
   const dropdownRef = useRef<HTMLDivElement | null>(null);
 
@@ -86,12 +83,10 @@ const Select: FC<TypeSelect & TypeFluidContainer> = ({
       const updatedOptions = value.includes(option)
         ? value.filter((el) => el !== option)
         : [...value, option];
-      //setSelectedOption(updatedOptions);
       onChange?.(updatedOptions as unknown as string | number);
     };
 
     const updateSingleSelection = () => {
-      //setSelectedOption(option);
       onChange?.(option);
       setIsOpen(false);
     };
@@ -100,12 +95,11 @@ const Select: FC<TypeSelect & TypeFluidContainer> = ({
   };
 
   useImperativeHandle(selectRef, () => ({
-    toggleDropdown, //
+    toggleDropdown,
     clear,
   }));
 
   const clear = () => {
-    //setSelectedOption([]);
     onChange?.([]);
     setIsOpen(false);
   };
