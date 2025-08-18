@@ -1,4 +1,13 @@
-import { FC, memo, Ref, useImperativeHandle, useLayoutEffect, useRef, useState } from "react";
+import {
+  FC,
+  memo,
+  Ref,
+  useEffect,
+  useImperativeHandle,
+  useLayoutEffect,
+  useRef,
+  useState,
+} from "react";
 import styles from "./Select.module.scss";
 import Portal from "components/atoms/portal/Portal";
 import FluidContainer, { TypeFluidContainer } from "@atoms/fluid-container/FluidContainer";
@@ -51,6 +60,11 @@ const Select: FC<TypeSelect & TypeFluidContainer> = ({
   const [selectedOption, setSelectedOption] = useState<TypeValue | null>(
     value || (multiple ? [] : null)
   );
+
+  useEffect(() => {
+    if (!value && value !== 0 && value !== "") return;
+    setSelectedOption(value);
+  }, [value]);
 
   const containerRef = useRef<HTMLDivElement | null>(null);
   const dropdownRef = useRef<HTMLDivElement | null>(null);
