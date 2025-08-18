@@ -57,8 +57,11 @@ const BaseInput = ({
     },
   });
 
-  const handleClick = () => {
+  const handleClick = (e: React.MouseEvent) => {
     if (disabled || readonly) return;
+    if (!containerRef.current?.contains(e.target as Node)) {
+      return; // ignore portal clicks
+    }
     setIsFocused(true);
   };
 
