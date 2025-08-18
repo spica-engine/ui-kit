@@ -31,6 +31,7 @@ export type TypeProperties = {
     locationType?: string;
     className?: string;
     properties?: TypeProperties;
+    requires?: string;
   };
 };
 
@@ -282,6 +283,15 @@ type TypeUseInputRepresenter = {
   onChange?: (value: any) => void;
 };
 
+const isFalsy = (value: any) => {
+  if (value === null || value === undefined) return true;
+  if (typeof value === "boolean") return !value;
+  if (typeof value === "number" && value === 0) return true;
+  if (typeof value === "string" && value.trim() === "") return true;
+  if (Array.isArray(value) && value.length === 0) return true;
+  return false;
+};
+
 const useInputRepresenter = ({ properties, value, error, onChange }: TypeUseInputRepresenter) => {
   const handleChange = (event: { key: string; value: any }) => {
     const updatedValue: any = structuredClone(value);
@@ -291,6 +301,9 @@ const useInputRepresenter = ({ properties, value, error, onChange }: TypeUseInpu
 
   return Object.entries(properties).map(([key, el]) => {
     const isObject = typeof value === "object" && !Array.isArray(value);
+    if (isObject && el.requires && isFalsy(value[el.requires])) {
+      return null;
+    }
     const _value = isObject ? (value[key] ?? value) : value;
     const _error = error?.[key];
 
