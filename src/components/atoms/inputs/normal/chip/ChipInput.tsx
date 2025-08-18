@@ -30,11 +30,6 @@ const ChipInput: FC<TypeChipInput> = ({
       const newChips = [...value, newValue];
       onChange(newChips);
       setInputValue("");
-    } else if (e.key === "Backspace" && inputValue.length === 0) {
-      const newChips = [...value];
-      const lastValue = newChips.pop();
-      setInputValue(lastValue ?? "");
-      onChange(newChips);
     }
   };
 

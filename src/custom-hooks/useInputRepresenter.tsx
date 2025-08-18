@@ -281,6 +281,8 @@ type TypeUseInputRepresenter = {
   value?: TypeValueType | TypeRepresenterValue;
   error?: TypeInputRepresenterError;
   onChange?: (value: any) => void;
+  containerClassName?: string;
+  errorClassName?: string;
 };
 
 const isFalsy = (value: any) => {
@@ -292,12 +294,21 @@ const isFalsy = (value: any) => {
   return false;
 };
 
-const useInputRepresenter = ({ properties, value, error, onChange }: TypeUseInputRepresenter) => {
+const useInputRepresenter = ({
+  properties,
+  value,
+  error,
+  onChange,
+  containerClassName,
+  errorClassName,
+}: TypeUseInputRepresenter) => {
   const handleChange = (event: { key: string; value: any }) => {
     const updatedValue: any = structuredClone(value);
     updatedValue[event.key] = event.value;
     onChange?.(updatedValue);
   };
+
+  const hasCustomStyles = Boolean(containerClassName || errorClassName);
 
   return Object.entries(properties).map(([key, el]) => {
     const isObject = typeof value === "object" && !Array.isArray(value);
@@ -308,7 +319,11 @@ const useInputRepresenter = ({ properties, value, error, onChange }: TypeUseInpu
     const _error = error?.[key];
 
     return (
-      <div style={{ position: "relative", width: "100%" }} key={key}>
+      <div
+        style={hasCustomStyles ? undefined : { position: "relative", width: "100%" }}
+        className={`${containerClassName}`}
+        key={key}
+      >
         {types[el.type]({
           key,
           title: el.title,
@@ -321,17 +336,22 @@ const useInputRepresenter = ({ properties, value, error, onChange }: TypeUseInpu
           minItems: el.minItems,
           maxItems: el.maxItems,
           items: el.items,
-          onChange: (event: any) => handleChange(event),
+          onChange: (event) => handleChange(event),
         })}
         {_error && (
           <Text
-            style={{
-              position: "absolute",
-              top: "100%",
-              left: 0,
-              pointerEvents: "none",
-              whiteSpace: "nowrap",
-            }}
+            className={`${errorClassName}`}
+            style={
+              hasCustomStyles
+                ? undefined
+                : {
+                    position: "absolute",
+                    bottom: 0,
+                    left: 0,
+                    pointerEvents: "none",
+                    whiteSpace: "nowrap",
+                  }
+            }
             size="xsmall"
             variant="danger"
           >
