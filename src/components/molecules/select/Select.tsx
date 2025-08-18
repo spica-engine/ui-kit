@@ -1,4 +1,13 @@
-import { FC, memo, Ref, useImperativeHandle, useLayoutEffect, useRef, useState } from "react";
+import {
+  FC,
+  memo,
+  Ref,
+  useEffect,
+  useImperativeHandle,
+  useLayoutEffect,
+  useRef,
+  useState,
+} from "react";
 import styles from "./Select.module.scss";
 import Portal from "components/atoms/portal/Portal";
 import FluidContainer, { TypeFluidContainer } from "@atoms/fluid-container/FluidContainer";
@@ -48,6 +57,15 @@ const Select: FC<TypeSelect & TypeFluidContainer> = ({
 }) => {
   const [displayerWidth, setDisplayerWidth] = useState(0);
   const [isOpen, setIsOpen] = useState(false);
+  const [selectedOption, setSelectedOption] = useState<TypeValue | null>(
+    value || (multiple ? [] : null)
+  );
+
+  useEffect(() => {
+    if (!value && value !== 0 && value !== "") return;
+    setSelectedOption(value);
+  }, [value]);
+
   const containerRef = useRef<HTMLDivElement | null>(null);
   const dropdownRef = useRef<HTMLDivElement | null>(null);
 
@@ -79,14 +97,16 @@ const Select: FC<TypeSelect & TypeFluidContainer> = ({
 
   const handleOptionSelect = (option: string | number) => {
     const updateMultipleSelection = () => {
-      if (!Array.isArray(value)) return;
-      const updatedOptions = value.includes(option)
-        ? value.filter((el) => el !== option)
-        : [...value, option];
+      if (!Array.isArray(selectedOption)) return;
+      const updatedOptions = selectedOption.includes(option)
+        ? selectedOption.filter((el) => el !== option)
+        : [...selectedOption, option];
+      setSelectedOption(updatedOptions);
       onChange?.(updatedOptions as unknown as string | number);
     };
 
     const updateSingleSelection = () => {
+      setSelectedOption(option);
       onChange?.(option);
       setIsOpen(false);
     };
@@ -100,6 +120,7 @@ const Select: FC<TypeSelect & TypeFluidContainer> = ({
   }));
 
   const clear = () => {
+    setSelectedOption([]);
     onChange?.([]);
     setIsOpen(false);
   };
@@ -118,28 +139,28 @@ const Select: FC<TypeSelect & TypeFluidContainer> = ({
   };
 
   const getDisplayer = (): string => {
-    if (!value) return placeholder;
+    if (!selectedOption) return placeholder;
 
     if (multiple) {
-      return handleMultipleSelection(value as (string | number)[]);
+      return handleMultipleSelection(selectedOption as (string | number)[]);
     }
 
-    return handleSingleSelection(value as string | number);
+    return handleSingleSelection(selectedOption as string | number);
   };
 
-  const handleSingleSelection = (value: string | number): string => {
-    if (typeof options[0] !== "object") return String(value);
-    return getLabelByValue(value) as string;
+  const handleSingleSelection = (selectedOption: string | number): string => {
+    if (typeof options[0] !== "object") return String(selectedOption);
+    return getLabelByValue(selectedOption) as string;
   };
 
-  const handleMultipleSelection = (value: (string | number)[]): string => {
-    if (!value.length) return placeholder;
+  const handleMultipleSelection = (selectedOption: (string | number)[]): string => {
+    if (!selectedOption.length) return placeholder;
 
     if (typeof options[0] === "object") {
-      return value.map((option) => getLabelByValue(option)).join(", ");
+      return selectedOption.map((option) => getLabelByValue(option)).join(", ");
     }
 
-    return value.join(", ");
+    return selectedOption.join(", ");
   };
 
   const getLabelByValue = (value: string | number) => {
@@ -187,14 +208,14 @@ const Select: FC<TypeSelect & TypeFluidContainer> = ({
             {options.map((option) => {
               const optionValue = typeof option === "object" ? option.value : option;
               const selected = multiple
-                ? Array.isArray(value) && value.includes(optionValue)
-                : value === optionValue;
+                ? Array.isArray(selectedOption) && selectedOption.includes(optionValue)
+                : selectedOption === optionValue;
 
               const isDisabled =
                 multiple &&
                 !!maxCount &&
-                Array.isArray(value) &&
-                value.length >= maxCount &&
+                Array.isArray(selectedOption) &&
+                selectedOption.length >= maxCount &&
                 !selected;
 
               return (
