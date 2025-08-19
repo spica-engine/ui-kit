@@ -167,27 +167,26 @@ const RelationSelect: FC<TypeRelationSelect & TypeFluidContainer> = ({
   };
 
   const getDisplayer = () => {
-    if (!selectedOption) return placeholder;
-    return handleMultipleSelection(selectedOption as TypeLabeledValue[]);
-  };
-
-  const handleMultipleSelection = (selectedOption: TypeLabeledValue[]) => {
-    if (!selectedOption.length) return placeholder;
-
-    if (typeof options[0] === "object") {
-      return selectedOption.map((option) => (
-        <Chip
-          variant="outlined"
-          key={option.value + option.label}
-          label={option.label as string}
-          onDelete={() => {
-            setSelectedOption((prev) =>
-              (prev as TypeLabeledValue[])?.filter((i) => i.value !== option.value)
-            );
-          }}
-        />
-      ));
+    if (
+      !Array.isArray(selectedOption) ||
+      !selectedOption.length ||
+      typeof options[0] !== "object"
+    ) {
+      return placeholder;
     }
+
+    return selectedOption.map((option) => (
+      <Chip
+        variant="outlined"
+        key={`${option.value}${option.label}`}
+        label={option.label as string}
+        onDelete={() => {
+          setSelectedOption((prev) =>
+            (prev as TypeLabeledValue[])?.filter((i) => i.value !== option.value)
+          );
+        }}
+      />
+    ));
   };
 
   const infiniteScrollId = useId();
