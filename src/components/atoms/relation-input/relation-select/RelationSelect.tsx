@@ -126,8 +126,10 @@ const RelationSelect: FC<TypeRelationSelect & TypeFluidContainer> = ({
   const handleOptionSelect = (option: TypeLabeledValue) => {
     const updateMultipleSelection = () => {
       if (!Array.isArray(selectedOption)) return;
-      const updatedOptions = selectedOption.includes(option)
-        ? selectedOption.filter((el) => el !== option)
+      const updatedOptions = Boolean(
+        selectedOption.find((i) => i.value === option.value && i.label === option.label)
+      )
+        ? selectedOption.filter((el) => el.value !== option.value)
         : [...selectedOption, option];
       setSelectedOption(updatedOptions);
       onChange?.(updatedOptions as TypeLabeledValue[]);
@@ -258,7 +260,12 @@ const RelationSelect: FC<TypeRelationSelect & TypeFluidContainer> = ({
               {options.map((option) => {
                 const optionValue = typeof option === "object" ? option.value : option;
                 const selected = multiple
-                  ? Array.isArray(selectedOption) && selectedOption.includes(option)
+                  ? Array.isArray(selectedOption) &&
+                    Boolean(
+                      selectedOption.find(
+                        (i) => i.value === option.value && i.label === option.label
+                      )
+                    )
                   : selectedOption === option;
 
                 const isDisabled =
