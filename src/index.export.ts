@@ -70,6 +70,8 @@ export { default as Drawer } from "./components/atoms/drawer/Drawer";
 export { default as Backdrop } from "./components/atoms/backdrop/Backdrop";
 export { default as Portal } from "./components/atoms/portal/Portal";
 export { default as Tab } from "./components/atoms/tab/Tab";
+export { default as RelationInput } from "./components/atoms/relation-input/RelationInput";
+export { default as Loader } from "./components/atoms/loader/Loader";
 //Custom Hooks export
 export { default as useInputRepresenter } from "./custom-hooks/useInputRepresenter";
 export { default as useKeyDown } from "./custom-hooks/useKeyDown";
@@ -159,6 +161,7 @@ export { type TypePopover } from "./components/atoms/popover/Popover";
 export { type TypePortalProps } from "./components/atoms/portal/Portal";
 export { type TypeSelectOption } from "./components/atoms/select-option/SelectOption";
 export { type TypeTab } from "./components/atoms/tab/Tab";
+export { type TypeRelationInput } from "./components/atoms/relation-input/RelationInput";
 export { type TypeAccordionGroup } from "./components/molecules/accordion/Accordion";
 export { type TypeNavigatorItem } from "./components/molecules/navigator-item/NavigatorItem";
 export { type TypeSSOButton } from "./components/molecules/sso-button/SSOButton";

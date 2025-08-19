@@ -16,6 +16,8 @@ import ArrayInput from "components/atoms/inputs/normal/array/ArrayInput";
 import { utils } from "utils";
 import ChipInput from "components/atoms/inputs/normal/chip/ChipInput";
 import Text from "components/atoms/text/Text";
+import RelationInput from "@atoms/relation-input/RelationInput";
+import { TypeLabeledValue } from "index.export";
 
 export type TypeProperties = {
   [key: string]: {
@@ -110,6 +112,13 @@ type TypeArrayInputProps<T> = {
   items?: TypeArrayItems;
 } & TypeInputProps<T[]>;
 
+type TypeRelationInputProps<T> = {
+  getOptions: () => Promise<TypeLabeledValue[]>;
+  loadMoreOptions: () => Promise<TypeLabeledValue[]>;
+  searchOptions: (value: string) => Promise<TypeLabeledValue[]>;
+  totalOptionsLength: number;
+} & TypeInputProps<T>;
+
 export type TypeInputTypeMap = {
   string: (props: TypeSelectInputProps<string>) => ReactNode;
   number: (props: TypeSelectInputProps<number>) => ReactNode;
@@ -124,6 +133,7 @@ export type TypeInputTypeMap = {
   object: (props: TypeObjectInputProps<TypeRepresenterValue>) => ReactNode;
   array: (props: TypeArrayInputProps<TypeValueType>) => ReactNode;
   chip: (props: TypeInputProps<string[]>) => ReactNode;
+  relation: (props: TypeRelationInputProps<TypeLabeledValue[] | TypeLabeledValue>) => ReactNode;
 };
 
 const types: TypeInputTypeMap = {
@@ -271,6 +281,19 @@ const types: TypeInputTypeMap = {
         onChange={(value) => {
           props.onChange?.({ key: props.key, value });
         }}
+      />
+    );
+  },
+  relation: (props) => {
+    return (
+      <RelationInput
+        value={props.value}
+        onChange={(value) => props.onChange?.({ key: props.key, value })}
+        label={props.title}
+        getOptions={props.getOptions}
+        loadMoreOptions={props.loadMoreOptions}
+        searchOptions={props.searchOptions}
+        totalOptionsLength={props.totalOptionsLength}
       />
     );
   },
