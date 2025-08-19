@@ -190,10 +190,6 @@ const RelationSelect: FC<TypeRelationSelect & TypeFluidContainer> = ({
     }
   };
 
-  const getLabelByValue = (value: string | number) => {
-    return (options as TypeLabeledValue[]).find((el) => el.value === value)?.label;
-  };
-
   const infiniteScrollId = useId();
 
   return (
