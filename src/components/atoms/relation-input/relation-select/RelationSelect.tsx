@@ -182,11 +182,7 @@ const RelationSelect: FC<TypeRelationSelect & TypeFluidContainer> = ({
         variant="outlined"
         key={`${option.value}${option.label}`}
         label={option.label as string}
-        onDelete={() => {
-          setSelectedOption((prev) =>
-            (prev as TypeLabeledValue[])?.filter((i) => i.value !== option.value)
-          );
-        }}
+        onDelete={() => handleOptionSelect(option)}
       />
     ));
   };
