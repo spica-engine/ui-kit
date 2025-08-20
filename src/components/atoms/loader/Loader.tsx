@@ -1,7 +1,18 @@
-import styles from "./Loader.module.scss"
+import styles from "./Loader.module.scss";
 
-const Loader = () => {
-  return <div className={styles.loader} />;
+type LoaderProps = {
+  className?: string;
+  size?: "small" | "medium" | "large";
 };
 
-export default Loader
+const SIZE_CLASSES = {
+  small: styles.small,
+  medium: styles.medium,
+  large: styles.large,
+};
+
+const Loader = ({ className, size = "medium" }: LoaderProps) => {
+  return <div className={`${styles.loader} ${SIZE_CLASSES[size]} ${className || ""} `} />;
+};
+
+export default Loader;

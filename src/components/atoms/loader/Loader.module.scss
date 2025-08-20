@@ -1,6 +1,4 @@
 .loader {
-  width: 15px;
-  height: 15px;
   border: var(--oziko-border-default);
   border-bottom-color: transparent;
   border-radius: var(--oziko-border-radius-round);
@@ -16,4 +14,19 @@
   100% {
     transform: rotate(360deg);
   }
+}
+
+.small {
+  width: 10px;
+  height: 10px;
+}
+
+.medium {
+  width: 15px;
+  height: 15px;
+}
+
+.big {
+  width: 30px;
+  height: 30px;
 }
