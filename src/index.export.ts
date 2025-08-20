@@ -71,7 +71,6 @@ export { default as Backdrop } from "./components/atoms/backdrop/Backdrop";
 export { default as Portal } from "./components/atoms/portal/Portal";
 export { default as Tab } from "./components/atoms/tab/Tab";
 export { default as RelationInput } from "./components/atoms/relation-input/RelationInput";
-export { default as Loader } from "./components/atoms/loader/Loader";
 //Custom Hooks export
 export { default as useInputRepresenter } from "./custom-hooks/useInputRepresenter";
 export { default as useKeyDown } from "./custom-hooks/useKeyDown";

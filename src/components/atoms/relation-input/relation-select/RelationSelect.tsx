@@ -19,10 +19,9 @@ import SelectOption, { TypeLabeledValue } from "@atoms/select-option/SelectOptio
 import FlexElement from "@atoms/flex-element/FlexElement";
 import { useOnClickOutside } from "@custom-hooks/useOnClickOutside";
 import useAdaptivePosition from "@custom-hooks/useAdaptivePosition";
-import { Chip, InputWithIcon } from "index.export";
+import { Chip, InputWithIcon, Spinner } from "index.export";
 import debounce from "lodash/debounce";
 import InfiniteScroll from "react-infinite-scroll-component";
-import Loader from "@atoms/loader/Loader";
 
 export type TypeRelationSelectRef = {
   toggleDropdown: (toggleValue?: boolean) => void;
@@ -236,7 +235,7 @@ const RelationSelect: FC<TypeRelationSelect & TypeFluidContainer> = ({
               dataLength={options.length}
               next={loadMoreOptions}
               hasMore={totalOptionsLength > options.length}
-              loader={<Loader />}
+              loader={<Spinner size="small" />}
               scrollableTarget={infiniteScrollId}
               className={styles.infiniteScroll}
             >
