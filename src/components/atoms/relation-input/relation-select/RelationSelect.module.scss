@@ -1,0 +1,52 @@
+@use "styles/mixins";
+
+.container {
+  background: var(--oziko-color-zebra);
+  padding: var(--oziko-padding-md) var(--oziko-padding-lg);
+  border-radius: var(--oziko-border-radius-md);
+  cursor: pointer;
+
+  &.disabled {
+    cursor: default;
+    opacity: var(--oziko-disabled-opacity);
+  }
+
+  .displayer {
+    @include mixins.textEllipsis(1);
+    width: 100%;
+    max-height: 100px;
+    overflow-y: auto;
+    display: flex;
+    flex-wrap: wrap;
+    gap: var(--oziko-gap-sm);
+  }
+}
+
+.selectDropdown {
+  position: fixed;
+  border-radius: var(--oziko-border-radius-md);
+  z-index: 1000;
+  height: 100%;
+  max-height: 200px;
+  overflow-y: auto;
+  box-shadow: var(--oziko-box-shadow);
+  background: var(--oziko-color-menu-background);
+}
+
+.searchInputWrapper {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: var(--oziko-gap-sm);
+}
+.searchIcon {
+  color: var(--oziko-color-font-primary);
+}
+
+.searchInput {
+  border: 0;
+}
+
+.deleteIcon {
+  color: var(--oziko-color-danger);
+}
