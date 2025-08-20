@@ -1,0 +1,117 @@
+import BaseInput from "@atoms/base-input/BaseInput";
+import Icon from "@atoms/icon/Icon";
+import Text from "@atoms/text/Text";
+import React, { memo, useEffect, useRef, useState } from "react";
+import styles from "./RelationInput.module.scss";
+import RelationSelect, { TypeRelationSelectRef } from "./relation-select/RelationSelect";
+import { TypeFlexElement } from "@atoms/flex-element/FlexElement";
+import { TypeFluidContainer } from "@atoms/fluid-container/FluidContainer";
+import { TypeLabeledValue } from "index.export";
+
+export type TypeRelationInput<T = TypeLabeledValue> = {
+  label: string;
+  description?: string;
+  value?: T | T[];
+  onChange?: (value: T[]) => void;
+  selectProps?: TypeFluidContainer;
+  inputContainerClassName?: string;
+  getOptions: () => Promise<TypeLabeledValue[]>;
+  loadMoreOptions: () => Promise<TypeLabeledValue[]>;
+  searchOptions: (value: string) => Promise<TypeLabeledValue[]>;
+  totalOptionsLength: number;
+  multiple?: boolean;
+} & TypeFlexElement;
+
+const RelationInput = <T extends TypeLabeledValue>({
+  label,
+  description,
+  value,
+  onChange,
+  selectProps,
+  inputContainerClassName,
+  getOptions,
+  loadMoreOptions,
+  searchOptions,
+  totalOptionsLength,
+  multiple,
+  ...props
+}: TypeRelationInput<T>) => {
+  const selectRef = useRef<TypeRelationSelectRef>(null);
+
+  const [forceFocus, setForceFocus] = useState(false);
+  const [options, setOptions] = useState<TypeLabeledValue[]>([]);
+  const [selectedOption, setSelectedOption] = useState<
+    TypeLabeledValue[] | TypeLabeledValue | null
+  >(() => value || (multiple ? [] : null));
+
+  useEffect(() => {
+    if (!value && value !== 0 && value !== "") return;
+    setSelectedOption(value);
+  }, [value]);
+
+  const handleOnFocusChange = (isFocused: boolean) => {
+    selectRef?.current?.toggleDropdown(isFocused);
+    setForceFocus(isFocused);
+  };
+
+  useEffect(() => {
+    getOptions().then((result) => setOptions(result));
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, []);
+
+  const appendMoreOptions = () => {
+    loadMoreOptions().then((result) => setOptions([...options, ...result]));
+  };
+
+  const filterOptions = (searchValue: string) => {
+    searchOptions(searchValue).then((result) => {
+      setOptions(result);
+    });
+  };
+
+  return (
+    <BaseInput
+      dimensionX={"fill"}
+      description={description}
+      forceFocus={forceFocus}
+      onFocusChange={(isFocused) => handleOnFocusChange(isFocused)}
+      labelProps={{
+        dimensionX: "hug",
+        divider: true,
+        prefix: {
+          children: <Icon className={styles.icon} name="callMerge" />,
+        },
+        root: {
+          dimensionX: "hug",
+          children: (
+            <Text className={styles.text} size="medium">
+              {label}
+            </Text>
+          ),
+        },
+      }}
+      inputContainerProps={{ className: `${styles.baseInput} ${inputContainerClassName}` }}
+      {...props}
+    >
+      <RelationSelect
+        totalOptionsLength={totalOptionsLength}
+        selectRef={selectRef}
+        disableClick
+        options={options || []}
+        placeholder=""
+        multiple={multiple}
+        onChange={(value) => {
+          onChange?.(value as T[]);
+        }}
+        {...selectProps}
+        className={`${styles.select} ${selectProps?.className}`}
+        loadMoreOptions={appendMoreOptions}
+        searchOptions={filterOptions}
+        selectedOption={selectedOption}
+        setSelectedOption={setSelectedOption}
+      />
+    </BaseInput>
+  );
+};
+
+export default memo(RelationInput);
