@@ -34,6 +34,10 @@ export type TypeProperties = {
     className?: string;
     properties?: TypeProperties;
     renderCondition?: { field: string; equals: any } | { field: string; notEquals: any };
+    getOptions?: () => Promise<TypeLabeledValue[]>;
+    loadMoreOptions?: () => Promise<TypeLabeledValue[]>;
+    searchOptions?: (value: string) => Promise<TypeLabeledValue[]>;
+    totalOptionsLength?: number;
   };
 };
 
@@ -380,6 +384,10 @@ const useInputRepresenter = ({
           maxItems: el.maxItems,
           items: el.items,
           onChange: (event) => handleChange(event),
+          getOptions: el.getOptions as () => Promise<TypeLabeledValue[]>,
+          loadMoreOptions: el.loadMoreOptions as () => Promise<TypeLabeledValue[]>,
+          searchOptions: el.searchOptions as (value: string) => Promise<TypeLabeledValue[]>,
+          totalOptionsLength: el.totalOptionsLength as number,
         })}
         {_error && (
           <Text
