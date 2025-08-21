@@ -63,7 +63,10 @@ export type TypeInputType =
   | "location"
   | "richtext"
   | "object"
-  | "array";
+  | "array"
+  | "chip"
+  | "relation"
+  | "select";
 
 type TypeOptions = {
   position?: "top" | "bottom" | "left" | "right";
