@@ -17,7 +17,7 @@ import { utils } from "utils";
 import ChipInput from "components/atoms/inputs/normal/chip/ChipInput";
 import Text from "components/atoms/text/Text";
 import RelationInput from "@atoms/relation-input/RelationInput";
-import { TypeLabeledValue } from "index.export";
+import { Select, TypeLabeledValue } from "index.export";
 
 export type TypeProperties = {
   [key: string]: {
@@ -33,7 +33,7 @@ export type TypeProperties = {
     locationType?: string;
     className?: string;
     properties?: TypeProperties;
-    requires?: string;
+    renderCondition?: { field: string; equals: any } | { field: string; notEquals: any };
   };
 };
 
@@ -63,7 +63,10 @@ export type TypeInputType =
   | "location"
   | "richtext"
   | "object"
-  | "array";
+  | "array"
+  | "chip"
+  | "relation"
+  | "select";
 
 type TypeOptions = {
   position?: "top" | "bottom" | "left" | "right";
@@ -134,6 +137,7 @@ export type TypeInputTypeMap = {
   array: (props: TypeArrayInputProps<TypeValueType>) => ReactNode;
   chip: (props: TypeInputProps<string[]>) => ReactNode;
   relation: (props: TypeRelationInputProps<TypeLabeledValue[] | TypeLabeledValue>) => ReactNode;
+  select: (props: TypeSelectInputProps<string>) => ReactNode;
 };
 
 const types: TypeInputTypeMap = {
@@ -297,6 +301,17 @@ const types: TypeInputTypeMap = {
       />
     );
   },
+  select: (props) => {
+    return (
+      <Select
+        options={props.enum as string[]}
+        value={props.value}
+        onChange={(value) => {
+          props.onChange?.({ key: props.key, value: value as string });
+        }}
+      />
+    );
+  },
 };
 
 type TypeUseInputRepresenter = {
@@ -306,15 +321,6 @@ type TypeUseInputRepresenter = {
   onChange?: (value: any) => void;
   containerClassName?: string;
   errorClassName?: string;
-};
-
-const isFalsy = (value: any) => {
-  if (value === null || value === undefined) return true;
-  if (typeof value === "boolean") return !value;
-  if (typeof value === "number" && value === 0) return true;
-  if (typeof value === "string" && value.trim() === "") return true;
-  if (Array.isArray(value) && value.length === 0) return true;
-  return false;
 };
 
 const useInputRepresenter = ({
@@ -335,8 +341,22 @@ const useInputRepresenter = ({
 
   return Object.entries(properties).map(([key, el]) => {
     const isObject = typeof value === "object" && !Array.isArray(value);
-    if (isObject && el.requires && isFalsy(value[el.requires])) {
-      return null;
+    if (isObject && el.renderCondition) {
+      const { field } = el.renderCondition;
+      const currentFieldValue = value[field];
+
+      const checkValues = (key: "equals" | "notEquals", negate = false) => {
+        if (!(key in (el.renderCondition as {}))) return false;
+        const condition = (el.renderCondition as unknown as { equals: any; notEquals: any })[key];
+        const match = Array.isArray(condition)
+          ? condition.includes(currentFieldValue)
+          : currentFieldValue === condition;
+        return negate ? match : !match;
+      };
+
+      if (checkValues("notEquals", true) || checkValues("equals")) {
+        return null;
+      }
     }
     const _value = isObject ? (value[key] ?? value) : value;
     const _error = error?.[key];
@@ -344,7 +364,7 @@ const useInputRepresenter = ({
     return (
       <div
         style={hasCustomStyles ? undefined : { position: "relative", width: "100%" }}
-        className={`${containerClassName}`}
+        className={containerClassName}
         key={key}
       >
         {types[el.type]({
@@ -363,7 +383,7 @@ const useInputRepresenter = ({
         })}
         {_error && (
           <Text
-            className={`${errorClassName}`}
+            className={errorClassName}
             style={
               hasCustomStyles
                 ? undefined
