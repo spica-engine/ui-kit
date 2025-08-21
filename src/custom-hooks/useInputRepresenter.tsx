@@ -342,27 +342,20 @@ const useInputRepresenter = ({
   return Object.entries(properties).map(([key, el]) => {
     const isObject = typeof value === "object" && !Array.isArray(value);
     if (isObject && el.renderCondition) {
-      const currentFieldValue = value[el.renderCondition.field];
-      if ("notEquals" in el.renderCondition) {
-        const forbiddenValues = el.renderCondition.notEquals;
-        const shouldHide = Array.isArray(forbiddenValues)
-          ? forbiddenValues.includes(currentFieldValue)
-          : currentFieldValue === forbiddenValues;
+      const { field } = el.renderCondition;
+      const currentFieldValue = value[field];
 
-        if (shouldHide) {
-          return null;
-        }
-      }
+      const checkValues = (key: "equals" | "notEquals", negate = false) => {
+        if (!(key in (el.renderCondition as {}))) return false;
+        const condition = (el.renderCondition as unknown as { equals: any; notEquals: any })[key];
+        const match = Array.isArray(condition)
+          ? condition.includes(currentFieldValue)
+          : currentFieldValue === condition;
+        return negate ? match : !match;
+      };
 
-      if ("equals" in el.renderCondition) {
-        const requiredValues = el.renderCondition.equals;
-        const shouldShow = Array.isArray(requiredValues)
-          ? requiredValues.includes(currentFieldValue)
-          : currentFieldValue === requiredValues;
-
-        if (!shouldShow) {
-          return null;
-        }
+      if (checkValues("notEquals", true) || checkValues("equals")) {
+        return null;
       }
     }
     const _value = isObject ? (value[key] ?? value) : value;
