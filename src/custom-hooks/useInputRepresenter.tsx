@@ -33,7 +33,7 @@ export type TypeProperties = {
     locationType?: string;
     className?: string;
     properties?: TypeProperties;
-    requires?: { field: string; toBe: any } | { field: string; notToBe: any };
+    renderCondition?: { field: string; equals: any } | { field: string; notEquals: any };
   };
 };
 
@@ -338,10 +338,10 @@ const useInputRepresenter = ({
 
   return Object.entries(properties).map(([key, el]) => {
     const isObject = typeof value === "object" && !Array.isArray(value);
-    if (isObject && el.requires) {
-      const currentFieldValue = value[el.requires.field];
-      if ("notToBe" in el.requires) {
-        const forbiddenValues = el.requires.notToBe;
+    if (isObject && el.renderCondition) {
+      const currentFieldValue = value[el.renderCondition.field];
+      if ("notEquals" in el.renderCondition) {
+        const forbiddenValues = el.renderCondition.notEquals;
         const shouldHide = Array.isArray(forbiddenValues)
           ? forbiddenValues.includes(currentFieldValue)
           : currentFieldValue === forbiddenValues;
@@ -351,8 +351,8 @@ const useInputRepresenter = ({
         }
       }
 
-      if ("toBe" in el.requires) {
-        const requiredValues = el.requires.toBe;
+      if ("equals" in el.renderCondition) {
+        const requiredValues = el.renderCondition.equals;
         const shouldShow = Array.isArray(requiredValues)
           ? requiredValues.includes(currentFieldValue)
           : currentFieldValue === requiredValues;
