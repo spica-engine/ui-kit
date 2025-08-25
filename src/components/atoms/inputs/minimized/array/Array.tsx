@@ -12,7 +12,6 @@ export type TypeMinimizedArrayInput = {
   items?: TypeArrayItems;
   popoverProps?: TypeFlexElement;
   contentProps?: TypeFlexElement;
-  portalClassName?: string;
 } & TypeFlexElement;
 
 const MinimizedArrayInput: FC<TypeMinimizedArrayInput> = ({
@@ -21,12 +20,10 @@ const MinimizedArrayInput: FC<TypeMinimizedArrayInput> = ({
   items,
   popoverProps,
   contentProps,
-  portalClassName,
   ...props
 }) => {
   return (
     <Popover
-      portalClassName={portalClassName}
       content={
         <ArrayInput
           propertyKey={propertyKey}

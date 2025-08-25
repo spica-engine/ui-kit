@@ -11,19 +11,16 @@ export type TypeMinimizedLocationInput = TypeFlexElement & {
   contentProps?: TypeFlexElement;
   mapProps?: TypeMapProps;
   icon?: ReactNode;
-  portalClassName?: string;
 };
 
 const MinimizedLocationInput = ({
   contentProps,
   mapProps,
   icon,
-  portalClassName,
   ...props
 }: TypeMinimizedLocationInput) => {
   return (
     <Popover
-      portalClassName={portalClassName}
       content={<Map {...mapProps} />}
       contentProps={contentProps}
       containerProps={{ dimensionX: "fill", alignment: "leftCenter", ...props }}

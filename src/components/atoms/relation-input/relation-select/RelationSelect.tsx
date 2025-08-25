@@ -47,7 +47,6 @@ export type TypeRelationSelect = {
   setSelectedOption: React.Dispatch<
     React.SetStateAction<TypeLabeledValue | TypeLabeledValue[] | null>
   >;
-  portalClassName?: string;
 };
 
 const SEARCH_DEBOUNCE_TIME = 1000;
@@ -69,7 +68,6 @@ const RelationSelect: FC<TypeRelationSelect & TypeFluidContainer> = ({
   totalOptionsLength,
   selectedOption,
   setSelectedOption,
-  portalClassName,
   ...props
 }) => {
   const [displayerWidth, setDisplayerWidth] = useState(0);
@@ -223,7 +221,7 @@ const RelationSelect: FC<TypeRelationSelect & TypeFluidContainer> = ({
         className={`${props.className} ${styles.container} ${disabled && styles.disabled}`}
       />
       {isOpen && (
-        <Portal className={portalClassName}>
+        <Portal>
           <FlexElement
             ref={dropdownRef}
             style={{ ...targetPosition }}

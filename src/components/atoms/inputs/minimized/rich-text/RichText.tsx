@@ -8,18 +8,11 @@ import styles from "./RichText.module.scss";
 export type TypeRichTextMinimized = {
   value?: string;
   richTextProps?: TypeFlexElement;
-  portalClassName?: string;
 } & TypeFlexElement;
 
-const MinimizedRichTextInput: FC<TypeRichTextMinimized> = ({
-  value,
-  richTextProps,
-  portalClassName,
-  ...props
-}) => {
+const MinimizedRichTextInput: FC<TypeRichTextMinimized> = ({ value, richTextProps, ...props }) => {
   return (
     <Popover
-      portalClassName={portalClassName}
       content={<RichText value={value} contentProps={richTextProps} />}
       containerProps={{ dimensionX: "fill" }}
     >
