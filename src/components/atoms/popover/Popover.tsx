@@ -16,6 +16,7 @@ export type TypePopover = {
   contentProps?: TypeFlexElement;
   arrow?: boolean;
   arrowPlacement?: Placement;
+  portalClassName?: string;
 };
 
 const Popover: FC<TypePopover> = ({
@@ -28,6 +29,7 @@ const Popover: FC<TypePopover> = ({
   contentProps,
   arrow = false,
   arrowPlacement,
+  portalClassName,
 }) => {
   const containerRef = useRef<HTMLDivElement | null>(null);
   const popoverRef = useRef<HTMLDivElement | null>(null);
@@ -93,7 +95,7 @@ const Popover: FC<TypePopover> = ({
     >
       <FlexElement ref={childrenRef}>{children}</FlexElement>
       {isOpen && (
-        <Portal>
+        <Portal className={portalClassName}>
           <FlexElement
             ref={popoverRef}
             style={{ ...targetPosition }}
