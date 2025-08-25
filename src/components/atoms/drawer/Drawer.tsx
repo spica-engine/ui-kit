@@ -21,6 +21,7 @@ export type TypeDrawer = {
   showCloseButton?: boolean;
   isOpen?: boolean;
   onClose?: () => void;
+  portalClassName?: string;
 } & TypeFlexElement;
 
 const Drawer: FC<TypeDrawer> = ({
@@ -34,6 +35,7 @@ const Drawer: FC<TypeDrawer> = ({
   showCloseButton = true,
   isOpen = false,
   onClose,
+  portalClassName,
 }) => {
   const [isVisible, setIsVisible] = useState(isOpen);
   const [isShaking, setIsShaking] = useState(false);
@@ -84,7 +86,7 @@ const Drawer: FC<TypeDrawer> = ({
     : {};
 
   return (
-    <Portal>
+    <Portal className={portalClassName}>
       <FlexElement className={styles.drawerContainer}>
         <Backdrop
           showBackdrop={showBackdrop}

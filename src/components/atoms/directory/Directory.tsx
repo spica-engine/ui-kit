@@ -9,9 +9,10 @@ import ListItem from "components/atoms/list-item/ListItem";
 export type TypeDirectory = {
   directory: string[];
   onChangeDirectory?: (index: number) => void;
+  portalClassName?: string;
 };
 
-const Directory: FC<TypeDirectory> = ({ directory, onChangeDirectory }) => {
+const Directory: FC<TypeDirectory> = ({ directory, onChangeDirectory, portalClassName }) => {
   const hasMoreThanTwo = directory.length > 2;
   const visiblePaths = directory.slice(-2);
   const hiddenPaths = directory.slice(0, -2);
@@ -20,6 +21,7 @@ const Directory: FC<TypeDirectory> = ({ directory, onChangeDirectory }) => {
     <FlexElement gap={20} className={styles.directory}>
       {hasMoreThanTwo && (
         <Popover
+          portalClassName={portalClassName}
           content={
             <FlexElement direction="vertical" dimensionX={150}>
               {hiddenPaths.map((el, index) => (

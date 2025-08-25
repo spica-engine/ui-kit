@@ -38,6 +38,7 @@ export type TypeSelect = {
   selectRef?: Ref<TypeSelectRef>;
   disableClick?: boolean;
   onChange?: (value: TypeValue) => void;
+  portalClassName?: string;
 };
 
 const Select: FC<TypeSelect & TypeFluidContainer> = ({
@@ -53,6 +54,7 @@ const Select: FC<TypeSelect & TypeFluidContainer> = ({
   selectRef,
   disableClick,
   onChange,
+  portalClassName,
   ...props
 }) => {
   const [displayerWidth, setDisplayerWidth] = useState(0);
@@ -196,7 +198,7 @@ const Select: FC<TypeSelect & TypeFluidContainer> = ({
         className={`${props.className} ${styles.container} ${disabled && styles.disabled}`}
       />
       {isOpen && (
-        <Portal>
+        <Portal className={portalClassName}>
           <FlexElement
             ref={dropdownRef}
             style={{ ...targetPosition }}

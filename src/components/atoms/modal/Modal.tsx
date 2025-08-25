@@ -22,6 +22,7 @@ export type TypeModal = {
   backdropClassName?: string;
   backdropProps?: React.HTMLAttributes<HTMLDivElement>;
   isOpen?: boolean;
+  portalClassName?: string;
 } & TypeFlexElement;
 
 const ModalComponent: FC<TypeModal> = ({
@@ -36,6 +37,7 @@ const ModalComponent: FC<TypeModal> = ({
   backdropClassName,
   backdropProps,
   isOpen = false,
+  portalClassName,
   ...props
 }) => {
   const [isVisible, setIsVisible] = useState(isOpen);
@@ -66,7 +68,7 @@ const ModalComponent: FC<TypeModal> = ({
   if (!isVisible) return null;
 
   return (
-    <Portal>
+    <Portal className={portalClassName}>
       <FlexElement className={styles.modalContainer}>
         <Backdrop
           showBackdrop={showBackdrop}

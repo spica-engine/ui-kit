@@ -12,6 +12,7 @@ export type TypeMinimizedObjectInput = {
   popoverProps?: TypeFlexElement;
   contentProps?: TypeFlexElement;
   onChange?: (value: any) => void;
+  portalClassName?: string;
 } & TypeFlexElement;
 
 const MinimizedObjectInput: FC<TypeMinimizedObjectInput> = ({
@@ -20,10 +21,12 @@ const MinimizedObjectInput: FC<TypeMinimizedObjectInput> = ({
   contentProps,
   properties,
   onChange,
+  portalClassName,
   ...props
 }) => {
   return (
     <Popover
+      portalClassName={portalClassName}
       content={
         <ObjectInput
           properties={properties}
