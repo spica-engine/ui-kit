@@ -10,9 +10,10 @@ export const isClickInsideAnyPortal = (target: EventTarget) => {
 
 export type TypePortalProps = {
   children: ReactNode;
+  className?: string;
 };
 
-const Portal: FC<TypePortalProps> = ({ children }) => {
+const Portal: FC<TypePortalProps> = ({ children, className }) => {
   const portalElRef = useRef<HTMLDivElement | null>(null);
   useEffect(() => {
     const el = portalElRef.current;
@@ -31,7 +32,7 @@ const Portal: FC<TypePortalProps> = ({ children }) => {
   }, []);
 
   return ReactDOM.createPortal(
-    <div ref={portalElRef} className={styles.container}>
+    <div ref={portalElRef} className={`${styles.container} ${className || ""}`}>
       {children}
     </div>,
     document.body
