@@ -1,4 +1,13 @@
-import { FC, memo, ReactNode, useEffect, useLayoutEffect, useRef, useState } from "react";
+import {
+  FC,
+  memo,
+  ReactNode,
+  useEffect,
+  useImperativeHandle,
+  useLayoutEffect,
+  useRef,
+  useState,
+} from "react";
 import FlexElement, { TypeFlexElement } from "../flex-element/FlexElement";
 import styles from "./Popover.module.scss";
 import useAdaptivePosition, { Placement } from "@custom-hooks/useAdaptivePosition";
@@ -33,6 +42,16 @@ const Popover: FC<TypePopover> = ({
 }) => {
   const containerRef = useRef<HTMLDivElement | null>(null);
   const popoverRef = useRef<HTMLDivElement | null>(null);
+
+  useImperativeHandle(
+    contentProps?.ref ?? { current: null },
+    () => popoverRef.current as HTMLDivElement
+  );
+  useImperativeHandle(
+    containerProps?.ref ?? { current: null },
+    () => containerRef.current as HTMLDivElement
+  );
+
   const childrenRef = useRef<HTMLDivElement | null>(null);
   const [isOpen, setIsOpen] = useState(open);
 
@@ -88,18 +107,18 @@ const Popover: FC<TypePopover> = ({
 
   return (
     <FlexElement
+      {...containerProps}
       ref={containerRef}
       {...handleInteraction}
-      {...containerProps}
-      className={styles.container}
+      className={`${styles.container} ${containerProps?.className || ""}`}
     >
       <FlexElement ref={childrenRef}>{children}</FlexElement>
       {isOpen && (
         <Portal className={portalClassName}>
           <FlexElement
-            ref={popoverRef}
-            style={{ ...targetPosition }}
             {...contentProps}
+            ref={popoverRef}
+            style={{ ...targetPosition, ...(contentProps?.style ?? {}) }}
             className={`${contentProps?.className} ${styles.content}`}
           >
             {arrow && (
