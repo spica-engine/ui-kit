@@ -1,8 +1,45 @@
+.switch.small {
+  width: 33px;
+  height: 16.5px;
+  .slider::before {
+    width: 12px;
+    height: 12px;
+    top: 2px;
+  }
+  input:checked + .slider::before {
+    transform: translateX(15px);
+  }
+}
+
+.switch.medium {
+  width: 44px;
+  height: 22px;
+  .slider::before {
+    width: 16px;
+    height: 16px;
+    top: 3px;
+  }
+  input:checked + .slider::before {
+    transform: translateX(20px);
+  }
+}
+
+.switch.large {
+  width: 55px;
+  height: 27.5px;
+  .slider::before {
+    width: 20px;
+    height: 20px;
+    top: 4px;
+  }
+  input:checked + .slider::before {
+    transform: translateX(25px);
+  }
+}
+
 .switch {
   position: relative;
   display: inline-block;
-  width: 44px;
-  height: 22px;
   cursor: pointer;
 
   input {
@@ -34,9 +71,6 @@
   &::before {
     content: "";
     position: absolute;
-    width: 16px;
-    height: 16px;
-    top: 3px;
     left: 3px;
     transition: transform 0.3s ease;
     background: var(--oziko-color-font-primary);
@@ -49,6 +83,5 @@ input:checked + .slider {
 }
 
 input:checked + .slider::before {
-  transform: translateX(20px);
   background: var(--oziko-color-primary);
 }

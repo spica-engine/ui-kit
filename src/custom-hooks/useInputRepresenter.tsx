@@ -17,7 +17,7 @@ import { utils } from "utils";
 import ChipInput from "components/atoms/inputs/normal/chip/ChipInput";
 import Text from "components/atoms/text/Text";
 import RelationInput from "@atoms/relation-input/RelationInput";
-import { Select, TypeLabeledValue } from "index.export";
+import { Select, TypeLabeledValue, TypeSwitch } from "index.export";
 
 export type TypeProperties = {
   [key: string]: {
@@ -38,6 +38,7 @@ export type TypeProperties = {
     loadMoreOptions?: () => Promise<TypeLabeledValue[]>;
     searchOptions?: (value: string) => Promise<TypeLabeledValue[]>;
     totalOptionsLength?: number;
+    size?: TypeSwitch["size"];
   };
 };
 
@@ -96,6 +97,7 @@ export type TypeInputProps<T> = {
   value?: T;
   className?: string;
   onChange?: ({ key, value }: TypeChangeEvent<T>) => void;
+  size?: TypeSwitch["size"];
 };
 
 export type TypeInputRepresenterError = { [key: string]: string | null };
@@ -192,6 +194,7 @@ const types: TypeInputTypeMap = {
       description={props.description}
       containerProps={{ dimensionX: "fill" }}
       onChange={(value) => props.onChange?.({ key: props.key, value })}
+      size={props.size}
     />
   ),
   color: (props) => (
@@ -388,6 +391,7 @@ const useInputRepresenter = ({
           loadMoreOptions: el.loadMoreOptions as () => Promise<TypeLabeledValue[]>,
           searchOptions: el.searchOptions as (value: string) => Promise<TypeLabeledValue[]>,
           totalOptionsLength: el.totalOptionsLength as number,
+          size: el.size,
         })}
         {_error && (
           <Text
