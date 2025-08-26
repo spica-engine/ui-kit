@@ -17,7 +17,7 @@ import { utils } from "utils";
 import ChipInput from "components/atoms/inputs/normal/chip/ChipInput";
 import Text from "components/atoms/text/Text";
 import RelationInput from "@atoms/relation-input/RelationInput";
-import { Select, TypeLabeledValue } from "index.export";
+import { Select, TypeLabeledValue, TypeSwitch } from "index.export";
 
 export type TypeProperties = {
   [key: string]: {
@@ -38,7 +38,7 @@ export type TypeProperties = {
     loadMoreOptions?: () => Promise<TypeLabeledValue[]>;
     searchOptions?: (value: string) => Promise<TypeLabeledValue[]>;
     totalOptionsLength?: number;
-    size?: "medium" | "small" | "large";
+    size?: TypeSwitch["size"];
   };
 };
 
@@ -97,7 +97,7 @@ export type TypeInputProps<T> = {
   value?: T;
   className?: string;
   onChange?: ({ key, value }: TypeChangeEvent<T>) => void;
-  size?: "medium" | "small" | "large";
+  size?: TypeSwitch["size"];
 };
 
 export type TypeInputRepresenterError = { [key: string]: string | null };

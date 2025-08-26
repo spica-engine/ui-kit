@@ -2,7 +2,7 @@ import { FC, memo } from "react";
 import styles from "./Boolean.module.scss";
 import Text, { TypeText } from "@atoms/text/Text";
 import FluidContainer, { TypeFluidContainer } from "@atoms/fluid-container/FluidContainer";
-import Switch from "@atoms/switch/Switch";
+import Switch, { TypeSwitch } from "@atoms/switch/Switch";
 import FlexElement, { TypeFlexElement } from "@atoms/flex-element/FlexElement";
 
 export type TypeBooleanInput = {
@@ -16,7 +16,7 @@ export type TypeBooleanInput = {
   labelProps?: TypeText;
   description?: string;
   onChange?: (checked: boolean) => void;
-  size?: "medium" | "small" | "large";
+  size?: TypeSwitch["size"];
 };
 
 const BooleanInput: FC<TypeBooleanInput> = ({
