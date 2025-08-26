@@ -16,6 +16,7 @@ export type TypeBooleanInput = {
   labelProps?: TypeText;
   description?: string;
   onChange?: (checked: boolean) => void;
+  size?: "medium" | "small" | "large";
 };
 
 const BooleanInput: FC<TypeBooleanInput> = ({
@@ -29,6 +30,7 @@ const BooleanInput: FC<TypeBooleanInput> = ({
   labelProps,
   description,
   onChange,
+  size,
 }) => {
   return (
     <FlexElement dimensionX="fill" alignment="leftCenter" direction="vertical">
@@ -42,6 +44,7 @@ const BooleanInput: FC<TypeBooleanInput> = ({
               disabled={disabled}
               {...switchContainerProps}
               onChange={onChange}
+              size={size}
             />
           ),
           ...rootProps,
