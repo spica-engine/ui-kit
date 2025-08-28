@@ -1,4 +1,4 @@
-import React from "react";
+import React, { memo } from "react";
 import DatePicker from "@atoms/date-picker/DatePicker";
 import FluidContainer, { TypeFluidContainer } from "@atoms/fluid-container/FluidContainer";
 import styles from "./Date.module.scss";
@@ -58,4 +58,4 @@ const DateMinimizedInput = ({
   );
 };
 
-export default DateMinimizedInput;
+export default memo(DateMinimizedInput);

@@ -1,4 +1,4 @@
-import React, { FC, memo, useState } from "react";
+import React, { FC, memo, useRef, useState } from "react";
 import styles from "./StringMinimized.module.scss";
 import FluidContainer, { TypeFluidContainer } from "@atoms/fluid-container/FluidContainer";
 import Input from "@atoms/input/Input";
@@ -22,11 +22,19 @@ const StringMinimized: FC<TypeStringMinimized> = ({
   enumOnChange,
   ...props
 }) => {
+  const [isFocused, setIsFocused] = useState(false);
+  const inputRef = useRef<HTMLInputElement>(null);
+
+  const handleClear = () => {
+    onClear?.();
+    inputRef.current?.focus();
+  };
   return (
     <FluidContainer
       alignment="leftCenter"
       dimensionX="fill"
       className={styles.stringMinimized}
+      dimensionY={32}
       {...props}
       root={{
         dimensionX: "fill",
@@ -39,18 +47,27 @@ const StringMinimized: FC<TypeStringMinimized> = ({
             onChange={(value) => enumOnChange?.(String(value))}
           />
         ) : (
-          <Input value={value} {...inputProps} />
+          <Input
+            ref={inputRef}
+            value={value}
+            onFocus={() => setIsFocused(true)}
+            onBlur={() => setIsFocused(false)}
+            {...inputProps}
+          />
         ),
         ...props.root,
       }}
       suffix={{
         dimensionX: "hug",
         alignment: "center",
-        children: (
+        children: isFocused && (
           <Button
             children={<Icon name="close" />}
             color="transparent"
-            onClick={onClear}
+            onClick={handleClear}
+            onMouseDown={(e) => {
+              e.preventDefault();
+            }}
             className={styles.closeIcon}
           />
         ),
