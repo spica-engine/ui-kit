@@ -27,7 +27,7 @@ const Autocomplete: FC<TypeAutocomplete> = ({
   const menuRef = useRef<HTMLDivElement | null>(null);
 
   useOnClickOutside({
-    refs: [menuRef, containerRef],
+    targetElements: [menuRef, containerRef],
     onClickOutside: () => setShowMenu(false),
   });
 
