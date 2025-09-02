@@ -39,6 +39,7 @@ export type TypeProperties = {
     searchOptions?: (value: string) => Promise<TypeLabeledValue[]>;
     totalOptionsLength?: number;
     size?: TypeSwitch["size"];
+    valueType?: "string" | "number";
   };
 };
 
@@ -128,6 +129,10 @@ type TypeRelationInputProps<T> = {
   totalOptionsLength: number;
 } & TypeInputProps<T>;
 
+type TypeChipInputProps<T> = {
+  valueType?: "string" | "number";
+} & TypeInputProps<T>;
+
 export type TypeInputTypeMap = {
   string: (props: TypeSelectInputProps<string>) => ReactNode;
   number: (props: TypeSelectInputProps<number>) => ReactNode;
@@ -141,7 +146,7 @@ export type TypeInputTypeMap = {
   richtext: (props: TypeInputProps<string>) => ReactNode;
   object: (props: TypeObjectInputProps<TypeRepresenterValue>) => ReactNode;
   array: (props: TypeArrayInputProps<TypeValueType>) => ReactNode;
-  chip: (props: TypeInputProps<string[]>) => ReactNode;
+  chip: (props: TypeChipInputProps<string[] | number[]>) => ReactNode;
   relation: (props: TypeRelationInputProps<TypeLabeledValue[] | TypeLabeledValue>) => ReactNode;
   select: (props: TypeSelectInputProps<string>) => ReactNode;
 };
@@ -292,6 +297,7 @@ const types: TypeInputTypeMap = {
         onChange={(value) => {
           props.onChange?.({ key: props.key, value });
         }}
+        valueType={props.valueType}
       />
     );
   },
@@ -392,6 +398,7 @@ const useInputRepresenter = ({
           searchOptions: el.searchOptions as (value: string) => Promise<TypeLabeledValue[]>,
           totalOptionsLength: el.totalOptionsLength as number,
           size: el.size,
+          valueType: el.valueType,
         })}
         {_error && (
           <Text
