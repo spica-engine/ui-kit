@@ -9,6 +9,7 @@ export type TypeTab = {
   indicatorClassName?: string;
   indicatorMode?: "equal" | "fit";
   value?: number;
+  onChange?: (index: number) => void;
 } & TypeFlexElement;
 
 const Tab: FC<TypeTab> = ({
@@ -17,6 +18,7 @@ const Tab: FC<TypeTab> = ({
   indicatorClassName,
   indicatorMode = "equal",
   value,
+  onChange,
   ...props
 }) => {
   const [activeIndex, setActiveIndex] = useState<number>(0);
@@ -32,6 +34,7 @@ const Tab: FC<TypeTab> = ({
 
   const handleItemClick = (index: number) => {
     setActiveIndex(index);
+    onChange?.(index);
   };
 
   useEffect(() => {
