@@ -8,6 +8,8 @@ export type TypeTab = {
   items: TypeFluidContainer[];
   indicatorClassName?: string;
   indicatorMode?: "equal" | "fit";
+  value?: number;
+  onChange?: (index: number) => void;
 } & TypeFlexElement;
 
 const Tab: FC<TypeTab> = ({
@@ -15,6 +17,8 @@ const Tab: FC<TypeTab> = ({
   items,
   indicatorClassName,
   indicatorMode = "equal",
+  value,
+  onChange,
   ...props
 }) => {
   const [activeIndex, setActiveIndex] = useState<number>(0);
@@ -23,8 +27,14 @@ const Tab: FC<TypeTab> = ({
   const containerRef = useRef<HTMLDivElement | null>(null);
   const itemRefs = useRef<(HTMLDivElement | null)[]>([]);
 
+  useEffect(() => {
+    if (!value && value !== 0) return;
+    setActiveIndex(value);
+  }, [value]);
+
   const handleItemClick = (index: number) => {
     setActiveIndex(index);
+    onChange?.(index);
   };
 
   useEffect(() => {
