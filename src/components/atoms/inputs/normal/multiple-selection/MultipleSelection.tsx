@@ -30,6 +30,7 @@ const MultipleSelectionInput = <T extends string | number>({
   const selectRef = useRef<TypeSelectRef>(null);
 
   const [forceFocus, setForceFocus] = useState(false);
+  const dropDownRef = useRef<HTMLDivElement>(null);
 
   const handleOnFocusChange = (isFocused: boolean) => {
     selectRef?.current?.toggleDropdown(isFocused);
@@ -40,6 +41,7 @@ const MultipleSelectionInput = <T extends string | number>({
     <BaseInput
       dimensionX={"fill"}
       description={description}
+      dropDownRef={dropDownRef}
       forceFocus={forceFocus}
       onFocusChange={(isFocused) => handleOnFocusChange(isFocused)}
       labelProps={{
@@ -62,6 +64,7 @@ const MultipleSelectionInput = <T extends string | number>({
     >
       <Select
         selectRef={selectRef}
+        externalDropdownRef={dropDownRef}
         disableClick
         options={options || []}
         value={value}
