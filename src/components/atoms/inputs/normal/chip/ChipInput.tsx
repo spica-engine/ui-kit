@@ -24,7 +24,7 @@ const ChipInput: FC<TypeChipInput> = ({
   ...props
 }) => {
   const [inputValue, setInputValue] = useState<string>("");
-  const [error, setError] = useState<string>();
+  const [error, setError] = useState<string | undefined>();
 
   const handleKeyDown = (e: React.KeyboardEvent<HTMLInputElement>) => {
     if (e.key === "Enter" && inputValue.trim() !== "") {
