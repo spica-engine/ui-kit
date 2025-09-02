@@ -14,7 +14,7 @@ import Icon from "components/atoms/icon/Icon";
 import ObjectInput from "components/atoms/inputs/normal/object/ObjectInput";
 import ArrayInput from "components/atoms/inputs/normal/array/ArrayInput";
 import { utils } from "utils";
-import ChipInput, { TypeChipInput } from "components/atoms/inputs/normal/chip/ChipInput";
+import ChipInput, { TypeChipInput } from "@molecules/chip/ChipInput";
 import Text from "components/atoms/text/Text";
 import RelationInput from "@atoms/relation-input/RelationInput";
 import { Select, TypeLabeledValue, TypeSwitch } from "index.export";
