@@ -34,6 +34,7 @@ const NumberInput: FC<TypeNumberInput & TypeFlexElement> = ({
   const inputRef = useRef<HTMLInputElement>(null);
 
   const [forceFocus, setForceFocus] = useState(false);
+  const dropDownRef = useRef<HTMLDivElement>(null);
 
   const handleOnFocusChange = (isFocused: boolean) => {
     selectRef?.current?.toggleDropdown(isFocused);
@@ -48,6 +49,7 @@ const NumberInput: FC<TypeNumberInput & TypeFlexElement> = ({
       dimensionX={"fill"}
       description={description}
       forceFocus={forceFocus}
+      dropDownRef={dropDownRef}
       onFocusChange={(isFocused) => handleOnFocusChange(isFocused)}
       labelProps={{
         dimensionX: "hug",
@@ -70,6 +72,7 @@ const NumberInput: FC<TypeNumberInput & TypeFlexElement> = ({
       {!!options ? (
         <Select
           selectRef={selectRef}
+          externalDropdownRef={dropDownRef}
           disableClick
           options={options}
           value={value}

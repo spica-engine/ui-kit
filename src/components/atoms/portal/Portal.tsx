@@ -1,27 +1,36 @@
-import React, { type ReactNode, type FC, useEffect, useRef } from "react";
+import React, { type ReactNode, type FC, useEffect, useRef, useId } from "react";
 import ReactDOM from "react-dom";
 import styles from "./Portal.module.scss";
+import { useOnClickOutside } from "index.export";
 
-const portalRegistry = new Set<HTMLElement>();
-
-export const isClickInsideAnyPortal = (target: EventTarget) => {
-  return [...portalRegistry].some((el) => el.contains(target as Node));
-};
+const portalRegistry = new Map<string, number>();
 
 export type TypePortalProps = {
   children: ReactNode;
   className?: string;
+  onClickOutside?: (event?: MouseEvent) => void;
 };
 
-const Portal: FC<TypePortalProps> = ({ children, className }) => {
+const Portal: FC<TypePortalProps> = ({ children, className, onClickOutside }) => {
+  const id = useId();
   const portalElRef = useRef<HTMLDivElement | null>(null);
+  const portalCreationTime = useRef(Date.now());
+
+  useOnClickOutside({
+    targetElements: [portalElRef.current?.firstChild as HTMLElement],
+    onClickOutside: (event) => {
+      const record = portalRegistry.get(id);
+      if (record !== Math.max(...portalRegistry.values())) return;
+      onClickOutside?.(event);
+    },
+  });
+
   useEffect(() => {
-    const el = portalElRef.current;
-    if (el) portalRegistry.add(el.firstChild as HTMLElement);
+    portalRegistry.set(id, portalCreationTime.current);
     return () => {
-      if (el) portalRegistry.delete(el);
+      portalRegistry.delete(id);
     };
-  }, []);
+  }, [id]);
 
   useEffect(() => {
     const originalOverflow = document.body.style.overflow;

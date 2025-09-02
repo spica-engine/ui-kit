@@ -2,6 +2,7 @@ import {
   FC,
   memo,
   Ref,
+  RefObject,
   useEffect,
   useImperativeHandle,
   useLayoutEffect,
@@ -15,7 +16,6 @@ import Icon from "@atoms/icon/Icon";
 import Text from "@atoms/text/Text";
 import SelectOption, { TypeLabeledValue } from "@atoms/select-option/SelectOption";
 import FlexElement from "@atoms/flex-element/FlexElement";
-import { useOnClickOutside } from "@custom-hooks/useOnClickOutside";
 import useAdaptivePosition from "@custom-hooks/useAdaptivePosition";
 
 export type TypeValue = string | number | (string | number)[];
@@ -38,6 +38,7 @@ export type TypeSelect = {
   selectRef?: Ref<TypeSelectRef>;
   disableClick?: boolean;
   onChange?: (value: TypeValue) => void;
+  externalDropdownRef?: RefObject<HTMLDivElement | null>;
 };
 
 const Select: FC<TypeSelect & TypeFluidContainer> = ({
@@ -53,6 +54,7 @@ const Select: FC<TypeSelect & TypeFluidContainer> = ({
   selectRef,
   disableClick,
   onChange,
+  externalDropdownRef,
   ...props
 }) => {
   const [displayerWidth, setDisplayerWidth] = useState(0);
@@ -69,13 +71,10 @@ const Select: FC<TypeSelect & TypeFluidContainer> = ({
   const containerRef = useRef<HTMLDivElement | null>(null);
   const dropdownRef = useRef<HTMLDivElement | null>(null);
 
-  useOnClickOutside({
-    refs: [dropdownRef, containerRef],
-    onClickOutside: () => {
-      if (disableClick) return;
-      setIsOpen(false);
-    },
-  });
+  useImperativeHandle(
+    externalDropdownRef ?? { current: null },
+    () => dropdownRef.current as HTMLDivElement
+  );
 
   const { targetPosition, calculatePosition } = useAdaptivePosition({
     containerRef,
@@ -196,7 +195,12 @@ const Select: FC<TypeSelect & TypeFluidContainer> = ({
         className={`${props.className} ${styles.container} ${disabled && styles.disabled}`}
       />
       {isOpen && (
-        <Portal>
+        <Portal
+          onClickOutside={() => {
+            if (disableClick) return;
+            setIsOpen(false);
+          }}
+        >
           <FlexElement
             ref={dropdownRef}
             style={{ ...targetPosition }}

@@ -27,6 +27,7 @@ export type TypeBaseInputProps = {
   readonly?: boolean;
   forceFocus?: boolean;
   onFocusChange?: (isFocused: boolean) => void;
+  dropDownRef?: React.RefObject<HTMLElement | null>;
 } & TypeFlexElement;
 
 const BaseInput = ({
@@ -41,6 +42,7 @@ const BaseInput = ({
   helperTextContainerProps,
   children,
   forceFocus = false,
+  dropDownRef,
   ...props
 }: TypeBaseInputProps) => {
   const [isFocused, setIsFocused] = useState(forceFocus);
@@ -51,7 +53,7 @@ const BaseInput = ({
   }, [forceFocus]);
 
   useOnClickOutside({
-    refs: [containerRef],
+    targetElements: [containerRef, dropDownRef],
     onClickOutside: () => {
       setIsFocused(false);
     },

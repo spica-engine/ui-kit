@@ -97,7 +97,7 @@ const RelationSelect: FC<TypeRelationSelect & TypeFluidContainer> = ({
   const dropdownRef = useRef<HTMLDivElement | null>(null);
 
   useOnClickOutside({
-    refs: [dropdownRef, containerRef],
+    targetElements: [dropdownRef, containerRef],
     onClickOutside: () => {
       if (disableClick) return;
       setIsOpen(false);

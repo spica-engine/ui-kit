@@ -32,7 +32,7 @@ const StringInput: FC<TypeStringInput & TypeFlexElement> = ({
 }) => {
   const selectRef = useRef<TypeSelectRef>(null);
   const inputRef = useRef<HTMLInputElement>(null);
-
+  const dropDownRef = useRef<HTMLDivElement>(null);
   const [forceFocus, setForceFocus] = useState(false);
 
   const handleOnFocusChange = (isFocused: boolean) => {
@@ -49,6 +49,7 @@ const StringInput: FC<TypeStringInput & TypeFlexElement> = ({
       dimensionX={"fill"}
       description={description}
       forceFocus={forceFocus}
+      dropDownRef={dropDownRef}
       onFocusChange={(isFocused) => handleOnFocusChange(isFocused)}
       labelProps={{
         dimensionX: "hug",
@@ -71,6 +72,7 @@ const StringInput: FC<TypeStringInput & TypeFlexElement> = ({
       {!!options ? (
         <Select
           selectRef={selectRef}
+          externalDropdownRef={dropDownRef}
           disableClick
           options={options}
           value={value}

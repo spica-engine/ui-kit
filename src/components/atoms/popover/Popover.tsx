@@ -2,7 +2,7 @@ import {
   FC,
   memo,
   ReactNode,
-  useEffect,
+  useCallback,
   useImperativeHandle,
   useLayoutEffect,
   useRef,
@@ -11,7 +11,6 @@ import {
 import FlexElement, { TypeFlexElement } from "../flex-element/FlexElement";
 import styles from "./Popover.module.scss";
 import useAdaptivePosition, { Placement } from "@custom-hooks/useAdaptivePosition";
-import { useOnClickOutside } from "@custom-hooks/useOnClickOutside";
 import useKeyDown from "@custom-hooks/useKeyDown";
 import Portal from "../portal/Portal";
 
@@ -26,6 +25,7 @@ export type TypePopover = {
   arrow?: boolean;
   arrowPlacement?: Placement;
   portalClassName?: string;
+  onClose?: (triggerEvent?: MouseEvent) => void;
 };
 
 const Popover: FC<TypePopover> = ({
@@ -39,6 +39,7 @@ const Popover: FC<TypePopover> = ({
   arrow = false,
   arrowPlacement,
   portalClassName,
+  onClose,
 }) => {
   const containerRef = useRef<HTMLDivElement | null>(null);
   const popoverRef = useRef<HTMLDivElement | null>(null);
@@ -53,7 +54,21 @@ const Popover: FC<TypePopover> = ({
   );
 
   const childrenRef = useRef<HTMLDivElement | null>(null);
-  const [isOpen, setIsOpen] = useState(open);
+  const [internalOpen, setInternalOpen] = useState(false);
+  const isControlled = onClose !== undefined;
+  const isOpen = isControlled ? open : internalOpen;
+
+  const handleVisibilityChange = useCallback(
+    (newOpen: boolean, event?: MouseEvent) => {
+      if (!isControlled) {
+        setInternalOpen(newOpen);
+      }
+      if (newOpen === false) {
+        onClose?.(event);
+      }
+    },
+    [isControlled, onClose]
+  );
 
   const arrowplc = {
     top: "bottom",
@@ -72,23 +87,14 @@ const Popover: FC<TypePopover> = ({
 
   useKeyDown("Escape", () => {
     if (isOpen) {
-      setIsOpen(false);
+      handleVisibilityChange(false);
     }
   });
-
-  useEffect(() => {
-    setIsOpen(open);
-  }, [open]);
 
   const { targetPosition, calculatePosition } = useAdaptivePosition({
     containerRef: childrenRef,
     targetRef: popoverRef,
     initialPlacement: placement,
-  });
-
-  useOnClickOutside({
-    refs: [containerRef, popoverRef],
-    onClickOutside: () => trigger === "click" && setIsOpen(false),
   });
 
   useLayoutEffect(() => {
@@ -99,10 +105,10 @@ const Popover: FC<TypePopover> = ({
 
   const handleInteraction = {
     onMouseEnter: () => {
-      trigger === "hover" && setIsOpen(true);
+      trigger === "hover" && handleVisibilityChange(true);
     },
-    onMouseLeave: () => trigger === "hover" && setIsOpen(false),
-    onClick: () => trigger === "click" && setIsOpen(true),
+    onMouseLeave: () => trigger === "hover" && handleVisibilityChange(false),
+    onClick: () => trigger === "click" && handleVisibilityChange(true),
   };
 
   return (
@@ -114,7 +120,12 @@ const Popover: FC<TypePopover> = ({
     >
       <FlexElement ref={childrenRef}>{children}</FlexElement>
       {isOpen && (
-        <Portal className={portalClassName}>
+        <Portal
+          className={portalClassName}
+          onClickOutside={(event?: MouseEvent) =>
+            trigger === "click" && handleVisibilityChange(false, event)
+          }
+        >
           <FlexElement
             {...contentProps}
             ref={popoverRef}
