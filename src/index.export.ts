@@ -54,7 +54,7 @@ export { default as StringMinimizedInput } from "./components/atoms/inputs/minim
 export { default as TextAreaMinimizedInput } from "./components/atoms/inputs/minimized/text-area/TextArea";
 export { default as ArrayInput } from "./components/atoms/inputs/normal/array/ArrayInput";
 export { default as BooleanInput } from "./components/atoms/inputs/normal/boolean/Boolean";
-export { default as ChipInput } from "./components/atoms/inputs/normal/chip/ChipInput";
+export { default as ChipInput } from "./components/molecules/chip/ChipInput";
 export { default as ColorInput } from "./components/atoms/inputs/normal/color/Color";
 export { default as DateInput } from "./components/atoms/inputs/normal/date/Date";
 export { default as EnumInput } from "./components/atoms/inputs/normal/enum/Enum";
@@ -137,7 +137,7 @@ export { type TypeRichTextMinimized } from "./components/atoms/inputs/minimized/
 export { type TypeStorageMinimized } from "./components/atoms/inputs/minimized/storage/StorageMinimized";
 export { type TypeStringMinimized } from "./components/atoms/inputs/minimized/string/StringMinimized";
 export { type TypeArrayInput } from "./components/atoms/inputs/normal/array/ArrayInput";
-export { type TypeChipInput } from "./components/atoms/inputs/normal/chip/ChipInput";
+export { type TypeChipInput } from "./components/molecules/chip/ChipInput";
 export { type TypeColorInput } from "./components/atoms/inputs/normal/color/Color";
 export { type TypeEnum } from "./components/atoms/inputs/normal/enum/Enum";
 export { type TypeLocationInput } from "./components/atoms/inputs/normal/location/Location";
