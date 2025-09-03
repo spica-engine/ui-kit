@@ -1,4 +1,4 @@
-import { FC, memo, useState } from "react";
+import { FC, memo, useCallback, useState } from "react";
 import styles from "./ArrayInput.module.scss";
 import Icon from "@atoms/icon/Icon";
 import InputHeader from "@atoms/input-header/InputHeader";
@@ -7,6 +7,7 @@ import FlexElement, { TypeFlexElement } from "@atoms/flex-element/FlexElement";
 import InputGroup from "@atoms/base-input/InputGroup";
 import useInputRepresenter, {
   TypeArrayItems,
+  TypeInputType,
   TypeProperties,
   TypeRepresenterValue,
   TypeValueType,
@@ -38,14 +39,15 @@ const ArrayInput: FC<TypeArrayInput> = ({
   maxItems,
   propertyKey,
   onChange,
+  minItems,
   ...props
 }) => {
   const [active, setActive] = useState(0);
 
-  const handleChange = (_value: any) => {
+  const handleChange = (_value: { [key: string]: TypeValueType[] }) => {
     const updatedValue = structuredClone(value);
     if (!updatedValue?.length) return value;
-    updatedValue[active] = _value[propertyKey];
+    updatedValue[active] = _value[propertyKey] as TypeValueType;
     onChange?.(updatedValue);
   };
 
@@ -59,12 +61,95 @@ const ArrayInput: FC<TypeArrayInput> = ({
     setActive(index);
   };
 
+  const generateDefaultValueForType = useCallback(
+    (
+      type: TypeInputType,
+      properties?: TypeProperties,
+      enumValues?: (string | number)[],
+      defaultValue?: TypeValueType
+    ): TypeValueType => {
+      // If explicit default is provided, use it
+      if (defaultValue !== undefined) {
+        return defaultValue;
+      }
+
+      // If enum is provided, use the first value
+      if (enumValues && enumValues.length > 0) {
+        return enumValues[0];
+      }
+
+      // Generate default value based on type
+      switch (type) {
+        case "string":
+        case "textarea":
+        case "richtext":
+        case "color":
+        case "storage":
+        case "select":
+          return "";
+
+        case "number":
+          return 0;
+
+        case "boolean":
+          return false;
+
+        case "date":
+          return "";
+
+        case "multiselect":
+        case "chip":
+          return [];
+
+        case "location":
+          return { lat: 0, lng: 0 };
+
+        case "relation":
+          return [];
+
+        case "object":
+          if (!properties) return {};
+
+          // Generate default object based on properties
+          const defaultObject: TypeRepresenterValue = {};
+          Object.entries(properties).forEach(([key, property]) => {
+            defaultObject[key] = generateDefaultValueForType(
+              property.type,
+              property.properties,
+              property.enum,
+              property.default
+            );
+          });
+          return defaultObject;
+
+        case "array":
+          return [];
+
+        default:
+          return "";
+      }
+    },
+    []
+  );
+
+  const getDefaultValue = useCallback((): TypeValueType => {
+    if (!items) return "";
+    return generateDefaultValueForType(items.type, items.properties, items.enum);
+  }, [items, generateDefaultValueForType]);
+
   const handleCreateNewItem = () => {
     const localValue = value || [];
 
-    localValue?.push(value?.[active] || "");
+    localValue?.push(value?.[active] || getDefaultValue());
     onChange?.(localValue);
     setActive(localValue.length - 1);
+  };
+
+  const handleDeleteItem = (index: number) => {
+    const localValue = value || [];
+    localValue.splice(index, 1);
+    onChange?.(localValue);
+    setActive(Math.max(0, index - 1));
   };
 
   return (
@@ -75,21 +160,22 @@ const ArrayInput: FC<TypeArrayInput> = ({
       {...props}
       className={`${props.className} ${styles.container}`}
     >
-      {title && (
-        <InputHeader
-          prefix={{ children: <Icon name="ballot" className={styles.icon} /> }}
-          root={{ children: <Text variant="secondary">{title}</Text> }}
+      <div className={styles.header}>
+        {title && (
+          <InputHeader
+            prefix={{ children: <Icon name="ballot" className={styles.icon} /> }}
+            root={{ children: <Text variant="secondary">{title}</Text> }}
+          />
+        )}
+        <DropList
+          length={value?.length}
+          active={active}
+          maxItems={maxItems}
+          onChange={handleChangeActiveIndex}
+          onCreate={handleCreateNewItem}
+          onDelete={handleDeleteItem}
         />
-      )}
-
-      <DropList
-        length={value?.length}
-        active={active}
-        maxItems={maxItems}
-        onChange={handleChangeActiveIndex}
-        onCreate={handleCreateNewItem}
-      />
-
+      </div>
       {inputFields}
       <InputGroup.HelperText
         alignment="leftCenter"
