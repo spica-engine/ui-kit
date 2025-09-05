@@ -187,7 +187,9 @@ const RelationSelect: FC<TypeRelationSelect & TypeFluidContainer> = ({
           label={option.label as string}
           onDelete={() => handleOptionSelect(option)}
         />
-      )) ?? (selectedOption as TypeLabeledValue)?.label
+      )) ??
+      (selectedOption as TypeLabeledValue)?.label ??
+      placeholder
     );
   };
 
