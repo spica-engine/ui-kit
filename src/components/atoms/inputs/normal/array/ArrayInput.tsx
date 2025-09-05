@@ -69,14 +69,8 @@ const ArrayInput: FC<TypeArrayInput> = ({
     (
       type: TypeInputType,
       properties?: TypeProperties,
-      enumValues?: (string | number)[],
-      defaultValue?: TypeValueType
+      enumValues?: (string | number)[]
     ): TypeValueType => {
-      // If explicit default is provided, use it
-      if (defaultValue !== undefined) {
-        return defaultValue;
-      }
-
       // If enum is provided, use the first value
       if (enumValues && enumValues.length > 0) {
         return enumValues[0];
@@ -117,12 +111,10 @@ const ArrayInput: FC<TypeArrayInput> = ({
           // Generate default object based on properties
           const defaultObject: TypeRepresenterValue = {};
           Object.entries(properties).forEach(([key, property]) => {
-            defaultObject[key] = generateDefaultValueForType(
-              property.type,
-              property.properties,
-              property.enum,
-              property.default
-            );
+            defaultObject[key] =
+              property.default !== undefined
+                ? property.default
+                : generateDefaultValueForType(property.type, property.properties, property.enum);
           });
           return defaultObject;
 
