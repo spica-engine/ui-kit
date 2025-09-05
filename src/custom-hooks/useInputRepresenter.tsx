@@ -40,6 +40,8 @@ export type TypeProperties = {
     totalOptionsLength?: number;
     size?: TypeSwitch["size"];
     valueType?: TypeChipInput["valueType"];
+    error?: TypeInputRepresenterError | string;
+    id?: string;
   };
 };
 
@@ -101,11 +103,14 @@ export type TypeInputProps<T> = {
   size?: TypeSwitch["size"];
 };
 
-export type TypeInputRepresenterError = { [key: string]: string | null };
+export type TypeInputRepresenterError = {
+  [key: string]: string | TypeInputRepresenterError;
+};
 
 type TypeObjectInputProps<T> = {
   key?: string;
   properties?: TypeProperties;
+  errors?: TypeInputRepresenterError | string;
 } & TypeInputProps<T>;
 
 type TypeSelectInputProps<T extends string | number> = {
@@ -120,6 +125,7 @@ type TypeArrayInputProps<T> = {
   minItems?: number;
   maxItems?: number;
   items?: TypeArrayItems;
+  errors?: TypeInputRepresenterError | string | null;
 } & TypeInputProps<T[]>;
 
 type TypeRelationInputProps<T> = {
@@ -273,6 +279,7 @@ const types: TypeInputTypeMap = {
         onChange={(value) => {
           props.onChange?.({ key: props.key, value });
         }}
+        errors={props.errors as TypeInputRepresenterError}
       />
     );
   },
@@ -287,6 +294,7 @@ const types: TypeInputTypeMap = {
         maxItems={props.maxItems}
         items={props.items}
         propertyKey={props.key}
+        errors={props.errors as TypeInputRepresenterError}
       />
     );
   },
@@ -373,12 +381,13 @@ const useInputRepresenter = ({
     }
     const _value = isObject ? (value[key] ?? value) : value;
     const _error = error?.[key];
-
+    if (el.type === "object") console.log("error for object", key, _error);
     return (
       <div
         style={hasCustomStyles ? undefined : { position: "relative", width: "100%" }}
         className={containerClassName}
         key={key}
+        id={el.id ?? undefined}
       >
         {types[el.type]({
           key,
@@ -399,8 +408,9 @@ const useInputRepresenter = ({
           totalOptionsLength: el.totalOptionsLength as number,
           size: el.size,
           valueType: el.valueType,
+          errors: typeof _error === "string" ? undefined : _error,
         })}
-        {_error && (
+        {_error && typeof _error === "string" && (
           <Text
             className={errorClassName}
             style={

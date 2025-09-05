@@ -2,6 +2,7 @@ import {
   FC,
   memo,
   Ref,
+  RefObject,
   useEffect,
   useId,
   useImperativeHandle,
@@ -47,6 +48,7 @@ export type TypeRelationSelect = {
   setSelectedOption: React.Dispatch<
     React.SetStateAction<TypeLabeledValue | TypeLabeledValue[] | null>
   >;
+  dropDownRef?: Ref<HTMLDivElement>;
 };
 
 const SEARCH_DEBOUNCE_TIME = 1000;
@@ -68,6 +70,7 @@ const RelationSelect: FC<TypeRelationSelect & TypeFluidContainer> = ({
   totalOptionsLength,
   selectedOption,
   setSelectedOption,
+  dropDownRef,
   ...props
 }) => {
   const [displayerWidth, setDisplayerWidth] = useState(0);
@@ -94,19 +97,20 @@ const RelationSelect: FC<TypeRelationSelect & TypeFluidContainer> = ({
   }, [searchValue]);
 
   const containerRef = useRef<HTMLDivElement | null>(null);
-  const dropdownRef = useRef<HTMLDivElement | null>(null);
+
+  const handleClose = () => {
+    if (disableClick) return;
+    setIsOpen(false);
+  };
 
   useOnClickOutside({
-    targetElements: [dropdownRef, containerRef],
-    onClickOutside: () => {
-      if (disableClick) return;
-      setIsOpen(false);
-    },
+    targetElements: [containerRef],
+    onClickOutside: handleClose,
   });
 
   const { targetPosition, calculatePosition } = useAdaptivePosition({
     containerRef,
-    targetRef: dropdownRef,
+    targetRef: dropDownRef as RefObject<HTMLElement | null>,
     initialPlacement: placement,
   });
 
@@ -117,7 +121,7 @@ const RelationSelect: FC<TypeRelationSelect & TypeFluidContainer> = ({
   }, []);
 
   useLayoutEffect(() => {
-    if (isOpen && containerRef.current && dropdownRef.current) {
+    if (isOpen && containerRef.current && (dropDownRef as RefObject<HTMLElement | null>)?.current) {
       calculatePosition();
     }
   }, [isOpen, options, calculatePosition]);
@@ -169,21 +173,22 @@ const RelationSelect: FC<TypeRelationSelect & TypeFluidContainer> = ({
 
   const getDisplayer = () => {
     if (
-      !Array.isArray(selectedOption) ||
-      !selectedOption.length ||
+      (multiple && (!Array.isArray(selectedOption) || !selectedOption.length)) ||
       typeof options[0] !== "object"
     ) {
       return placeholder;
     }
 
-    return selectedOption.map((option) => (
-      <Chip
-        variant="outlined"
-        key={`${option.value}${option.label}`}
-        label={option.label as string}
-        onDelete={() => handleOptionSelect(option)}
-      />
-    ));
+    return (
+      (selectedOption as TypeLabeledValue[])?.map?.((option) => (
+        <Chip
+          variant="outlined"
+          key={`${option.value}${option.label}`}
+          label={option.label as string}
+          onDelete={() => handleOptionSelect(option)}
+        />
+      )) ?? (selectedOption as TypeLabeledValue)?.label
+    );
   };
 
   const infiniteScrollId = useId();
@@ -221,9 +226,9 @@ const RelationSelect: FC<TypeRelationSelect & TypeFluidContainer> = ({
         className={`${props.className} ${styles.container} ${disabled && styles.disabled}`}
       />
       {isOpen && (
-        <Portal>
+        <Portal onClickOutside={handleClose}>
           <FlexElement
-            ref={dropdownRef}
+            ref={dropDownRef as RefObject<HTMLDivElement>}
             style={{ ...targetPosition }}
             className={`${popupClassName} ${styles.selectDropdown}`}
             direction="vertical"

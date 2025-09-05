@@ -7,6 +7,7 @@ import FlexElement, { TypeFlexElement } from "@atoms/flex-element/FlexElement";
 import InputGroup from "@atoms/base-input/InputGroup";
 import useInputRepresenter, {
   TypeArrayItems,
+  TypeInputRepresenterError,
   TypeInputType,
   TypeProperties,
   TypeRepresenterValue,
@@ -26,6 +27,7 @@ export type TypeArrayInput = {
   propertyKey: string;
   items?: TypeArrayItems;
   onChange?: (value: any) => void;
+  errors?: TypeInputRepresenterError | string;
 } & TypeFlexElement;
 
 const ArrayInput: FC<TypeArrayInput> = ({
@@ -40,6 +42,7 @@ const ArrayInput: FC<TypeArrayInput> = ({
   propertyKey,
   onChange,
   minItems,
+  errors,
   ...props
 }) => {
   const [active, setActive] = useState(0);
@@ -55,6 +58,7 @@ const ArrayInput: FC<TypeArrayInput> = ({
     properties: { [propertyKey]: items } as unknown as TypeProperties,
     value: { [propertyKey]: value?.[active] } as TypeRepresenterValue,
     onChange: handleChange,
+    error: errors as TypeInputRepresenterError,
   });
 
   const handleChangeActiveIndex = (index: number) => {
