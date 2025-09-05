@@ -40,6 +40,7 @@ export type TypeProperties = {
     totalOptionsLength?: number;
     size?: TypeSwitch["size"];
     valueType?: TypeChipInput["valueType"];
+    id?: string;
   };
 };
 
@@ -379,6 +380,7 @@ const useInputRepresenter = ({
         style={hasCustomStyles ? undefined : { position: "relative", width: "100%" }}
         className={containerClassName}
         key={key}
+        id={el.id ?? undefined}
       >
         {types[el.type]({
           key,
