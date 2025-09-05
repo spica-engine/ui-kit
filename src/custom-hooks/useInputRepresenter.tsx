@@ -381,7 +381,7 @@ const useInputRepresenter = ({
     }
     const _value = isObject ? (value[key] ?? value) : value;
     const _error = error?.[key];
-    if (el.type === "object") console.log("error for object", key, _error);
+
     return (
       <div
         style={hasCustomStyles ? undefined : { position: "relative", width: "100%" }}
