@@ -76,7 +76,6 @@ const ArrayInput: FC<TypeArrayInput> = ({
         return enumValues[0];
       }
 
-      // Generate default value based on type
       switch (type) {
         case "string":
         case "textarea":
@@ -86,24 +85,20 @@ const ArrayInput: FC<TypeArrayInput> = ({
         case "select":
           return "";
 
+        case "multiselect":
+        case "chip":
+        case "relation":
+        case "array":
+          return [];
+
         case "number":
           return 0;
 
         case "boolean":
           return false;
 
-        case "date":
-          return "";
-
-        case "multiselect":
-        case "chip":
-          return [];
-
         case "location":
           return { lat: 0, lng: 0 };
-
-        case "relation":
-          return [];
 
         case "object":
           if (!properties) return {};
@@ -118,9 +113,7 @@ const ArrayInput: FC<TypeArrayInput> = ({
           });
           return defaultObject;
 
-        case "array":
-          return [];
-
+        case "date":
         default:
           return "";
       }
