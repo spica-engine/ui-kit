@@ -41,8 +41,8 @@ const ArrayInput: FC<TypeArrayInput> = ({
   maxItems,
   propertyKey,
   onChange,
-  minItems,
   errors,
+  minItems,
   ...props
 }) => {
   const [active, setActive] = useState(0);
