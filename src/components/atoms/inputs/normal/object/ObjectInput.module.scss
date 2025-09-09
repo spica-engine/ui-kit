@@ -2,4 +2,14 @@
 
 .container {
   @include mixins.inputContainer;
+  border: var(--oziko-border-default);
+  border-radius: var(--oziko-border-radius-md);
+}
+
+.error {
+  position: unset;
+}
+
+.inputContainer {
+  width: 100%;
 }

@@ -80,12 +80,15 @@ const RichTextInput: FC<TypeRichTextInput> = ({
     ],
   };
 
-  const handleChange = useCallback((state: EditorState, editor: LexicalEditor) => {
-    state.read(() => {
-      const htmlString = $generateHtmlFromNodes(editor, null);
-      onChange?.(htmlString);
-    });
-  }, []);
+  const handleChange = useCallback(
+    (state: EditorState, editor: LexicalEditor) => {
+      state.read(() => {
+        const htmlString = $generateHtmlFromNodes(editor, null);
+        onChange?.(htmlString);
+      });
+    },
+    [onChange]
+  );
 
   return (
     <FlexElement
