@@ -37,8 +37,7 @@ const RelationInput = <T extends TypeLabeledValue>({
   ...props
 }: TypeRelationInput<T>) => {
   const selectRef = useRef<TypeRelationSelectRef>(null);
-
-  const [forceFocus, setForceFocus] = useState(false);
+  const dropDownRef = useRef<HTMLDivElement>(null);
   const [options, setOptions] = useState<TypeLabeledValue[]>([]);
   const [selectedOption, setSelectedOption] = useState<
     TypeLabeledValue[] | TypeLabeledValue | null
@@ -51,7 +50,6 @@ const RelationInput = <T extends TypeLabeledValue>({
 
   const handleOnFocusChange = (isFocused: boolean) => {
     selectRef?.current?.toggleDropdown(isFocused);
-    setForceFocus(isFocused);
   };
 
   useEffect(() => {
@@ -73,7 +71,7 @@ const RelationInput = <T extends TypeLabeledValue>({
     <BaseInput
       dimensionX={"fill"}
       description={description}
-      forceFocus={forceFocus}
+      dropDownRef={dropDownRef}
       onFocusChange={(isFocused) => handleOnFocusChange(isFocused)}
       labelProps={{
         dimensionX: "hug",
@@ -109,6 +107,7 @@ const RelationInput = <T extends TypeLabeledValue>({
         searchOptions={filterOptions}
         selectedOption={selectedOption}
         setSelectedOption={setSelectedOption}
+        dropDownRef={dropDownRef}
       />
     </BaseInput>
   );

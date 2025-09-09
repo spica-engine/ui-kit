@@ -48,14 +48,19 @@ const BaseInput = ({
   const [isFocused, setIsFocused] = useState(forceFocus);
   const containerRef = useRef<HTMLDivElement>(null);
 
+  const handleOnFocusChange = (isFocused: boolean) => {
+    onFocusChange?.(isFocused);
+    setIsFocused(isFocused);
+  };
+
   useEffect(() => {
-    setIsFocused(forceFocus);
+    handleOnFocusChange(forceFocus);
   }, [forceFocus]);
 
   useOnClickOutside({
     targetElements: [containerRef, dropDownRef],
     onClickOutside: () => {
-      setIsFocused(false);
+      handleOnFocusChange(false);
     },
   });
 
@@ -64,12 +69,8 @@ const BaseInput = ({
     if (!containerRef.current?.contains(e.target as Node)) {
       return; // ignore portal clicks
     }
-    setIsFocused(true);
+    handleOnFocusChange(true);
   };
-
-  useEffect(() => {
-    onFocusChange?.(isFocused);
-  }, [isFocused]);
 
   return (
     <InputGroup
