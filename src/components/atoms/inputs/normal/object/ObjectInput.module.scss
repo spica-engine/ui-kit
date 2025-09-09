@@ -3,3 +3,11 @@
 .container {
   @include mixins.inputContainer;
 }
+
+.error {
+  position: unset;
+}
+
+.inputContainer {
+  width: 100%;
+}

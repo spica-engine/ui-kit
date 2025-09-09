@@ -6,6 +6,7 @@ import Text, { TypeText } from "@atoms/text/Text";
 import FlexElement, { TypeFlexElement } from "@atoms/flex-element/FlexElement";
 import InputGroup from "@atoms/base-input/InputGroup";
 import useInputRepresenter, {
+  TypeInputRepresenterError,
   TypeProperties,
   TypeRepresenterValue,
 } from "@custom-hooks/useInputRepresenter";
@@ -19,6 +20,7 @@ export type TypeObjectInput = {
   helperTextContainerProps?: TypeFlexElement;
   helperTextProps?: TypeText;
   onChange?: (value: any) => void;
+  errors?: TypeInputRepresenterError;
 } & TypeFlexElement;
 
 const ObjectInput: FC<TypeObjectInput> = ({
@@ -30,12 +32,16 @@ const ObjectInput: FC<TypeObjectInput> = ({
   helperTextContainerProps,
   helperTextProps,
   onChange,
+  errors,
   ...props
 }) => {
   const inputFields = useInputRepresenter({
     properties,
     value,
     onChange: onChange,
+    error: errors,
+    errorClassName: styles.error,
+    containerClassName: styles.inputContainer,
   });
 
   return (
