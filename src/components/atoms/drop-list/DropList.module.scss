@@ -28,7 +28,7 @@
       width: 20px;
       height: 20px;
       min-width: unset !important;
-      > div > div {
+      .deleteButtonContent {
         margin-bottom: 3px;
       }
       &:hover {
@@ -39,7 +39,7 @@
     }
   }
 
-  .addButton > div > div {
+  .addButtonContent {
     margin-bottom: 3px;
   }
 }

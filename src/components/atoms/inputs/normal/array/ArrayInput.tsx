@@ -127,7 +127,7 @@ const ArrayInput: FC<TypeArrayInput> = ({
   }, [items, generateDefaultValueForType]);
 
   const handleCreateNewItem = () => {
-    const localValue = value || [];
+    const localValue = [...(value || [])];
 
     localValue?.push(value?.[active] || getDefaultValue());
     onChange?.(localValue);
@@ -135,7 +135,7 @@ const ArrayInput: FC<TypeArrayInput> = ({
   };
 
   const handleDeleteItem = (index: number) => {
-    const localValue = value || [];
+    const localValue = [...(value || [])];
     localValue.splice(index, 1);
     onChange?.(localValue);
     setActive(Math.max(0, index - 1));
