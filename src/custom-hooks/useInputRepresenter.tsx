@@ -86,6 +86,12 @@ export type TypeArrayItems = {
   type: TypeInputType;
   properties: TypeProperties;
   enum?: (number | string)[];
+  minItems?: number;
+  maxItems?: number;
+  minimum?: boolean;
+  maximum?: boolean;
+  pattern?: string;
+  items?: TypeArrayItems;
 };
 
 export type TypeChangeEvent<T> = {
@@ -289,7 +295,7 @@ const types: TypeInputTypeMap = {
         title={props.title}
         description={props.description}
         value={props.value}
-        onChange={(value) => props.onChange?.({ key: props.title, value })}
+        onChange={(value) => props.onChange?.({ key: props.key, value })}
         minItems={props.minItems}
         maxItems={props.maxItems}
         items={props.items}
