@@ -13,13 +13,11 @@ type TypeMenuGroup = {
     } & Partial<TypeFlexElement>
   >;
   showDivider?: boolean;
-  showTitle?: boolean;
 } & TypeFlexElement;
 
 const MenuGroup: FC<TypeMenuGroup> = ({
   options = {},
   showDivider = true,
-  showTitle = true,
   className,
   ...props
 }) => {
