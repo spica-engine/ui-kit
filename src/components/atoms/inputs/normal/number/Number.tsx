@@ -9,7 +9,7 @@ import styles from "./Number.module.scss";
 import { TypeFluidContainer } from "@atoms/fluid-container/FluidContainer";
 
 export type TypeNumberInput = {
-  label: string;
+  label?: string;
   description?: string;
   value?: number;
   options?: number[];
@@ -53,18 +53,20 @@ const NumberInput: FC<TypeNumberInput & TypeFlexElement> = ({
       onFocusChange={(isFocused) => handleOnFocusChange(isFocused)}
       labelProps={{
         dimensionX: "hug",
-        divider: true,
+        divider: !!label && label !== "",
         prefix: {
           children: <Icon className={styles.icon} name="numericBox" />,
         },
-        root: {
-          dimensionX: "hug",
-          children: (
-            <Text className={styles.text} size="medium">
-              {label}
-            </Text>
-          ),
-        },
+        root: label
+          ? {
+              dimensionX: "hug",
+              children: (
+                <Text className={styles.text} size="medium">
+                  {label}
+                </Text>
+              ),
+            }
+          : undefined,
       }}
       inputContainerProps={{ className: `${styles.baseInput} ${inputContainerClassName}` }}
       {...props}
