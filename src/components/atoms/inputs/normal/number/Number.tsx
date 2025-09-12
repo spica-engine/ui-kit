@@ -7,7 +7,7 @@ import { FC, memo, useRef, useState } from "react";
 import Text from "@atoms/text/Text";
 import styles from "./Number.module.scss";
 import { TypeFluidContainer } from "@atoms/fluid-container/FluidContainer";
-import { IconName } from "index.export";
+import { IconName } from "@utils/iconList";
 
 export type TypeNumberInput = {
   label?: string;

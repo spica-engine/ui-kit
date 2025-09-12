@@ -7,7 +7,7 @@ import styles from "./String.module.scss";
 import Select, { TypeSelectRef } from "@molecules/select/Select";
 import { TypeFlexElement } from "@atoms/flex-element/FlexElement";
 import { TypeFluidContainer } from "@atoms/fluid-container/FluidContainer";
-import { IconName } from "index.export";
+import { IconName } from "@utils/iconList";
 
 export type TypeStringInput = {
   label?: string;
