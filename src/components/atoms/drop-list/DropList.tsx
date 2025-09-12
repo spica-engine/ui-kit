@@ -22,13 +22,11 @@ const DropListItem: FC<{
   const hoverTimeoutRef = useRef<NodeJS.Timeout | null>(null);
 
   const handleMouseEnter = () => {
-    // Clear any existing timeout
     hoverTimeoutRef.current && clearTimeout(hoverTimeoutRef.current);
     setShowDeleteButton(true);
   };
 
   const handleMouseLeave = () => {
-    // Delay hiding the delete button to allow interaction
     hoverTimeoutRef.current = setTimeout(() => {
       setShowDeleteButton(false);
     }, 1000);
@@ -36,16 +34,13 @@ const DropListItem: FC<{
 
   const handleDeleteButtonInteraction = (isEntering: boolean) => {
     if (isEntering) {
-      // Keep delete button visible when hovering over it
       hoverTimeoutRef.current && clearTimeout(hoverTimeoutRef.current);
       setShowDeleteButton(true);
     } else {
-      // Hide delete button when leaving it
       setShowDeleteButton(false);
     }
   };
 
-  // Cleanup timeout on unmount
   useEffect(() => {
     return () => {
       hoverTimeoutRef.current && clearTimeout(hoverTimeoutRef.current);
@@ -66,6 +61,7 @@ const DropListItem: FC<{
           keepWidth={false}
           onClick={onDelete}
           className={styles.deleteButton}
+          containerProps={{ className: styles.deleteButtonContent }}
           onMouseEnter={() => handleDeleteButtonInteraction(true)}
           onMouseLeave={() => handleDeleteButtonInteraction(false)}
         >
@@ -115,7 +111,7 @@ const DropList: FC<TypeDropList> = ({
         variant="filled"
         onClick={handleClickCreate}
         disabled={maxItems === length}
-        className={styles.addButton}
+        containerProps={{ className: styles.addButtonContent }}
       >
         +
       </Button>

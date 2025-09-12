@@ -116,7 +116,7 @@ export type TypeInputRepresenterError = {
 type TypeObjectInputProps<T> = {
   key?: string;
   properties?: TypeProperties;
-  errors?: TypeInputRepresenterError | string;
+  errors?: TypeInputRepresenterError | string | null;
 } & TypeInputProps<T>;
 
 type TypeSelectInputProps<T extends string | number> = {
