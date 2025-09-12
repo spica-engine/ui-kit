@@ -14,12 +14,16 @@ const DatePicker = ({ value, onChange, ...props }: DatePickerProps) => {
     onChange?.(dateString);
   };
 
+  const normalizedPickerValue =
+    value && value instanceof Date && !isNaN(value.getTime()) ? dayjs(value) : null;
+
   return (
     <AntDatePicker
       {...props}
-      value={value ? dayjs(value) : null}
+      value={normalizedPickerValue}
       onChange={handleOnChange}
       className={`${styles.datePicker} ${props.className}`}
+      getPopupContainer={(triggerNode) => triggerNode.parentElement!}
     />
   );
 };
