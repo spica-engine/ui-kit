@@ -75,6 +75,7 @@ export { default as RelationInput } from "./components/atoms/relation-input/Rela
 export { default as useInputRepresenter } from "./custom-hooks/useInputRepresenter";
 export { default as useKeyDown } from "./custom-hooks/useKeyDown";
 export { useOnClickOutside } from "./custom-hooks/useOnClickOutside";
+export { default as useAdaptivePosition } from "./custom-hooks/useAdaptivePosition";
 //Theme export
 export { createTheme } from "./theme/createTheme";
 export { useTheme } from "./theme/ThemeContext";
