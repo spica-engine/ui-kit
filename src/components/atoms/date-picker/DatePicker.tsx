@@ -17,9 +17,10 @@ const DatePicker = ({ value, onChange, ...props }: DatePickerProps) => {
   return (
     <AntDatePicker
       {...props}
-      value={value ? dayjs(value) : null}
+      value={value && value instanceof Date && !isNaN(value.getTime()) ? dayjs(value) : null}
       onChange={handleOnChange}
       className={`${styles.datePicker} ${props.className}`}
+      getPopupContainer={(triggerNode) => triggerNode.parentElement!}
     />
   );
 };
