@@ -7,6 +7,7 @@ import styles from "./String.module.scss";
 import Select, { TypeSelectRef } from "@molecules/select/Select";
 import { TypeFlexElement } from "@atoms/flex-element/FlexElement";
 import { TypeFluidContainer } from "@atoms/fluid-container/FluidContainer";
+import { IconName } from "@utils/iconList";
 
 export type TypeStringInput = {
   label?: string;
@@ -17,6 +18,7 @@ export type TypeStringInput = {
   inputProps?: TypeInput;
   selectProps?: TypeFluidContainer;
   inputContainerClassName?: string;
+  iconName?: IconName;
 };
 
 const StringInput: FC<TypeStringInput & TypeFlexElement> = ({
@@ -28,6 +30,7 @@ const StringInput: FC<TypeStringInput & TypeFlexElement> = ({
   selectProps,
   inputProps,
   inputContainerClassName,
+  iconName = "formatQuoteClose",
   ...props
 }) => {
   const selectRef = useRef<TypeSelectRef>(null);
@@ -53,18 +56,20 @@ const StringInput: FC<TypeStringInput & TypeFlexElement> = ({
       onFocusChange={(isFocused) => handleOnFocusChange(isFocused)}
       labelProps={{
         dimensionX: "hug",
-        divider: true,
+        divider: !!label?.trim(),
         prefix: {
-          children: <Icon className={styles.icon} name="formatQuoteClose" />,
+          children: <Icon className={styles.icon} name={iconName} />,
         },
-        root: {
-          dimensionX: "hug",
-          children: (
-            <Text className={styles.text} size="medium">
-              {label}
-            </Text>
-          ),
-        },
+        root: label
+          ? {
+              dimensionX: "hug",
+              children: (
+                <Text className={styles.text} size="medium">
+                  {label}
+                </Text>
+              ),
+            }
+          : undefined,
       }}
       inputContainerProps={{ className: `${styles.baseInput} ${inputContainerClassName}` }}
       {...props}
