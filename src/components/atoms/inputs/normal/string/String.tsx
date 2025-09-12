@@ -56,7 +56,7 @@ const StringInput: FC<TypeStringInput & TypeFlexElement> = ({
       onFocusChange={(isFocused) => handleOnFocusChange(isFocused)}
       labelProps={{
         dimensionX: "hug",
-        divider: !!label && label.trim() !== "",
+        divider: !!label?.trim(),
         prefix: {
           children: <Icon className={styles.icon} name={iconName} />,
         },
