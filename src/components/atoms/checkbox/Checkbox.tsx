@@ -33,6 +33,7 @@ const Checkbox: FC<TypeCheckbox & TypeFluidContainer> = ({
   ...props
 }) => {
   const inputRef = useRef<HTMLInputElement | null>(null);
+  const labelRef = useRef<HTMLLabelElement | null>(null);
   const generatedId = useId();
 
   useEffect(() => {
@@ -40,6 +41,23 @@ const Checkbox: FC<TypeCheckbox & TypeFluidContainer> = ({
       inputRef.current.indeterminate = indeterminate;
     }
   }, [indeterminate]);
+
+  // Workaround: Chrome doesn't repaint label when switching indeterminate -> checked; force repaint via style change
+  useEffect(() => {
+    if (!checked || indeterminate) return;
+    const node = labelRef.current;
+    if (!node) return;
+
+    node.style.transform = "translateZ(0)";
+    const raf = requestAnimationFrame(() => {
+      node.style.transform = "";
+    });
+
+    return () => {
+      cancelAnimationFrame(raf);
+      if (node) node.style.transform = "";
+    };
+  }, [checked, indeterminate]);
 
   const handleContainerClick = (e: React.MouseEvent) => {
     if (disabled) return;
@@ -64,7 +82,11 @@ const Checkbox: FC<TypeCheckbox & TypeFluidContainer> = ({
               aria-checked={indeterminate ? "mixed" : checked}
               readOnly
             />
-            <label htmlFor={id ?? generatedId} onClick={(e) => e.stopPropagation()} />
+            <label
+              ref={labelRef}
+              htmlFor={id ?? generatedId}
+              onClick={(e) => e.stopPropagation()}
+            />
           </div>
         ),
         ...props.prefix,
