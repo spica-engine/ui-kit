@@ -23,6 +23,7 @@
       label {
         &::after {
           content: "-";
+          margin-bottom: 2px;
         }
       }
     }
@@ -49,7 +50,8 @@
       }
     }
 
-    input[type="checkbox"]:checked + label {
+    input[type="checkbox"]:checked + label,
+    &.indeterminate input[type="checkbox"] + label {
       background-color: var(--oziko-color-primary);
       border-color: var(--oziko-color-primary);
 
