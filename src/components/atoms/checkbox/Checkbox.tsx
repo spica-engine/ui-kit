@@ -42,19 +42,22 @@ const Checkbox: FC<TypeCheckbox & TypeFluidContainer> = ({
     }
   }, [indeterminate]);
 
-  // Chrome has a bug where it doesn't repaint the checkbox label background when transitioning
-  // from indeterminate to checked state. The DOM updates correctly but the visual rendering doesn't.
-  // This forces a repaint by applying a transform and then removing it in the next animation frame
+  // Workaround: Chrome doesn't repaint label when switching indeterminate -> checked; force repaint via style change
   useEffect(() => {
-    if (labelRef.current && !indeterminate && checked) {
-      labelRef.current.style.transform = "translateZ(0)";
-      requestAnimationFrame(() => {
-        if (labelRef.current) {
-          labelRef.current.style.transform = "";
-        }
-      });
-    }
-  }, [indeterminate, checked]);
+    if (!checked || indeterminate) return;
+    const node = labelRef.current;
+    if (!node) return;
+
+    node.style.transform = "translateZ(0)";
+    const raf = requestAnimationFrame(() => {
+      node.style.transform = "";
+    });
+
+    return () => {
+      cancelAnimationFrame(raf);
+      if (node) node.style.transform = "";
+    };
+  }, [checked, indeterminate]);
 
   const handleContainerClick = (e: React.MouseEvent) => {
     if (disabled) return;
