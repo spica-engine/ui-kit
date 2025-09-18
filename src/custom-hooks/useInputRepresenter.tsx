@@ -383,14 +383,7 @@ const useInputRepresenter = ({
       }
     }
 
-    let _value;
-    if (isObject) {
-      if (value[key] === undefined) _value = undefined;
-      else if (value[key] === null) _value = value;
-      else _value = value[key];
-    } else {
-      _value = value;
-    }
+    const _value = isObject ? (value[key] ?? value) : value;
     const _error = error?.[key];
 
     return (
