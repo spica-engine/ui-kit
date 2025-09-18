@@ -280,6 +280,7 @@ const types: TypeInputTypeMap = {
           props.onChange?.({ key: props.key, value });
         }}
         errors={props.errors as TypeInputRepresenterError}
+        className={props.className}
       />
     );
   },
