@@ -1,4 +1,4 @@
-import { FC, memo } from "react";
+import { FC, memo, useMemo } from "react";
 import styles from "./ObjectInput.module.scss";
 import Icon from "@atoms/icon/Icon";
 import InputHeader from "@atoms/input-header/InputHeader";
@@ -35,8 +35,22 @@ const ObjectInput: FC<TypeObjectInput> = ({
   errors,
   ...props
 }) => {
+  const formattedProperties = useMemo(
+    () =>
+      Object.fromEntries(
+        Object.entries(properties).map(([key, value]) => [
+          key,
+          {
+            ...value,
+            className: value?.type !== "boolean" ? styles.outlinedInput : undefined,
+          },
+        ])
+      ),
+    [properties]
+  );
+
   const inputFields = useInputRepresenter({
-    properties,
+    properties: formattedProperties,
     value,
     onChange: onChange,
     error: errors,
@@ -46,7 +60,7 @@ const ObjectInput: FC<TypeObjectInput> = ({
 
   return (
     <FlexElement
-      gap={20}
+      gap={10}
       direction="vertical"
       dimensionX="fill"
       {...props}

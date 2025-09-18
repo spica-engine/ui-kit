@@ -11,7 +11,8 @@
   }
 
   &.containerFocused {
-    outline: 1px solid var(--oziko-color-primary);
+    outline: var(--oziko-border-default);
+    outline-color: var(--oziko-color-primary) !important;
   }
 }
 
