@@ -42,6 +42,7 @@ export type TypeProperties = {
     valueType?: TypeChipInput["valueType"];
     error?: TypeInputRepresenterError | string;
     id?: string;
+    relationType?: "onetoone" | "onetomany";
   };
 };
 
@@ -133,6 +134,7 @@ type TypeRelationInputProps<T> = {
   loadMoreOptions: () => Promise<TypeLabeledValue[]>;
   searchOptions: (value: string) => Promise<TypeLabeledValue[]>;
   totalOptionsLength: number;
+  relationType?: "onetoone" | "onetomany";
 } & TypeInputProps<T>;
 
 type TypeChipInputProps<T> = {
@@ -319,6 +321,7 @@ const types: TypeInputTypeMap = {
         loadMoreOptions={props.loadMoreOptions}
         searchOptions={props.searchOptions}
         totalOptionsLength={props.totalOptionsLength}
+        multiple={props.relationType === "onetomany"}
       />
     );
   },
@@ -379,7 +382,16 @@ const useInputRepresenter = ({
         return null;
       }
     }
-    const _value = isObject ? (value[key] ?? value) : value;
+
+    // DISGUSTING LOOKING CODE, REFACTOR LATER
+    let _value;
+    if (isObject) {
+      if (value[key] === undefined) _value = undefined;
+      else if (value[key] === null) _value = value;
+      else _value = value[key];
+    } else {
+      _value = value;
+    }
     const _error = error?.[key];
 
     return (
@@ -409,6 +421,7 @@ const useInputRepresenter = ({
           size: el.size,
           valueType: el.valueType,
           errors: typeof _error === "string" ? undefined : _error,
+          relationType: el.relationType,
         })}
         {_error && typeof _error === "string" && (
           <Text

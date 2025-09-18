@@ -72,7 +72,7 @@ const ArrayInput: FC<TypeArrayInput> = ({
       enumValues?: (string | number)[]
     ): TypeValueType => {
       // If enum is provided, use the first value
-      if (enumValues && enumValues.length > 0) {
+      if (enumValues && enumValues.length > 0 && type !== "multiselect") {
         return enumValues[0];
       }
 
@@ -102,7 +102,6 @@ const ArrayInput: FC<TypeArrayInput> = ({
 
         case "object":
           if (!properties) return {};
-
           // Generate default object based on properties
           const defaultObject: TypeRepresenterValue = {};
           Object.entries(properties).forEach(([key, property]) => {

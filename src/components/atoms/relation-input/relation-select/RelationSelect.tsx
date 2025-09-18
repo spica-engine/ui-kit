@@ -128,6 +128,7 @@ const RelationSelect: FC<TypeRelationSelect & TypeFluidContainer> = ({
 
   const handleOptionSelect = (option: TypeLabeledValue) => {
     const updateMultipleSelection = () => {
+      console.log("updateMultipleSelection", { selectedOption }); // Debugging line
       if (!Array.isArray(selectedOption)) return;
       const updatedOptions = Boolean(
         selectedOption.find((i) => i.value === option.value && i.label === option.label)
