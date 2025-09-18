@@ -8,7 +8,7 @@ import { TypeFlexElement } from "@atoms/flex-element/FlexElement";
 import { TypeFluidContainer } from "@atoms/fluid-container/FluidContainer";
 import { TypeLabeledValue } from "index.export";
 
-export type RelationType = "onetone" | "onetomany";
+export type RelationType = "onetoone" | "onetomany";
 
 export type TypeRelationInput<T = TypeLabeledValue> = {
   label: string;
