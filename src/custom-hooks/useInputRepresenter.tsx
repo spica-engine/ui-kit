@@ -16,7 +16,7 @@ import ArrayInput from "components/atoms/inputs/normal/array/ArrayInput";
 import { utils } from "utils";
 import ChipInput, { TypeChipInput } from "@molecules/chip/ChipInput";
 import Text from "components/atoms/text/Text";
-import RelationInput from "@atoms/relation-input/RelationInput";
+import RelationInput, { RelationType } from "@atoms/relation-input/RelationInput";
 import { Select, TypeLabeledValue, TypeSwitch } from "index.export";
 
 export type TypeProperties = {
@@ -42,6 +42,7 @@ export type TypeProperties = {
     valueType?: TypeChipInput["valueType"];
     error?: TypeInputRepresenterError | string;
     id?: string;
+    relationType?: RelationType;
   };
 };
 
@@ -133,6 +134,7 @@ type TypeRelationInputProps<T> = {
   loadMoreOptions: () => Promise<TypeLabeledValue[]>;
   searchOptions: (value: string) => Promise<TypeLabeledValue[]>;
   totalOptionsLength: number;
+  relationType?: RelationType;
 } & TypeInputProps<T>;
 
 type TypeChipInputProps<T> = {
@@ -320,6 +322,7 @@ const types: TypeInputTypeMap = {
         loadMoreOptions={props.loadMoreOptions}
         searchOptions={props.searchOptions}
         totalOptionsLength={props.totalOptionsLength}
+        multiple={props.relationType === "onetomany"}
       />
     );
   },
@@ -380,6 +383,7 @@ const useInputRepresenter = ({
         return null;
       }
     }
+
     const _value = isObject ? (value[key] ?? value) : value;
     const _error = error?.[key];
 
