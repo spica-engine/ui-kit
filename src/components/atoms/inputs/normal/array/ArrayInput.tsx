@@ -66,16 +66,7 @@ const ArrayInput: FC<TypeArrayInput> = ({
   };
 
   const generateDefaultValueForType = useCallback(
-    (
-      type: TypeInputType,
-      properties?: TypeProperties,
-      enumValues?: (string | number)[]
-    ): TypeValueType => {
-      // If enum is provided, use the first value
-      if (enumValues && enumValues.length > 0) {
-        return enumValues[0];
-      }
-
+    (type: TypeInputType, properties?: TypeProperties): TypeValueType => {
       switch (type) {
         case "string":
         case "textarea":
@@ -109,7 +100,7 @@ const ArrayInput: FC<TypeArrayInput> = ({
             defaultObject[key] =
               property.default !== undefined
                 ? property.default
-                : generateDefaultValueForType(property.type, property.properties, property.enum);
+                : generateDefaultValueForType(property.type, property.properties);
           });
           return defaultObject;
 
@@ -123,7 +114,7 @@ const ArrayInput: FC<TypeArrayInput> = ({
 
   const getDefaultValue = useCallback((): TypeValueType => {
     if (!items) return "";
-    return generateDefaultValueForType(items.type, items.properties, items.enum);
+    return generateDefaultValueForType(items.type, items.properties);
   }, [items, generateDefaultValueForType]);
 
   const handleCreateNewItem = () => {
