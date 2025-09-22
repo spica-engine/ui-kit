@@ -1,4 +1,4 @@
-import { ChangeEventHandler, FC, memo } from "react";
+import { ChangeEventHandler, FC, memo, useRef } from "react";
 import FlexElement, { TypeFlexElement } from "../../../flex-element/FlexElement";
 import styles from "./TextArea.module.scss";
 import { TypeFluidContainer } from "@atoms/fluid-container/FluidContainer";
@@ -41,6 +41,13 @@ const TextAreaInput: FC<TypeTextArea> = ({
   placeholder,
   onChange,
 }) => {
+  const textAreaRef = useRef<HTMLTextAreaElement>(null);
+
+  const handleLabelClick = (e: React.MouseEvent<HTMLDivElement>) => {
+    textAreaRef.current?.focus();
+    titleContainerProps?.onClick?.(e);
+  };
+
   return (
     <FlexElement
       dimensionX="fill"
@@ -58,7 +65,7 @@ const TextAreaInput: FC<TypeTextArea> = ({
             {...titleContainerProps}
             className={`${styles.titleContainer} ${titleContainerProps?.className || ""}`}
             prefix={{
-              children: icon ? <Icon name={`${icon}`} /> : null,
+              children: icon ? <Icon name={icon} className={styles.icon} /> : null,
               dimensionX: "hug",
               alignment: "leftCenter",
               ...titlePrefixProps,
@@ -75,6 +82,7 @@ const TextAreaInput: FC<TypeTextArea> = ({
               alignment: "rightCenter",
               ...titleSuffixProps,
             }}
+            onClick={handleLabelClick}
           />
         )}
         <FlexElement
@@ -89,6 +97,7 @@ const TextAreaInput: FC<TypeTextArea> = ({
             value={value}
             onChange={onChange}
             placeholder={placeholder || ""}
+            ref={textAreaRef}
           ></textarea>
         </FlexElement>
       </>
