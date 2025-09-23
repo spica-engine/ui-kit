@@ -7,13 +7,14 @@ export type TypeSwitch = {
   disabled?: boolean;
   containerProps?: TypeFlexElement;
   onChange?: (checked: boolean) => void;
-  size?: "large" | "medium" | "small";
+  size?: "large" | "medium" | "small" | "extra-small";
 };
 
 const sizeClasses = {
   large: styles.large,
   medium: styles.medium,
   small: styles.small,
+  "extra-small": styles.extraSmall,
 };
 
 const Switch: FC<TypeSwitch> = ({
