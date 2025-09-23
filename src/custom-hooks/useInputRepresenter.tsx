@@ -419,6 +419,7 @@ const useInputRepresenter = ({
           errors: typeof _error === "string" ? undefined : _error,
           icon: el.icon,
           placeholder: el.placeholder,
+          relationType: el.relationType,
         })}
         {_error && typeof _error === "string" && (
           <Text
