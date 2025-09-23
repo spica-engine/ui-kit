@@ -29,4 +29,8 @@
     width: 100% !important;
     @include mixins.inputDescriptionContainer;
   }
+
+  .icon {
+    color: var(--oziko-color-font-primary);
+  }
 }

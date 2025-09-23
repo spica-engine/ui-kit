@@ -1,4 +1,4 @@
-import { TypeCoordinates } from "components/atoms/map/Map";
+import { TypeCoordinates } from "../components/atoms/map/Map";
 import { ReactNode } from "react";
 import StringInput from "../components/atoms/inputs/normal/string/String";
 import NumberInput from "../components/atoms/inputs/normal/number/Number";
@@ -10,14 +10,13 @@ import StorageInput from "../components/atoms/inputs/normal/storage/Storage";
 import MultipleSelectionInput from "../components/atoms/inputs/normal/multiple-selection/MultipleSelection";
 import LocationInput from "../components/atoms/inputs/normal/location/Location";
 import RichTextInput from "../components/atoms/inputs/normal/rich-text/RichText";
-import Icon from "components/atoms/icon/Icon";
-import ObjectInput from "components/atoms/inputs/normal/object/ObjectInput";
-import ArrayInput from "components/atoms/inputs/normal/array/ArrayInput";
+import ObjectInput from "../components/atoms/inputs/normal/object/ObjectInput";
+import ArrayInput from "../components/atoms/inputs/normal/array/ArrayInput";
 import { utils } from "utils";
 import ChipInput, { TypeChipInput } from "@molecules/chip/ChipInput";
-import Text from "components/atoms/text/Text";
+import Text from "../components/atoms/text/Text";
 import RelationInput, { RelationType } from "@atoms/relation-input/RelationInput";
-import { Select, TypeLabeledValue, TypeSwitch } from "index.export";
+import { IconName, Select, TypeLabeledValue, TypeSwitch } from "index.export";
 
 export type TypeProperties = {
   [key: string]: {
@@ -43,6 +42,8 @@ export type TypeProperties = {
     error?: TypeInputRepresenterError | string;
     id?: string;
     relationType?: RelationType;
+    icon?: IconName;
+    placeholder?: string;
   };
 };
 
@@ -102,6 +103,8 @@ export type TypeInputProps<T> = {
   className?: string;
   onChange?: ({ key, value }: TypeChangeEvent<T>) => void;
   size?: TypeSwitch["size"];
+  icon?: IconName;
+  placeholder?: string;
 };
 
 export type TypeInputRepresenterError = {
@@ -185,10 +188,11 @@ const types: TypeInputTypeMap = {
   textarea: (props) => (
     <TextAreaInput
       title={props.title}
-      titlePrefixProps={{ children: <Icon name="formatSize" /> }}
       containerProps={{ className: props.className }}
       value={props.value}
       onChange={(event) => props.onChange?.({ key: props.key, value: event.target.value })}
+      icon={props.icon ?? "formatSize"}
+      placeholder={props.placeholder}
     />
   ),
   date: (props) => (
@@ -363,7 +367,6 @@ const useInputRepresenter = ({
   };
 
   const hasCustomStyles = Boolean(containerClassName || errorClassName);
-
   return Object.entries(properties).map(([key, el]) => {
     const isObject = typeof value === "object" && !Array.isArray(value);
     if (isObject && el.renderCondition) {
@@ -414,6 +417,8 @@ const useInputRepresenter = ({
           size: el.size,
           valueType: el.valueType,
           errors: typeof _error === "string" ? undefined : _error,
+          icon: el.icon,
+          placeholder: el.placeholder,
           relationType: el.relationType,
         })}
         {_error && typeof _error === "string" && (
