@@ -14,8 +14,7 @@ const DatePicker = ({ value, onChange, ...props }: DatePickerProps) => {
     onChange?.(dateString);
   };
 
-  const normalizedPickerValue =
-    value && value instanceof Date && !isNaN(value.getTime()) ? dayjs(value) : null;
+  const normalizedPickerValue = value && dayjs(value).isValid() ? dayjs(value) : null;
 
   return (
     <AntDatePicker
