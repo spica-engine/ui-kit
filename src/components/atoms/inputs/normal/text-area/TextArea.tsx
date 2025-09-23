@@ -45,7 +45,11 @@ const TextAreaInput: FC<TypeTextArea> = ({
 
   const handleLabelClick = (e: React.MouseEvent<HTMLDivElement>) => {
     textAreaRef.current?.focus();
-    titleContainerProps?.onClick?.(e);
+    try {
+      titleContainerProps?.onClick?.(e);
+    } catch (error) {
+      console.error("Error in titleContainerProps.onClick:", error);
+    }
   };
 
   return (

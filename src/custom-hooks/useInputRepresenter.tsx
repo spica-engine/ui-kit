@@ -1,4 +1,4 @@
-import { TypeCoordinates } from "components/atoms/map/Map";
+import { TypeCoordinates } from "../components/atoms/map/Map";
 import { ReactNode } from "react";
 import StringInput from "../components/atoms/inputs/normal/string/String";
 import NumberInput from "../components/atoms/inputs/normal/number/Number";
@@ -10,11 +10,11 @@ import StorageInput from "../components/atoms/inputs/normal/storage/Storage";
 import MultipleSelectionInput from "../components/atoms/inputs/normal/multiple-selection/MultipleSelection";
 import LocationInput from "../components/atoms/inputs/normal/location/Location";
 import RichTextInput from "../components/atoms/inputs/normal/rich-text/RichText";
-import ObjectInput from "components/atoms/inputs/normal/object/ObjectInput";
-import ArrayInput from "components/atoms/inputs/normal/array/ArrayInput";
+import ObjectInput from "../components/atoms/inputs/normal/object/ObjectInput";
+import ArrayInput from "../components/atoms/inputs/normal/array/ArrayInput";
 import { utils } from "utils";
 import ChipInput, { TypeChipInput } from "@molecules/chip/ChipInput";
-import Text from "components/atoms/text/Text";
+import Text from "../components/atoms/text/Text";
 import RelationInput, { RelationType } from "@atoms/relation-input/RelationInput";
 import { IconName, Select, TypeLabeledValue, TypeSwitch } from "index.export";
 
