@@ -118,6 +118,10 @@ type TypeSelectInputProps<T extends string | number> = {
   enum?: T[];
 } & TypeInputProps<T>;
 
+type TypeNullableSelectInputProps<T extends string | number> = {
+  enum?: T[];
+} & TypeInputProps<T | undefined>;
+
 type TypeMultiSelectInputProps<T extends string | number> = {
   enum?: T[];
 } & TypeInputProps<T[]>;
@@ -143,7 +147,7 @@ type TypeChipInputProps<T> = {
 
 export type TypeInputTypeMap = {
   string: (props: TypeSelectInputProps<string>) => ReactNode;
-  number: (props: TypeSelectInputProps<number>) => ReactNode;
+  number: (props: TypeNullableSelectInputProps<number>) => ReactNode;
   textarea: (props: TypeInputProps<string>) => ReactNode;
   date: (props: TypeInputProps<Date | string | null>) => ReactNode;
   boolean: (props: TypeInputProps<boolean>) => ReactNode;
