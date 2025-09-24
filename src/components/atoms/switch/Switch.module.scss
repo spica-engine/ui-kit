@@ -1,3 +1,16 @@
+.switch.extraSmall {
+  width: 27.5px;
+  height: 14px;
+  .slider::before {
+    width: 10px;
+    height: 10px;
+    top: 1.75px;
+  }
+  input:checked + .slider::before {
+    transform: translateX(12px);
+  }
+}
+
 .switch.small {
   width: 33px;
   height: 16.5px;
