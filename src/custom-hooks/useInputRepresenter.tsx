@@ -313,6 +313,7 @@ const types: TypeInputTypeMap = {
           props.onChange?.({ key: props.key, value });
         }}
         valueType={props.valueType}
+        className={props.className}
       />
     );
   },
