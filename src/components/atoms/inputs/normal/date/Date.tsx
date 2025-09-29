@@ -3,7 +3,7 @@ import Icon from "@atoms/icon/Icon";
 import styles from "./Date.module.scss";
 import BaseInput from "@atoms/base-input/BaseInput";
 import Text from "@atoms/text/Text";
-import DatePicker from "@atoms/date-picker/DatePicker";
+import DatePicker, { AntDatePickerSharedProps } from "@atoms/date-picker/DatePicker";
 
 type DateRangePickerProps = {
   label?: string;
@@ -12,6 +12,7 @@ type DateRangePickerProps = {
   value?: Date | string | null;
   placeholder?: string;
   inputContainerClassName?: string;
+  datePickerProps?: AntDatePickerSharedProps;
 };
 
 const DateInput: React.FC<DateRangePickerProps> = ({
@@ -21,6 +22,7 @@ const DateInput: React.FC<DateRangePickerProps> = ({
   value,
   placeholder = "",
   inputContainerClassName,
+  datePickerProps,
 }) => {
   const handleOnChange = (dateString: string | string[]) => {
     onChange?.(new Date(dateString as string));
@@ -46,6 +48,7 @@ const DateInput: React.FC<DateRangePickerProps> = ({
         suffixIcon={null}
         onChange={handleOnChange}
         value={value}
+        {...datePickerProps}
       />
     </BaseInput>
   );
