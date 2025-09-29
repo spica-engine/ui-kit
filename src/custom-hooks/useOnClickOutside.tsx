@@ -15,9 +15,9 @@ export const useOnClickOutside = ({ targetElements, onClickOutside }: TypeUseOnC
 
       const clickedInsideRefs = targetElements.some((targetElement) => {
         if (targetElement instanceof HTMLElement) {
-          return targetElement.contains(event.target as Node);
+          return targetElement.contains?.(event.target as Node);
         }
-        return targetElement?.current?.contains(event.target as Node);
+        return targetElement?.current?.contains?.(event.target as Node);
       });
 
       if (clickedInsideRefs) return;
