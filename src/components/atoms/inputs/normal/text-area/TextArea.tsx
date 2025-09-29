@@ -1,4 +1,4 @@
-import { ChangeEventHandler, FC, memo, useRef } from "react";
+import { ChangeEventHandler, FC, memo, useImperativeHandle, useRef } from "react";
 import FlexElement, { TypeFlexElement } from "../../../flex-element/FlexElement";
 import styles from "./TextArea.module.scss";
 import { TypeFluidContainer } from "@atoms/fluid-container/FluidContainer";
@@ -12,6 +12,7 @@ export type TypeTextArea = {
   textAreaProps?: React.TextareaHTMLAttributes<HTMLTextAreaElement> & {
     rows?: number;
     cols?: number;
+    ref?: React.RefObject<HTMLTextAreaElement>;
   };
   textAreaContainerProps?: TypeFlexElement;
   containerProps?: TypeFlexElement;
@@ -51,6 +52,11 @@ const TextAreaInput: FC<TypeTextArea> = ({
       console.error("Error in titleContainerProps.onClick:", error);
     }
   };
+
+  useImperativeHandle(
+    textAreaProps?.ref ?? { current: null },
+    () => textAreaRef.current as HTMLTextAreaElement
+  );
 
   return (
     <FlexElement
@@ -96,12 +102,12 @@ const TextAreaInput: FC<TypeTextArea> = ({
           className={`${textAreaContainerProps?.className || ""}`}
         >
           <textarea
-            {...textAreaProps}
             className={styles.textAreaInput}
             value={value}
             onChange={onChange}
             placeholder={placeholder || ""}
             ref={textAreaRef}
+            {...textAreaProps}
           ></textarea>
         </FlexElement>
       </>
