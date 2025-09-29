@@ -44,7 +44,6 @@ const SelectOption: FC<TypeSelectOption & TypeFluidContainer> = ({
       dimensionY={36}
       alignment="leftCenter"
       onClick={onClick}
-      className={`${styles.option} ${selected && styles.selected} ${disabled && styles.disabled}`}
       root={{
         children: (
           <Checkbox
@@ -63,6 +62,7 @@ const SelectOption: FC<TypeSelectOption & TypeFluidContainer> = ({
         dimensionX: "fill",
       }}
       {...props}
+      className={`${styles.option} ${selected && styles.selected} ${disabled && styles.disabled} ${props.className || ""}`}
     />
   );
 };
