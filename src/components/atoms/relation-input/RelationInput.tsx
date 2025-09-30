@@ -1,10 +1,12 @@
-import BaseInput from "@atoms/base-input/BaseInput";
+import BaseInput, { TypeBaseInputProps } from "@atoms/base-input/BaseInput";
 import Icon from "@atoms/icon/Icon";
 import Text from "@atoms/text/Text";
-import React, { memo, useEffect, useRef, useState } from "react";
+import React, { memo, useEffect, useImperativeHandle, useRef, useState } from "react";
 import styles from "./RelationInput.module.scss";
-import RelationSelect, { TypeRelationSelectRef } from "./relation-select/RelationSelect";
-import { TypeFlexElement } from "@atoms/flex-element/FlexElement";
+import RelationSelect, {
+  TypeRelationSelect,
+  TypeRelationSelectRef,
+} from "./relation-select/RelationSelect";
 import { TypeFluidContainer } from "@atoms/fluid-container/FluidContainer";
 import { TypeLabeledValue } from "index.export";
 
@@ -15,14 +17,15 @@ export type TypeRelationInput<T = TypeLabeledValue> = {
   description?: string;
   value?: T | T[];
   onChange?: (value: T[]) => void;
-  selectProps?: TypeFluidContainer;
+  selectProps?: TypeRelationSelect & TypeFluidContainer;
   inputContainerClassName?: string;
   getOptions: () => Promise<TypeLabeledValue[]>;
   loadMoreOptions: () => Promise<TypeLabeledValue[]>;
   searchOptions: (value: string) => Promise<TypeLabeledValue[]>;
   totalOptionsLength: number;
   multiple?: boolean;
-} & TypeFlexElement;
+  externalDropdownRef?: React.RefObject<HTMLDivElement>;
+} & Omit<TypeBaseInputProps, "children">;
 
 const RelationInput = <T extends TypeLabeledValue>({
   label,
@@ -36,6 +39,7 @@ const RelationInput = <T extends TypeLabeledValue>({
   searchOptions,
   totalOptionsLength,
   multiple,
+  externalDropdownRef,
   ...props
 }: TypeRelationInput<T>) => {
   const selectRef = useRef<TypeRelationSelectRef>(null);
@@ -69,12 +73,22 @@ const RelationInput = <T extends TypeLabeledValue>({
     });
   };
 
+  useImperativeHandle(
+    selectProps?.selectRef ?? { current: null },
+    () => selectRef.current as TypeRelationSelectRef
+  );
+
+  useImperativeHandle(
+    externalDropdownRef ?? { current: null },
+    () => dropDownRef.current as HTMLDivElement
+  );
+
   return (
     <BaseInput
       dimensionX={"fill"}
       description={description}
       dropDownRef={dropDownRef}
-      onFocusChange={(isFocused) => handleOnFocusChange(isFocused)}
+      onFocusChange={handleOnFocusChange}
       labelProps={{
         dimensionX: "hug",
         divider: true,
@@ -95,7 +109,6 @@ const RelationInput = <T extends TypeLabeledValue>({
     >
       <RelationSelect
         totalOptionsLength={totalOptionsLength}
-        selectRef={selectRef}
         disableClick
         options={options || []}
         placeholder=""
@@ -104,6 +117,7 @@ const RelationInput = <T extends TypeLabeledValue>({
           onChange?.(value as T[]);
         }}
         {...selectProps}
+        selectRef={selectRef}
         className={`${styles.select} ${selectProps?.className}`}
         loadMoreOptions={appendMoreOptions}
         searchOptions={filterOptions}
