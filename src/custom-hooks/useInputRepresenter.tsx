@@ -265,6 +265,7 @@ const types: TypeInputTypeMap = {
         dimensionX="fill"
         coordinates={props.value as TypeCoordinates}
         onChange={handleChangeLocation}
+        className={props.className}
       />
     );
   },
