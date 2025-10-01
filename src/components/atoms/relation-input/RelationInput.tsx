@@ -44,7 +44,7 @@ const RelationInput = <T extends TypeLabeledValue>({
 }: TypeRelationInput<T>) => {
   const selectRef = useRef<TypeRelationSelectRef>(null);
   const dropDownRef = useRef<HTMLDivElement>(null);
-  const [options, setOptions] = useState<TypeLabeledValue[]>([]);
+  const [options, setOptions] = useState<TypeLabeledValue[] | null>(null);
   const [selectedOption, setSelectedOption] = useState<
     TypeLabeledValue[] | TypeLabeledValue | null
   >(() => value || (multiple ? [] : null));
@@ -64,7 +64,7 @@ const RelationInput = <T extends TypeLabeledValue>({
   }, []);
 
   const appendMoreOptions = () => {
-    loadMoreOptions().then((result) => setOptions([...options, ...result]));
+    loadMoreOptions().then((result) => setOptions([...(options ?? []), ...result]));
   };
 
   const filterOptions = (searchValue: string) => {
@@ -110,7 +110,7 @@ const RelationInput = <T extends TypeLabeledValue>({
       <RelationSelect
         totalOptionsLength={totalOptionsLength}
         disableClick
-        options={options || []}
+        options={options}
         placeholder=""
         multiple={multiple}
         onChange={(value) => {

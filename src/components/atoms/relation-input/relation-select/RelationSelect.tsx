@@ -17,7 +17,7 @@ import FluidContainer, { TypeFluidContainer } from "@atoms/fluid-container/Fluid
 import Icon from "@atoms/icon/Icon";
 import Text from "@atoms/text/Text";
 import SelectOption, { TypeLabeledValue } from "@atoms/select-option/SelectOption";
-import FlexElement from "@atoms/flex-element/FlexElement";
+import FlexElement, { TypeFlexElement } from "@atoms/flex-element/FlexElement";
 import { useOnClickOutside } from "@custom-hooks/useOnClickOutside";
 import useAdaptivePosition from "@custom-hooks/useAdaptivePosition";
 import { Chip, InputWithIcon, Spinner } from "index.export";
@@ -30,7 +30,7 @@ export type TypeRelationSelectRef = {
 };
 
 export type TypeRelationSelect = {
-  options: TypeLabeledValue[];
+  options: TypeLabeledValue[] | null;
   placeholder?: string;
   placement?: "bottom" | "top";
   multiple?: boolean;
@@ -174,7 +174,7 @@ const RelationSelect: FC<TypeRelationSelect & TypeFluidContainer> = ({
   const getDisplayer = () => {
     if (
       (multiple && (!Array.isArray(selectedOption) || !selectedOption.length)) ||
-      typeof options[0] !== "object"
+      typeof options?.[0] !== "object"
     ) {
       return placeholder;
     }
@@ -194,7 +194,11 @@ const RelationSelect: FC<TypeRelationSelect & TypeFluidContainer> = ({
   };
 
   const infiniteScrollId = useId();
-
+  const isFetchingInitialOptions = options === null;
+  const handleNext = () => {
+    if (isFetchingInitialOptions) return;
+    loadMoreOptions();
+  };
   return (
     <>
       <FluidContainer
@@ -239,9 +243,9 @@ const RelationSelect: FC<TypeRelationSelect & TypeFluidContainer> = ({
             id={infiniteScrollId}
           >
             <InfiniteScroll
-              dataLength={options.length}
-              next={loadMoreOptions}
-              hasMore={totalOptionsLength > options.length}
+              dataLength={options?.length || 0}
+              next={handleNext}
+              hasMore={totalOptionsLength > (options?.length || 0)}
               loader={<Spinner size="small" />}
               scrollableTarget={infiniteScrollId}
               className={styles.infiniteScroll}
@@ -250,16 +254,21 @@ const RelationSelect: FC<TypeRelationSelect & TypeFluidContainer> = ({
                 <InputWithIcon
                   gap={10}
                   dimensionX={400}
-                  prefix={{ children: <Icon name="magnify" className={styles.searchIcon} /> }}
+                  prefix={{
+                    children: <Icon name="magnify" className={styles.searchIcon} />,
+                  }}
                   inputProps={{
                     placeholder: "Search",
                     value: searchValue,
                     onChange: (e) => setSearchValue(e.target.value),
                   }}
+                  suffix={{
+                    children: isFetchingInitialOptions ? <Spinner size="small" /> : null,
+                  }}
                   className={styles.searchInput}
                 />
               </div>
-              {options.map((option) => {
+              {options?.map((option) => {
                 const optionValue = typeof option === "object" ? option.value : option;
                 const selected = multiple
                   ? Array.isArray(selectedOption) &&
