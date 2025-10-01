@@ -2,8 +2,8 @@ import BaseInput from "@atoms/base-input/BaseInput";
 import { TypeFlexElement } from "@atoms/flex-element/FlexElement";
 import Icon from "@atoms/icon/Icon";
 import Input, { TypeInput } from "@atoms/input/Input";
-import Select, { TypeSelectRef } from "@molecules/select/Select";
-import { FC, memo, useRef, useState } from "react";
+import Select, { TypeSelectRef, TypeValue } from "@molecules/select/Select";
+import { ChangeEvent, FC, memo, useRef, useState } from "react";
 import Text from "@atoms/text/Text";
 import styles from "./Number.module.scss";
 import { TypeFluidContainer } from "@atoms/fluid-container/FluidContainer";
@@ -14,7 +14,7 @@ export type TypeNumberInput = {
   description?: string;
   value?: number;
   options?: number[];
-  onChange?: (value: number) => void;
+  onChange?: (value: number | undefined) => void;
   inputProps?: TypeInput;
   selectProps?: TypeFluidContainer;
   inputContainerClassName?: string;
@@ -47,6 +47,18 @@ const NumberInput: FC<TypeNumberInput & TypeFlexElement> = ({
       inputRef.current?.focus();
     }
   };
+
+  const handleSelectChange = (value: TypeValue) => {
+    onChange?.(value as number);
+    setForceFocus(false);
+  };
+
+  const handleTypedChange = (e: ChangeEvent<HTMLInputElement>) => {
+    const value = e.target.value;
+    const isEmptyString = value === "";
+    onChange?.(isEmptyString ? undefined : Number(value));
+  };
+
   return (
     <BaseInput
       dimensionX={"fill"}
@@ -82,10 +94,7 @@ const NumberInput: FC<TypeNumberInput & TypeFlexElement> = ({
           options={options}
           value={value}
           placeholder=""
-          onChange={(value) => {
-            onChange?.(value as number);
-            setForceFocus(false);
-          }}
+          onChange={handleSelectChange}
           {...selectProps}
           className={`${styles.select} ${selectProps?.className}`}
         />
@@ -94,7 +103,7 @@ const NumberInput: FC<TypeNumberInput & TypeFlexElement> = ({
           ref={inputRef}
           value={value}
           type="number"
-          onChange={(e) => onChange?.(Number(e.target.value))}
+          onChange={handleTypedChange}
           {...inputProps}
           className={`${styles.input} ${inputProps?.className}`}
         />
