@@ -4,7 +4,7 @@
   .slider::before {
     width: 10px;
     height: 10px;
-    top: 1.75px;
+    top: 2.75px;
   }
   input:checked + .slider::before {
     transform: translateX(12px);
