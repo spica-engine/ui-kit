@@ -41,6 +41,7 @@ export { default as Dashboard } from "./components/organisms/dashboard/layout/Da
 export { default as MenuGroup } from "./components/organisms/menu-group/MenuGroup";
 export { default as Section } from "./components/organisms/section/Section";
 export { default as Table } from "./components/organisms/table/Table";
+export { NotificationProvider, useNotification } from "./components/organisms/notification";
 export { default as ArrayMinimizedInput } from "./components/atoms/inputs/minimized/array/Array";
 export { default as BooleanMinimizedInput } from "./components/atoms/inputs/minimized/boolean/Boolean";
 export { default as ColorMinimizedInput } from "./components/atoms/inputs/minimized/color/ColorMinimized";
@@ -174,7 +175,6 @@ export { type TypeUnit } from "./components/molecules/timeline/Timeline";
 export { type TypeTimeline } from "./components/molecules/timeline/Timeline";
 export { type TypeDashboardItem } from "./components/organisms/dashboard/layout/DashboardLayout";
 export { type TypeDashboardLayout } from "./components/organisms/dashboard/layout/DashboardLayout";
-export { type TypeMenuGroup } from "./components/organisms/menu-group/MenuGroup";
 export { type TypeSection } from "./components/organisms/section/Section";
 export { type TypeSectionComponent } from "./components/organisms/section/Section";
 export { type TypeTable } from "./components/organisms/table/Table";
@@ -182,6 +182,12 @@ export { type TypeColumn } from "./components/organisms/table/Table";
 export { type TypeColumnComponent } from "./components/organisms/table/Table";
 export { type TypeHeaderCell } from "./components/organisms/table/Table";
 export { type TypeCell } from "./components/organisms/table/Table";
+export {
+  type NotificationPlacement,
+  type NotificationConfig,
+  type NotificationAPI,
+  type NotificationProviderProps,
+} from "./components/organisms/notification";
 export { type IconName } from "./utils/iconList";
 export { type TypeInputType } from "./custom-hooks/useInputRepresenter";
 //Utilities export
