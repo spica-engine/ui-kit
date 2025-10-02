@@ -49,6 +49,7 @@ export type TypeRelationSelect = {
     React.SetStateAction<TypeLabeledValue | TypeLabeledValue[] | null>
   >;
   dropDownRef?: Ref<HTMLDivElement>;
+  portalClassName?: string;
 };
 
 const SEARCH_DEBOUNCE_TIME = 1000;
@@ -71,6 +72,7 @@ const RelationSelect: FC<TypeRelationSelect & TypeFluidContainer> = ({
   selectedOption,
   setSelectedOption,
   dropDownRef,
+  portalClassName = "",
   ...props
 }) => {
   const [displayerWidth, setDisplayerWidth] = useState(0);
@@ -206,6 +208,7 @@ const RelationSelect: FC<TypeRelationSelect & TypeFluidContainer> = ({
         onClick={handleOnClick}
         dimensionX="fill"
         dimensionY={36}
+        {...props}
         root={{
           children: (
             <Text
@@ -228,11 +231,10 @@ const RelationSelect: FC<TypeRelationSelect & TypeFluidContainer> = ({
           },
           children: <Icon className={styles.deleteIcon} name="delete" size="sm" />,
         }}
-        {...props}
         className={`${props.className} ${styles.container} ${disabled && styles.disabled}`}
       />
       {isOpen && (
-        <Portal onClickOutside={handleClose}>
+        <Portal onClickOutside={handleClose} className={portalClassName}>
           <FlexElement
             ref={dropDownRef as RefObject<HTMLDivElement>}
             style={{ ...targetPosition }}
