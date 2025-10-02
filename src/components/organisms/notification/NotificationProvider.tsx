@@ -39,7 +39,7 @@ const NotificationProvider: FC<NotificationProviderProps> = ({
     (config: NotificationConfig, instanceId: string) => {
       const placement = config.placement || "topRight";
       const id =
-        config.key || `notification-${Date.now()}-${Math.random().toString(36).substr(2, 9)}`;
+        config.key || `notification-${Date.now()}-${Math.random().toString(36).substring(2, 9)}`;
 
       const newNotification: NotificationInstance = {
         id,

@@ -75,7 +75,7 @@ function NotificationItem({
 
       progressTimerRef.current = setTimeout(updateProgress, 16);
     },
-    [effectiveDuration, handleClose]
+    [effectiveDuration, handleClose, isExiting]
   );
 
   const stopTimer = useCallback((trackPausedTime = false) => {
@@ -113,7 +113,7 @@ function NotificationItem({
     if (!isExiting && effectiveDuration !== null && effectiveDuration > 0) {
       startTimer(true);
     }
-  }, [startTimer, isExiting]);
+  }, [startTimer, isExiting, effectiveDuration]);
 
   const handleKeyDown = useCallback(
     (e: React.KeyboardEvent) => {
