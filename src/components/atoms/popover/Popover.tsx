@@ -13,6 +13,7 @@ import styles from "./Popover.module.scss";
 import useAdaptivePosition, { Placement } from "@custom-hooks/useAdaptivePosition";
 import useKeyDown from "@custom-hooks/useKeyDown";
 import Portal from "../portal/Portal";
+import Backdrop from "@atoms/backdrop/Backdrop";
 
 export type TypePopover = {
   placement?: Placement;
@@ -120,12 +121,13 @@ const Popover: FC<TypePopover> = ({
     >
       <FlexElement ref={childrenRef}>{children}</FlexElement>
       {isOpen && (
-        <Portal
-          className={portalClassName}
-          onClickOutside={(event?: MouseEvent) =>
-            trigger === "click" && handleVisibilityChange(false, event)
-          }
-        >
+        <Portal className={portalClassName}>
+          <Backdrop
+            showBackdrop={false}
+            onClick={(event) =>
+              trigger === "click" && handleVisibilityChange(false, event.nativeEvent)
+            }
+          />
           <FlexElement
             {...contentProps}
             ref={popoverRef}
