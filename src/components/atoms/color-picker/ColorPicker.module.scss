@@ -75,7 +75,7 @@
   border-radius: 12px;
   box-shadow: 0 10px 30px rgba(0, 0, 0, 0.15);
   padding: 14px;
-  width: 250px;
+  width: 270px;
   margin-top: 8px;
   display: flex;
   flex-direction: column;
@@ -235,39 +235,36 @@
 
 /* Controls Row */
 
-.formatSelect {
-  height: 32px;
-  border: 1px solid #e5e7eb;
-  border-radius: 6px;
-  background: #fff;
-  font-size: 12px;
-  font-weight: 500;
-  color: #374151;
-  outline: none;
-  cursor: pointer;
-  padding: 0 8px !important;
-}
+.controls {
+  width: 100% !important;
 
-.formatSelect:focus {
-  outline: 2px solid #4c9ffe;
-  outline-offset: 2px;
+  .formatSelect {
+    height: 32px;
+    border: var(--oziko-border-default) !important;
+    border-radius: var(--oziko-border-radius-md) !important;
+    background: var();
+    font-weight: 500;
+    outline: none;
+    cursor: pointer;
+    padding: 0 8px !important;
+
+    span {
+      font-size: var(--oziko-font-size-xs) !important;
+    }
+  }
+
+  .formatSelect:focus {
+    outline: 2px solid #4c9ffe;
+    outline-offset: 2px;
+  }
 }
 
 .colorInput {
-  width: 100px !important;
-  height: 32px;
-  border: 1px solid #e5e7eb;
-  border-radius: 6px;
-  padding: 0 8px;
-  font-size: 12px;
-  font-family: "SF Mono", Monaco, "Cascadia Code", "Roboto Mono", Consolas, "Courier New", monospace;
-  outline: none;
-  background: #fff;
-}
-
-.colorInput:focus {
-  outline: 2px solid #4c9ffe;
-  outline-offset: 2px;
+  width: 100% !important;
+  border: var(--oziko-border-default) !important;
+  font-size: var(--oziko-font-size-sm) !important;
+  padding: 0 var(--oziko-padding-sm) !important;
+  border-radius: var(--oziko-border-radius-md);
 }
 
 .colorInput.error {
@@ -275,20 +272,16 @@
   background-color: #fef2f2;
 }
 
-.alphaInput {
-  height: 32px;
-  border: 1px solid #e5e7eb;
-  border-radius: 6px;
-  // padding: 0 6px;
-  font-size: 12px;
-  text-align: center;
-  outline: none;
-  background: #fff;
+.alphaInputContainer {
+  border: var(--oziko-border-default) !important;
+  border-radius: var(--oziko-border-radius-md) !important;
+  font-size: var(--oziko-font-size-sm) !important;
+  display: flex;
+  align-items: center;
 }
 
-.alphaInput:focus {
-  outline: 2px solid #4c9ffe;
-  outline-offset: 2px;
+.alphaInput {
+  text-align: center;
 }
 
 /* Preview */

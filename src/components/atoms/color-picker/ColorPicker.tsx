@@ -14,7 +14,7 @@ import { useDrag } from "./useDrag";
 import styles from "./ColorPicker.module.scss";
 import Select from "@molecules/select/Select";
 import Input from "@atoms/input/Input";
-import { FluidContainer } from "index.export";
+import { FlexElement, FluidContainer } from "index.export";
 
 const ColorPicker: React.FC<ColorPickerProps> = ({
   value,
@@ -464,6 +464,7 @@ const ColorPicker: React.FC<ColorPickerProps> = ({
                     dimensionY={32}
                   />
                 ),
+                dimensionX: 100,
               }}
               root={{
                 children: (
@@ -475,26 +476,28 @@ const ColorPicker: React.FC<ColorPickerProps> = ({
                     onBlur={handleInputBlur}
                     aria-label="Color value"
                     aria-invalid={inputError}
-                    dimensionX="fill"
                     dimensionY={32}
                   />
                 ),
+                dimensionX: 102,
               }}
               suffix={{
                 children: (
-                  <>
-                    <Input
-                      type="text"
-                      className={styles.alphaInput}
-                      value={alphaValue}
-                      onChange={(e) => handleAlphaInputChange(e.target.value)}
-                      aria-label="Alpha percentage"
-                      dimensionX={40}
-                      dimensionY={32}
-                    />
-                    <span style={{ fontSize: "12px", color: "#6B7280" }}>%</span>
-                  </>
+                  <FlexElement className={styles.alphaInputContainer}>
+                    <>
+                      <Input
+                        type="text"
+                        className={styles.alphaInput}
+                        value={alphaValue}
+                        onChange={(e) => handleAlphaInputChange(e.target.value)}
+                        aria-label="Alpha percentage"
+                        dimensionY={32}
+                      />
+                      %
+                    </>
+                  </FlexElement>
                 ),
+                dimensionX: 10,
               }}
             />
           </div>
