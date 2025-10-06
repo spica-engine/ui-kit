@@ -9,6 +9,7 @@ export { default as Chart } from "./components/atoms/chart/Chart";
 export { default as Checkbox } from "./components/atoms/checkbox/Checkbox";
 export { default as Chip } from "./components/atoms/chip/Chip";
 export { default as Color } from "./components/atoms/color/Color";
+export { default as ColorPicker } from "./components/atoms/color-picker/ColorPicker";
 export { default as DashboardItem } from "./components/atoms/dashboard-item/DashboardItem";
 export { default as DatePicker } from "./components/atoms/date-picker/DatePicker";
 export { default as Directory } from "./components/atoms/directory/Directory";
@@ -190,6 +191,11 @@ export {
 } from "./components/organisms/notification";
 export { type IconName } from "./utils/iconList";
 export { type TypeInputType } from "./custom-hooks/useInputRepresenter";
+export {
+  type ColorPickerProps,
+  type ColorValue,
+  type ColorFormat,
+} from "./components/atoms/color-picker";
 //Utilities export
 export { api as apiUtil } from "./utils/api";
 export { color as colorUtil } from "./utils/color";
