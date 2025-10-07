@@ -179,21 +179,23 @@ const StorageInput: FC<TypeStorageInput> = ({
           }}
         </Dropzone>
       </FlexElement>
-      <InputGroup.HelperText
-        alignment="leftCenter"
-        dimensionX="fill"
-        {...helperTextContainerProps}
-        className={`${styles.helperText} ${helperTextContainerProps?.className}`}
-      >
-        <Text
-          {...helperTextProps}
-          size="small"
-          variant={errorMessage ? "danger" : "secondary"}
-          className={`${helperTextProps?.className}`}
+      {(errorMessage || description) && (
+        <InputGroup.HelperText
+          alignment="leftCenter"
+          dimensionX="fill"
+          {...helperTextContainerProps}
+          className={`${styles.helperText} ${helperTextContainerProps?.className}`}
         >
-          {errorMessage || description}
-        </Text>
-      </InputGroup.HelperText>
+          <Text
+            {...helperTextProps}
+            size="small"
+            variant={errorMessage ? "danger" : "secondary"}
+            className={`${helperTextProps?.className}`}
+          >
+            {errorMessage || description}
+          </Text>
+        </InputGroup.HelperText>
+      )}
     </FlexElement>
   );
 };

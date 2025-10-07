@@ -35,7 +35,7 @@ const DateInput: React.FC<DateRangePickerProps> = ({
       description={description}
       labelProps={{
         prefix: { children: <Icon name="calendarBlank" /> },
-        root: { children: <Text>{label}</Text> },
+        root: { children: <Text className={styles.text}>{label}</Text> },
       }}
       inputContainerProps={{
         dimensionX: "fill",
