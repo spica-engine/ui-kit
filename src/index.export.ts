@@ -190,6 +190,7 @@ export {
 } from "./components/organisms/notification";
 export { type IconName } from "./utils/iconList";
 export { type TypeInputType } from "./custom-hooks/useInputRepresenter";
+export { type TypeProperties } from "./custom-hooks/useInputRepresenter";
 //Utilities export
 export { api as apiUtil } from "./utils/api";
 export { color as colorUtil } from "./utils/color";
