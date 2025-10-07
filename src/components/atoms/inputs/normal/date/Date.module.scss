@@ -3,3 +3,7 @@
 .datePickerContainer {
   @include mixins.inputContainer;
 }
+
+.text {
+  color: var(--oziko-color-input-placeholder) !important;
+}
