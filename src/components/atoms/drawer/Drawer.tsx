@@ -13,7 +13,6 @@ export type TypeDrawer = {
   placement: "top" | "right" | "bottom" | "left";
   size?: DrawerSize | number | string;
   children?: React.ReactNode;
-  className?: string;
   showBackdrop?: boolean;
   backdropType?: "static" | "default";
   backdropClassName?: string;
@@ -22,6 +21,8 @@ export type TypeDrawer = {
   isOpen?: boolean;
   onClose?: () => void;
   portalClassName?: string;
+  contentClassName?: string;
+  scrollableContentClassName?: string;
 } & TypeFlexElement;
 
 const Drawer: FC<TypeDrawer> = ({
@@ -36,6 +37,8 @@ const Drawer: FC<TypeDrawer> = ({
   isOpen = false,
   onClose,
   portalClassName,
+  contentClassName,
+  scrollableContentClassName,
 }) => {
   const [isVisible, setIsVisible] = useState(isOpen);
   const [isShaking, setIsShaking] = useState(false);
@@ -95,7 +98,7 @@ const Drawer: FC<TypeDrawer> = ({
           onClick={handleClickOutside}
         />
         <div
-          className={`${styles.contentContainer} ${animationController ? "" : styles[animationClass]} ${isShaking ? styles.shake : ""} ${styles[placement]} ${isCustomSize ? "" : styles[size as keyof typeof styles]}`}
+          className={`${styles.contentContainer} ${animationController ? "" : styles[animationClass]} ${isShaking ? styles.shake : ""} ${styles[placement]} ${isCustomSize ? "" : styles[size as keyof typeof styles]} ${contentClassName || ""}`}
           style={sizeStyle}
         >
           {showCloseButton && (
@@ -106,7 +109,9 @@ const Drawer: FC<TypeDrawer> = ({
               variant="icon"
             />
           )}
-          <div className={styles.scrollableContent}>{children}</div>
+          <div className={`${styles.scrollableContent} ${scrollableContentClassName || ""}`}>
+            {children}
+          </div>
         </div>
       </FlexElement>
     </Portal>
