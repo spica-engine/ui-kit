@@ -27,6 +27,10 @@ export type TypeMapProps = {
   onChange?: (coordinates: TypeCoordinates) => void;
 };
 
+function normalizeLongitude(lng: number) {
+  return ((((lng + 180) % 360) + 360) % 360) - 180;
+}
+
 const MapClickHandler = ({ onMapClick }: MapClickHandlerProps) => {
   useMapEvents({
     click: (event: LeafletMouseEvent) => {
@@ -53,7 +57,9 @@ const Map: FC<TypeMapProps> = ({
 
   const handleMapClick = (latlng: TypeCoordinates) => {
     setPosition(latlng);
-    onChange?.(latlng);
+    const lat = latlng.lat;
+    const lng = normalizeLongitude(latlng.lng);
+    onChange?.({ lat, lng });
   };
   return (
     <MapContainer
@@ -61,6 +67,12 @@ const Map: FC<TypeMapProps> = ({
       zoom={zoom}
       scrollWheelZoom={scrollWheelZoom}
       className={`${styles.map} ${className}`}
+      worldCopyJump={true}
+      maxBoundsViscosity={1.0}
+      maxBounds={[
+        [-90, -180],
+        [90, 180],
+      ]}
     >
       <TileLayer
         url="https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png"
