@@ -17,7 +17,12 @@ import ChipInput, { TypeChipInput } from "@molecules/chip/ChipInput";
 import Text from "../components/atoms/text/Text";
 import RelationInput, { RelationType } from "@atoms/relation-input/RelationInput";
 import { IconName, Select, TypeLabeledValue, TypeSwitch } from "index.export";
+import { TypeRelationSelect } from "@atoms/relation-input/relation-select/RelationSelect";
 
+// TODO: This type is overly complex and combines properties for multiple input types.
+//       It should be split into separate types for each input type (e.g., TypeStringInputProperties, TypeNumberInputProperties, etc.).
+//       Each specific type should only include the relevant properties for that input type.
+//       This will improve type safety, readability, and maintainability.
 export type TypeProperties = {
   [key: string]: {
     type: keyof typeof types;
@@ -44,6 +49,7 @@ export type TypeProperties = {
     relationType?: RelationType;
     icon?: IconName;
     placeholder?: string;
+    popupClassName?: string;
   };
 };
 
@@ -142,6 +148,7 @@ type TypeRelationInputProps<T> = {
   searchOptions: (value: string) => Promise<TypeLabeledValue[]>;
   totalOptionsLength: number;
   relationType?: RelationType;
+  popupClassName?: string;
 } & TypeInputProps<T>;
 
 type TypeChipInputProps<T> = {
@@ -333,6 +340,7 @@ const types: TypeInputTypeMap = {
         searchOptions={props.searchOptions}
         totalOptionsLength={props.totalOptionsLength}
         multiple={props.relationType === "onetomany"}
+        selectProps={{ popupClassName: props.popupClassName || "" } as TypeRelationSelect}
       />
     );
   },
@@ -426,6 +434,7 @@ const useInputRepresenter = ({
           icon: el.icon,
           placeholder: el.placeholder,
           relationType: el.relationType,
+          popupClassName: el.popupClassName,
         })}
         {_error && typeof _error === "string" && (
           <Text
