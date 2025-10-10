@@ -110,21 +110,23 @@ const BaseInput = ({
         {children}
       </FlexElement>
 
-      <InputGroup.HelperText
-        alignment="leftCenter"
-        dimensionX="fill"
-        {...helperTextContainerProps}
-        className={`${styles.helperText} ${helperTextContainerProps?.className}`}
-      >
-        <Text
-          {...helperTextProps}
-          size="xsmall"
-          variant={errorMessage ? "danger" : "secondary"}
-          className={`${helperTextProps?.className}`}
+      {(errorMessage || description) && (
+        <InputGroup.HelperText
+          alignment="leftCenter"
+          dimensionX="fill"
+          {...helperTextContainerProps}
+          className={`${styles.helperText} ${helperTextContainerProps?.className}`}
         >
-          {errorMessage || description}
-        </Text>
-      </InputGroup.HelperText>
+          <Text
+            {...helperTextProps}
+            size="xsmall"
+            variant={errorMessage ? "danger" : "secondary"}
+            className={`${helperTextProps?.className}`}
+          >
+            {errorMessage || description}
+          </Text>
+        </InputGroup.HelperText>
+      )}
     </InputGroup>
   );
 };

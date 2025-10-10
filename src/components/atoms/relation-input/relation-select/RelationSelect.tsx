@@ -17,7 +17,7 @@ import FluidContainer, { TypeFluidContainer } from "@atoms/fluid-container/Fluid
 import Icon from "@atoms/icon/Icon";
 import Text from "@atoms/text/Text";
 import SelectOption, { TypeLabeledValue } from "@atoms/select-option/SelectOption";
-import FlexElement, { TypeFlexElement } from "@atoms/flex-element/FlexElement";
+import FlexElement from "@atoms/flex-element/FlexElement";
 import { useOnClickOutside } from "@custom-hooks/useOnClickOutside";
 import useAdaptivePosition from "@custom-hooks/useAdaptivePosition";
 import { Chip, InputWithIcon, Spinner } from "index.export";
@@ -75,7 +75,6 @@ const RelationSelect: FC<TypeRelationSelect & TypeFluidContainer> = ({
   portalClassName = "",
   ...props
 }) => {
-  const [displayerWidth, setDisplayerWidth] = useState(0);
   const [isOpen, setIsOpen] = useState(false);
 
   const [searchValue, setSearchValue] = useState("");
@@ -115,12 +114,6 @@ const RelationSelect: FC<TypeRelationSelect & TypeFluidContainer> = ({
     targetRef: dropDownRef as RefObject<HTMLElement | null>,
     initialPlacement: placement,
   });
-
-  useLayoutEffect(() => {
-    if (containerRef.current) {
-      setDisplayerWidth(containerRef.current.offsetWidth - 50);
-    }
-  }, []);
 
   useLayoutEffect(() => {
     if (isOpen && containerRef.current && (dropDownRef as RefObject<HTMLElement | null>)?.current) {
@@ -210,12 +203,11 @@ const RelationSelect: FC<TypeRelationSelect & TypeFluidContainer> = ({
         dimensionY={36}
         {...props}
         root={{
+          className: styles.displayerContainer,
           children: (
             <Text
-              style={{
-                maxWidth: displayerWidth,
-                ...props.root?.style,
-              }}
+              dimensionX={"fill"}
+              style={props.root?.style}
               className={`${props.root?.className} ${styles.displayer}`}
             >
               {getDisplayer()}
@@ -225,6 +217,7 @@ const RelationSelect: FC<TypeRelationSelect & TypeFluidContainer> = ({
           alignment: "leftCenter",
         }}
         suffix={{
+          className: styles.deleteButton,
           onClick: (e) => {
             e.stopPropagation();
             setSelectedOption(multiple ? [] : null);
@@ -255,7 +248,7 @@ const RelationSelect: FC<TypeRelationSelect & TypeFluidContainer> = ({
               <div className={styles.searchInputWrapper}>
                 <InputWithIcon
                   gap={10}
-                  dimensionX={400}
+                  dimensionX={"fill"}
                   prefix={{
                     children: <Icon name="magnify" className={styles.searchIcon} />,
                   }}

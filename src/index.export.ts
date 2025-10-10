@@ -196,6 +196,7 @@ export {
   type ColorValue,
   type ColorFormat,
 } from "./components/atoms/color-picker";
+export { type TypeProperties } from "./custom-hooks/useInputRepresenter";
 //Utilities export
 export { api as apiUtil } from "./utils/api";
 export { color as colorUtil } from "./utils/color";

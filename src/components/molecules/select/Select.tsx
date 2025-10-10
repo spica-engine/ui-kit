@@ -57,7 +57,6 @@ const Select: FC<TypeSelect & TypeFluidContainer> = ({
   externalDropdownRef,
   ...props
 }) => {
-  const [displayerWidth, setDisplayerWidth] = useState(0);
   const [isOpen, setIsOpen] = useState(false);
   const [selectedOption, setSelectedOption] = useState<TypeValue | null>(
     value || (multiple ? [] : null)
@@ -81,12 +80,6 @@ const Select: FC<TypeSelect & TypeFluidContainer> = ({
     targetRef: dropdownRef,
     initialPlacement: placement,
   });
-
-  useLayoutEffect(() => {
-    if (containerRef.current) {
-      setDisplayerWidth(containerRef.current.offsetWidth - 50);
-    }
-  }, []);
 
   useLayoutEffect(() => {
     if (isOpen && containerRef.current && dropdownRef.current) {
@@ -173,13 +166,11 @@ const Select: FC<TypeSelect & TypeFluidContainer> = ({
         onClick={handleOnClick}
         dimensionX="fill"
         dimensionY={36}
+        {...props}
         root={{
           children: (
             <Text
-              style={{
-                maxWidth: displayerWidth,
-                ...props.root?.style,
-              }}
+              style={props.root?.style}
               className={`${props.root?.className} ${styles.displayer}`}
             >
               {getDisplayer()}
@@ -191,7 +182,6 @@ const Select: FC<TypeSelect & TypeFluidContainer> = ({
         suffix={{
           children: <Icon name="chevronDown" />,
         }}
-        {...props}
         className={`${props.className} ${styles.container} ${disabled && styles.disabled}`}
       />
       {isOpen && (
