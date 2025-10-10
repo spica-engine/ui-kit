@@ -156,7 +156,11 @@ const ArrayInput: FC<TypeArrayInput> = ({
           onDelete={handleDeleteItem}
         />
       </div>
-      {value?.length ? inputFields : "Create an element to see the fields"}
+      {value?.length ? (
+        inputFields
+      ) : (
+        <span className={styles.emptyStateText}>Create an element to see the fields</span>
+      )}
       <InputGroup.HelperText
         alignment="leftCenter"
         dimensionX="fill"
