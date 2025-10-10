@@ -143,6 +143,7 @@ const ArrayInput: FC<TypeArrayInput> = ({
       <div className={styles.header}>
         {title && (
           <InputHeader
+            className={styles.inputHeader}
             prefix={{ children: <Icon name="ballot" className={styles.icon} /> }}
             root={{ children: <Text variant="secondary">{title}</Text> }}
           />
