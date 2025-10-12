@@ -17,6 +17,7 @@ export type TypeBooleanInput = {
   description?: string;
   onChange?: (checked: boolean) => void;
   size?: TypeSwitch["size"];
+  className?: string;
 };
 
 const BooleanInput: FC<TypeBooleanInput> = ({
@@ -31,9 +32,15 @@ const BooleanInput: FC<TypeBooleanInput> = ({
   description,
   onChange,
   size,
+  className,
 }) => {
   return (
-    <FlexElement dimensionX="fill" alignment="leftCenter" direction="vertical">
+    <FlexElement
+      dimensionX="fill"
+      alignment="leftCenter"
+      direction="vertical"
+      className={className || ""}
+    >
       <FluidContainer
         dimensionY={36}
         dimensionX="fill"

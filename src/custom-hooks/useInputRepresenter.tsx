@@ -223,6 +223,7 @@ const types: TypeInputTypeMap = {
       containerProps={{ dimensionX: "fill" }}
       onChange={(value) => props.onChange?.({ key: props.key, value })}
       size={props.size}
+      className={props.className}
     />
   ),
   color: (props) => (
@@ -285,6 +286,7 @@ const types: TypeInputTypeMap = {
       headerProps={{ label: props.title, icon: "formatAlignCenter" }}
       value={props.value}
       onChange={(value) => props.onChange?.({ key: props.key, value })}
+      className={props.className}
     />
   ),
   object: (props) => {
@@ -314,6 +316,7 @@ const types: TypeInputTypeMap = {
         items={props.items}
         propertyKey={props.key}
         errors={props.errors as TypeInputRepresenterError}
+        className={props.className}
       />
     );
   },
@@ -341,6 +344,7 @@ const types: TypeInputTypeMap = {
         totalOptionsLength={props.totalOptionsLength}
         multiple={props.relationType === "onetomany"}
         selectProps={{ popupClassName: props.popupClassName || "" } as TypeRelationSelect}
+        className={props.className}
       />
     );
   },
@@ -352,6 +356,7 @@ const types: TypeInputTypeMap = {
         onChange={(value) => {
           props.onChange?.({ key: props.key, value: value as string });
         }}
+        className={props.className}
       />
     );
   },
