@@ -24,3 +24,20 @@
     }
   }
 }
+
+.stringValueWrapper {
+  display: flex;
+  align-items: center;
+  width: 100%;
+}
+
+.stringValue {
+  font-size: 14px;
+  text-transform: capitalize;
+  padding: 2px 8px;
+}
+
+.hiddenAntDatePicker {
+  visibility: hidden;
+  width: 0px !important;
+}

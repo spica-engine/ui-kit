@@ -21,7 +21,7 @@ const DateMinimizedInput = ({
   datePickerClassName,
   ...props
 }: DateInputProps) => {
-  const handleOnChange = (dateString: string | string[]) => {
+  const handleOnChange = (dateString: string | string[] | null) => {
     onChange?.(new Date(dateString as string));
   };
 
