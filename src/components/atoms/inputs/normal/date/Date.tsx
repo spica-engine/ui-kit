@@ -4,6 +4,8 @@ import styles from "./Date.module.scss";
 import BaseInput from "@atoms/base-input/BaseInput";
 import Text from "@atoms/text/Text";
 import DatePicker, { AntDatePickerSharedProps } from "@atoms/date-picker/DatePicker";
+import { Tag } from "antd";
+import { CloseCircleFilled } from "@ant-design/icons";
 
 type DateRangePickerProps = {
   label?: string;
@@ -24,7 +26,7 @@ const DateInput: React.FC<DateRangePickerProps> = ({
   inputContainerClassName,
   datePickerProps,
 }) => {
-  const handleOnChange = (dateString: string | string[]) => {
+  const handleOnChange = (dateString: string | string[] | null) => {
     onChange?.(new Date(dateString as string));
   };
 
@@ -40,7 +42,7 @@ const DateInput: React.FC<DateRangePickerProps> = ({
       inputContainerProps={{
         dimensionX: "fill",
         alignment: "leftCenter",
-        className: inputContainerClassName,
+        className: `${inputContainerClassName} ${styles.dateInput}`,
       }}
     >
       <DatePicker
@@ -48,6 +50,16 @@ const DateInput: React.FC<DateRangePickerProps> = ({
         suffixIcon={null}
         onChange={handleOnChange}
         value={value}
+        renderLabel={(v) => (
+          <div className={styles.stringValueWrapper}>
+            <Tag color="default" className={styles.stringValue}>
+              {v}
+            </Tag>
+            <div className={styles.iconGroup}>
+              <CloseCircleFilled className={styles.clearIcon} onClick={() => handleOnChange("")} />
+            </div>
+          </div>
+        )}
         {...datePickerProps}
       />
     </BaseInput>

@@ -287,6 +287,7 @@ const types: TypeInputTypeMap = {
       value={props.value}
       onChange={(value) => props.onChange?.({ key: props.key, value })}
       className={props.className}
+      placeHolder={props.placeholder}
     />
   ),
   object: (props) => {
