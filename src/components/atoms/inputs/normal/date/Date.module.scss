@@ -7,3 +7,43 @@
 .text {
   color: var(--oziko-color-input-placeholder) !important;
 }
+
+.dateInput {
+  height: 36px !important;
+}
+
+.stringValueWrapper {
+  display: flex;
+  align-items: center;
+  width: 100%;
+}
+
+.iconGroup {
+  display: flex;
+  align-items: center;
+  margin-left: auto;
+  gap: 6px;
+  cursor: pointer;
+}
+
+.clearIcon {
+  font-size: 16px;
+  user-select: none;
+  cursor: pointer;
+  opacity: 0;
+  transition: opacity var(--oziko-transition-duration) ease;
+}
+
+.stringValueWrapper:hover .clearIcon {
+  opacity: 0.7;
+}
+
+.clearIcon:hover {
+  opacity: 1 !important;
+}
+
+.stringValue {
+  font-size: 14px;
+  text-transform: capitalize;
+  padding: 2px 8px;
+}
