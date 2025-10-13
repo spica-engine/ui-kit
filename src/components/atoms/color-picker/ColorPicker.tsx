@@ -14,7 +14,7 @@ import { useDrag } from "./useDrag";
 import styles from "./ColorPicker.module.scss";
 import Select from "@molecules/select/Select";
 import Input from "@atoms/input/Input";
-import { FlexElement, FluidContainer } from "index.export";
+import { FlexElement, FluidContainer, Popover } from "index.export";
 
 const ColorPicker: React.FC<ColorPickerProps> = ({
   value,
@@ -333,176 +333,183 @@ const ColorPicker: React.FC<ColorPickerProps> = ({
 
   return (
     <div className={`${styles.colorPicker} ${className || ""}`} data-disabled={disabled}>
-      {/* Trigger Button */}
-      <button
-        ref={triggerRef}
-        className={styles.trigger}
-        onClick={handleTriggerClick}
-        onKeyDown={handleTriggerKeyDown}
-        disabled={disabled}
-        aria-label="Open color picker"
-        aria-expanded={isOpen}
-        aria-haspopup="dialog"
-        id={id}
-      >
-        <div className={styles.swatch}>
-          <div className={styles.swatchColor} style={swatchStyle} />
-        </div>
-      </button>
+      <Popover
+        content={
+          <>
+            {/* Floating Label */}
+            <div className={styles.floatingLabel}>
+              <div className={styles.labelSwatch} style={swatchStyle} />
+              <span>{getDisplayValue()}</span>
+            </div>
 
-      {/* Popover */}
-      {isOpen && (
-        <>
-          {/* Floating Label */}
-          <div className={styles.floatingLabel}>
-            <div className={styles.labelSwatch} style={swatchStyle} />
-            <span>{getDisplayValue()}</span>
-          </div>
-
-          <div
-            ref={popoverRef}
-            className={styles.popover}
-            data-placement={placement}
-            role="dialog"
-            aria-modal="true"
-            aria-label="Color picker"
-            tabIndex={-1}
-          >
-            {/* Visually hidden title for screen readers */}
-            <h2 className={styles.visuallyHidden}>Color picker</h2>
-
-            {/* SV Panel */}
             <div
-              ref={(el) => {
-                svPanelRef.current = el;
-                if (svDrag.elementRef) {
-                  (svDrag.elementRef as React.MutableRefObject<HTMLDivElement | null>).current = el;
-                }
-              }}
-              className={styles.svPanel}
-              style={svPanelStyle}
-              tabIndex={0}
-              role="slider"
-              aria-label="Saturation and brightness"
-              aria-valuenow={Math.round(hsv.s)}
-              aria-valuemin={0}
-              aria-valuemax={100}
-              aria-valuetext={`Saturation ${Math.round(hsv.s)}%, Brightness ${Math.round(hsv.v)}%`}
+              ref={popoverRef}
+              className={styles.popover}
+              data-placement={placement}
+              role="dialog"
+              aria-modal="true"
+              aria-label="Color picker"
+              tabIndex={-1}
             >
-              <div className={styles.svBackground} />
-              <div className={styles.svHandle} style={svHandleStyle} />
-            </div>
+              {/* Visually hidden title for screen readers */}
+              <h2 className={styles.visuallyHidden}>Color picker</h2>
 
-            <div className={styles.slidersContainer}>
-              {/* Hue Slider */}
-              <div className={styles.sliders}>
-                <div
-                  ref={(el) => {
-                    hueSliderRef.current = el;
-                    if (hueDrag.elementRef) {
-                      (
-                        hueDrag.elementRef as React.MutableRefObject<HTMLDivElement | null>
-                      ).current = el;
-                    }
-                  }}
-                  className={`${styles.slider} ${styles.hueSlider}`}
-                  tabIndex={0}
-                  role="slider"
-                  aria-label="Hue"
-                  aria-valuenow={Math.round(hsv.h)}
-                  aria-valuemin={0}
-                  aria-valuemax={360}
-                  aria-valuetext={`Hue ${Math.round(hsv.h)} degrees`}
-                >
-                  <div className={styles.sliderHandle} style={hueHandleStyle} />
+              {/* SV Panel */}
+              <div
+                ref={(el) => {
+                  svPanelRef.current = el;
+                  if (svDrag.elementRef) {
+                    (svDrag.elementRef as React.MutableRefObject<HTMLDivElement | null>).current =
+                      el;
+                  }
+                }}
+                className={styles.svPanel}
+                style={svPanelStyle}
+                tabIndex={0}
+                role="slider"
+                aria-label="Saturation and brightness"
+                aria-valuenow={Math.round(hsv.s)}
+                aria-valuemin={0}
+                aria-valuemax={100}
+                aria-valuetext={`Saturation ${Math.round(hsv.s)}%, Brightness ${Math.round(hsv.v)}%`}
+              >
+                <div className={styles.svBackground} />
+                <div className={styles.svHandle} style={svHandleStyle} />
+              </div>
+
+              <div className={styles.slidersContainer}>
+                {/* Hue Slider */}
+                <div className={styles.sliders}>
+                  <div
+                    ref={(el) => {
+                      hueSliderRef.current = el;
+                      if (hueDrag.elementRef) {
+                        (
+                          hueDrag.elementRef as React.MutableRefObject<HTMLDivElement | null>
+                        ).current = el;
+                      }
+                    }}
+                    className={`${styles.slider} ${styles.hueSlider}`}
+                    tabIndex={0}
+                    role="slider"
+                    aria-label="Hue"
+                    aria-valuenow={Math.round(hsv.h)}
+                    aria-valuemin={0}
+                    aria-valuemax={360}
+                    aria-valuetext={`Hue ${Math.round(hsv.h)} degrees`}
+                  >
+                    <div className={styles.sliderHandle} style={hueHandleStyle} />
+                  </div>
+
+                  {/* Alpha Slider */}
+                  <div
+                    ref={(el) => {
+                      alphaSliderRef.current = el;
+                      if (alphaDrag.elementRef) {
+                        (
+                          alphaDrag.elementRef as React.MutableRefObject<HTMLDivElement | null>
+                        ).current = el;
+                      }
+                    }}
+                    className={`${styles.slider} ${styles.alphaSlider}`}
+                    tabIndex={0}
+                    role="slider"
+                    aria-label="Alpha"
+                    aria-valuenow={Math.round(hsv.a * 100)}
+                    aria-valuemin={0}
+                    aria-valuemax={100}
+                    aria-valuetext={`Alpha ${Math.round(hsv.a * 100)}%`}
+                  >
+                    <div className={styles.alphaGradient} style={alphaGradientStyle} />
+                    <div className={styles.sliderHandle} style={alphaHandleStyle} />
+                  </div>
                 </div>
 
-                {/* Alpha Slider */}
-                <div
-                  ref={(el) => {
-                    alphaSliderRef.current = el;
-                    if (alphaDrag.elementRef) {
-                      (
-                        alphaDrag.elementRef as React.MutableRefObject<HTMLDivElement | null>
-                      ).current = el;
-                    }
-                  }}
-                  className={`${styles.slider} ${styles.alphaSlider}`}
-                  tabIndex={0}
-                  role="slider"
-                  aria-label="Alpha"
-                  aria-valuenow={Math.round(hsv.a * 100)}
-                  aria-valuemin={0}
-                  aria-valuemax={100}
-                  aria-valuetext={`Alpha ${Math.round(hsv.a * 100)}%`}
-                >
-                  <div className={styles.alphaGradient} style={alphaGradientStyle} />
-                  <div className={styles.sliderHandle} style={alphaHandleStyle} />
+                <div className={styles.preview}>
+                  <div className={styles.previewColor} style={swatchStyle} />
                 </div>
               </div>
 
-              <div className={styles.preview}>
-                <div className={styles.previewColor} style={swatchStyle} />
-              </div>
+              {/* Controls */}
+              <FluidContainer
+                mode="fill"
+                className={styles.controls}
+                prefix={{
+                  children: (
+                    <Select
+                      className={styles.formatSelect}
+                      value={currentFormat}
+                      options={[
+                        { value: "hex", label: "HEX" },
+                        { value: "rgb", label: "RGB" },
+                        { value: "hsl", label: "HSL" },
+                      ]}
+                      onChange={(value) => setCurrentFormat(value as ColorFormat)}
+                      dimensionY={32}
+                    />
+                  ),
+                  dimensionX: 100,
+                }}
+                root={{
+                  children: (
+                    <Input
+                      type="text"
+                      className={`${styles.colorInput} ${inputError ? styles.error : ""}`}
+                      value={inputValue}
+                      onChange={(e) => handleInputChange(e.target.value)}
+                      onBlur={handleInputBlur}
+                      aria-label="Color value"
+                      aria-invalid={inputError}
+                      dimensionY={32}
+                    />
+                  ),
+                  dimensionX: 102,
+                }}
+                suffix={{
+                  children: (
+                    <FlexElement className={styles.alphaInputContainer}>
+                      <>
+                        <Input
+                          type="text"
+                          className={styles.alphaInput}
+                          value={alphaValue}
+                          onChange={(e) => handleAlphaInputChange(e.target.value)}
+                          aria-label="Alpha percentage"
+                          dimensionY={32}
+                        />
+                        %
+                      </>
+                    </FlexElement>
+                  ),
+                  dimensionX: 10,
+                }}
+              />
             </div>
-
-            {/* Controls */}
-            <FluidContainer
-              mode="fill"
-              className={styles.controls}
-              prefix={{
-                children: (
-                  <Select
-                    className={styles.formatSelect}
-                    value={currentFormat}
-                    options={[
-                      { value: "hex", label: "HEX" },
-                      { value: "rgb", label: "RGB" },
-                      { value: "hsl", label: "HSL" },
-                    ]}
-                    onChange={(value) => setCurrentFormat(value as ColorFormat)}
-                    dimensionY={32}
-                  />
-                ),
-                dimensionX: 100,
-              }}
-              root={{
-                children: (
-                  <Input
-                    type="text"
-                    className={`${styles.colorInput} ${inputError ? styles.error : ""}`}
-                    value={inputValue}
-                    onChange={(e) => handleInputChange(e.target.value)}
-                    onBlur={handleInputBlur}
-                    aria-label="Color value"
-                    aria-invalid={inputError}
-                    dimensionY={32}
-                  />
-                ),
-                dimensionX: 102,
-              }}
-              suffix={{
-                children: (
-                  <FlexElement className={styles.alphaInputContainer}>
-                    <>
-                      <Input
-                        type="text"
-                        className={styles.alphaInput}
-                        value={alphaValue}
-                        onChange={(e) => handleAlphaInputChange(e.target.value)}
-                        aria-label="Alpha percentage"
-                        dimensionY={32}
-                      />
-                      %
-                    </>
-                  </FlexElement>
-                ),
-                dimensionX: 10,
-              }}
-            />
+          </>
+        }
+        placement="right"
+        open={isOpen}
+        onClose={() => setIsOpen(false)}
+        arrow={true}
+      >
+        <button
+          style={{ padding: "8px 16px", cursor: "pointer" }}
+          ref={triggerRef}
+          className={styles.trigger}
+          onClick={handleTriggerClick}
+          onKeyDown={handleTriggerKeyDown}
+          disabled={disabled}
+          aria-label="Open color picker"
+          aria-expanded={isOpen}
+          aria-haspopup="dialog"
+          id={id}
+        >
+          <div className={styles.swatch}>
+            <div className={styles.swatchColor} style={swatchStyle} />
           </div>
-        </>
-      )}
+        </button>
+      </Popover>{" "}
+      {/* Trigger Button */}
     </div>
   );
 };
