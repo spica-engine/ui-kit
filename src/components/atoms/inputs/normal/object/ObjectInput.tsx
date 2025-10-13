@@ -59,23 +59,21 @@ const ObjectInput: FC<TypeObjectInput> = ({
         />
       )}
       {inputFields}
-      {(errorMessage || description) && (
-        <InputGroup.HelperText
-          alignment="leftCenter"
-          dimensionX="fill"
-          {...helperTextContainerProps}
-          className={`${styles.helperText} ${helperTextContainerProps?.className}`}
+      <InputGroup.HelperText
+        alignment="leftCenter"
+        dimensionX="fill"
+        {...helperTextContainerProps}
+        className={`${styles.helperText} ${helperTextContainerProps?.className}`}
+      >
+        <Text
+          {...helperTextProps}
+          size="small"
+          variant={errorMessage ? "danger" : "secondary"}
+          className={`${helperTextProps?.className}`}
         >
-          <Text
-            {...helperTextProps}
-            size="small"
-            variant={errorMessage ? "danger" : "secondary"}
-            className={`${helperTextProps?.className}`}
-          >
-            {errorMessage || description}
-          </Text>
-        </InputGroup.HelperText>
-      )}
+          {errorMessage || description}
+        </Text>
+      </InputGroup.HelperText>
     </FlexElement>
   );
 };
