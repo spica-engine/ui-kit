@@ -285,6 +285,7 @@ const types: TypeInputTypeMap = {
       headerProps={{ label: props.title, icon: "formatAlignCenter" }}
       value={props.value}
       onChange={(value) => props.onChange?.({ key: props.key, value })}
+      placeHolder={props.placeholder}
     />
   ),
   object: (props) => {

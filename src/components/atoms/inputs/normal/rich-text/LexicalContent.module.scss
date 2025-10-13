@@ -7,3 +7,18 @@
   border-top: var(--oziko-border-default);
   overflow: auto;
 }
+
+.placeholder {
+  position: absolute;
+  left: 0;
+  color: var(--oziko-color-input-placeholder);
+  pointer-events: none;
+  user-select: none;
+  padding: var(--oziko-padding-md);
+  padding-top: calc(var(--oziko-padding-md) + 1em);
+  font-size: var(---oziko-font-size-sm);
+}
+
+.editorContainer {
+  position: relative;
+}
