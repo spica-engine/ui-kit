@@ -263,10 +263,10 @@ function Divider() {
 
 export type TypeToolbarPlugin = {
   editor: LexicalEditor;
+  toolbarRef?: React.RefObject<HTMLDivElement | null>;
 };
 
-const ToolbarPlugin: FC<TypeToolbarPlugin> = memo(({ editor }) => {
-  const toolbarRef = useRef(null);
+const ToolbarPlugin: FC<TypeToolbarPlugin> = memo(({ editor, toolbarRef }) => {
   const sizeSvgRef = useRef(null);
   const bucketSvgRef = useRef(null);
   const [fontSize, setFontSize] = useState<string>("14px");

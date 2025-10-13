@@ -1,4 +1,4 @@
-import { FC, memo, useCallback } from "react";
+import { FC, JSX, memo, useCallback } from "react";
 import styles from "./RichText.module.scss";
 import { ExtendedTextNode } from "./plugins/ExtendedTextNode";
 import { $createParagraphNode, $getRoot, EditorState, LexicalEditor, TextNode } from "lexical";
@@ -28,6 +28,7 @@ export type TypeRichTextInput = {
   onChange?: (value: string) => void;
   description?: string;
   contentProps?: TypeFlexElement;
+  placeHolder?: string | JSX.Element;
 };
 
 const RichTextInput: FC<TypeRichTextInput> = ({
@@ -37,6 +38,7 @@ const RichTextInput: FC<TypeRichTextInput> = ({
   description,
   onChange,
   contentProps,
+  placeHolder,
 }) => {
   const updateHTML = (editor: LexicalEditor, value: string) => {
     const root = $getRoot();
@@ -111,7 +113,7 @@ const RichTextInput: FC<TypeRichTextInput> = ({
       )}
 
       <LexicalComposer initialConfig={initialConfig}>
-        <LexicalContent {...contentProps} onChange={handleChange} />
+        <LexicalContent {...contentProps} onChange={handleChange} placeHolder={placeHolder} />
       </LexicalComposer>
       <Text size="xsmall" className={`${styles.description}`}>
         {description}
