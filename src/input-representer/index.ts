@@ -17,7 +17,8 @@ export * from "./types";
 export * from "./core/abstractions";
 
 // Plugin system
-export { InputPlugin, BaseInputPlugin } from "./core/plugin/InputPlugin";
+export type { InputPlugin } from "./core/plugin/InputPlugin";
+export { BaseInputPlugin } from "./core/plugin/InputPlugin";
 export { InputRegistry, globalInputRegistry } from "./core/registry/InputRegistry";
 export { InputFactory } from "./core/factories/InputFactory";
 

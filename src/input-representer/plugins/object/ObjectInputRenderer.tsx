@@ -10,10 +10,10 @@ export class ObjectInputRenderer extends BaseRenderer<ObjectValue, ObjectInputPr
   render(props: ObjectInputProps): React.ReactNode {
     return (
       <ObjectInput
-        properties={props.properties}
+        properties={props.properties as any}
         title={props.title}
         description={props.description}
-        value={props.value}
+        value={props.value as any}
         onChange={(value) => {
           props.onChange?.({ key: props.key, value });
         }}

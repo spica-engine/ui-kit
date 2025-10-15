@@ -6,6 +6,7 @@ import { ConditionalRenderer } from "../utils/ConditionalRenderer";
 import { ErrorPresenter } from "../utils/ErrorPresenter";
 import { ValueManager } from "../utils/ValueManager";
 import { InputContainer } from "./InputContainer";
+import { getDefaultPlugins } from "../plugins";
 
 /**
  * Main component for rendering input fields based on schema
@@ -28,6 +29,14 @@ export const InputRepresenter: React.FC<InputRepresenterProps> = ({
   errorClassName,
   registry = globalInputRegistry,
 }) => {
+  // Ensure default plugins are registered if registry is empty
+  useMemo(() => {
+    if (registry === globalInputRegistry && registry.getRegisteredTypes().length === 0) {
+      const defaultPlugins = getDefaultPlugins();
+      registry.registerMany(defaultPlugins);
+    }
+  }, [registry]);
+
   // Create service instances (could be injected via context in the future)
   const factory = useMemo(() => new InputFactory(registry), [registry]);
   const conditionalRenderer = useMemo(() => new ConditionalRenderer(), []);

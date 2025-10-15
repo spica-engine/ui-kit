@@ -13,7 +13,7 @@ export class InputRegistry {
    * @param plugin - The plugin to register
    * @throws Error if plugin type is already registered with higher priority
    */
-  register(plugin: InputPlugin<InputValue>): void {
+  register(plugin: InputPlugin<any>): void {
     const existing = this.plugins.get(plugin.type);
 
     if (existing) {
@@ -36,7 +36,7 @@ export class InputRegistry {
    * Registers multiple plugins at once
    * @param plugins - Array of plugins to register
    */
-  registerMany(plugins: InputPlugin<InputValue>[]): void {
+  registerMany(plugins: InputPlugin<any>[]): void {
     plugins.forEach((plugin) => this.register(plugin));
   }
 

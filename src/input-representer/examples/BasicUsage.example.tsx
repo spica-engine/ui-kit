@@ -44,7 +44,11 @@ export const SimpleFormExample: React.FC = () => {
   return (
     <div>
       <h2>Simple Form Example</h2>
-      <InputRepresenter properties={properties} value={values} onChange={setValues} />
+      <InputRepresenter
+        properties={properties}
+        value={values}
+        onChange={(value) => setValues(value as ObjectValue)}
+      />
       <pre>{JSON.stringify(values, null, 2)}</pre>
     </div>
   );
@@ -94,7 +98,11 @@ export const ConditionalFieldsExample: React.FC = () => {
   return (
     <div>
       <h2>Conditional Fields Example</h2>
-      <InputRepresenter properties={properties} value={values} onChange={setValues} />
+      <InputRepresenter
+        properties={properties}
+        value={values}
+        onChange={(value) => setValues(value as ObjectValue)}
+      />
       <pre>{JSON.stringify(values, null, 2)}</pre>
     </div>
   );
@@ -147,7 +155,11 @@ export const NestedObjectsExample: React.FC = () => {
   return (
     <div>
       <h2>Nested Objects Example</h2>
-      <InputRepresenter properties={properties} value={values} onChange={setValues} />
+      <InputRepresenter
+        properties={properties}
+        value={values}
+        onChange={(value) => setValues(value as ObjectValue)}
+      />
       <pre>{JSON.stringify(values, null, 2)}</pre>
     </div>
   );
@@ -177,7 +189,11 @@ export const ArraysExample: React.FC = () => {
   return (
     <div>
       <h2>Arrays Example</h2>
-      <InputRepresenter properties={properties} value={values} onChange={setValues} />
+      <InputRepresenter
+        properties={properties}
+        value={values}
+        onChange={(value) => setValues(value as ObjectValue)}
+      />
       <pre>{JSON.stringify(values, null, 2)}</pre>
     </div>
   );
@@ -200,7 +216,6 @@ export const RichInputsExample: React.FC = () => {
       type: "textarea",
       title: "Short Description",
       placeholder: "A brief description...",
-      icon: "description",
     },
     favoriteColor: {
       type: "color",
@@ -215,7 +230,11 @@ export const RichInputsExample: React.FC = () => {
   return (
     <div>
       <h2>Rich Inputs Example</h2>
-      <InputRepresenter properties={properties} value={values} onChange={setValues} />
+      <InputRepresenter
+        properties={properties}
+        value={values}
+        onChange={(value) => setValues(value as ObjectValue)}
+      />
       <pre>{JSON.stringify(values, null, 2)}</pre>
     </div>
   );
@@ -252,7 +271,11 @@ export const ValidationExample: React.FC = () => {
   return (
     <div>
       <h2>Validation Example</h2>
-      <InputRepresenter properties={properties} value={values} onChange={setValues} />
+      <InputRepresenter
+        properties={properties}
+        value={values}
+        onChange={(value) => setValues(value as ObjectValue)}
+      />
       <pre>{JSON.stringify(values, null, 2)}</pre>
     </div>
   );
@@ -322,7 +345,7 @@ export const CustomRegistryExample: React.FC = () => {
       <InputRepresenter
         properties={properties}
         value={values}
-        onChange={setValues}
+        onChange={(value) => setValues(value as ObjectValue)}
         registry={customRegistry}
       />
       <pre>{JSON.stringify(values, null, 2)}</pre>

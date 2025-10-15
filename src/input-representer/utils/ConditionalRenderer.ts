@@ -1,5 +1,5 @@
 import { IConditionalRenderer } from "../core/abstractions";
-import { RenderCondition, InputValue } from "../types";
+import { RenderCondition, InputValue, ObjectValue } from "../types";
 
 /**
  * Handles conditional rendering logic
@@ -56,10 +56,12 @@ export class ConditionalRenderer implements IConditionalRenderer {
 
     // Handle objects
     if (!Array.isArray(a) && !Array.isArray(b)) {
-      const keysA = Object.keys(a);
-      const keysB = Object.keys(b);
+      const objA = a as ObjectValue;
+      const objB = b as ObjectValue;
+      const keysA = Object.keys(objA);
+      const keysB = Object.keys(objB);
       if (keysA.length !== keysB.length) return false;
-      return keysA.every((key) => this.valuesEqual(a[key], b[key]));
+      return keysA.every((key) => this.valuesEqual(objA[key], objB[key]));
     }
 
     return false;

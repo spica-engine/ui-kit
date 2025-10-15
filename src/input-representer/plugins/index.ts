@@ -1,21 +1,4 @@
-// Export all plugins
-export * from "./string/StringInputPlugin";
-export * from "./number/NumberInputPlugin";
-export * from "./textarea/TextAreaInputPlugin";
-export * from "./date/DateInputPlugin";
-export * from "./boolean/BooleanInputPlugin";
-export * from "./color/ColorInputPlugin";
-export * from "./storage/StorageInputPlugin";
-export * from "./multiselect/MultiSelectInputPlugin";
-export * from "./location/LocationInputPlugin";
-export * from "./richtext/RichTextInputPlugin";
-export * from "./object/ObjectInputPlugin";
-export * from "./array/ArrayInputPlugin";
-export * from "./chip/ChipInputPlugin";
-export * from "./relation/RelationInputPlugin";
-export * from "./select/SelectInputPlugin";
-
-// Export function to get all default plugins
+// All imports at the top
 import { StringInputPlugin } from "./string/StringInputPlugin";
 import { NumberInputPlugin } from "./number/NumberInputPlugin";
 import { TextAreaInputPlugin } from "./textarea/TextAreaInputPlugin";
@@ -34,7 +17,26 @@ import { SelectInputPlugin } from "./select/SelectInputPlugin";
 import { InputPlugin } from "../core/plugin/InputPlugin";
 import { InputValue } from "../types";
 
-export function getDefaultPlugins(): InputPlugin<InputValue>[] {
+// Export all plugins
+export * from "./string/StringInputPlugin";
+export * from "./number/NumberInputPlugin";
+export * from "./textarea/TextAreaInputPlugin";
+export * from "./date/DateInputPlugin";
+export * from "./boolean/BooleanInputPlugin";
+export * from "./color/ColorInputPlugin";
+export * from "./storage/StorageInputPlugin";
+export * from "./multiselect/MultiSelectInputPlugin";
+export * from "./location/LocationInputPlugin";
+export * from "./richtext/RichTextInputPlugin";
+export * from "./object/ObjectInputPlugin";
+export * from "./array/ArrayInputPlugin";
+export * from "./chip/ChipInputPlugin";
+export * from "./relation/RelationInputPlugin";
+export * from "./select/SelectInputPlugin";
+
+// Export function to get all default plugins
+
+export function getDefaultPlugins(): InputPlugin<any>[] {
   return [
     new StringInputPlugin(),
     new NumberInputPlugin(),

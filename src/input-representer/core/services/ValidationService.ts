@@ -92,7 +92,7 @@ class DefaultValidator implements IInputValidator {
         return null;
 
       case "custom":
-        if (rule.validator) {
+        if (rule.validator && value !== undefined) {
           const isValid = await rule.validator(value);
           return isValid ? null : rule.message || "Validation failed";
         }

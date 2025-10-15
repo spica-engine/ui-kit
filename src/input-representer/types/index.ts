@@ -122,6 +122,14 @@ export interface ArrayItemsConfig {
 }
 
 /**
+ * Number input specific config
+ */
+export interface NumberInputConfig {
+  min?: number;
+  max?: number;
+}
+
+/**
  * Chip input specific config
  */
 export interface ChipInputConfig extends StyledInputConfig {
@@ -173,6 +181,7 @@ export type InputConfig =
   | (BaseInputConfig &
       ValidatableInputConfig &
       SelectableInputConfig &
+      NumberInputConfig &
       StyledInputConfig & { type: "number" })
   | (BaseInputConfig & ValidatableInputConfig & StyledInputConfig & { type: "textarea" })
   | (BaseInputConfig & ValidatableInputConfig & StyledInputConfig & { type: "date" })

@@ -15,7 +15,7 @@ export class NumberInputRenderer extends BaseRenderer<number, NumberInputProps> 
         inputContainerClassName={props.className}
         value={props.value}
         options={props.options}
-        onChange={(value) => props.onChange?.({ key: props.key, value })}
+        onChange={(value) => props.onChange?.({ key: props.key, value: value ?? 0 })}
       />
     );
   }
@@ -24,8 +24,8 @@ export class NumberInputRenderer extends BaseRenderer<number, NumberInputProps> 
     return {
       ...baseProps,
       options: "enum" in config ? (config.enum as number[]) : undefined,
-      min: "min" in config ? config.min : undefined,
-      max: "max" in config ? config.max : undefined,
+      min: "min" in config ? (config.min as number | undefined) : undefined,
+      max: "max" in config ? (config.max as number | undefined) : undefined,
     };
   }
 }
