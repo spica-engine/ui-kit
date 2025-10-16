@@ -151,9 +151,9 @@ export interface LocationInputConfig {
 }
 
 /**
- * All input types
+ * Built-in input types
  */
-export type InputType =
+export type BuiltInInputType =
   | "string"
   | "number"
   | "textarea"
@@ -171,9 +171,14 @@ export type InputType =
   | "select";
 
 /**
+ * All input types (includes built-in and allows custom types)
+ */
+export type InputType = BuiltInInputType | (string & {});
+
+/**
  * Full input configuration - discriminated union based on type
  */
-export type InputConfig =
+export type BuiltInInputConfig =
   | (BaseInputConfig &
       ValidatableInputConfig &
       SelectableInputConfig &
@@ -214,6 +219,20 @@ export type InputConfig =
       ValidatableInputConfig &
       SelectableInputConfig &
       StyledInputConfig & { type: "select" });
+
+/**
+ * Custom input configuration for user-defined types
+ * Extends base configuration with custom properties
+ */
+export interface CustomInputConfig extends BaseInputConfig, ValidatableInputConfig {
+  type: string;
+  [key: string]: any; // Allow any additional custom properties
+}
+
+/**
+ * Union of all input configurations (built-in and custom)
+ */
+export type InputConfig = BuiltInInputConfig | CustomInputConfig;
 
 /**
  * Input properties map
