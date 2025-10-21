@@ -32,7 +32,8 @@ const CircularProgress = ({
   const diameter = sizeMap[size];
   const radius = (diameter - strokeWidth) / 2;
   const circumference = 2 * Math.PI * radius;
-  const offset = circumference - (percent / 100) * circumference;
+  const normalizedPercent = Math.min(Math.max(percent, 0), 100);
+  const offset = circumference - (normalizedPercent / 100) * circumference;
   const icon = status === "success" ? "✓" : status === "danger" ? "✕" : null;
 
   return (
@@ -56,13 +57,8 @@ const CircularProgress = ({
         />
       </svg>
       {showLabel && (
-        <div
-          className={`${styles.centerText} ${styles[status]} ${styles[size]}`}
-          style={{
-            fontSize: diameter * 0.24,
-          }}
-        >
-          {label || icon || `${Math.round(percent)}%`}
+        <div className={`${styles.centerText} ${styles[status]} ${styles[size]}`}>
+          {label || icon || `${Math.round(normalizedPercent)}%`}
         </div>
       )}
     </div>
