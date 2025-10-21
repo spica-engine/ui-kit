@@ -5,7 +5,7 @@ import { IconName, IconSize } from "@utils/iconList";
 
 type CircularProgressStatus = "normal" | "success" | "danger";
 
-type CircularProgressSize = "xs" | "sm" | "md" | "lg" | "xl";
+type CircularProgressSize = keyof typeof progressSizes;
 export interface CircularProgressProps {
   percent?: number;
   size?: CircularProgressSize;
@@ -15,7 +15,7 @@ export interface CircularProgressProps {
   label?: React.ReactNode;
 }
 
-const progressSizes: { [key in CircularProgressSize]: number } = {
+const progressSizes = {
   xs: 40,
   sm: 60,
   md: 80,
