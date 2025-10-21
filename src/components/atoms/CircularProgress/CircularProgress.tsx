@@ -65,9 +65,13 @@ const CircularProgress = ({
       </svg>
       {showLabel && (
         <div className={`${styles.centerText} ${styles[status]} ${styles[size]}`}>
-          {label ||
-            (icon && <Icon name={icon} size={iconSize} />) ||
-            `${Math.round(normalizedPercent)}%`}
+          {label !== undefined ? (
+            label
+          ) : icon ? (
+            <Icon name={icon} size={iconSize} />
+          ) : (
+            `${Math.round(normalizedPercent)}%`
+          )}
         </div>
       )}
     </div>
