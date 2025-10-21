@@ -1,7 +1,7 @@
 import React from "react";
 import styles from "./CircularProgress.module.scss";
 import Icon from "@atoms/icon/Icon";
-import { IconName } from "@utils/iconList";
+import { IconName, IconSize } from "@utils/iconList";
 
 type CircularProgressStatus = "normal" | "success" | "danger";
 
@@ -15,12 +15,25 @@ export interface CircularProgressProps {
   label?: React.ReactNode;
 }
 
-const sizeMap: { [key in CircularProgressSize]: number } = {
+const progressSizes: { [key in CircularProgressSize]: number } = {
   xs: 40,
   sm: 60,
   md: 80,
   lg: 100,
   xl: 120,
+};
+
+const circularProgressIcon: { [key in CircularProgressSize]: IconSize } = {
+  xs: "xs",
+  sm: "sm",
+  md: "md",
+  lg: "lg",
+  xl: "lg",
+};
+
+const progressStatusIcon: { [key in CircularProgressStatus]?: IconName } = {
+  success: "check",
+  danger: "close",
 };
 
 const CircularProgress = ({
@@ -31,17 +44,13 @@ const CircularProgress = ({
   status = "normal",
   label,
 }: CircularProgressProps) => {
-  const diameter = sizeMap[size];
+  const diameter = progressSizes[size];
   const radius = (diameter - strokeWidth) / 2;
   const circumference = 2 * Math.PI * radius;
   const normalizedPercent = Math.min(Math.max(percent, 0), 100);
   const offset = circumference - (normalizedPercent / 100) * circumference;
-  const iconMap: { [key in CircularProgressStatus]?: IconName } = {
-    success: "check",
-    danger: "close",
-  };
-  const icon = iconMap[status];
-  const iconSize = size === "xl" ? "lg" : size;
+  const icon = progressStatusIcon[status];
+  const iconSize = circularProgressIcon[size];
 
   return (
     <div className={styles.container} style={{ width: diameter, height: diameter }}>
