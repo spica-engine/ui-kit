@@ -1,9 +1,11 @@
 import React from "react";
 import styles from "./CircularProgress.module.scss";
+import Icon from "@atoms/icon/Icon";
+import { IconName } from "@utils/iconList";
 
 type CircularProgressStatus = "normal" | "success" | "danger";
 
-type CircularProgressSize = "xsmall" | "small" | "medium" | "large" | "xlarge";
+type CircularProgressSize = "xs" | "sm" | "md" | "lg" | "xl";
 export interface CircularProgressProps {
   percent?: number;
   size?: CircularProgressSize;
@@ -14,16 +16,16 @@ export interface CircularProgressProps {
 }
 
 const sizeMap: { [key in CircularProgressSize]: number } = {
-  xsmall: 40,
-  small: 60,
-  medium: 80,
-  large: 100,
-  xlarge: 120,
+  xs: 40,
+  sm: 60,
+  md: 80,
+  lg: 100,
+  xl: 120,
 };
 
 const CircularProgress = ({
   percent = 0,
-  size = "medium",
+  size = "md",
   strokeWidth = 6,
   showLabel = true,
   status = "normal",
@@ -34,7 +36,12 @@ const CircularProgress = ({
   const circumference = 2 * Math.PI * radius;
   const normalizedPercent = Math.min(Math.max(percent, 0), 100);
   const offset = circumference - (normalizedPercent / 100) * circumference;
-  const icon = status === "success" ? "✓" : status === "danger" ? "✕" : null;
+  const iconMap: { [key in CircularProgressStatus]?: IconName } = {
+    success: "check",
+    danger: "close",
+  };
+  const icon = iconMap[status];
+  const iconSize = size === "xl" ? "lg" : size;
 
   return (
     <div className={styles.container} style={{ width: diameter, height: diameter }}>
@@ -58,7 +65,9 @@ const CircularProgress = ({
       </svg>
       {showLabel && (
         <div className={`${styles.centerText} ${styles[status]} ${styles[size]}`}>
-          {label || icon || `${Math.round(normalizedPercent)}%`}
+          {label ||
+            (icon && <Icon name={icon} size={iconSize} />) ||
+            `${Math.round(normalizedPercent)}%`}
         </div>
       )}
     </div>
