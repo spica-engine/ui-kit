@@ -4,7 +4,7 @@ import styles from "./CircularProgress.module.scss";
 type CircularProgressStatus = "normal" | "success" | "danger";
 
 type CircularProgressSize = "xsmall" | "small" | "medium" | "large" | "xlarge";
-interface CircularProgressProps {
+export interface CircularProgressProps {
   percent?: number;
   size?: CircularProgressSize;
   strokeWidth?: number;
