@@ -1,11 +1,11 @@
 import React from "react";
 import styles from "./CircularProgress.module.scss";
 import Icon from "@atoms/icon/Icon";
-import { IconName, IconSize } from "@utils/iconList";
+import { IconSize } from "@utils/iconList";
 
-type CircularProgressStatus = "normal" | "success" | "danger";
-
+type CircularProgressStatus = keyof typeof progressStatusIcon;
 type CircularProgressSize = keyof typeof progressSizes;
+
 export interface CircularProgressProps {
   percent?: number;
   size?: CircularProgressSize;
@@ -31,10 +31,11 @@ const circularProgressIcon: { [key in CircularProgressSize]: IconSize } = {
   xl: "lg",
 };
 
-const progressStatusIcon: { [key in CircularProgressStatus]?: IconName } = {
+const progressStatusIcon = {
   success: "check",
   danger: "close",
-};
+  normal: undefined,
+} as const;
 
 const CircularProgress = ({
   percent = 0,
