@@ -19,18 +19,18 @@
   transform-origin: center;
   transform: rotate(-90deg);
   stroke: var(--oziko-color-primary-light);
-}
 
-.progressCircle.normal {
-  stroke: var(--oziko-color-primary-light);
-}
+  &.normal {
+    stroke: var(--oziko-color-primary-light);
+  }
 
-.progressCircle.success {
-  stroke: var(--oziko-color-success);
-}
+  &.success {
+    stroke: var(--oziko-color-success);
+  }
 
-.progressCircle.danger {
-  stroke: var(--oziko-color-danger);
+  &.danger {
+    stroke: var(--oziko-color-danger);
+  }
 }
 
 .centerText {
@@ -40,36 +40,36 @@
   transform: translate(-50%, -50%);
   font-weight: 500;
   font-family: var(--oziko-font-family-base);
-}
 
-.centerText.normal {
-  color: var(--oziko-color-font-primary);
-}
+  &.normal {
+    color: var(--oziko-color-font-primary);
+  }
 
-.centerText.success {
-  color: var(--oziko-color-success);
-}
+  &.success {
+    color: var(--oziko-color-success);
+  }
 
-.centerText.danger {
-  color: var(--oziko-color-danger);
-}
+  &.danger {
+    color: var(--oziko-color-danger);
+  }
 
-.centerText.xs {
-  font-size: var(--oziko-font-size-xs);
-}
+  &.xs {
+    font-size: var(--oziko-font-size-xs);
+  }
 
-.centerText.sm {
-  font-size: var(--oziko-font-size-sm);
-}
+  &.sm {
+    font-size: var(--oziko-font-size-sm);
+  }
 
-.centerText.md {
-  font-size: var(--oziko-font-size-md);
-}
+  &.md {
+    font-size: var(--oziko-font-size-md);
+  }
 
-.centerText.lg {
-  font-size: var(--oziko-font-size-lg);
-}
+  &.lg {
+    font-size: var(--oziko-font-size-lg);
+  }
 
-.centerText.xl {
-  font-size: var(--oziko-font-size-xl);
+  &.xl {
+    font-size: var(--oziko-font-size-xl);
+  }
 }
