@@ -72,6 +72,7 @@ export { default as Backdrop } from "./components/atoms/backdrop/Backdrop";
 export { default as Portal } from "./components/atoms/portal/Portal";
 export { default as Tab } from "./components/atoms/tab/Tab";
 export { default as RelationInput } from "./components/atoms/relation-input/RelationInput";
+export { default as CircularProgress } from "./components/atoms/CircularProgress/CircularProgress";
 //Custom Hooks export
 export { default as useInputRepresenter } from "./custom-hooks/useInputRepresenter";
 export { default as useKeyDown } from "./custom-hooks/useKeyDown";
@@ -205,3 +206,4 @@ export {
   type TypeFlexDimension,
   type TypeFile,
 } from "./utils/interface";
+export { type CircularProgressProps } from "./components/atoms/CircularProgress/CircularProgress";
