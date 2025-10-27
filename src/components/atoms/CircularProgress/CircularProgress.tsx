@@ -16,6 +16,7 @@ export interface CircularProgressProps {
 }
 
 const progressSizes = {
+  xxs: 25,
   xs: 40,
   sm: 60,
   md: 80,
@@ -24,6 +25,7 @@ const progressSizes = {
 };
 
 const circularProgressIcon: { [key in CircularProgressSize]: IconSize } = {
+  xxs: "xs",
   xs: "xs",
   sm: "sm",
   md: "md",

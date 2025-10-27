@@ -53,7 +53,8 @@
     color: var(--oziko-color-danger);
   }
 
-  &.xs {
+  &.xs,
+  &.xxs {
     font-size: var(--oziko-font-size-xs);
   }
 
