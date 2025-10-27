@@ -1,4 +1,4 @@
-import { FC, memo, useLayoutEffect, useRef, useState } from "react";
+import { FC, memo } from "react";
 import styles from "./SelectOption.module.scss";
 import FluidContainer, { TypeFluidContainer } from "../fluid-container/FluidContainer";
 import Checkbox from "../checkbox/Checkbox";
@@ -24,22 +24,13 @@ const SelectOption: FC<TypeSelectOption & TypeFluidContainer> = ({
   onClick,
   ...props
 }) => {
-  const [displayerWidth, setDisplayerWidth] = useState(0);
-  const containerRef = useRef<HTMLDivElement | null>(null);
-
   const { value, label } =
     typeof option === "object"
       ? { value: option.value, label: option.label }
       : { value: option, label: option };
 
-  useLayoutEffect(() => {
-    if (!containerRef.current) return;
-    setDisplayerWidth(containerRef.current?.offsetWidth - 50);
-  }, []);
-
   return (
     <FluidContainer
-      ref={containerRef}
       dimensionX="fill"
       dimensionY={36}
       alignment="leftCenter"
@@ -56,7 +47,7 @@ const SelectOption: FC<TypeSelectOption & TypeFluidContainer> = ({
             root={{
               className: `${props.root?.className} ${styles.displayer}`,
             }}
-            labelProps={{ style: { maxWidth: displayerWidth }, className: styles.displayer }}
+            labelProps={{ className: styles.displayer }}
           />
         ),
         dimensionX: "fill",
