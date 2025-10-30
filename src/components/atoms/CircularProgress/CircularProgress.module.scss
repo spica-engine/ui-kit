@@ -53,6 +53,13 @@
     color: var(--oziko-color-danger);
   }
 
+  &.xxs.danger {
+    svg {
+      margin-top: 3px;
+      margin-left: 1px;
+    }
+  }
+
   &.xs,
   &.xxs {
     font-size: var(--oziko-font-size-xs);
