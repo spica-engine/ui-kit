@@ -8,7 +8,6 @@
 import React, { useState } from "react";
 import { InputRepresenter } from "../components/InputRepresenter";
 import type { InputProperties, InputValue, ObjectValue } from "../types";
-
 // ============================================================================
 // Example 1: Simple Form
 // ============================================================================

@@ -77,6 +77,35 @@ export { default as useInputRepresenter } from "./custom-hooks/useInputRepresent
 export { default as useKeyDown } from "./custom-hooks/useKeyDown";
 export { useOnClickOutside } from "./custom-hooks/useOnClickOutside";
 export { default as useAdaptivePosition } from "./custom-hooks/useAdaptivePosition";
+//InputRepresenter System export
+export {
+  InputRepresenter,
+  InputContainer,
+  useInputRepresenter as useInputRepresenterNew,
+  globalInputRegistry,
+  InputRegistry,
+  InputFactory,
+  BaseInputPlugin,
+  BaseRenderer,
+  getDefaultPlugins,
+  ValidationService,
+  ConditionalRenderer,
+  ErrorPresenter,
+  ValueManager,
+} from "./input-representer";
+export type {
+  BuiltInInputType,
+  BuiltInInputConfig,
+  CustomInputConfig,
+  InputProperties,
+  InputConfig,
+  InputValue,
+  InputChangeEvent,
+  ObjectValue,
+  RenderCondition,
+  ValidationRule,
+  ValidationResult,
+} from "./input-representer/types";
 //Theme export
 export { createTheme } from "./theme/createTheme";
 export { useTheme } from "./theme/ThemeContext";

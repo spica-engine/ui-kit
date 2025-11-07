@@ -13,7 +13,6 @@ function App() {
         style={{
           maxWidth: "1200px",
           margin: "0 auto",
-          padding: "20px",
           fontFamily: "Inter, -apple-system, BlinkMacSystemFont, sans-serif",
         }}
       >
@@ -445,5 +444,3 @@ function ConditionalRenderingDemo() {
     </div>
   );
 }
-
-export default App;
