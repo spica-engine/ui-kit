@@ -14,17 +14,18 @@ import { useDrag } from "./useDrag";
 import styles from "./ColorPicker.module.scss";
 import Select from "@molecules/select/Select";
 import Input from "@atoms/input/Input";
-import { FlexElement, FluidContainer, Popover } from "index.export";
+import { FlexElement, Popover } from "index.export";
 
 const ColorPicker: React.FC<ColorPickerProps> = ({
   value,
   defaultValue = "#1677FF",
   onChange,
   format: initialFormat = "hex",
-  placement = "bottom-start",
+  placement = "bottomStart",
   disabled = false,
   id,
   className,
+  triggerDisplay = "complete",
 }) => {
   const [isOpen, setIsOpen] = useState(false);
   const [currentFormat, setCurrentFormat] = useState<ColorFormat>(initialFormat);
@@ -331,169 +332,132 @@ const ColorPicker: React.FC<ColorPickerProps> = ({
     return inputValue;
   };
 
+  const displayValue = getDisplayValue();
+  const showSwatch = triggerDisplay !== "only-code";
+  const showCode = triggerDisplay !== "only-color";
+
   return (
     <div className={`${styles.colorPicker} ${className || ""}`} data-disabled={disabled}>
       <Popover
         content={
-          <>
-            {/* Floating Label */}
-            <div className={styles.floatingLabel}>
-              <div className={styles.labelSwatch} style={swatchStyle} />
-              <span>{getDisplayValue()}</span>
-            </div>
-
+          <FlexElement gap={5} direction="vertical">
             <div
-              ref={popoverRef}
-              className={styles.popover}
-              data-placement={placement}
-              role="dialog"
-              aria-modal="true"
-              aria-label="Color picker"
-              tabIndex={-1}
+              ref={(el) => {
+                svPanelRef.current = el;
+                if (svDrag.elementRef) {
+                  (svDrag.elementRef as React.MutableRefObject<HTMLDivElement | null>).current = el;
+                }
+              }}
+              className={styles.svPanel}
+              style={svPanelStyle}
+              tabIndex={0}
+              role="slider"
+              aria-label="Saturation and brightness"
+              aria-valuenow={Math.round(hsv.s)}
+              aria-valuemin={0}
+              aria-valuemax={100}
+              aria-valuetext={`Saturation ${Math.round(hsv.s)}%, Brightness ${Math.round(hsv.v)}%`}
             >
-              {/* Visually hidden title for screen readers */}
-              <h2 className={styles.visuallyHidden}>Color picker</h2>
-
-              {/* SV Panel */}
-              <div
-                ref={(el) => {
-                  svPanelRef.current = el;
-                  if (svDrag.elementRef) {
-                    (svDrag.elementRef as React.MutableRefObject<HTMLDivElement | null>).current =
-                      el;
-                  }
-                }}
-                className={styles.svPanel}
-                style={svPanelStyle}
-                tabIndex={0}
-                role="slider"
-                aria-label="Saturation and brightness"
-                aria-valuenow={Math.round(hsv.s)}
-                aria-valuemin={0}
-                aria-valuemax={100}
-                aria-valuetext={`Saturation ${Math.round(hsv.s)}%, Brightness ${Math.round(hsv.v)}%`}
-              >
-                <div className={styles.svBackground} />
-                <div className={styles.svHandle} style={svHandleStyle} />
-              </div>
-
-              <div className={styles.slidersContainer}>
-                {/* Hue Slider */}
-                <div className={styles.sliders}>
-                  <div
-                    ref={(el) => {
-                      hueSliderRef.current = el;
-                      if (hueDrag.elementRef) {
-                        (
-                          hueDrag.elementRef as React.MutableRefObject<HTMLDivElement | null>
-                        ).current = el;
-                      }
-                    }}
-                    className={`${styles.slider} ${styles.hueSlider}`}
-                    tabIndex={0}
-                    role="slider"
-                    aria-label="Hue"
-                    aria-valuenow={Math.round(hsv.h)}
-                    aria-valuemin={0}
-                    aria-valuemax={360}
-                    aria-valuetext={`Hue ${Math.round(hsv.h)} degrees`}
-                  >
-                    <div className={styles.sliderHandle} style={hueHandleStyle} />
-                  </div>
-
-                  {/* Alpha Slider */}
-                  <div
-                    ref={(el) => {
-                      alphaSliderRef.current = el;
-                      if (alphaDrag.elementRef) {
-                        (
-                          alphaDrag.elementRef as React.MutableRefObject<HTMLDivElement | null>
-                        ).current = el;
-                      }
-                    }}
-                    className={`${styles.slider} ${styles.alphaSlider}`}
-                    tabIndex={0}
-                    role="slider"
-                    aria-label="Alpha"
-                    aria-valuenow={Math.round(hsv.a * 100)}
-                    aria-valuemin={0}
-                    aria-valuemax={100}
-                    aria-valuetext={`Alpha ${Math.round(hsv.a * 100)}%`}
-                  >
-                    <div className={styles.alphaGradient} style={alphaGradientStyle} />
-                    <div className={styles.sliderHandle} style={alphaHandleStyle} />
-                  </div>
-                </div>
-
-                <div className={styles.preview}>
-                  <div className={styles.previewColor} style={swatchStyle} />
-                </div>
-              </div>
-
-              {/* Controls */}
-              <FluidContainer
-                mode="fill"
-                className={styles.controls}
-                prefix={{
-                  children: (
-                    <Select
-                      className={styles.formatSelect}
-                      value={currentFormat}
-                      options={[
-                        { value: "hex", label: "HEX" },
-                        { value: "rgb", label: "RGB" },
-                        { value: "hsl", label: "HSL" },
-                      ]}
-                      onChange={(value) => setCurrentFormat(value as ColorFormat)}
-                      dimensionY={32}
-                    />
-                  ),
-                  dimensionX: 100,
-                }}
-                root={{
-                  children: (
-                    <Input
-                      type="text"
-                      className={`${styles.colorInput} ${inputError ? styles.error : ""}`}
-                      value={inputValue}
-                      onChange={(e) => handleInputChange(e.target.value)}
-                      onBlur={handleInputBlur}
-                      aria-label="Color value"
-                      aria-invalid={inputError}
-                      dimensionY={32}
-                    />
-                  ),
-                  dimensionX: 102,
-                }}
-                suffix={{
-                  children: (
-                    <FlexElement className={styles.alphaInputContainer}>
-                      <>
-                        <Input
-                          type="text"
-                          className={styles.alphaInput}
-                          value={alphaValue}
-                          onChange={(e) => handleAlphaInputChange(e.target.value)}
-                          aria-label="Alpha percentage"
-                          dimensionY={32}
-                        />
-                        %
-                      </>
-                    </FlexElement>
-                  ),
-                  dimensionX: 10,
-                }}
-              />
+              <div className={styles.svBackground} />
+              <div className={styles.svHandle} style={svHandleStyle} />
             </div>
-          </>
+
+            <div className={styles.slidersContainer}>
+              <div className={styles.sliders}>
+                <div
+                  ref={(el) => {
+                    hueSliderRef.current = el;
+                    if (hueDrag.elementRef) {
+                      (
+                        hueDrag.elementRef as React.MutableRefObject<HTMLDivElement | null>
+                      ).current = el;
+                    }
+                  }}
+                  className={`${styles.slider} ${styles.hueSlider}`}
+                  tabIndex={0}
+                  role="slider"
+                  aria-label="Hue"
+                  aria-valuenow={Math.round(hsv.h)}
+                  aria-valuemin={0}
+                  aria-valuemax={360}
+                  aria-valuetext={`Hue ${Math.round(hsv.h)} degrees`}
+                >
+                  <div className={styles.sliderHandle} style={hueHandleStyle} />
+                </div>
+
+                <div
+                  ref={(el) => {
+                    alphaSliderRef.current = el;
+                    if (alphaDrag.elementRef) {
+                      (
+                        alphaDrag.elementRef as React.MutableRefObject<HTMLDivElement | null>
+                      ).current = el;
+                    }
+                  }}
+                  className={`${styles.slider} ${styles.alphaSlider}`}
+                  tabIndex={0}
+                  role="slider"
+                  aria-label="Alpha"
+                  aria-valuenow={Math.round(hsv.a * 100)}
+                  aria-valuemin={0}
+                  aria-valuemax={100}
+                  aria-valuetext={`Alpha ${Math.round(hsv.a * 100)}%`}
+                >
+                  <div className={styles.alphaGradient} style={alphaGradientStyle} />
+                  <div className={styles.sliderHandle} style={alphaHandleStyle} />
+                </div>
+              </div>
+
+              <div className={styles.preview}>
+                <div className={styles.previewColor} style={swatchStyle} />
+              </div>
+            </div>
+
+            <FlexElement gap={5} direction="horizontal">
+              <Select
+                className={styles.formatSelect}
+                value={currentFormat}
+                options={[
+                  { value: "hex", label: "HEX" },
+                  { value: "rgb", label: "RGB" },
+                  { value: "hsl", label: "HSL" },
+                ]}
+                onChange={(value) => setCurrentFormat(value as ColorFormat)}
+                dimensionY={32}
+              />
+
+              <Input
+                type="text"
+                className={`${styles.colorInput} ${inputError ? styles.error : ""}`}
+                value={inputValue}
+                onChange={(e) => handleInputChange(e.target.value)}
+                onBlur={handleInputBlur}
+                aria-label="Color value"
+                aria-invalid={inputError}
+                dimensionY={32}
+              />
+
+              <FlexElement className={styles.alphaInputContainer}>
+                <Input
+                  type="text"
+                  className={styles.alphaInput}
+                  value={alphaValue}
+                  onChange={(e) => handleAlphaInputChange(e.target.value)}
+                  aria-label="Alpha percentage"
+                  dimensionY={32}
+                  dimensionX={30}
+                />
+                <span>%</span>
+              </FlexElement>
+            </FlexElement>
+          </FlexElement>
         }
-        placement="right"
         open={isOpen}
         onClose={() => setIsOpen(false)}
         arrow={true}
+        placement="bottom"
       >
         <button
-          style={{ padding: "8px 16px", cursor: "pointer" }}
           ref={triggerRef}
           className={styles.trigger}
           onClick={handleTriggerClick}
@@ -503,13 +467,16 @@ const ColorPicker: React.FC<ColorPickerProps> = ({
           aria-expanded={isOpen}
           aria-haspopup="dialog"
           id={id}
+          data-display={triggerDisplay}
         >
-          <div className={styles.swatch}>
-            <div className={styles.swatchColor} style={swatchStyle} />
-          </div>
+          {showSwatch && (
+            <div className={styles.swatch}>
+              <div className={styles.swatchColor} style={swatchStyle} />
+            </div>
+          )}
+          {showCode && <span className={styles.triggerLabel}>{displayValue}</span>}
         </button>
-      </Popover>{" "}
-      {/* Trigger Button */}
+      </Popover>
     </div>
   );
 };

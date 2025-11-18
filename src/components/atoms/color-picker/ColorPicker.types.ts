@@ -1,20 +1,25 @@
+import { Placement } from "@custom-hooks/useAdaptivePosition";
+
 export type ColorFormat = "hex" | "rgb" | "hsl";
 
 export interface ColorValue {
-  hex: string; // #RRGGBB (uppercase), includes alpha as #RRGGBBAA when alpha < 1
-  rgb: { r: number; g: number; b: number; a: number }; // 0-255, a: 0-1
-  hsl: { h: number; s: number; l: number; a: number }; // h: 0-360, s/l: 0-100
+  hex: string;
+  rgb: { r: number; g: number; b: number; a: number };
+  hsl: { h: number; s: number; l: number; a: number };
 }
 
+export type ColorPickerTriggerDisplay = "only-color" | "only-code" | "complete";
+
 export interface ColorPickerProps {
-  value?: string; // accepts "#1677FF", "rgba(...)", or "hsl(...)"
+  value?: string;
   defaultValue?: string;
   onChange?: (color: ColorValue) => void;
-  format?: ColorFormat; // initial format for the input select (default 'hex')
-  placement?: "bottom-start" | "bottom" | "bottom-end" | "top-start" | "top" | "top-end";
+  format?: ColorFormat;
+  placement?: Placement;
   disabled?: boolean;
   id?: string;
   className?: string;
+  triggerDisplay?: ColorPickerTriggerDisplay;
 }
 
 export interface DragState {
@@ -33,8 +38,8 @@ export interface Bounds {
 }
 
 export interface HSVColor {
-  h: number; // 0-360
-  s: number; // 0-100
-  v: number; // 0-100
-  a: number; // 0-1
+  h: number;
+  s: number;
+  v: number;
+  a: number;
 }
