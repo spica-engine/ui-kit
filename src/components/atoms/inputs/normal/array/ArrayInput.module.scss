@@ -9,3 +9,11 @@
 .header {
   width: 100%;
 }
+
+.inputHeader {
+  padding-left: 0;
+}
+
+.emptyStateText {
+  font-size: var(--oziko-icon-size-sm);
+}
