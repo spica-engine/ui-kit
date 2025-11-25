@@ -58,26 +58,55 @@ const Table: FC<TypeTable> = ({
     const handleKeyDown = (event: KeyboardEvent) => {
       const currentColumnIndex = columns.findIndex((col) => col.key === focusedCell?.column);
       const currentRowIndex = focusedCell?.row;
+
+      // Helper function to blur any focused input
+      const blurFocusedInput = () => {
+        const activeElement = document.activeElement as HTMLElement;
+        if (activeElement && activeElement.tagName === "INPUT") {
+          activeElement.blur();
+        }
+      };
+
       switch (event.key) {
         case "ArrowRight":
           if (currentColumnIndex < columns.length - 1) {
+            blurFocusedInput();
             setFocusedCell({ column: columns[currentColumnIndex + 1].key, row: currentRowIndex! });
           }
           break;
         case "ArrowLeft":
           if (currentColumnIndex > 0) {
+            blurFocusedInput();
             setFocusedCell({ column: columns[currentColumnIndex - 1].key, row: currentRowIndex! });
           }
           break;
         case "ArrowDown":
           if (currentRowIndex! < data.length - 1) {
+            blurFocusedInput();
             setFocusedCell({ column: focusedCell?.column!, row: currentRowIndex! + 1 });
           }
           break;
         case "ArrowUp":
           if (currentRowIndex! > 0) {
+            blurFocusedInput();
             setFocusedCell({ column: focusedCell?.column!, row: currentRowIndex! - 1 });
           }
+          break;
+        case "Enter":
+          // Focus the input inside the focused cell
+          const cellElement = document.querySelector(
+            `[data-cell-key="${focusedCell?.column}-${focusedCell?.row}"]`
+          );
+          if (cellElement) {
+            const input = cellElement.querySelector("input");
+            if (input) {
+              input.focus();
+            }
+          }
+          break;
+        case "Escape":
+          // Unfocus any focused input and return focus to the table
+          blurFocusedInput();
           break;
         default:
           break;
@@ -91,7 +120,7 @@ const Table: FC<TypeTable> = ({
     return () => {
       window.removeEventListener("keydown", handleKeyDown);
     };
-  }, [focusedCell]);
+  }, [focusedCell, columns, data]);
 
   return (
     <div className={styles.table}>
@@ -122,7 +151,10 @@ const Table: FC<TypeTable> = ({
               (row: any, index: number) =>
                 row[column.key] && (
                   <Column.Cell
+                    key={index}
                     focused={focusedCell?.column === column.key && focusedCell?.row === index}
+                    onClick={() => handleCellClick(column.key, index)}
+                    data-cell-key={`${column.key}-${index}`}
                   >
                     {row[column.key]}
                   </Column.Cell>
