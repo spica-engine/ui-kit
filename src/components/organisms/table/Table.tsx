@@ -11,6 +11,8 @@ export type TypeTable = {
   };
   fixedColumns?: string[];
   noResizeableColumns?: string[];
+  onCellEnter?: (columnKey: string, rowIndex: number, event: KeyboardEvent) => void;
+  onCellEscape?: (columnKey: string, rowIndex: number, event: KeyboardEvent) => void;
 };
 
 const Table: FC<TypeTable> = ({
@@ -19,6 +21,8 @@ const Table: FC<TypeTable> = ({
   saveToLocalStorage = { id: "table", save: false },
   fixedColumns = [],
   noResizeableColumns = [],
+  onCellEnter,
+  onCellEscape,
 }) => {
   const [dataColumns, setDataColumns] = useState(() => {
     return columns.map((column) => {
@@ -56,57 +60,43 @@ const Table: FC<TypeTable> = ({
 
   useEffect(() => {
     const handleKeyDown = (event: KeyboardEvent) => {
+      if (!focusedCell) return;
+
       const currentColumnIndex = columns.findIndex((col) => col.key === focusedCell?.column);
       const currentRowIndex = focusedCell?.row;
-
-      // Helper function to blur any focused input
-      const blurFocusedInput = () => {
-        const activeElement = document.activeElement as HTMLElement;
-        if (activeElement && activeElement.tagName === "INPUT") {
-          activeElement.blur();
-        }
-      };
 
       switch (event.key) {
         case "ArrowRight":
           if (currentColumnIndex < columns.length - 1) {
-            blurFocusedInput();
+            event.preventDefault();
             setFocusedCell({ column: columns[currentColumnIndex + 1].key, row: currentRowIndex! });
           }
           break;
         case "ArrowLeft":
           if (currentColumnIndex > 0) {
-            blurFocusedInput();
+            event.preventDefault();
             setFocusedCell({ column: columns[currentColumnIndex - 1].key, row: currentRowIndex! });
           }
           break;
         case "ArrowDown":
           if (currentRowIndex! < data.length - 1) {
-            blurFocusedInput();
+            event.preventDefault();
             setFocusedCell({ column: focusedCell?.column!, row: currentRowIndex! + 1 });
           }
           break;
         case "ArrowUp":
           if (currentRowIndex! > 0) {
-            blurFocusedInput();
+            event.preventDefault();
             setFocusedCell({ column: focusedCell?.column!, row: currentRowIndex! - 1 });
           }
           break;
         case "Enter":
-          // Focus the input inside the focused cell
-          const cellElement = document.querySelector(
-            `[data-cell-key="${focusedCell?.column}-${focusedCell?.row}"]`
-          );
-          if (cellElement) {
-            const input = cellElement.querySelector("input");
-            if (input) {
-              input.focus();
-            }
-          }
+          event.preventDefault();
+          onCellEnter?.(focusedCell.column, focusedCell.row, event);
           break;
         case "Escape":
-          // Unfocus any focused input and return focus to the table
-          blurFocusedInput();
+          event.preventDefault();
+          onCellEscape?.(focusedCell.column, focusedCell.row, event);
           break;
         default:
           break;
@@ -120,7 +110,7 @@ const Table: FC<TypeTable> = ({
     return () => {
       window.removeEventListener("keydown", handleKeyDown);
     };
-  }, [focusedCell, columns, data]);
+  }, [focusedCell, columns, data, onCellEnter, onCellEscape]);
 
   return (
     <div className={styles.table}>
@@ -147,19 +137,16 @@ const Table: FC<TypeTable> = ({
             noResizeable={noResizeableColumns.includes(column.key)}
           >
             <Column.Header>{column.header}</Column.Header>
-            {data.map(
-              (row: any, index: number) =>
-                row[column.key] && (
-                  <Column.Cell
-                    key={index}
-                    focused={focusedCell?.column === column.key && focusedCell?.row === index}
-                    onClick={() => handleCellClick(column.key, index)}
-                    data-cell-key={`${column.key}-${index}`}
-                  >
-                    {row[column.key]}
-                  </Column.Cell>
-                )
-            )}
+            {data.map((row: any, index: number) => (
+              <Column.Cell
+                key={index}
+                focused={focusedCell?.column === column.key && focusedCell?.row === index}
+                onClick={() => handleCellClick(column.key, index)}
+                data-cell-key={`${column.key}-${index}`}
+              >
+                {row[column.key]}
+              </Column.Cell>
+            ))}
           </Column>
         );
       })}

@@ -36,9 +36,19 @@
 }
 
 .cell {
-  padding: var(--oziko-padding-md);
+  padding: 0 var(--oziko-padding-md);
+  min-height: 48px;
+  display: flex;
+  align-items: center;
+  width: 100%;
+  box-sizing: border-box;
+
   &:not(:last-child) {
     border-bottom: 1px solid var(--oziko-color-border);
+  }
+
+  > * {
+    width: 100%;
   }
 }
 
