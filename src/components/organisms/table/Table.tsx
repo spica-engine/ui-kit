@@ -13,6 +13,10 @@ export type TypeTable = {
   noResizeableColumns?: string[];
   onCellEnter?: (columnKey: string, rowIndex: number, event: KeyboardEvent) => void;
   onCellEscape?: (columnKey: string, rowIndex: number, event: KeyboardEvent) => void;
+  tableClassName?: string;
+  columnClassName?: string;
+  headerClassName?: string;
+  cellClassName?: string;
 };
 
 const Table: FC<TypeTable> = ({
@@ -23,6 +27,10 @@ const Table: FC<TypeTable> = ({
   noResizeableColumns = [],
   onCellEnter,
   onCellEscape,
+  tableClassName = "",
+  columnClassName = "",
+  headerClassName = "",
+  cellClassName = "",
 }) => {
   const [dataColumns, setDataColumns] = useState(() => {
     return columns.map((column) => {
@@ -113,7 +121,7 @@ const Table: FC<TypeTable> = ({
   }, [focusedCell, columns, data, onCellEnter, onCellEscape]);
 
   return (
-    <div className={styles.table}>
+    <div className={`${styles.table} ${tableClassName}`}>
       {dataColumns.map((column: any, index: number) => {
         const isFixed = fixedColumns.includes(column.key);
         const positionAmount = isFixed
@@ -128,7 +136,9 @@ const Table: FC<TypeTable> = ({
           <Column
             key={column.key}
             columnKey={column.key}
-            className={`${styles.column} ${isFixed ? styles.fixedColumns : styles.scrollableColumns}`}
+            className={`${styles.column} ${
+              isFixed ? styles.fixedColumns : styles.scrollableColumns
+            } ${columnClassName}`}
             style={{
               left: positionAmount,
             }}
@@ -136,13 +146,14 @@ const Table: FC<TypeTable> = ({
             updateColumnWidth={updateColumnWidth}
             noResizeable={noResizeableColumns.includes(column.key)}
           >
-            <Column.Header>{column.header}</Column.Header>
+            <Column.Header className={headerClassName}>{column.header}</Column.Header>
             {data.map((row: any, index: number) => (
               <Column.Cell
                 key={index}
                 focused={focusedCell?.column === column.key && focusedCell?.row === index}
                 onClick={() => handleCellClick(column.key, index)}
                 data-cell-key={`${column.key}-${index}`}
+                className={cellClassName}
               >
                 {row[column.key]}
               </Column.Cell>
