@@ -1,38 +1,59 @@
-import React, { FC, memo, useEffect, useRef, useState } from "react";
+import React, { memo, useEffect, useRef, useState } from "react";
 import FlexElement, { TypeFlexElement } from "components/atoms/flex-element/FlexElement";
 import styles from "./Table.module.scss";
 import { TypeAlignment } from "utils/interface";
-export type TypeTable = {
-  columns: any[];
-  data: any[];
-  saveToLocalStorage?: {
-    id: string;
-    save?: boolean;
-  };
+
+export type TableColumnRenderCellParams<TRow = any> = {
+  row: TRow;
+  rowIndex: number;
+  isFocused: boolean;
+  columnKey: string;
+};
+
+export type TableColumn<TRow = any> = {
+  key: string;
+  header: React.ReactNode;
+  width?: string;
+  renderCell: (params: TableColumnRenderCellParams<TRow>) => React.ReactNode;
+};
+
+export type TableSaveToLocalStorage = {
+  id: string;
+  save?: boolean;
+};
+
+export type TableCellKeyDownParams = {
+  columnKey: string;
+  rowIndex: number;
+  event: KeyboardEvent;
+};
+
+export type TypeTable<TRow = any> = {
+  columns: TableColumn<TRow>[];
+  data: TRow[];
+  saveToLocalStorage?: TableSaveToLocalStorage;
   fixedColumns?: string[];
   noResizeableColumns?: string[];
-  onCellEnter?: (columnKey: string, rowIndex: number, event: KeyboardEvent) => void;
-  onCellEscape?: (columnKey: string, rowIndex: number, event: KeyboardEvent) => void;
+  onCellKeyDown?: (params: TableCellKeyDownParams) => void;
   tableClassName?: string;
   columnClassName?: string;
   headerClassName?: string;
   cellClassName?: string;
 };
 
-const Table: FC<TypeTable> = ({
+const Table = <TRow = any,>({
   columns,
   data,
   saveToLocalStorage = { id: "table", save: false },
   fixedColumns = [],
   noResizeableColumns = [],
-  onCellEnter,
-  onCellEscape,
+  onCellKeyDown,
   tableClassName = "",
   columnClassName = "",
   headerClassName = "",
   cellClassName = "",
-}) => {
-  const [dataColumns, setDataColumns] = useState(() => {
+}: TypeTable<TRow>) => {
+  const [dataColumns, setDataColumns] = useState<TableColumn<TRow>[]>(() => {
     return columns.map((column) => {
       const savedWidth = saveToLocalStorage?.save
         ? localStorage.getItem(`${saveToLocalStorage?.id}-${column.key}`)
@@ -47,14 +68,14 @@ const Table: FC<TypeTable> = ({
   const [focusedCell, setFocusedCell] = useState<{ column: string; row: number } | null>(null);
 
   const updateColumnWidth = (key: string, newWidth: string) => {
-    setDataColumns((prevColumns: any) =>
-      prevColumns.map((col: any) => (col.key === key ? { ...col, width: newWidth } : col))
+    setDataColumns((prevColumns) =>
+      prevColumns.map((col) => (col.key === key ? { ...col, width: newWidth } : col))
     );
   };
 
-  const saveColumns = (columns: any[], tableId: string) => {
+  const saveColumns = (columns: TableColumn<TRow>[], tableId: string) => {
     columns.forEach((column) => {
-      localStorage.setItem(`${tableId}-${column.key}`, column.width);
+      localStorage.setItem(`${tableId}-${column.key}`, column.width || "");
     });
   };
 
@@ -67,68 +88,102 @@ const Table: FC<TypeTable> = ({
   };
 
   useEffect(() => {
-    const handleKeyDown = (event: KeyboardEvent) => {
-      if (!focusedCell) return;
+    if (!focusedCell) return;
 
-      const currentColumnIndex = columns.findIndex((col) => col.key === focusedCell?.column);
-      const currentRowIndex = focusedCell?.row;
+    const ARROW_KEYS = ["ArrowRight", "ArrowLeft", "ArrowDown", "ArrowUp"] as const;
+    const isArrowKey = (key: string): boolean =>
+      ARROW_KEYS.includes(key as (typeof ARROW_KEYS)[number]);
+
+    const handleArrowRight = (currentColumnIndex: number, currentRowIndex: number) => {
+      if (currentColumnIndex < columns.length - 1) {
+        setFocusedCell({
+          column: columns[currentColumnIndex + 1].key,
+          row: currentRowIndex,
+        });
+      }
+    };
+
+    const handleArrowLeft = (currentColumnIndex: number, currentRowIndex: number) => {
+      if (currentColumnIndex > 0) {
+        setFocusedCell({
+          column: columns[currentColumnIndex - 1].key,
+          row: currentRowIndex,
+        });
+      }
+    };
+
+    const handleArrowDown = (column: string, currentRowIndex: number) => {
+      if (currentRowIndex < data.length - 1) {
+        setFocusedCell({
+          column,
+          row: currentRowIndex + 1,
+        });
+      }
+    };
+
+    const handleArrowUp = (column: string, currentRowIndex: number) => {
+      if (currentRowIndex > 0) {
+        setFocusedCell({
+          column,
+          row: currentRowIndex - 1,
+        });
+      }
+    };
+
+    const handleArrowKeyNavigation = (
+      event: KeyboardEvent,
+      cell: { column: string; row: number }
+    ) => {
+      const currentColumnIndex = columns.findIndex((col) => col.key === cell.column);
+      const currentRowIndex = cell.row;
 
       switch (event.key) {
         case "ArrowRight":
-          if (currentColumnIndex < columns.length - 1) {
-            event.preventDefault();
-            setFocusedCell({ column: columns[currentColumnIndex + 1].key, row: currentRowIndex! });
-          }
+          handleArrowRight(currentColumnIndex, currentRowIndex);
           break;
         case "ArrowLeft":
-          if (currentColumnIndex > 0) {
-            event.preventDefault();
-            setFocusedCell({ column: columns[currentColumnIndex - 1].key, row: currentRowIndex! });
-          }
+          handleArrowLeft(currentColumnIndex, currentRowIndex);
           break;
         case "ArrowDown":
-          if (currentRowIndex! < data.length - 1) {
-            event.preventDefault();
-            setFocusedCell({ column: focusedCell?.column!, row: currentRowIndex! + 1 });
-          }
+          handleArrowDown(cell.column, currentRowIndex);
           break;
         case "ArrowUp":
-          if (currentRowIndex! > 0) {
-            event.preventDefault();
-            setFocusedCell({ column: focusedCell?.column!, row: currentRowIndex! - 1 });
-          }
-          break;
-        case "Enter":
-          event.preventDefault();
-          onCellEnter?.(focusedCell.column, focusedCell.row, event);
-          break;
-        case "Escape":
-          event.preventDefault();
-          onCellEscape?.(focusedCell.column, focusedCell.row, event);
-          break;
-        default:
+          handleArrowUp(cell.column, currentRowIndex);
           break;
       }
     };
 
-    if (focusedCell) {
-      window.addEventListener("keydown", handleKeyDown);
-    }
+    const handleKeyDown = (event: KeyboardEvent) => {
+      if (isArrowKey(event.key)) {
+        event.preventDefault();
+        handleArrowKeyNavigation(event, focusedCell);
+      } else {
+        onCellKeyDown?.({
+          columnKey: focusedCell.column,
+          rowIndex: focusedCell.row,
+          event,
+        });
+      }
+    };
+
+    globalThis.addEventListener("keydown", handleKeyDown);
 
     return () => {
-      window.removeEventListener("keydown", handleKeyDown);
+      globalThis.removeEventListener("keydown", handleKeyDown);
     };
-  }, [focusedCell, columns, data, onCellEnter, onCellEscape]);
+  }, [focusedCell, columns, data, onCellKeyDown]);
 
   return (
     <div className={`${styles.table} ${tableClassName}`}>
-      {dataColumns.map((column: any, index: number) => {
+      {dataColumns.map((column, index) => {
         const isFixed = fixedColumns.includes(column.key);
         const positionAmount = isFixed
           ? fixedColumns
               .slice(0, fixedColumns.indexOf(column.key))
               .reduce(
-                (acc, curr) => acc + parseInt(dataColumns.find((dc) => dc.key === curr).width),
+                (acc, curr) =>
+                  acc +
+                  Number.parseInt(dataColumns.find((dc) => dc.key === curr)?.width || "300px"),
                 0
               ) + "px"
           : "unset";
@@ -147,17 +202,26 @@ const Table: FC<TypeTable> = ({
             noResizeable={noResizeableColumns.includes(column.key)}
           >
             <Column.Header className={headerClassName}>{column.header}</Column.Header>
-            {data.map((row: any, index: number) => (
-              <Column.Cell
-                key={index}
-                focused={focusedCell?.column === column.key && focusedCell?.row === index}
-                onClick={() => handleCellClick(column.key, index)}
-                data-cell-key={`${column.key}-${index}`}
-                className={cellClassName}
-              >
-                {row[column.key]}
-              </Column.Cell>
-            ))}
+            {data.map((row: TRow, index: number) => {
+              const isFocused = focusedCell?.column === column.key && focusedCell?.row === index;
+              const cellKey = `${column.key}-${index}`;
+              return (
+                <Column.Cell
+                  key={cellKey}
+                  focused={isFocused}
+                  onClick={() => handleCellClick(column.key, index)}
+                  data-cell-key={cellKey}
+                  className={cellClassName}
+                >
+                  {column.renderCell({
+                    row,
+                    rowIndex: index,
+                    isFocused,
+                    columnKey: column.key,
+                  })}
+                </Column.Cell>
+              );
+            })}
           </Column>
         );
       })}
@@ -165,7 +229,8 @@ const Table: FC<TypeTable> = ({
   );
 };
 
-export default memo(Table);
+const MemoizedTable = memo(Table) as <TRow = any>(props: TypeTable<TRow>) => React.ReactElement;
+export default MemoizedTable;
 
 export type TypeColumn = {
   columnKey?: string;
@@ -214,20 +279,37 @@ const ColumnComponent = ({
     };
 
     if (isResizing) {
-      window.addEventListener("mousemove", handleMouseMove);
-      window.addEventListener("mouseup", handleMouseUp);
+      globalThis.addEventListener("mousemove", handleMouseMove);
+      globalThis.addEventListener("mouseup", handleMouseUp);
     }
 
     return () => {
-      window.removeEventListener("mousemove", handleMouseMove);
-      window.removeEventListener("mouseup", handleMouseUp);
+      globalThis.removeEventListener("mousemove", handleMouseMove);
+      globalThis.removeEventListener("mouseup", handleMouseUp);
     };
   }, [isResizing, columnKey, updateColumnWidth]);
+
+  const handleResizerMouseDown = (event: React.MouseEvent<HTMLButtonElement>) => {
+    event.preventDefault();
+    setIsResizing(true);
+  };
+
+  const handleResizerClick = (event: React.MouseEvent<HTMLButtonElement>) => {
+    event.preventDefault();
+  };
 
   return (
     <div ref={columnRef} className={className} style={{ ...style, minWidth: columnWidth }}>
       {children}
-      {!noResizeable && <div className={styles.resizer} onMouseDown={() => setIsResizing(true)} />}
+      {!noResizeable && (
+        <button
+          type="button"
+          className={styles.resizer}
+          aria-label="Resize column"
+          onMouseDown={handleResizerMouseDown}
+          onClick={handleResizerClick}
+        />
+      )}
     </div>
   );
 };
