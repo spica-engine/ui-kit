@@ -179,6 +179,11 @@ export { type TypeDashboardItem } from "./components/organisms/dashboard/layout/
 export { type TypeDashboardLayout } from "./components/organisms/dashboard/layout/DashboardLayout";
 export { type TypeSection } from "./components/organisms/section/Section";
 export { type TypeSectionComponent } from "./components/organisms/section/Section";
+//Table exports
+export { type TableColumn } from "./components/organisms/table/Table";
+export { type TableColumnRenderCellParams } from "./components/organisms/table/Table";
+export { type TableSaveToLocalStorage } from "./components/organisms/table/Table";
+export { type TableCellKeyDownParams } from "./components/organisms/table/Table";
 export { type TypeTable } from "./components/organisms/table/Table";
 export { type TypeColumn } from "./components/organisms/table/Table";
 export { type TypeColumnComponent } from "./components/organisms/table/Table";
