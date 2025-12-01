@@ -12,6 +12,7 @@ import FlexElement, { TypeFlexElement } from "../flex-element/FlexElement";
 import styles from "./Popover.module.scss";
 import useAdaptivePosition, { Placement } from "@custom-hooks/useAdaptivePosition";
 import useKeyDown from "@custom-hooks/useKeyDown";
+import { useOnClickOutside } from "@custom-hooks/useOnClickOutside";
 import Portal from "../portal/Portal";
 import Backdrop from "@atoms/backdrop/Backdrop";
 
@@ -104,6 +105,41 @@ const Popover: FC<TypePopover> = ({
     }
   }, [isOpen, calculatePosition]);
 
+  const handleClickOutside = useCallback(
+    (event?: MouseEvent) => {
+      if (!isOpen || trigger !== "click" || !event?.target || !popoverRef.current) {
+        return;
+      }
+
+      const target = event.target as Node;
+      const allPopoverContents = document.querySelectorAll("[data-popover-content]");
+
+      const clickedInsideOtherPopover = Array.from(allPopoverContents).some(
+        (popoverContent) => popoverContent !== popoverRef.current && popoverContent.contains(target)
+      );
+
+      if (clickedInsideOtherPopover) {
+        return;
+      }
+
+      const visiblePopovers = Array.from(allPopoverContents).filter((el) => {
+        const style = globalThis.getComputedStyle(el);
+        return style.display !== "none" && style.visibility !== "hidden";
+      });
+
+      const topmostPopover = visiblePopovers.at(-1);
+      if (topmostPopover === popoverRef.current) {
+        handleVisibilityChange(false, event);
+      }
+    },
+    [isOpen, trigger, handleVisibilityChange]
+  );
+
+  useOnClickOutside({
+    targetElements: [popoverRef, containerRef],
+    onClickOutside: handleClickOutside,
+  });
+
   const handleInteraction = {
     onMouseEnter: () => {
       trigger === "hover" && handleVisibilityChange(true);
@@ -122,15 +158,11 @@ const Popover: FC<TypePopover> = ({
       <FlexElement ref={childrenRef}>{children}</FlexElement>
       {isOpen && (
         <Portal className={portalClassName}>
-          <Backdrop
-            showBackdrop={false}
-            onClick={(event) =>
-              trigger === "click" && handleVisibilityChange(false, event.nativeEvent)
-            }
-          />
+          <Backdrop showBackdrop={false} />
           <FlexElement
             {...contentProps}
             ref={popoverRef}
+            data-popover-content
             style={{ ...targetPosition, ...(contentProps?.style ?? {}) }}
             className={`${contentProps?.className} ${styles.content}`}
           >
