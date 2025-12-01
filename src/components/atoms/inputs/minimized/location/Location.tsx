@@ -22,7 +22,7 @@ const MinimizedLocationInput = ({
   return (
     <Popover
       content={<Map {...mapProps} />}
-      contentProps={contentProps}
+      contentProps={{ dimensionX: 500, dimensionY: 500, ...contentProps }}
       containerProps={{ dimensionX: "fill", alignment: "leftCenter", ...props }}
     >
       <FluidContainer
