@@ -122,6 +122,15 @@ const Popover: FC<TypePopover> = ({
         return;
       }
 
+      const selectDropdowns = document.querySelectorAll("[data-select-dropdown]");
+      const clickedInsideSelectDropdown = Array.from(selectDropdowns).some((dropdown) => {
+        return dropdown.contains(target);
+      });
+
+      if (clickedInsideSelectDropdown) {
+        return;
+      }
+
       const visiblePopovers = Array.from(allPopoverContents).filter((el) => {
         const style = globalThis.getComputedStyle(el);
         return style.display !== "none" && style.visibility !== "hidden";
