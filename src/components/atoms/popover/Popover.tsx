@@ -122,8 +122,6 @@ const Popover: FC<TypePopover> = ({
         return;
       }
 
-      // Check if click is inside a Select dropdown
-      // If so, don't close the Popover - let the Select component handle its own dropdown closing
       const selectDropdowns = document.querySelectorAll("[data-select-dropdown]");
       const clickedInsideSelectDropdown = Array.from(selectDropdowns).some((dropdown) => {
         return dropdown.contains(target);
