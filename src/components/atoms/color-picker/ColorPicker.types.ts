@@ -1,3 +1,4 @@
+import { TypeFlexElement } from "@atoms/flex-element/FlexElement";
 import { Placement } from "@custom-hooks/useAdaptivePosition";
 
 export type ColorFormat = "hex" | "rgb" | "hsl";
@@ -11,14 +12,15 @@ export interface ColorValue {
 export type ColorPickerTriggerDisplay = "only-color" | "only-code" | "complete";
 
 export interface ColorPickerProps {
+  containerProps?: TypeFlexElement;
+  contentProps?: TypeFlexElement;
   value?: string;
   defaultValue?: string;
   onChange?: (color: ColorValue) => void;
   format?: ColorFormat;
   placement?: Placement;
-  disabled?: boolean;
   id?: string;
-  className?: string;
+  disabled?: boolean;
   triggerDisplay?: ColorPickerTriggerDisplay;
 }
 

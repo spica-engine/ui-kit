@@ -7,6 +7,7 @@
 
 .trigger {
   min-width: 32px;
+  width: 100%;
   height: 32px;
   border-radius: 8px;
   border: var(--oziko-border-default);
@@ -19,8 +20,12 @@
   outline: none;
   position: relative;
   gap: 8px;
-  padding: 4px;
+  padding: 0 !important;
   white-space: nowrap;
+
+  &:hover {
+    background: transparent !important;
+  }
 }
 
 .trigger[data-display="only-color"] {
@@ -202,7 +207,7 @@
     height: 32px;
     border: var(--oziko-border-default) !important;
     border-radius: var(--oziko-border-radius-md) !important;
-    background: var();
+
     font-weight: 500;
     outline: none;
     cursor: pointer;

@@ -24,6 +24,7 @@ export type TypePopover = {
   open?: boolean;
   containerProps?: TypeFlexElement;
   contentProps?: TypeFlexElement;
+  childrenProps?: TypeFlexElement;
   arrow?: boolean;
   arrowPlacement?: Placement;
   portalClassName?: string;
@@ -38,6 +39,7 @@ const Popover: FC<TypePopover> = ({
   open,
   containerProps,
   contentProps,
+  childrenProps,
   arrow = false,
   arrowPlacement,
   portalClassName,
@@ -164,7 +166,9 @@ const Popover: FC<TypePopover> = ({
       {...handleInteraction}
       className={`${styles.container} ${containerProps?.className || ""}`}
     >
-      <FlexElement ref={childrenRef}>{children}</FlexElement>
+      <FlexElement ref={childrenRef} dimensionX="fill" alignment="leftCenter" {...childrenProps}>
+        {children}
+      </FlexElement>
       {isOpen && (
         <Portal className={portalClassName}>
           <Backdrop showBackdrop={false} />
