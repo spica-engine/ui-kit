@@ -9,12 +9,17 @@ import {
   rgbaToString,
   hslaToString,
   clamp,
+  hexToRgb,
+  parseRgb,
+  parseHsl,
+  rgbToHsl,
+  hslToRgb,
 } from "./colorMath";
 import { useDrag } from "./useDrag";
 import styles from "./ColorPicker.module.scss";
 import Select from "@molecules/select/Select";
 import Input from "@atoms/input/Input";
-import { FlexElement, Popover } from "index.export";
+import { Button, FlexElement, Popover } from "index.export";
 
 const ColorPicker: React.FC<ColorPickerProps> = ({
   value,
@@ -24,8 +29,10 @@ const ColorPicker: React.FC<ColorPickerProps> = ({
   placement = "bottomStart",
   disabled = false,
   id,
-  className,
   triggerDisplay = "complete",
+  containerProps,
+  contentProps,
+  ...props
 }) => {
   const [isOpen, setIsOpen] = useState(false);
   const [currentFormat, setCurrentFormat] = useState<ColorFormat>(initialFormat);
@@ -196,20 +203,81 @@ const ColorPicker: React.FC<ColorPickerProps> = ({
     },
   });
 
-  // Handle input changes
+  // Helper function to check if a color string is valid and parse it
+  const tryParseColor = (input: string): ColorValue | null => {
+    const normalizedInput = input.trim().toLowerCase();
+
+    // Try hex format
+    if (normalizedInput.startsWith("#")) {
+      const rgb = hexToRgb(normalizedInput);
+      if (rgb) {
+        const hsl = rgbToHsl(rgb.r, rgb.g, rgb.b);
+        return {
+          hex: toHex(rgb),
+          rgb,
+          hsl: { ...hsl, a: rgb.a },
+        };
+      }
+      return null;
+    }
+
+    // Try RGB/RGBA format
+    if (normalizedInput.startsWith("rgb")) {
+      const rgb = parseRgb(normalizedInput);
+      if (rgb) {
+        const hsl = rgbToHsl(rgb.r, rgb.g, rgb.b);
+        return {
+          hex: toHex(rgb),
+          rgb,
+          hsl: { ...hsl, a: rgb.a },
+        };
+      }
+      return null;
+    }
+
+    // Try HSL/HSLA format
+    if (normalizedInput.startsWith("hsl")) {
+      const hsl = parseHsl(normalizedInput);
+      if (hsl) {
+        const rgb = hslToRgb(hsl.h, hsl.s, hsl.l);
+        return {
+          hex: toHex({ ...rgb, a: hsl.a }),
+          rgb: { ...rgb, a: hsl.a },
+          hsl,
+        };
+      }
+      return null;
+    }
+
+    return null;
+  };
+
+  // Handle input changes - update color in real-time when valid
   const handleInputChange = (value: string) => {
     setInputValue(value);
-    setInputError(false);
+
+    // Try to parse and update color if valid
+    if (value.trim()) {
+      const newColor = tryParseColor(value);
+      if (newColor) {
+        // Valid color - update immediately
+        setColor(newColor);
+        setHsv(colorToHsv(newColor));
+        onChange?.(newColor);
+        setInputError(false);
+      } else {
+        // Invalid format - show error but don't update color
+        setInputError(true);
+      }
+    } else {
+      // Empty input - clear error
+      setInputError(false);
+    }
   };
 
   const handleInputBlur = () => {
-    try {
-      const newColor = parseColor(inputValue);
-      handleColorChange(newColor);
-      setInputError(false);
-    } catch {
-      setInputError(true);
-      // Reset to current color value
+    // If there's an error or empty input, reset to current color
+    if (inputError || !inputValue.trim()) {
       const formatColor = (color: ColorValue, format: ColorFormat): string => {
         switch (format) {
           case "hex":
@@ -223,6 +291,30 @@ const ColorPicker: React.FC<ColorPickerProps> = ({
         }
       };
       setInputValue(formatColor(color, currentFormat));
+      setInputError(false);
+    } else {
+      // Final validation on blur
+      try {
+        const newColor = parseColor(inputValue);
+        handleColorChange(newColor);
+        setInputError(false);
+      } catch {
+        setInputError(true);
+        // Reset to current color value
+        const formatColor = (color: ColorValue, format: ColorFormat): string => {
+          switch (format) {
+            case "hex":
+              return color.hex;
+            case "rgb":
+              return rgbaToString(color.rgb.r, color.rgb.g, color.rgb.b, color.rgb.a);
+            case "hsl":
+              return hslaToString(color.hsl.h, color.hsl.s, color.hsl.l, color.hsl.a);
+            default:
+              return color.hex;
+          }
+        };
+        setInputValue(formatColor(color, currentFormat));
+      }
     }
   };
 
@@ -294,22 +386,22 @@ const ColorPicker: React.FC<ColorPickerProps> = ({
   };
 
   // Click outside handler
-  useEffect(() => {
-    const handleClickOutside = (event: MouseEvent) => {
-      if (
-        isOpen &&
-        popoverRef.current &&
-        triggerRef.current &&
-        !popoverRef.current.contains(event.target as Node) &&
-        !triggerRef.current.contains(event.target as Node)
-      ) {
-        setIsOpen(false);
-      }
-    };
+  // useEffect(() => {
+  //   const handleClickOutside = (event: MouseEvent) => {
+  //     if (
+  //       isOpen &&
+  //       popoverRef.current &&
+  //       triggerRef.current &&
+  //       !popoverRef.current.contains(event.target as Node) &&
+  //       !triggerRef.current.contains(event.target as Node)
+  //     ) {
+  //       setIsOpen(false);
+  //     }
+  //   };
 
-    document.addEventListener("mousedown", handleClickOutside);
-    return () => document.removeEventListener("mousedown", handleClickOutside);
-  }, [isOpen]);
+  //   document.addEventListener("mousedown", handleClickOutside);
+  //   return () => document.removeEventListener("mousedown", handleClickOutside);
+  // }, [isOpen]);
 
   // Escape key handler
   useEffect(() => {
@@ -337,147 +429,148 @@ const ColorPicker: React.FC<ColorPickerProps> = ({
   const showCode = triggerDisplay !== "only-color";
 
   return (
-    <div className={`${styles.colorPicker} ${className || ""}`} data-disabled={disabled}>
-      <Popover
-        content={
-          <FlexElement gap={5} direction="vertical">
-            <div
-              ref={(el) => {
-                svPanelRef.current = el;
-                if (svDrag.elementRef) {
-                  (svDrag.elementRef as React.MutableRefObject<HTMLDivElement | null>).current = el;
-                }
-              }}
-              className={styles.svPanel}
-              style={svPanelStyle}
-              tabIndex={0}
-              role="slider"
-              aria-label="Saturation and brightness"
-              aria-valuenow={Math.round(hsv.s)}
-              aria-valuemin={0}
-              aria-valuemax={100}
-              aria-valuetext={`Saturation ${Math.round(hsv.s)}%, Brightness ${Math.round(hsv.v)}%`}
-            >
-              <div className={styles.svBackground} />
-              <div className={styles.svHandle} style={svHandleStyle} />
-            </div>
+    <Popover
+      content={
+        <FlexElement gap={5} direction="vertical">
+          <div
+            ref={(el) => {
+              svPanelRef.current = el;
+              if (svDrag.elementRef) {
+                (svDrag.elementRef as React.MutableRefObject<HTMLDivElement | null>).current = el;
+              }
+            }}
+            className={styles.svPanel}
+            style={svPanelStyle}
+            tabIndex={0}
+            role="slider"
+            aria-label="Saturation and brightness"
+            aria-valuenow={Math.round(hsv.s)}
+            aria-valuemin={0}
+            aria-valuemax={100}
+            aria-valuetext={`Saturation ${Math.round(hsv.s)}%, Brightness ${Math.round(hsv.v)}%`}
+          >
+            <div className={styles.svBackground} />
+            <div className={styles.svHandle} style={svHandleStyle} />
+          </div>
 
-            <div className={styles.slidersContainer}>
-              <div className={styles.sliders}>
-                <div
-                  ref={(el) => {
-                    hueSliderRef.current = el;
-                    if (hueDrag.elementRef) {
-                      (
-                        hueDrag.elementRef as React.MutableRefObject<HTMLDivElement | null>
-                      ).current = el;
-                    }
-                  }}
-                  className={`${styles.slider} ${styles.hueSlider}`}
-                  tabIndex={0}
-                  role="slider"
-                  aria-label="Hue"
-                  aria-valuenow={Math.round(hsv.h)}
-                  aria-valuemin={0}
-                  aria-valuemax={360}
-                  aria-valuetext={`Hue ${Math.round(hsv.h)} degrees`}
-                >
-                  <div className={styles.sliderHandle} style={hueHandleStyle} />
-                </div>
-
-                <div
-                  ref={(el) => {
-                    alphaSliderRef.current = el;
-                    if (alphaDrag.elementRef) {
-                      (
-                        alphaDrag.elementRef as React.MutableRefObject<HTMLDivElement | null>
-                      ).current = el;
-                    }
-                  }}
-                  className={`${styles.slider} ${styles.alphaSlider}`}
-                  tabIndex={0}
-                  role="slider"
-                  aria-label="Alpha"
-                  aria-valuenow={Math.round(hsv.a * 100)}
-                  aria-valuemin={0}
-                  aria-valuemax={100}
-                  aria-valuetext={`Alpha ${Math.round(hsv.a * 100)}%`}
-                >
-                  <div className={styles.alphaGradient} style={alphaGradientStyle} />
-                  <div className={styles.sliderHandle} style={alphaHandleStyle} />
-                </div>
+          <div className={styles.slidersContainer}>
+            <div className={styles.sliders}>
+              <div
+                ref={(el) => {
+                  hueSliderRef.current = el;
+                  if (hueDrag.elementRef) {
+                    (hueDrag.elementRef as React.MutableRefObject<HTMLDivElement | null>).current =
+                      el;
+                  }
+                }}
+                className={`${styles.slider} ${styles.hueSlider}`}
+                tabIndex={0}
+                role="slider"
+                aria-label="Hue"
+                aria-valuenow={Math.round(hsv.h)}
+                aria-valuemin={0}
+                aria-valuemax={360}
+                aria-valuetext={`Hue ${Math.round(hsv.h)} degrees`}
+              >
+                <div className={styles.sliderHandle} style={hueHandleStyle} />
               </div>
 
-              <div className={styles.preview}>
-                <div className={styles.previewColor} style={swatchStyle} />
+              <div
+                ref={(el) => {
+                  alphaSliderRef.current = el;
+                  if (alphaDrag.elementRef) {
+                    (
+                      alphaDrag.elementRef as React.MutableRefObject<HTMLDivElement | null>
+                    ).current = el;
+                  }
+                }}
+                className={`${styles.slider} ${styles.alphaSlider}`}
+                tabIndex={0}
+                role="slider"
+                aria-label="Alpha"
+                aria-valuenow={Math.round(hsv.a * 100)}
+                aria-valuemin={0}
+                aria-valuemax={100}
+                aria-valuetext={`Alpha ${Math.round(hsv.a * 100)}%`}
+              >
+                <div className={styles.alphaGradient} style={alphaGradientStyle} />
+                <div className={styles.sliderHandle} style={alphaHandleStyle} />
               </div>
             </div>
 
-            <FlexElement gap={5} direction="horizontal">
-              <Select
-                className={styles.formatSelect}
-                value={currentFormat}
-                options={[
-                  { value: "hex", label: "HEX" },
-                  { value: "rgb", label: "RGB" },
-                  { value: "hsl", label: "HSL" },
-                ]}
-                onChange={(value) => setCurrentFormat(value as ColorFormat)}
-                dimensionY={32}
-              />
+            <div className={styles.preview}>
+              <div className={styles.previewColor} style={swatchStyle} />
+            </div>
+          </div>
 
+          <FlexElement gap={5} direction="horizontal">
+            <Select
+              className={styles.formatSelect}
+              value={currentFormat}
+              options={[
+                { value: "hex", label: "HEX" },
+                { value: "rgb", label: "RGB" },
+                { value: "hsl", label: "HSL" },
+              ]}
+              onChange={(value) => setCurrentFormat(value as ColorFormat)}
+              dimensionY={32}
+            />
+
+            <Input
+              type="text"
+              className={`${styles.colorInput} ${inputError ? styles.error : ""}`}
+              value={inputValue}
+              onChange={(e) => handleInputChange(e.target.value)}
+              onBlur={handleInputBlur}
+              aria-label="Color value"
+              aria-invalid={inputError}
+              dimensionY={32}
+            />
+
+            <FlexElement className={styles.alphaInputContainer}>
               <Input
                 type="text"
-                className={`${styles.colorInput} ${inputError ? styles.error : ""}`}
-                value={inputValue}
-                onChange={(e) => handleInputChange(e.target.value)}
-                onBlur={handleInputBlur}
-                aria-label="Color value"
-                aria-invalid={inputError}
+                className={styles.alphaInput}
+                value={alphaValue}
+                onChange={(e) => handleAlphaInputChange(e.target.value)}
+                aria-label="Alpha percentage"
                 dimensionY={32}
+                dimensionX={30}
               />
-
-              <FlexElement className={styles.alphaInputContainer}>
-                <Input
-                  type="text"
-                  className={styles.alphaInput}
-                  value={alphaValue}
-                  onChange={(e) => handleAlphaInputChange(e.target.value)}
-                  aria-label="Alpha percentage"
-                  dimensionY={32}
-                  dimensionX={30}
-                />
-                <span>%</span>
-              </FlexElement>
+              <span>%</span>
             </FlexElement>
           </FlexElement>
-        }
-        open={isOpen}
-        onClose={() => setIsOpen(false)}
-        arrow={true}
-        placement="bottom"
+        </FlexElement>
+      }
+      open={isOpen}
+      onClose={() => setIsOpen(false)}
+      arrow={true}
+      placement="bottom"
+      containerProps={{ alignment: "leftCenter", ...containerProps }}
+      contentProps={contentProps}
+    >
+      <Button
+        variant="text"
+        className={styles.trigger}
+        onClick={handleTriggerClick}
+        onKeyDown={handleTriggerKeyDown}
+        disabled={disabled}
+        aria-label="Open color picker"
+        aria-expanded={isOpen}
+        aria-haspopup="dialog"
+        id={id}
+        data-display={triggerDisplay}
+        fullWidth={true}
+        containerProps={{ dimensionX: "fill" }}
       >
-        <button
-          ref={triggerRef}
-          className={styles.trigger}
-          onClick={handleTriggerClick}
-          onKeyDown={handleTriggerKeyDown}
-          disabled={disabled}
-          aria-label="Open color picker"
-          aria-expanded={isOpen}
-          aria-haspopup="dialog"
-          id={id}
-          data-display={triggerDisplay}
-        >
-          {showSwatch && (
-            <div className={styles.swatch}>
-              <div className={styles.swatchColor} style={swatchStyle} />
-            </div>
-          )}
-          {showCode && <span className={styles.triggerLabel}>{displayValue}</span>}
-        </button>
-      </Popover>
-    </div>
+        {showSwatch && (
+          <div className={styles.swatch}>
+            <div className={styles.swatchColor} style={swatchStyle} />
+          </div>
+        )}
+        {showCode && <span className={styles.triggerLabel}>{displayValue}</span>}
+      </Button>
+    </Popover>
   );
 };
 
