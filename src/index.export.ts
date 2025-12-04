@@ -54,6 +54,7 @@ export { default as ObjectMinimizedInput } from "./components/atoms/inputs/minim
 export { default as RichTextMinimizedInput } from "./components/atoms/inputs/minimized/rich-text/RichText";
 export { default as StringMinimizedInput } from "./components/atoms/inputs/minimized/string/StringMinimized";
 export { default as TextAreaMinimizedInput } from "./components/atoms/inputs/minimized/text-area/TextArea";
+export { default as StorageMinimizedInput } from "./components/atoms/inputs/minimized/storage/StorageMinimized";
 export { default as ArrayInput } from "./components/atoms/inputs/normal/array/ArrayInput";
 export { default as BooleanInput } from "./components/atoms/inputs/normal/boolean/Boolean";
 export { default as ChipInput } from "./components/molecules/chip/ChipInput";
