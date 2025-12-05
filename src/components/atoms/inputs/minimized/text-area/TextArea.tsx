@@ -1,7 +1,8 @@
-import React, { useState } from "react";
+import React, { useRef, useState } from "react";
 import FluidContainer, { TypeFluidContainer } from "@atoms/fluid-container/FluidContainer";
 import Icon from "@atoms/icon/Icon";
 import styles from "./TextArea.module.scss";
+import { Button, useOnClickOutside } from "index.export";
 
 type MinimizedTextAreaProps = {
   value?: string;
@@ -21,11 +22,12 @@ const MinimizedTextArea = ({
   focusedRows = 3,
   onFocus,
   onBlur,
-  rows = 1,
+  rows = 2,
   cols = 1,
   ...props
 }: MinimizedTextAreaProps) => {
   const [isFocused, setIsFocused] = useState(false);
+  const containerRef = useRef<HTMLDivElement>(null);
 
   const handleFocus = () => {
     setIsFocused(true);
@@ -37,24 +39,38 @@ const MinimizedTextArea = ({
     onBlur?.(false);
   };
 
+  useOnClickOutside({
+    targetElements: [containerRef],
+    onClickOutside: () => {
+      handleBlur();
+    },
+  });
   return (
     <FluidContainer
+      ref={containerRef}
       mode="fill"
       dimensionX="fill"
+      prefix={props.prefix}
       root={{
         children: (
           <textarea
             value={value}
             onChange={(e) => onChange?.(e.target.value)}
             onFocus={handleFocus}
-            onBlur={handleBlur}
-            rows={isFocused ? focusedRows : rows}
+            rows={isFocused ? Math.max(focusedRows, rows) : rows}
             cols={cols}
           ></textarea>
         ),
+        ...props.root,
       }}
-      suffix={{ children: <Icon name="close" /> }}
-      {...props}
+      suffix={{
+        children: (
+          <Button variant="icon" color="transparent" onClick={onClear}>
+            <Icon name="close" />
+          </Button>
+        ),
+        ...props.suffix,
+      }}
       className={`${styles.textArea} ${props.className}`}
     />
   );
