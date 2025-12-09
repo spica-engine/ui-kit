@@ -29,9 +29,29 @@ const MinimizedLocationInput = ({
   containerProps,
   ...props
 }: TypeMinimizedLocationInput) => {
-  const [value, setValue] = useState<string>(
-    mapProps?.coordinates?.lat + " , " + mapProps?.coordinates?.lng
-  );
+  const DEFAULT_COORDINATES = { lat: 51.505, lng: -0.09 };
+
+  const getCoordinates = () => {
+    const coords = mapProps?.coordinates;
+    if (coords?.lat === undefined || coords?.lng === undefined) {
+      return DEFAULT_COORDINATES;
+    }
+    return coords;
+  };
+
+  const formatDisplayValue = () => {
+    const coords = mapProps?.coordinates;
+    if (coords?.lat === undefined || coords?.lng === undefined) {
+      return "lat , lng";
+    }
+    return `${coords.lat} , ${coords.lng}`;
+  };
+
+  const [value, setValue] = useState<string>(formatDisplayValue());
+
+  useEffect(() => {
+    setValue(formatDisplayValue());
+  }, [mapProps?.coordinates]);
 
   const handleChange = (e: React.ChangeEvent<HTMLInputElement>) => {
     const inputValue = e.target.value;
@@ -57,11 +77,12 @@ const MinimizedLocationInput = ({
     }
   }, [value]);
 
+  const mapCoordinates = getCoordinates();
+  const coordinatesKey = `${mapCoordinates.lat}-${mapCoordinates.lng}`;
+
   return (
     <Popover
-      content={
-        <Map key={`${mapProps?.coordinates?.lat}-${mapProps?.coordinates?.lng}`} {...mapProps} />
-      }
+      content={<Map key={coordinatesKey} {...mapProps} coordinates={mapCoordinates} />}
       contentProps={{ dimensionX: 500, dimensionY: 500, ...contentProps }}
       containerProps={{ dimensionX: "fill", alignment: "leftCenter", ...props }}
     >
@@ -76,7 +97,7 @@ const MinimizedLocationInput = ({
           className: styles.iconContainer,
         }}
         root={{
-          children: mapProps?.coordinates && (
+          children: (
             <Input
               value={value}
               onChange={handleChange}
