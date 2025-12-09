@@ -1,6 +1,6 @@
 import Popover from "@atoms/popover/Popover";
 import React, { FC, useState } from "react";
-import { TypeFlexElement } from "@atoms/flex-element/FlexElement";
+import FlexElement, { TypeFlexElement } from "@atoms/flex-element/FlexElement";
 import styles from "./Array.module.scss";
 import {
   TypeArrayItems,
@@ -14,9 +14,9 @@ export type TypeMinimizedArrayInput = {
   propertyKey: string;
   value?: TypeValueType[];
   items?: TypeArrayItems;
-  popoverProps?: TypeFlexElement;
   contentProps?: TypeFlexElement;
   containerProps?: TypeFlexElement;
+  childrenProps?: TypeFlexElement;
   errors?: TypeInputRepresenterError | string;
   onChange?: (value: any) => void;
 } & TypeFlexElement;
@@ -54,12 +54,12 @@ const MinimizedArrayInput: FC<TypeMinimizedArrayInput> = ({
   propertyKey,
   value,
   items,
-  popoverProps,
+
   contentProps,
   errors,
   onChange,
   containerProps,
-  ...props
+  childrenProps,
 }) => {
   const [activeIndex, setActiveIndex] = useState<number | null>(null);
 
@@ -106,13 +106,23 @@ const MinimizedArrayInput: FC<TypeMinimizedArrayInput> = ({
           />
         )
       }
-      contentProps={{ className: styles.contentContainer }}
-      containerProps={{ dimensionX: "hug", ...containerProps }}
+      contentProps={{
+        ...contentProps,
+        className: `${styles.contentContainer} ${contentProps?.className}`,
+      }}
+      containerProps={{
+        dimensionX: "hug",
+        ...containerProps,
+        className: `${styles.container} ${containerProps?.className}`,
+      }}
       open={activeIndex !== null}
       onClose={() => setActiveIndex(null)}
-      {...popoverProps}
     >
-      <div className={styles.buttonsContainer} onClick={(e) => e.stopPropagation()}>
+      <FlexElement
+        {...childrenProps}
+        className={`${styles.buttonsContainer} ${childrenProps?.className}`}
+        onClick={(e) => e.stopPropagation()}
+      >
         {value?.map((item, index) => (
           <div key={JSON.stringify(item) + index} className={styles.itemButtonWrapper}>
             <Button
@@ -135,7 +145,7 @@ const MinimizedArrayInput: FC<TypeMinimizedArrayInput> = ({
         <Button variant="filled" className={styles.itemButton} onClick={() => handleClickItem(-1)}>
           +
         </Button>
-      </div>
+      </FlexElement>
     </Popover>
   );
 };
