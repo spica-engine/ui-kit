@@ -1,18 +1,16 @@
-import { FC, memo, useCallback, useState } from "react";
+import { FC, memo, useState } from "react";
 import styles from "./ArrayInput.module.scss";
 import Icon from "@atoms/icon/Icon";
 import InputHeader from "@atoms/input-header/InputHeader";
 import Text, { TypeText } from "@atoms/text/Text";
 import FlexElement, { TypeFlexElement } from "@atoms/flex-element/FlexElement";
 import InputGroup from "@atoms/base-input/InputGroup";
-import useInputRepresenter, {
+import {
   TypeArrayItems,
   TypeInputRepresenterError,
-  TypeInputType,
-  TypeProperties,
-  TypeRepresenterValue,
   TypeValueType,
 } from "@custom-hooks/useInputRepresenter";
+import { useArrayItemInput } from "@custom-hooks/useArrayItemInput";
 import DropList from "@atoms/drop-list/DropList";
 
 export type TypeArrayInput = {
@@ -47,80 +45,23 @@ const ArrayInput: FC<TypeArrayInput> = ({
 }) => {
   const [active, setActive] = useState(0);
 
-  const handleChange = (_value: { [key: string]: TypeValueType[] }) => {
-    const updatedValue = structuredClone(value);
-    if (!updatedValue?.length) return value;
-    updatedValue[active] = _value[propertyKey] as TypeValueType;
-    onChange?.(updatedValue);
-  };
-
-  const inputFields = useInputRepresenter({
-    properties: { [propertyKey]: items } as unknown as TypeProperties,
-    value: { [propertyKey]: value?.[active] } as TypeRepresenterValue,
-    onChange: handleChange,
-    error: errors as TypeInputRepresenterError,
+  const { inputFields, getDefaultValue: getDefaultValueFn } = useArrayItemInput({
+    propertyKey,
+    items,
+    value,
+    activeIndex: active,
+    onChange,
+    errors,
   });
 
   const handleChangeActiveIndex = (index: number) => {
     setActive(index);
   };
 
-  const generateDefaultValueForType = useCallback(
-    (type: TypeInputType, properties?: TypeProperties): TypeValueType => {
-      switch (type) {
-        case "string":
-        case "textarea":
-        case "richtext":
-        case "color":
-        case "storage":
-        case "select":
-          return "";
-
-        case "multiselect":
-        case "chip":
-        case "relation":
-        case "array":
-          return [];
-
-        case "number":
-          return 0;
-
-        case "boolean":
-          return false;
-
-        case "location":
-          return { lat: 0, lng: 0 };
-
-        case "object":
-          if (!properties) return {};
-
-          // Generate default object based on properties
-          const defaultObject: TypeRepresenterValue = {};
-          Object.entries(properties).forEach(([key, property]) => {
-            defaultObject[key] =
-              property.default !== undefined
-                ? property.default
-                : generateDefaultValueForType(property.type, property.properties);
-          });
-          return defaultObject;
-
-        case "date":
-        default:
-          return "";
-      }
-    },
-    []
-  );
-
-  const getDefaultValue = useCallback((): TypeValueType => {
-    if (!items) return "";
-    return generateDefaultValueForType(items.type, items.properties);
-  }, [items, generateDefaultValueForType]);
-
   const handleCreateNewItem = () => {
     const localValue = [...(value || [])];
 
-    localValue?.push(value?.[active] || getDefaultValue());
+    localValue?.push(value?.[active] || getDefaultValueFn());
     onChange?.(localValue);
     setActive(localValue.length - 1);
   };
