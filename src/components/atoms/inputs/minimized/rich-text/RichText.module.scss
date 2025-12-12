@@ -2,4 +2,27 @@
 
 .richTextMinimized {
   @include mixins.inputMinimizedContainer;
+  @include mixins.inputContainer;
+  color: #000;
+  padding: var(--oziko-padding-md);
+}
+
+.richTextContent {
+  width: 100%;
+  text-align: start;
+
+  :global {
+    p {
+      margin: 0;
+      display: inline;
+    }
+
+    p:not(:last-child)::after {
+      content: " ";
+    }
+  }
+}
+
+.placeholder {
+  color: var(--oziko-color-input-placeholder);
 }
