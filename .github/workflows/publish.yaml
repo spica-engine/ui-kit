@@ -38,9 +38,7 @@ jobs:
 
       - name: Publish to npm
         run: |
-          echo "//registry.npmjs.org/:_authToken=${NODE_AUTH_TOKEN}" > ~/.npmrc
           cd build
-          npm whoami
-          npm publish --access public
+          npm publish
         env:
           NODE_AUTH_TOKEN: ${{ secrets.NPM_TOKEN }}
