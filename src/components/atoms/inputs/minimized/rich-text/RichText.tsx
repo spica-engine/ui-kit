@@ -10,6 +10,8 @@ export type TypeRichTextMinimized = {
   richTextProps?: TypeFlexElement;
   placeHolder?: string | JSX.Element;
   onChange?: (value: string) => void;
+  onCancel?: () => void;
+  onSave?: (value: string) => void;
 } & TypeFlexElement;
 
 const MinimizedRichTextInput: FC<TypeRichTextMinimized> = ({
@@ -17,6 +19,8 @@ const MinimizedRichTextInput: FC<TypeRichTextMinimized> = ({
   richTextProps,
   placeHolder,
   onChange,
+  onCancel,
+  onSave,
   ...props
 }) => {
   const [localValue, setLocalValue] = useState(value ?? "");
@@ -44,12 +48,14 @@ const MinimizedRichTextInput: FC<TypeRichTextMinimized> = ({
 
   const handleCancel = useCallback(() => {
     handleClose();
-  }, [handleClose]);
+    onCancel?.();
+  }, [handleClose, onCancel]);
 
   const handleSave = useCallback(() => {
     onChange?.(localValue);
     setIsOpen(false);
-  }, [localValue, onChange]);
+    onSave?.(localValue);
+  }, [localValue, onChange, onSave]);
 
   const hasContent = value && value.trim() !== "" && value !== "<p></p>";
 
