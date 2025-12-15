@@ -71,7 +71,6 @@
 
   // Variants
   &.vSolid {
-    border: 1px solid;
     &.cPrimary {
       @include button-color(
         var(--oziko-color-primary),
@@ -118,7 +117,11 @@
       );
     }
     &.cTransparent {
-      @include button-color(transparent, var(--oziko-color-border), var(--oziko-color-font-primary));
+      @include button-color(
+        transparent,
+        var(--oziko-color-border),
+        var(--oziko-color-font-primary)
+      );
     }
   }
 
@@ -227,7 +230,7 @@
   }
 
   &.vFilled {
-    border: none;
+    // border: none;
     &.cPrimary {
       @include button-color(
         rgba(var(--oziko-color-primary-rgb), 0.1),
