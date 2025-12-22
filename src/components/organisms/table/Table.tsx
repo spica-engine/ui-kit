@@ -14,6 +14,7 @@ export type TableColumn<TRow = any> = {
   key: string;
   header: React.ReactNode;
   width?: string;
+  minWidth?: string;
   renderCell: (params: TableColumnRenderCellParams<TRow>) => React.ReactNode;
 };
 
@@ -41,6 +42,15 @@ export type TypeTable<TRow = any> = {
   cellClassName?: string;
 };
 
+/** Helper to check if an element is editable (input, textarea, or contenteditable) */
+const isEditableElement = (target: EventTarget | null): boolean => {
+  if (!(target instanceof HTMLElement)) return false;
+  const tagName = target.tagName.toLowerCase();
+  if (tagName === "input" || tagName === "textarea") return true;
+  if (target.isContentEditable) return true;
+  return false;
+};
+
 const Table = <TRow = any,>({
   columns,
   data,
@@ -53,19 +63,32 @@ const Table = <TRow = any,>({
   headerClassName = "",
   cellClassName = "",
 }: TypeTable<TRow>) => {
+  const getColumnWidth = (column: TableColumn<TRow>): string => {
+    const savedWidth = saveToLocalStorage?.save
+      ? localStorage.getItem(`${saveToLocalStorage?.id}-${column.key}`)
+      : null;
+    return savedWidth || column.width || "300px";
+  };
+
   const [dataColumns, setDataColumns] = useState<TableColumn<TRow>[]>(() => {
-    return columns.map((column) => {
-      const savedWidth = saveToLocalStorage?.save
-        ? localStorage.getItem(`${saveToLocalStorage?.id}-${column.key}`)
-        : null;
-      return {
-        ...column,
-        width: savedWidth || column.width || "300px",
-      };
-    });
+    return columns.map((column) => ({
+      ...column,
+      width: getColumnWidth(column),
+    }));
   });
 
   const [focusedCell, setFocusedCell] = useState<{ column: string; row: number } | null>(null);
+
+  // (4) Sync dataColumns when columns prop changes
+  useEffect(() => {
+    setDataColumns((prevColumns) => {
+      const prevWidthMap = new Map(prevColumns.map((col) => [col.key, col.width]));
+      return columns.map((column) => ({
+        ...column,
+        width: prevWidthMap.get(column.key) || getColumnWidth(column),
+      }));
+    });
+  }, [columns, saveToLocalStorage?.save, saveToLocalStorage?.id]);
 
   const updateColumnWidth = (key: string, newWidth: string) => {
     setDataColumns((prevColumns) =>
@@ -73,15 +96,13 @@ const Table = <TRow = any,>({
     );
   };
 
-  const saveColumns = (columns: TableColumn<TRow>[], tableId: string) => {
-    columns.forEach((column) => {
-      localStorage.setItem(`${tableId}-${column.key}`, column.width || "");
-    });
-  };
-
+  // (1) Only save to localStorage when saveToLocalStorage.save is true
   useEffect(() => {
-    saveColumns(dataColumns, saveToLocalStorage.id);
-  }, [dataColumns, saveToLocalStorage.save]);
+    if (!saveToLocalStorage?.save) return;
+    dataColumns.forEach((column) => {
+      localStorage.setItem(`${saveToLocalStorage.id}-${column.key}`, column.width || "");
+    });
+  }, [dataColumns, saveToLocalStorage?.save, saveToLocalStorage?.id]);
 
   const handleCellClick = (columnKey: string, index: number) => {
     setFocusedCell({ column: columnKey, row: index });
@@ -154,6 +175,9 @@ const Table = <TRow = any,>({
     };
 
     const handleKeyDown = (event: KeyboardEvent) => {
+      // (6) Skip keyboard handling when inside an editable element
+      if (isEditableElement(event.target)) return;
+
       if (isArrowKey(event.key)) {
         event.preventDefault();
         handleArrowKeyNavigation(event, focusedCell);
@@ -198,6 +222,7 @@ const Table = <TRow = any,>({
               left: positionAmount,
             }}
             width={column.width}
+            minWidth={column.minWidth}
             updateColumnWidth={updateColumnWidth}
             noResizeable={noResizeableColumns.includes(column.key)}
           >
@@ -235,9 +260,9 @@ export default MemoizedTable;
 export type TypeColumn = {
   columnKey?: string;
   children?: React.ReactNode;
-  ref?: React.Ref<HTMLDivElement>;
   className?: string;
   width?: string;
+  minWidth?: string;
   updateColumnWidth?: (key: string, newWidth: string) => void;
   noResizeable?: boolean;
   style?: React.CSSProperties;
@@ -248,12 +273,17 @@ export type TypeColumnComponent = React.FC<TypeColumn> & {
   Cell: typeof Cell;
 };
 
+const parsePx = (value: string | undefined): number => {
+  if (!value) return 0;
+  return Number.parseInt(value, 10) || 0;
+};
+
 const ColumnComponent = ({
   columnKey,
   children,
-  ref,
   className,
   width,
+  minWidth,
   updateColumnWidth,
   noResizeable,
   style,
@@ -263,9 +293,19 @@ const ColumnComponent = ({
   const columnRef = useRef<HTMLDivElement>(null);
 
   useEffect(() => {
+    setColumnWidth(width);
+  }, [width]);
+
+  useEffect(() => {
+    const minWidthPx = parsePx(minWidth);
+
     const handleMouseMove = (e: MouseEvent) => {
       if (isResizing && columnRef.current) {
-        const newWidth = e.clientX - columnRef.current.getBoundingClientRect().left;
+        let newWidth = e.clientX - columnRef.current.getBoundingClientRect().left;
+
+        if (minWidthPx > 0 && newWidth < minWidthPx) {
+          newWidth = minWidthPx;
+        }
         setColumnWidth(`${newWidth}px`);
       }
     };
@@ -273,8 +313,11 @@ const ColumnComponent = ({
     const handleMouseUp = () => {
       setIsResizing(false);
       if (columnRef.current) {
-        const newWidth = columnRef.current.style.minWidth;
-        updateColumnWidth?.(columnKey!, newWidth);
+        let finalWidth = parsePx(columnRef.current.style.minWidth);
+        if (minWidthPx > 0 && finalWidth < minWidthPx) {
+          finalWidth = minWidthPx;
+        }
+        updateColumnWidth?.(columnKey!, `${finalWidth}px`);
       }
     };
 
@@ -287,7 +330,7 @@ const ColumnComponent = ({
       globalThis.removeEventListener("mousemove", handleMouseMove);
       globalThis.removeEventListener("mouseup", handleMouseUp);
     };
-  }, [isResizing, columnKey, updateColumnWidth]);
+  }, [isResizing, columnKey, updateColumnWidth, minWidth]);
 
   const handleResizerMouseDown = (event: React.MouseEvent<HTMLButtonElement>) => {
     event.preventDefault();
