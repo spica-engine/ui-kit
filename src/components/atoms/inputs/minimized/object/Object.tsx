@@ -1,10 +1,18 @@
 import Popover, { TypePopover } from "@atoms/popover/Popover";
-import React, { FC } from "react";
+import React, { FC, useMemo } from "react";
 import FlexElement, { TypeFlexElement } from "@atoms/flex-element/FlexElement";
 import Text from "@atoms/text/Text";
 import styles from "./Object.module.scss";
 import ObjectInput from "../../normal/object/ObjectInput";
 import { TypeProperties, TypeRepresenterValue } from "@custom-hooks/useInputRepresenter";
+
+const createOrderedValue = (
+  value: TypeRepresenterValue | undefined,
+  properties: TypeProperties
+): Record<string, any> => {
+  const orderedKeys = Object.keys(properties);
+  return Object.fromEntries(orderedKeys.map((key) => [key, (value as any)?.[key]]));
+};
 
 export type TypeMinimizedObjectInput = {
   value?: TypeRepresenterValue;
@@ -22,6 +30,8 @@ const MinimizedObjectInput: FC<TypeMinimizedObjectInput> = ({
   onChange,
   ...props
 }) => {
+  const orderedValue = useMemo(() => createOrderedValue(value, properties), [value, properties]);
+
   return (
     <Popover
       contentProps={{
@@ -49,7 +59,7 @@ const MinimizedObjectInput: FC<TypeMinimizedObjectInput> = ({
         {...props}
         className={`${props.className} ${styles.inputMinimized}`}
       >
-        <Text className={styles.value}>{JSON.stringify(value)}</Text>
+        <Text className={styles.value}>{JSON.stringify(orderedValue)}</Text>
       </FlexElement>
     </Popover>
   );
