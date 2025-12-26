@@ -59,7 +59,7 @@ const Popover: FC<TypePopover> = ({
 
   const childrenRef = useRef<HTMLDivElement | null>(null);
   const [internalOpen, setInternalOpen] = useState(false);
-  const isControlled = onClose !== undefined;
+  const isControlled = open !== undefined;
   const isOpen = isControlled ? open : internalOpen;
 
   const handleVisibilityChange = useCallback(
