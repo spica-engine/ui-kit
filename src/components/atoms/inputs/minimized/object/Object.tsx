@@ -1,4 +1,4 @@
-import Popover from "@atoms/popover/Popover";
+import Popover, { TypePopover } from "@atoms/popover/Popover";
 import React, { FC } from "react";
 import FlexElement, { TypeFlexElement } from "@atoms/flex-element/FlexElement";
 import Text from "@atoms/text/Text";
@@ -9,32 +9,38 @@ import { TypeProperties, TypeRepresenterValue } from "@custom-hooks/useInputRepr
 export type TypeMinimizedObjectInput = {
   value?: TypeRepresenterValue;
   properties: TypeProperties;
-  popoverProps?: TypeFlexElement;
-  contentProps?: TypeFlexElement;
+  popoverProps?: Omit<TypePopover, "content" | "children">;
+  objectInputProps?: TypeFlexElement;
   onChange?: (value: any) => void;
 } & TypeFlexElement;
 
 const MinimizedObjectInput: FC<TypeMinimizedObjectInput> = ({
   value,
   popoverProps,
-  contentProps,
+  objectInputProps,
   properties,
   onChange,
   ...props
 }) => {
   return (
     <Popover
+      contentProps={{
+        className: styles.contentContainer,
+        ...popoverProps?.contentProps,
+      }}
+      containerProps={{
+        dimensionX: "fill",
+        ...popoverProps?.containerProps,
+      }}
+      {...popoverProps}
       content={
         <ObjectInput
           properties={properties}
           value={value}
           onChange={(value) => onChange?.(value)}
-          {...contentProps}
+          {...objectInputProps}
         />
       }
-      contentProps={{ className: styles.contentContainer }}
-      containerProps={{ dimensionX: "fill" }}
-      {...popoverProps}
     >
       <FlexElement
         dimensionX="fill"
