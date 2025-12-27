@@ -14,7 +14,7 @@ export type TypeMinimizedArrayInput = {
   propertyKey: string;
   value?: TypeValueType[];
   items?: TypeArrayItems;
-  popoverProps?: Omit<TypePopover, "content" | "children" | "open" | "onClose">;
+  popoverProps?: Omit<TypePopover, "content" | "children">;
   buttonsContainerProps?: TypeFlexElement;
   errors?: TypeInputRepresenterError | string;
   onChange?: (value: any) => void;
