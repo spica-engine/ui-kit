@@ -1,4 +1,4 @@
-import Popover from "@atoms/popover/Popover";
+import Popover, { TypePopover } from "@atoms/popover/Popover";
 import React, { FC, useState } from "react";
 import FlexElement, { TypeFlexElement } from "@atoms/flex-element/FlexElement";
 import styles from "./Array.module.scss";
@@ -14,9 +14,8 @@ export type TypeMinimizedArrayInput = {
   propertyKey: string;
   value?: TypeValueType[];
   items?: TypeArrayItems;
-  contentProps?: TypeFlexElement;
-  containerProps?: TypeFlexElement;
-  childrenProps?: TypeFlexElement;
+  popoverProps?: Omit<TypePopover, "content" | "children" | "open" | "onClose">;
+  buttonsContainerProps?: TypeFlexElement;
   errors?: TypeInputRepresenterError | string;
   onChange?: (value: any) => void;
 } & TypeFlexElement;
@@ -54,12 +53,10 @@ const MinimizedArrayInput: FC<TypeMinimizedArrayInput> = ({
   propertyKey,
   value,
   items,
-
-  contentProps,
+  popoverProps,
+  buttonsContainerProps,
   errors,
   onChange,
-  containerProps,
-  childrenProps,
 }) => {
   const [activeIndex, setActiveIndex] = useState<number | null>(null);
 
@@ -92,8 +89,38 @@ const MinimizedArrayInput: FC<TypeMinimizedArrayInput> = ({
     }
   };
 
+  const {
+    contentProps: consumerContentProps,
+    containerProps: consumerContainerProps,
+    ...restPopoverProps
+  } = popoverProps ?? {};
+
+  const mergedContentClassName = [styles.contentContainer, consumerContentProps?.className]
+    .filter(Boolean)
+    .join(" ");
+
+  const mergedContainerClassName = [styles.container, consumerContainerProps?.className]
+    .filter(Boolean)
+    .join(" ");
+
+  const mergedButtonsClassName = [styles.buttonsContainer, buttonsContainerProps?.className]
+    .filter(Boolean)
+    .join(" ");
+
   return (
     <Popover
+      contentProps={{
+        ...consumerContentProps,
+        className: mergedContentClassName,
+      }}
+      containerProps={{
+        dimensionX: "hug",
+        ...consumerContainerProps,
+        className: mergedContainerClassName,
+      }}
+      {...restPopoverProps}
+      open={activeIndex !== null}
+      onClose={() => setActiveIndex(null)}
       content={
         activeIndex === null ? null : (
           <ExistingItemContent
@@ -106,21 +133,10 @@ const MinimizedArrayInput: FC<TypeMinimizedArrayInput> = ({
           />
         )
       }
-      contentProps={{
-        ...contentProps,
-        className: `${styles.contentContainer} ${contentProps?.className}`,
-      }}
-      containerProps={{
-        dimensionX: "hug",
-        ...containerProps,
-        className: `${styles.container} ${containerProps?.className}`,
-      }}
-      open={activeIndex !== null}
-      onClose={() => setActiveIndex(null)}
     >
       <FlexElement
-        {...childrenProps}
-        className={`${styles.buttonsContainer} ${childrenProps?.className}`}
+        {...buttonsContainerProps}
+        className={mergedButtonsClassName}
         onClick={(e) => e.stopPropagation()}
       >
         {value?.map((item, index) => (

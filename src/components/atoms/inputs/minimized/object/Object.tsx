@@ -32,17 +32,23 @@ const MinimizedObjectInput: FC<TypeMinimizedObjectInput> = ({
 }) => {
   const orderedValue = useMemo(() => createOrderedValue(value, properties), [value, properties]);
 
+  const {
+    contentProps: consumerContentProps,
+    containerProps: consumerContainerProps,
+    ...restPopoverProps
+  } = popoverProps ?? {};
+
   return (
     <Popover
       contentProps={{
         className: styles.contentContainer,
-        ...popoverProps?.contentProps,
+        ...consumerContentProps,
       }}
       containerProps={{
         dimensionX: "fill",
-        ...popoverProps?.containerProps,
+        ...consumerContainerProps,
       }}
-      {...popoverProps}
+      {...restPopoverProps}
       content={
         <ObjectInput
           properties={properties}
