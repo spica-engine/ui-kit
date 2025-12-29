@@ -29,9 +29,17 @@ export type TableCellKeyDownParams = {
   event: KeyboardEvent;
 };
 
+export type TableSkeletonCellParams<TRow = any> = {
+  column: TableColumn<TRow>;
+  rowIndex: number;
+};
+
 export type TypeTable<TRow = any> = {
   columns: TableColumn<TRow>[];
   data: TRow[];
+  loading?: boolean;
+  skeletonRowCount?: number;
+  renderSkeletonCell?: (params: TableSkeletonCellParams<TRow>) => React.ReactNode;
   saveToLocalStorage?: TableSaveToLocalStorage;
   fixedColumns?: string[];
   noResizeableColumns?: string[];
@@ -42,7 +50,6 @@ export type TypeTable<TRow = any> = {
   cellClassName?: string;
 };
 
-/** Helper to check if an element is editable (input, textarea, or contenteditable) */
 const isEditableElement = (target: EventTarget | null): boolean => {
   if (!(target instanceof HTMLElement)) return false;
   const tagName = target.tagName.toLowerCase();
@@ -54,6 +61,9 @@ const isEditableElement = (target: EventTarget | null): boolean => {
 const Table = <TRow = any,>({
   columns,
   data,
+  loading = false,
+  skeletonRowCount = 5,
+  renderSkeletonCell,
   saveToLocalStorage = { id: "table", save: false },
   fixedColumns = [],
   noResizeableColumns = [],
@@ -79,7 +89,6 @@ const Table = <TRow = any,>({
 
   const [focusedCell, setFocusedCell] = useState<{ column: string; row: number } | null>(null);
 
-  // (4) Sync dataColumns when columns prop changes
   useEffect(() => {
     setDataColumns((prevColumns) => {
       const prevWidthMap = new Map(prevColumns.map((col) => [col.key, col.width]));
@@ -105,11 +114,13 @@ const Table = <TRow = any,>({
   }, [dataColumns, saveToLocalStorage?.save, saveToLocalStorage?.id]);
 
   const handleCellClick = (columnKey: string, index: number) => {
-    setFocusedCell({ column: columnKey, row: index });
+    if (!loading) {
+      setFocusedCell({ column: columnKey, row: index });
+    }
   };
 
   useEffect(() => {
-    if (!focusedCell) return;
+    if (!focusedCell || loading) return;
 
     const ARROW_KEYS = ["ArrowRight", "ArrowLeft", "ArrowDown", "ArrowUp"] as const;
     const isArrowKey = (key: string): boolean =>
@@ -195,7 +206,7 @@ const Table = <TRow = any,>({
     return () => {
       globalThis.removeEventListener("keydown", handleKeyDown);
     };
-  }, [focusedCell, columns, data, onCellKeyDown]);
+  }, [focusedCell, columns, data, onCellKeyDown, loading]);
 
   return (
     <div className={`${styles.table} ${tableClassName}`}>
@@ -227,26 +238,40 @@ const Table = <TRow = any,>({
             noResizeable={noResizeableColumns.includes(column.key)}
           >
             <Column.Header className={headerClassName}>{column.header}</Column.Header>
-            {data.map((row: TRow, index: number) => {
-              const isFocused = focusedCell?.column === column.key && focusedCell?.row === index;
-              const cellKey = `${column.key}-${index}`;
-              return (
-                <Column.Cell
-                  key={cellKey}
-                  focused={isFocused}
-                  onClick={() => handleCellClick(column.key, index)}
-                  data-cell-key={cellKey}
-                  className={cellClassName}
-                >
-                  {column.renderCell({
-                    row,
-                    rowIndex: index,
-                    isFocused,
-                    columnKey: column.key,
-                  })}
-                </Column.Cell>
-              );
-            })}
+            {loading
+              ? Array.from({ length: skeletonRowCount }).map((_, index) => {
+                  const cellKey = `skeleton-${column.key}-${index}`;
+                  return (
+                    <Column.Cell key={cellKey} className={cellClassName} data-skeleton-cell>
+                      {renderSkeletonCell ? (
+                        renderSkeletonCell({ column, rowIndex: index })
+                      ) : (
+                        <DefaultSkeletonCell />
+                      )}
+                    </Column.Cell>
+                  );
+                })
+              : data.map((row: TRow, index: number) => {
+                  const isFocused =
+                    focusedCell?.column === column.key && focusedCell?.row === index;
+                  const cellKey = `${column.key}-${index}`;
+                  return (
+                    <Column.Cell
+                      key={cellKey}
+                      focused={isFocused}
+                      onClick={() => handleCellClick(column.key, index)}
+                      data-cell-key={cellKey}
+                      className={cellClassName}
+                    >
+                      {column.renderCell({
+                        row,
+                        rowIndex: index,
+                        isFocused,
+                        columnKey: column.key,
+                      })}
+                    </Column.Cell>
+                  );
+                })}
           </Column>
         );
       })}
@@ -399,6 +424,10 @@ const Cell = ({ children, focused, ...props }: TypeCell) => {
       {children}
     </div>
   );
+};
+
+const DefaultSkeletonCell = () => {
+  return <div className={styles.skeletonCell} />;
 };
 
 const Column = memo(ColumnComponent) as unknown as TypeColumnComponent;
