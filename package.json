@@ -1,6 +1,6 @@
 {
   "name": "oziko-ui-kit",
-  "version": "0.0.123",
+  "version": "0.0.122",
   "private": false,
   "main": "dist/index.cjs.js",
   "module": "dist/index.mjs",
