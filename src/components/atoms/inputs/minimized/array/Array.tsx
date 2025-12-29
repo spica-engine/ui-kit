@@ -1,5 +1,5 @@
 import Popover, { TypePopover } from "@atoms/popover/Popover";
-import React, { FC, useState } from "react";
+import React, { FC, useState, useEffect } from "react";
 import FlexElement, { TypeFlexElement } from "@atoms/flex-element/FlexElement";
 import styles from "./Array.module.scss";
 import {
@@ -60,6 +60,17 @@ const MinimizedArrayInput: FC<TypeMinimizedArrayInput> = ({
 }) => {
   const [activeIndex, setActiveIndex] = useState<number | null>(null);
 
+  // Detect controlled mode
+  const isControlled = popoverProps?.open !== undefined;
+  const resolvedOpen = isControlled ? popoverProps.open : activeIndex !== null;
+
+  // Sync internal state when externally controlled open becomes false
+  useEffect(() => {
+    if (isControlled && !popoverProps.open && activeIndex !== null) {
+      setActiveIndex(null);
+    }
+  }, [isControlled, popoverProps?.open, activeIndex]);
+
   const handleClickItem = (index: number) => {
     if (index >= 0) {
       setActiveIndex(index);
@@ -89,9 +100,16 @@ const MinimizedArrayInput: FC<TypeMinimizedArrayInput> = ({
     }
   };
 
+  const handleClose = () => {
+    setActiveIndex(null);
+    popoverProps?.onClose?.();
+  };
+
   const {
     contentProps: consumerContentProps,
     containerProps: consumerContainerProps,
+    open: _open,
+    onClose: _onClose,
     ...restPopoverProps
   } = popoverProps ?? {};
 
@@ -119,8 +137,8 @@ const MinimizedArrayInput: FC<TypeMinimizedArrayInput> = ({
         className: mergedContainerClassName,
       }}
       {...restPopoverProps}
-      open={activeIndex !== null}
-      onClose={() => setActiveIndex(null)}
+      open={resolvedOpen}
+      onClose={handleClose}
       content={
         activeIndex === null ? null : (
           <ExistingItemContent
