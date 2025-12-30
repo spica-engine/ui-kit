@@ -9,15 +9,18 @@ export type TypeStorageFileCard = {
   file: TypeFile;
   viewProps?: TypeFlexElement;
   nameProps?: TypeText;
+  renderView?: (file: TypeFile) => React.ReactNode;
 };
 
 const StorageFileCard: FC<TypeStorageFileCard & TypeFlexElement> = ({
   file,
   viewProps,
   nameProps,
+  renderView,
   ...props
 }) => {
   const fileView = useFileView({ file });
+  const view = renderView ? renderView(file) : fileView;
 
   return (
     <FlexElement
@@ -34,7 +37,7 @@ const StorageFileCard: FC<TypeStorageFileCard & TypeFlexElement> = ({
         {...viewProps}
         className={`${viewProps?.className} ${styles.viewContainer}`}
       >
-        {fileView}
+        {view}
       </FlexElement>
       <FlexElement
         dimensionX="fill"
