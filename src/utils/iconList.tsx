@@ -81,6 +81,8 @@ import ForkRightIcon from "@mui/icons-material/ForkRight";
 import FilterCenterFocusIcon from "@mui/icons-material/FilterCenterFocus";
 import SaveIcon from "@mui/icons-material/Save";
 import PersonIcon from "@mui/icons-material/Person";
+import AccountTreeIcon from "@mui/icons-material/AccountTree";
+import NotesIcon from "@mui/icons-material/Notes";
 
 export type IconName =
   | "article"
@@ -167,7 +169,9 @@ export type IconName =
   | "forkRight"
   | "filterCenterFocus"
   | "save"
-  | "person";
+  | "person"
+  | "accountTree"
+  | "notes";
 
 export type IconSize = "xs" | "sm" | "md" | "lg" | number;
 
@@ -256,4 +260,6 @@ export const iconMap: {
   filterCenterFocus: FilterCenterFocusIcon,
   save: SaveIcon,
   person: PersonIcon,
+  accountTree: AccountTreeIcon,
+  notes: NotesIcon,
 };
