@@ -19,6 +19,7 @@ export type TypeCheckbox = {
   indeterminate?: boolean;
   labelProps?: TypeText;
   onChange?: ChangeEventHandler<HTMLInputElement>;
+  checkBoxClassName?: string;
   id?: string;
 };
 
@@ -30,6 +31,7 @@ const Checkbox: FC<TypeCheckbox & TypeFluidContainer> = ({
   labelProps,
   onChange,
   id,
+  checkBoxClassName,
   ...props
 }) => {
   const inputRef = useRef<HTMLInputElement | null>(null);
@@ -72,7 +74,9 @@ const Checkbox: FC<TypeCheckbox & TypeFluidContainer> = ({
       className={`${props.className} ${styles.container} ${disabled && styles.disabled}`}
       prefix={{
         children: (
-          <div className={`${styles.checkbox} ${indeterminate && styles.indeterminate}`}>
+          <div
+            className={`${styles.checkbox} ${indeterminate && styles.indeterminate} ${checkBoxClassName}`}
+          >
             <input
               id={id ?? generatedId}
               ref={inputRef}
