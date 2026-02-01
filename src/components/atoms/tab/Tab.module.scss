@@ -1,0 +1,58 @@
+.container {
+  position: relative;
+  display: flex;
+  align-items: center;
+  justify-content: start !important;
+  padding: var(--oziko-padding-xs);
+
+  .indicator {
+    position: absolute;
+    height: 100%;
+    background-color: var(--oziko-color-primary);
+    border-radius: var(--oziko-border-radius-sm);
+    transition:
+      transform var(--oziko-transition-duration) ease-out,
+      left var(--oziko-transition-duration) ease-out;
+    z-index: 1;
+  }
+
+  .item {
+    z-index: 1;
+  }
+
+  &.default {
+    background-color: var(--oziko-color-default);
+    border: var(--oziko-border-default);
+    .active {
+      color: var(--oziko-color-default);
+    }
+    .indicator {
+      height: calc(100% - 2 * var(--oziko-padding-xs));
+    }
+  }
+
+  &.underline {
+    background: transparent;
+    border-bottom: var(--oziko-border-default);
+
+    .indicator {
+      bottom: -1px;
+      height: 2px;
+    }
+  }
+
+  &.window {
+    background-color: transparent;
+    .item {
+      border-right: var(--oziko-border-default);
+
+      .root {
+        opacity: 0.25;
+      }
+    }
+    .active {
+      background-color: var(--oziko-color-default);
+      opacity: 1;
+    }
+  }
+}

@@ -1,20 +1,53 @@
 {
-  "name": "ui-kit",
-  "version": "0.1.0",
-  "private": true,
+  "name": "oziko-ui-kit",
+  "version": "0.0.122",
+  "private": false,
+  "main": "dist/index.cjs.js",
+  "module": "dist/index.mjs",
+  "types": "dist/index.export.d.ts",
+  "files": [
+    "dist",
+    "dist/index.css"
+  ],
+  "sideEffects": [
+    "*.css"
+  ],
   "dependencies": {
-    "@testing-library/react": "^16.1.0",
+    "@emotion/react": "^11.14.0",
+    "@emotion/styled": "^11.14.0",
+    "@lexical/react": "^0.23.1",
+    "@mui/icons-material": "^6.3.1",
+    "@mui/material": "^6.3.1",
+    "antd": "^5.23.1",
+    "chart.js": "^4.4.7",
+    "chartjs-adapter-date-fns": "^3.0.0",
+    "chartjs-plugin-annotation": "^3.1.0",
+    "chartjs-plugin-zoom": "^2.2.0",
     "cra-template-typescript": "1.2.0",
-    "react": "^19.0.0",
-    "react-dom": "^19.0.0",
+    "date-fns": "^4.1.0",
+    "formik": "^2.4.6",
+    "leaflet": "^1.9.4",
+    "lexical": "^0.23.1",
+    "lodash": "^4.17.21",
+    "react-chartjs-2": "^5.3.0",
+    "react-draggable": "^4.4.6",
+    "react-dropzone": "^14.3.5",
+    "react-grid-layout": "1.4.4",
+    "react-infinite-scroll-component": "^6.1.0",
+    "react-leaflet": "^5.0.0",
+    "react-resizable": "^3.0.5",
     "react-scripts": "^5.0.1",
-    "sass": "^1.83.1"
+    "sass": "^1.83.1",
+    "tslib": "^2.8.1"
   },
   "scripts": {
-    "start": "react-scripts start",
-    "build": "react-scripts build",
-    "test": "react-scripts test",
-    "eject": "react-scripts eject"
+    "start": "react-app-rewired start",
+    "build": "react-app-rewired build",
+    "test": "react-app-rewired test",
+    "eject": "react-scripts eject",
+    "format": "prettier --write \"src/**/*.{ts,js,tsx,jsx,json,css,scss,html}\"",
+    "rollup-clean-css": "sed -i.bak '/@charset/d' build/dist/index.css && rm -f build/dist/index.css.bak",
+    "rollup": "rollup -c && yarn run rollup-clean-css"
   },
   "eslintConfig": {
     "extends": [
@@ -35,10 +68,37 @@
     ]
   },
   "devDependencies": {
+    "@rollup/plugin-alias": "^5.1.1",
+    "@rollup/plugin-commonjs": "^28.0.2",
+    "@rollup/plugin-node-resolve": "^16.0.0",
+    "@rollup/plugin-terser": "^0.4.4",
+    "@rollup/plugin-typescript": "^12.1.2",
+    "@rollup/plugin-url": "^8.0.2",
+    "@testing-library/react": "^16.1.0",
+    "@types/leaflet": "^1.9.16",
+    "@types/lodash": "^4.17.20",
     "@types/mocha": "^10.0.10",
     "@types/react": "^19.0.6",
     "@types/react-dom": "^19.0.3",
+    "@types/react-grid-layout": "^1.3.5",
+    "postcss-discard-comments": "^7.0.3",
+    "postcss-prefix-selector": "^2.1.1",
+    "prettier": "3.4.2",
+    "react": "^19.0.0",
+    "react-app-rewired": "^2.2.1",
+    "react-dom": "^19.0.0",
+    "rollup-plugin-copy": "^3.5.0",
+    "rollup-plugin-dts": "^6.1.1",
+    "rollup-plugin-peer-deps-external": "^2.2.4",
+    "rollup-plugin-postcss": "^4.0.2",
+    "rollup-plugin-styles": "^4.0.0",
+    "sass-migrator": "^2.3.1",
+    "tsc-alias": "^1.8.11",
     "typescript": "^5.7.3",
     "web-vitals": "^4.2.4"
+  },
+  "peerDependencies": {
+    "react": "^19.0.0",
+    "react-dom": "^19.0.0"
   }
 }

@@ -1,10 +1,33 @@
 {
   "compilerOptions": {
-    "jsx": "react-jsx",
-    "target": "es2016",
-    "module": "commonjs",
+    "target": "ESNext",
+    "lib": ["dom", "dom.iterable", "esnext"],
+    "allowJs": true,
+    "skipLibCheck": true,
     "esModuleInterop": true,
+    "allowSyntheticDefaultImports": true,
+    "strict": true,
     "forceConsistentCasingInFileNames": true,
-    "strict": true
-  }
+    "noFallthroughCasesInSwitch": true,
+    "module": "ESNext",
+    "moduleResolution": "node",
+    "resolveJsonModule": true,
+    "isolatedModules": true,
+    "declaration": true,
+    "declarationDir": "build/dist",
+    "emitDeclarationOnly": true,
+    "jsx": "react-jsx",
+    "paths": {
+      "style/*": ["styles/*"],
+      "@atoms/*": ["components/atoms/*"],
+      "@molecules/*": ["components/molecules/*"],
+      "@organizms/*": ["components/organizms/*"],
+      "@custom-hooks/*": ["custom-hooks/*"],
+      "@utils/*": ["utils/*"]
+    },
+    "outDir": "./build",
+    "baseUrl": "src"
+  },
+  "include": ["src", "declarations.d.ts"],
+  "exclude": ["src/index.tsx", "src/app.ts", "src/setupTests.ts", "**/*.test.ts"]
 }

@@ -1,0 +1,7 @@
+@use "styles/mixins";
+
+.inputHeaderContainer {
+  @include mixins.inputContainer;
+  padding: var(--oziko-padding-md);
+  font-size: var(--oziko-font-size-md);
+}

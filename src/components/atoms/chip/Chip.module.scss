@@ -1,0 +1,29 @@
+@use "styles/mixins";
+
+.chip {
+  @include mixins.inputContainer;
+  color: var(--oziko-color-font-primary);
+  border-radius: var(--oziko-border-radius-round);
+  padding: 6px 6px 6px var(--oziko-padding-md);
+  font-size: var(--oziko-font-size-md);
+
+  &.outlined {
+    border: 1px solid var(--oziko-color-border);
+    background-color: transparent;
+  }
+
+  &.filled {
+    background-color: var(--oziko-color-soft-hover);
+    border: none;
+  }
+
+  &.noButton {
+    padding: var(--oziko-padding-md) var(--oziko-padding-lg);
+  }
+
+  .closeButton {
+    border: 0;
+    padding: 0;
+    height: var(--oziko-icon-size-md);
+  }
+}

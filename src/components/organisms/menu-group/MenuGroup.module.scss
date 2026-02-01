@@ -1,0 +1,26 @@
+@use "styles/mixins";
+
+.container {
+  background-color: var(--oziko-color-menu-background);
+  border-radius: var(--oziko-border-radius-md);
+  box-shadow: var(--box-shadow);
+  color: var(--oziko-color-font-primary);
+}
+
+.menuSection {
+  padding: var(--oziko-padding-md);
+
+  .label {
+    width: 100%;
+    @include mixins.textEllipsis(1);
+    color: var(--oziko-color-input-placeholder);
+  }
+}
+
+.noDivider {
+  border-bottom: none !important;
+}
+
+.container > *:not(:last-child) {
+  border-bottom: 1px solid var(--oziko-color-border);
+}

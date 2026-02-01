@@ -1,0 +1,39 @@
+@use "styles/mixins";
+
+.container {
+  border-radius: var(--oziko-border-radius-md);
+  justify-content: space-between !important;
+  background: var(--oziko-color-menu-background);
+
+  &:hover {
+    cursor: pointer;
+  }
+
+  .viewContainer {
+    flex: 1;
+    overflow: hidden;
+    padding: var(--oziko-padding-md);
+
+    img,
+    embed {
+      width: 100%;
+      max-height: calc(85% - (2 * var(--oziko-padding-lg)));
+      object-fit: contain;
+    }
+
+    .icon {
+      width: 2rem;
+      height: 2rem;
+    }
+  }
+}
+
+.name {
+  border-top: var(--oziko-border-default);
+  padding: var(--oziko-padding-md);
+  text-align: center;
+
+  span {
+    @include mixins.textEllipsis(1);
+  }
+}

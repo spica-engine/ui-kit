@@ -1,0 +1,36 @@
+.text {
+  width: max-content;
+  line-height: 1rem;
+
+  &.primary {
+    color: var(--oziko-color-font-primary);
+  }
+
+  &.secondary {
+    color: var(--oziko-color-input-placeholder);
+  }
+
+  &.danger {
+    color: var(--oziko-color-danger);
+  }
+
+  &.xsmall {
+    font-size: var(--oziko-font-size-xs);
+  }
+
+  &.small {
+    font-size: var(--oziko-font-size-sm);
+  }
+
+  &.medium {
+    font-size: var(--oziko-font-size-md);
+  }
+
+  &.large {
+    font-size: var(--oziko-font-size-lg);
+  }
+
+  &.xlarge {
+    font-size: var(--oziko-font-size-xl);
+  }
+}

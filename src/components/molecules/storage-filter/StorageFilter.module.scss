@@ -1,0 +1,32 @@
+.container {
+  background: var(--oziko-color-menu-background);
+  padding: var(--oziko-padding-md);
+  box-shadow: var(--box-shadow);
+  border-radius: var(--oziko-border-radius-md);
+
+  .select {
+    background: none;
+    padding: 0;
+  }
+
+  .content {
+    padding: var(--oziko-padding-sm) var(--oziko-padding-md);
+    border: var(--oziko-border-default);
+    border-radius: var(--oziko-border-radius-md);
+
+    .left {
+      border-right: var(--oziko-border-default);
+    }
+  }
+
+  .chip {
+    font-size: var(--oziko-font-size-sm);
+    border-radius: var(--oziko-border-radius-md);
+    padding: var(--oziko-padding-sm) var(--oziko-padding-md) !important;
+    cursor: pointer;
+    justify-content: space-between !important;
+    &.active {
+      border-color: var(--oziko-color-primary);
+    }
+  }
+}
