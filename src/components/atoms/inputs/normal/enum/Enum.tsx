@@ -1,0 +1,32 @@
+import FlexElement, { TypeFlexElement } from "@atoms/flex-element/FlexElement";
+import Select, { TypeValue } from "@molecules/select/Select";
+import React, { FC, memo } from "react";
+
+export type TypeEnum = {
+  selectClassName?: string;
+  label: string;
+  options: { label: string; value: string }[];
+  onChange?: (value: TypeValue) => void;
+  value?: TypeValue;
+} & TypeFlexElement;
+
+const Enum: FC<TypeEnum> = ({
+  selectClassName = "",
+  label = "",
+  options = [],
+  onChange,
+  ...props
+}) => {
+  return (
+    <FlexElement {...props} dimensionX={"fill"} alignment={"leftCenter"}>
+      <Select
+        className={selectClassName}
+        placeholder={label}
+        options={options}
+        onChange={onChange || (() => {})}
+      />
+    </FlexElement>
+  );
+};
+
+export default memo(Enum);

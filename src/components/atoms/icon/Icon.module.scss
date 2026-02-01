@@ -1,0 +1,21 @@
+.icon {
+  &.xs {
+    width: var(--oziko-icon-size-xs);
+    height: var(--oziko-icon-size-xs);
+  }
+
+  &.sm {
+    width: var(--oziko-icon-size-sm);
+    height: var(--oziko-icon-size-sm);
+  }
+
+  &.md {
+    width: var(--oziko-icon-size-md);
+    height: var(--oziko-icon-size-md);
+  }
+
+  &.lg {
+    width: var(--oziko-icon-size-lg);
+    height: var(--oziko-icon-size-lg);
+  }
+}

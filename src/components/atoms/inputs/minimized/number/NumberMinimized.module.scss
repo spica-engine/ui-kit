@@ -1,0 +1,16 @@
+@use "styles/mixins";
+
+.numberMinimized {
+  @include mixins.inputMinimizedContainer;
+  padding: 0 var(--oziko-padding-md);
+  font-size: var(--oziko-font-size-md);
+
+  .select {
+    background: var(--oziko-color-input-background);
+    padding: 0;
+  }
+  .closeIcon {
+    border: 0;
+    padding: 0;
+  }
+}

@@ -1,0 +1,333 @@
+.notificationContainer {
+  pointer-events: none;
+  box-sizing: border-box;
+  z-index: 9999;
+
+  * {
+    box-sizing: border-box;
+  }
+}
+
+.notificationItem {
+  position: relative;
+  display: flex;
+  align-items: flex-start;
+  gap: var(--oziko-gap-md);
+  min-width: 320px;
+  max-width: 480px;
+  padding: var(--oziko-padding-lg) var(--oziko-padding-xl);
+
+  background: var(--notif-bg, var(--oziko-color-default));
+  border: var(--oziko-border-default);
+  border-radius: var(--notif-radius, var(--oziko-border-radius-lg));
+  box-shadow: var(--notif-shadow, var(--box-shadow));
+
+  color: var(--notif-fg, var(--oziko-color-font-primary));
+  font-family: var(--notif-font-family, var(--oziko-font-family-base));
+  font-size: var(--notif-font-size, var(--oziko-font-size-md));
+  line-height: var(--notif-line-height, 1.5);
+
+  cursor: pointer;
+  pointer-events: auto;
+
+  opacity: 0;
+  transition: all var(--oziko-transition-duration) cubic-bezier(0.645, 0.045, 0.355, 1);
+
+  will-change: transform, opacity;
+
+  transform: translateX(100%) translateY(-20px);
+
+  &[data-placement="topLeft"] {
+    transform: translateX(-100%) translateY(-20px);
+  }
+
+  &[data-placement="topRight"] {
+    transform: translateX(100%) translateY(-20px);
+  }
+
+  &[data-placement="bottomLeft"] {
+    transform: translateX(-100%) translateY(20px);
+  }
+
+  &[data-placement="bottomRight"] {
+    transform: translateX(100%) translateY(20px);
+  }
+
+  &[data-rtl="true"] {
+    direction: rtl;
+
+    &[data-placement="topLeft"] {
+      transform: translateX(100%) translateY(-20px);
+    }
+
+    &[data-placement="topRight"] {
+      transform: translateX(-100%) translateY(-20px);
+    }
+
+    &[data-placement="bottomLeft"] {
+      transform: translateX(100%) translateY(20px);
+    }
+
+    &[data-placement="bottomRight"] {
+      transform: translateX(-100%) translateY(20px);
+    }
+  }
+}
+
+.notificationItem.enter {
+  opacity: 1 !important;
+  transform: translateX(0) translateY(0) !important;
+}
+
+.notificationItem.exit {
+  opacity: 0;
+  transform: scale(0.8) translateY(-10px);
+  transition: all 0.3s cubic-bezier(0.645, 0.045, 0.355, 1);
+  pointer-events: none;
+}
+
+.notificationContainer {
+  & > * {
+    transition:
+      transform 0.2s ease-out,
+      margin 0.2s ease-out;
+  }
+}
+
+.notificationItem:hover {
+  box-shadow: var(--notif-shadow-hover, 0 8px 24px rgba(0, 0, 0, 0.16));
+}
+
+.notificationIcon {
+  flex-shrink: 0;
+  margin-top: var(--oziko-padding-xs);
+
+  :global(.notification-icon-info) {
+    color: var(--color-info, var(--oziko-color-primary));
+  }
+
+  :global(.notification-icon-success) {
+    color: var(--color-success, var(--oziko-color-success));
+  }
+
+  :global(.notification-icon-error) {
+    color: var(--color-error, var(--oziko-color-danger));
+  }
+
+  :global(.notification-icon-warning) {
+    color: var(--color-warning, #faad14);
+  }
+
+  :global(.notification-icon-loading) {
+    color: var(--color-primary, var(--oziko-color-primary));
+    animation: spin 1s linear infinite;
+  }
+}
+
+@keyframes spin {
+  from {
+    transform: rotate(0deg);
+  }
+  to {
+    transform: rotate(360deg);
+  }
+}
+
+.notificationContent {
+  flex: 1;
+  min-width: 0;
+}
+
+.notificationMessage {
+  font-weight: var(--notif-message-weight, 600);
+  color: var(--notif-message-color, var(--oziko-color-font-primary));
+  margin-bottom: var(--oziko-gap-xs);
+
+  &:last-child {
+    margin-bottom: 0;
+  }
+}
+
+.notificationDescription {
+  color: var(--notif-description-color, var(--oziko-color-input-placeholder));
+  font-size: var(--notif-description-size, var(--oziko-font-size-sm));
+  line-height: var(--notif-description-line-height, 1.4);
+  margin-bottom: var(--oziko-gap-md);
+
+  &:last-child {
+    margin-bottom: 0;
+  }
+}
+
+.notificationAction {
+  margin-top: var(--oziko-gap-md);
+
+  button {
+    background: var(--color-primary, var(--oziko-color-primary));
+    color: var(--color-primary-text, var(--oziko-color-font-secondary));
+    border: none;
+    border-radius: var(--notif-button-radius, var(--oziko-border-radius-sm));
+    padding: var(--oziko-padding-sm) var(--oziko-gap-md);
+    font-size: var(--oziko-font-size-sm);
+    font-weight: 500;
+    cursor: pointer;
+    transition: all 0.2s;
+
+    &:hover {
+      background: var(--color-primary-hover, var(--oziko-color-primary-light));
+    }
+
+    &:active {
+      background: var(--color-primary-active, var(--oziko-color-primary-dark));
+    }
+  }
+}
+
+.notificationClose {
+  flex-shrink: 0;
+  background: none;
+  border: none;
+  padding: var(--oziko-padding-xs);
+  margin: calc(-1 * var(--oziko-padding-xs)) calc(-1 * var(--oziko-gap-md))
+    calc(-1 * var(--oziko-padding-xs)) var(--oziko-padding-xs);
+  cursor: pointer;
+  border-radius: var(--notif-close-radius, var(--oziko-border-radius-sm));
+  color: var(--notif-close-color, var(--oziko-color-input-placeholder));
+  transition: all 0.2s;
+
+  &:hover {
+    background: var(--notif-close-bg-hover, rgba(0, 0, 0, 0.06));
+    color: var(--notif-close-color-hover, #666);
+  }
+
+  &:focus {
+    outline: 2px solid var(--color-primary, var(--oziko-color-primary));
+    outline-offset: 1px;
+  }
+
+  &:active {
+    background: var(--notif-close-bg-active, rgba(0, 0, 0, 0.1));
+  }
+}
+
+.notificationProgressContainer {
+  position: absolute;
+  bottom: 0;
+  left: 0;
+  right: 0;
+  height: var(--oziko-padding-xs);
+  background: rgba(var(--oziko-color-border-rgb), 0.3);
+  border-radius: 0 0 var(--oziko-border-radius-lg) var(--oziko-border-radius-lg);
+  overflow: hidden;
+}
+
+.notificationProgress {
+  height: 100%;
+  transition:
+    width 0.016s linear,
+    opacity 0.2s ease;
+  border-radius: 0 0 var(--oziko-border-radius-lg) var(--oziko-border-radius-lg);
+
+  background: linear-gradient(90deg, var(--oziko-color-primary), var(--oziko-color-primary-light));
+}
+
+.notificationItem {
+  &[data-type="success"] .notificationProgress {
+    background: linear-gradient(
+      90deg,
+      var(--oziko-color-success),
+      var(--oziko-color-success-light)
+    );
+  }
+
+  &[data-type="error"] .notificationProgress {
+    background: linear-gradient(90deg, var(--oziko-color-danger), var(--oziko-color-danger-light));
+  }
+
+  &[data-type="warning"] .notificationProgress {
+    background: linear-gradient(90deg, #faad14, #ffc53d);
+  }
+
+  &[data-type="info"] .notificationProgress {
+    background: linear-gradient(
+      90deg,
+      var(--oziko-color-primary),
+      var(--oziko-color-primary-light)
+    );
+  }
+}
+
+.notificationItem:focus {
+  outline: 2px solid var(--color-primary, var(--oziko-color-primary));
+  outline-offset: 2px;
+}
+
+@media (max-width: 768px) {
+  .notificationItem {
+    min-width: 280px;
+    max-width: calc(100vw - calc(2 * var(--oziko-padding-xl)));
+    margin: 0 var(--oziko-padding-xl);
+  }
+
+  .notificationContainer {
+    left: 0 !important;
+    right: 0 !important;
+
+    .notificationItem {
+      margin: 0 auto;
+    }
+  }
+}
+
+@media (prefers-contrast: high) {
+  .notificationItem {
+    border-width: 2px;
+    box-shadow: none;
+  }
+
+  .notificationClose:focus {
+    outline-width: 3px;
+  }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .notificationItem,
+  .notificationItem.enter,
+  .notificationItem.exit {
+    transition: none;
+    animation: none;
+  }
+
+  .notificationIcon :global(.notification-icon-loading) {
+    animation: none;
+  }
+
+  .notificationProgress {
+    transition: opacity 0.2s ease;
+  }
+}
+
+@media (prefers-color-scheme: dark) {
+  .notificationItem {
+    --notif-bg: var(--oziko-color-background-secondary);
+    --notif-border: var(--oziko-color-border);
+    --notif-fg: var(--oziko-color-font-secondary);
+    --notif-message-color: var(--oziko-color-font-secondary);
+    --notif-description-color: var(--oziko-color-soft);
+    --notif-close-color: var(--oziko-color-input-placeholder);
+    --notif-close-color-hover: var(--oziko-color-font-secondary);
+    --notif-close-bg-hover: rgba(255, 255, 255, 0.1);
+    --notif-close-bg-active: rgba(255, 255, 255, 0.2);
+    --notif-shadow: var(--box-shadow);
+    --notif-shadow-hover: 0 8px 24px rgba(0, 0, 0, 0.6);
+  }
+
+  .notificationProgressContainer {
+    background: rgba(var(--oziko-color-soft-light-rgb), 0.2);
+  }
+}
+
+.notificationPortal {
+  width: unset !important;
+  height: unset !important;
+}

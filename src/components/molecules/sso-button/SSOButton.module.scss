@@ -1,0 +1,22 @@
+@use "styles/mixins";
+
+.ssoButton {
+  border-radius: var(--oziko-border-radius-lg);
+  padding: var(--oziko-padding-xl);
+  background: var(--oziko-color-menu-background);
+  border: 1px solid var(--oziko-color-border);
+
+  .text {
+    @include mixins.textEllipsis(1);
+    display: block;
+    white-space: nowrap;
+  }
+
+  &.clicked {
+    border-color: var(--oziko-color-primary);
+  }
+
+  .active {
+    color: var(--oziko-color-primary) !important;
+  }
+}

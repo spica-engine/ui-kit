@@ -1,0 +1,19 @@
+.color {
+  input {
+    cursor: pointer;
+    -webkit-appearance: none;
+    padding: 0;
+    border: none;
+    width: 12px;
+    height: 12px;
+    border-radius: var(--oziko-border-radius-circle);
+    border: var(--oziko-border-default);
+
+    &::-webkit-color-swatch,
+    &::-webkit-color-swatch-wrapper {
+      border: none;
+      border-radius: var(--oziko-border-radius-circle);
+      padding: 0;
+    }
+  }
+}

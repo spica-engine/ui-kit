@@ -1,0 +1,19 @@
+@use "styles/mixins";
+
+.storageMinimized {
+  @include mixins.inputMinimizedContainer;
+  padding: 0;
+
+  .storage {
+    padding: var(--oziko-padding-md);
+  }
+
+  .text {
+    @include mixins.textEllipsis(1);
+    width: 100%;
+  }
+
+  .closeIcon {
+    padding: 0;
+  }
+}

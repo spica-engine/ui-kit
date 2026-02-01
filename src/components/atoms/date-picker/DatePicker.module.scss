@@ -1,0 +1,43 @@
+.datePicker {
+  border: none !important;
+  box-shadow: none !important;
+  outline: none;
+  background-color: transparent !important;
+  padding: 0;
+  font-size: var(--oziko-font-size-base);
+  box-shadow: none;
+  width: 100%;
+
+  input {
+    font-size: var(--oziko-font-size-base);
+    height: 16px !important;
+    background-color: transparent;
+    line-height: unset !important;
+  }
+
+  :global {
+    .ant-picker-input {
+      .ant-picker-clear {
+        top: 56%;
+        inset-inline-end: 1;
+      }
+    }
+  }
+}
+
+.stringValueWrapper {
+  display: flex;
+  align-items: center;
+  width: 100%;
+}
+
+.stringValue {
+  font-size: 14px;
+  text-transform: capitalize;
+  padding: 2px 8px;
+}
+
+.hiddenAntDatePicker {
+  visibility: hidden;
+  width: 0px !important;
+}

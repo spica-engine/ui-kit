@@ -1,0 +1,23 @@
+@use "styles/mixins";
+
+.option {
+  cursor: pointer;
+  padding: var(--oziko-padding-md) var(--oziko-padding-lg);
+
+  &:not(.disabled):hover {
+    background: var(--oziko-color-zebra);
+  }
+
+  &.selected {
+    background: var(--oziko-color-zebra);
+  }
+
+  &.disabled {
+    cursor: default;
+    opacity: var(--oziko-disabled-opacity);
+  }
+
+  .displayer {
+    @include mixins.textEllipsis(1);
+  }
+}
