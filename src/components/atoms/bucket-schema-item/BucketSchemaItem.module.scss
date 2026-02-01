@@ -1,0 +1,34 @@
+@use "styles/mixins";
+
+.bucketSchemaItem {
+  .suffixIcons,
+  .dragDropButton {
+    opacity: 0;
+    visibility: hidden;
+    transition:
+      opacity var(--oziko-transition-duration) ease,
+      visibility var(--oziko-transition-duration) ease;
+  }
+
+  &:hover {
+    .suffixIcons,
+    .dragDropButton {
+      opacity: 1;
+      visibility: visible;
+    }
+  }
+  .label {
+    @include mixins.textEllipsis(1);
+    display: block;
+    white-space: nowrap;
+    width: 100px;
+  }
+
+  .buttons {
+    padding: 0;
+    min-width: none;
+  }
+  .prefixDiv {
+    width: 100px;
+  }
+}

@@ -1,0 +1,38 @@
+@use "styles/mixins";
+
+.container {
+  @include mixins.inputContainer;
+  padding: var(--oziko-padding-md);
+
+  .top {
+    padding: var(--oziko-padding-md);
+  }
+
+  .storage {
+    position: relative;
+    cursor: pointer;
+    opacity: 0.8;
+    transition: all var(--oziko-transition-duration) ease-in-out;
+
+    .previewIcon {
+      position: absolute;
+      z-index: 1;
+      color: #ffd740;
+      transition: all var(--oziko-transition-duration) ease-in-out;
+    }
+
+    .text {
+      span {
+        text-align: center;
+      }
+    }
+
+    &:hover {
+      opacity: 1;
+
+      .previewIcon {
+        transform: rotate(180deg);
+      }
+    }
+  }
+}

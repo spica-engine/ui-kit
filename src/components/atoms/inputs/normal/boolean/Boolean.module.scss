@@ -1,0 +1,10 @@
+@use "styles/mixins";
+
+.container {
+  @include mixins.inputContainer;
+}
+
+.description {
+  width: 100% !important;
+  @include mixins.inputDescriptionContainer;
+}

@@ -1,0 +1,16 @@
+.icon {
+  color: var(--oziko-color-font-primary) !important;
+}
+.text {
+  color: var(--oziko-color-input-placeholder) !important;
+}
+.select {
+  background: none !important;
+  padding: var(--oziko-padding-md) 0 !important;
+  height: 100% !important;
+}
+
+.baseInput {
+  padding: 0 var(--oziko-padding-lg) !important;
+  justify-content: start;
+}

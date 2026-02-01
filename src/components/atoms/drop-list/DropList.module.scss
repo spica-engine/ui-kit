@@ -1,0 +1,45 @@
+.container {
+  overflow: auto;
+  height: 55px !important;
+  align-items: end !important;
+  margin-top: -25px;
+  scrollbar-width: none;
+  button:not(.deleteButton) {
+    width: 30px;
+    min-width: 30px !important;
+    height: 30px;
+  }
+  button {
+    border-radius: var(--oziko-border-radius-circle) !important;
+    background: var(--oziko-color-background-secondary) !important;
+    color: var(--oziko-color-font-primary) !important;
+    border: var(--oziko-border-default) !important;
+    border-color: var(--oziko-color-background-secondary) !important;
+
+    &.active {
+      background: transparent !important;
+    }
+  }
+
+  .dropListItemContainer {
+    position: relative;
+    .deleteButton {
+      padding: 0;
+      width: 20px;
+      height: 20px;
+      min-width: unset !important;
+      .deleteButtonContent {
+        margin-bottom: 3px;
+      }
+      &:hover {
+        background: var(--oziko-color-default) !important;
+      }
+      position: absolute;
+      bottom: 33px;
+    }
+  }
+
+  .addButtonContent {
+    margin-bottom: 3px;
+  }
+}

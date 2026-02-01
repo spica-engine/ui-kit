@@ -1,0 +1,27 @@
+@use "styles/mixins";
+
+.baseInputContainer {
+  @include mixins.inputContainer;
+  position: relative;
+
+  .focused {
+    * {
+      color: var(--oziko-color-primary) !important;
+    }
+  }
+
+  &.containerFocused {
+    outline: 1px solid var(--oziko-color-primary);
+  }
+}
+
+.disabled {
+  opacity: var(--oziko-disabled-opacity);
+  cursor: not-allowed;
+  pointer-events: none;
+}
+
+.helperText {
+  padding-left: var(--oziko-padding-lg);
+  font-size: var(--oziko-font-size-sm) !important;
+}

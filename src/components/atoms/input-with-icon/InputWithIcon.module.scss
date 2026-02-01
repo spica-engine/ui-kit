@@ -1,0 +1,23 @@
+@use "styles/mixins";
+
+.container {
+  @include mixins.inputContainer;
+  border: var(--oziko-border-default);
+
+  &.disabled {
+    cursor: default;
+    opacity: var(--oziko-disabled-opacity);
+  }
+
+  .input {
+    border: none;
+    outline: none;
+    width: 100%;
+    background: none;
+    color: var(--oziko-color-font-primary);
+
+    &::placeholder {
+      color: var(--oziko-color-input-placeholder);
+    }
+  }
+}

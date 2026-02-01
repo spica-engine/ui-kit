@@ -1,0 +1,80 @@
+.accordionGroup {
+  width: 100%;
+  margin: 0 auto;
+}
+
+.accordionItem {
+  width: 100%;
+
+  .icon {
+    transition: all var(--oziko-transition-duration) ease-in-out;
+
+    &.rotate {
+      transform: rotate(180deg);
+    }
+  }
+}
+
+.accordionTitle {
+  width: 100%;
+  padding: var(--oziko-padding-lg);
+  text-align: left;
+  border: none;
+  cursor: pointer;
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+
+  &:hover {
+    background: var(--oziko-color-soft);
+
+    .suffixOnHover {
+      opacity: 1;
+    }
+  }
+
+  &.open {
+    background: var(--oziko-color-soft);
+
+    &:hover {
+      &.noBackgroundOnHover {
+        background: var(--oziko-color-soft);
+      }
+    }
+  }
+
+  &.noBackgroundOnFocus {
+    background: transparent;
+  }
+}
+
+.accordionContent {
+  background: white;
+  width: 100%;
+  display: grid;
+  grid-template-rows: 0fr;
+  opacity: 0;
+  transition: all var(--oziko-transition-duration) ease-in-out;
+  padding-left: var(--oziko-padding-lg);
+  padding-right: var(--oziko-padding-lg);
+
+  &.open {
+    grid-template-rows: 1fr;
+    opacity: 1;
+    padding-bottom: var(--oziko-padding-lg);
+    padding-top: var(--oziko-padding-lg);
+  }
+}
+
+.accordionContentInner {
+  overflow: hidden;
+}
+
+.bordered {
+  border: var(--oziko-border-default);
+}
+
+.suffixOnHover {
+  opacity: 0;
+  transition: all var(--oziko-transition-duration) ease;
+}

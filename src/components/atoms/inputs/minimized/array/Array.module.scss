@@ -1,0 +1,62 @@
+@use "styles/mixins";
+
+.inputMinimized {
+  @include mixins.inputMinimizedContainer;
+}
+
+.contentContainer {
+  padding: 0 !important;
+}
+
+.value {
+  @include mixins.textEllipsis(1);
+  display: block;
+}
+
+.buttonsContainer {
+  display: flex;
+  gap: 8px;
+  align-items: center;
+}
+
+.itemButtonWrapper {
+  position: relative;
+  display: inline-block;
+  height: 100% !important;
+}
+
+.itemButton {
+  background: var(--oziko-color-border) !important;
+  color: var(--oziko-color-font-primary) !important;
+  border-radius: var(--oziko-border-radius-md) !important;
+  height: 100% !important;
+}
+
+.removeButton {
+  position: absolute;
+  top: -10px;
+  left: 90%;
+  transform: translateX(-50%);
+  opacity: 0;
+  visibility: hidden;
+  transition:
+    opacity 0.2s,
+    visibility 0.2s;
+  background: var(--oziko-color-background-secondary) !important;
+  color: var(--oziko-color-font-primary) !important;
+  z-index: 1;
+  cursor: pointer;
+
+  width: 20px !important;
+  height: 20px !important;
+  min-width: 20px !important;
+
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
+.itemButtonWrapper:hover .removeButton {
+  opacity: 1;
+  visibility: visible;
+}

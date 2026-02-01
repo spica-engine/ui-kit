@@ -1,0 +1,75 @@
+import { FC, memo } from "react";
+import styles from "./Boolean.module.scss";
+import Text, { TypeText } from "@atoms/text/Text";
+import FluidContainer, { TypeFluidContainer } from "@atoms/fluid-container/FluidContainer";
+import Switch, { TypeSwitch } from "@atoms/switch/Switch";
+import FlexElement, { TypeFlexElement } from "@atoms/flex-element/FlexElement";
+
+export type TypeBooleanInput = {
+  checked?: boolean;
+  label?: string;
+  disabled?: boolean;
+  containerProps?: TypeFluidContainer;
+  switchContainerProps?: TypeFlexElement;
+  suffixProps?: TypeFlexElement;
+  rootProps?: TypeFlexElement;
+  labelProps?: TypeText;
+  description?: string;
+  onChange?: (checked: boolean) => void;
+  size?: TypeSwitch["size"];
+  className?: string;
+};
+
+const BooleanInput: FC<TypeBooleanInput> = ({
+  checked = false,
+  disabled = false,
+  label,
+  containerProps,
+  switchContainerProps,
+  suffixProps,
+  rootProps,
+  labelProps,
+  description,
+  onChange,
+  size,
+  className,
+}) => {
+  return (
+    <FlexElement
+      dimensionX="fill"
+      alignment="leftCenter"
+      direction="vertical"
+      className={className || ""}
+    >
+      <FluidContainer
+        dimensionY={36}
+        dimensionX="fill"
+        root={{
+          children: (
+            <Switch
+              checked={checked}
+              disabled={disabled}
+              {...switchContainerProps}
+              onChange={onChange}
+              size={size}
+            />
+          ),
+          ...rootProps,
+        }}
+        suffix={{
+          children: label && <Text {...labelProps}>{label}</Text>,
+          ...suffixProps,
+        }}
+        className={`${containerProps?.className} ${styles.container}`}
+        {...containerProps}
+      />
+      {description && (
+        <Text size="xsmall" className={`${styles.description}`}>
+          {description}
+        </Text>
+      )}
+    </FlexElement>
+  );
+};
+
+export default memo(BooleanInput);

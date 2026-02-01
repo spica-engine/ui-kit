@@ -1,0 +1,27 @@
+@use "styles/mixins";
+.sectionContainer {
+  background-color: var(--oziko-color-menu-background);
+
+  .header,
+  .content,
+  .footer {
+    padding: var(--oziko-padding-xl);
+    color: var(--oziko-font-color);
+    font-size: var(--oziko-font-size-md);
+    font-weight: 700;
+  }
+
+  .header {
+    @include mixins.flexAlignCenterJustifyBetween;
+    border-radius: var(--oziko-border-radius-md) var(--oziko-border-radius-md) 0 0;
+    border-bottom: 1px solid var(--oziko-color-border);
+  }
+
+  .content {
+    flex: 1;
+  }
+  .footer {
+    border-radius: 0 0 var(--oziko-border-radius-md) var(--oziko-border-radius-md);
+    border-top: 1px solid var(--oziko-color-border);
+  }
+}

@@ -1,0 +1,25 @@
+@use "styles/mixins";
+
+.location {
+  background: var(--oziko-color-input-background);
+  padding: var(--oziko-gap-md);
+  border-radius: var(--oziko-border-radius-md);
+
+  .icon {
+    color: var(--oziko-color-font-primary);
+  }
+
+  .map {
+    height: 100%;
+    width: 100%;
+    border-radius: var(--oziko-border-radius-md);
+  }
+  .mapMarker {
+    width: 35px;
+    height: 35px;
+  }
+  .description {
+    width: 100% !important;
+    @include mixins.inputDescriptionContainer;
+  }
+}

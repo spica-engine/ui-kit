@@ -1,0 +1,10 @@
+.container {
+  background-color: var(--oziko-color-menu-background);
+  padding: var(--oziko-padding-md);
+  border-radius: var(--oziko-border-radius-lg);
+  .item {
+    color: var(--oziko-color-font-primary);
+    padding: var(--oziko-padding-xs) 0;
+    cursor: pointer;
+  }
+}
