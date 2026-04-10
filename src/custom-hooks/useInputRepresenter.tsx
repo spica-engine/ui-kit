@@ -370,6 +370,7 @@ type TypeUseInputRepresenter = {
   onChange?: (value: any) => void;
   containerClassName?: string;
   errorClassName?: string;
+  typeOverrides?: Partial<TypeInputTypeMap>;
 };
 
 const useInputRepresenter = ({
@@ -379,6 +380,7 @@ const useInputRepresenter = ({
   onChange,
   containerClassName,
   errorClassName,
+  typeOverrides,
 }: TypeUseInputRepresenter) => {
   const handleChange = (event: { key: string; value: any }) => {
     const updatedValue: any = structuredClone(value);
@@ -386,6 +388,7 @@ const useInputRepresenter = ({
     onChange?.(updatedValue);
   };
 
+  const effectiveTypes = typeOverrides ? { ...types, ...typeOverrides } : types;
   const hasCustomStyles = Boolean(containerClassName || errorClassName);
   return Object.entries(properties).map(([key, el]) => {
     const isObject = typeof value === "object" && !Array.isArray(value);
@@ -417,7 +420,7 @@ const useInputRepresenter = ({
         key={key}
         id={el.id ?? undefined}
       >
-        {types[el.type]({
+        {effectiveTypes[el.type]({
           key,
           title: el.title,
           description: el.description!,
