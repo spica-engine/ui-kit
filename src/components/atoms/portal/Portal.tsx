@@ -1,37 +1,28 @@
-import React, { type ReactNode, type FC, useEffect, useRef, useId } from "react";
+import React, { type ReactNode, type FC, type RefObject, useEffect, useRef } from "react";
 import ReactDOM from "react-dom";
 import styles from "./Portal.module.scss";
-import { useOnClickOutside, handledClickOutsideEvents } from "index.export";
-
-const portalRegistry = new Map<string, number>();
+import { useLayer } from "../layer-manager/LayerManager";
 
 export type TypePortalProps = {
   children: ReactNode;
   className?: string;
   onClickOutside?: (event?: MouseEvent) => void;
+  additionalRefs?: RefObject<HTMLElement | null>[];
 };
 
-const Portal: FC<TypePortalProps> = ({ children, className, onClickOutside }) => {
-  const id = useId();
+const Portal: FC<TypePortalProps> = ({
+  children,
+  className,
+  onClickOutside,
+  additionalRefs = [],
+}) => {
   const portalElRef = useRef<HTMLDivElement | null>(null);
-  const portalCreationTime = useRef(Date.now());
 
-  useOnClickOutside({
-    targetElements: [portalElRef.current?.firstChild as HTMLElement],
-    onClickOutside: (event) => {
-      const record = portalRegistry.get(id);
-      if (record !== Math.max(...portalRegistry.values())) return;
-      if (event) handledClickOutsideEvents.add(event);
-      onClickOutside?.(event);
-    },
-  });
-
-  useEffect(() => {
-    portalRegistry.set(id, portalCreationTime.current);
-    return () => {
-      portalRegistry.delete(id);
-    };
-  }, [id]);
+  useLayer(
+    [portalElRef, ...additionalRefs],
+    onClickOutside as ((event: MouseEvent) => void) | undefined,
+    !!onClickOutside
+  );
 
   useEffect(() => {
     const originalOverflow = document.body.style.overflow;

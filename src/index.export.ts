@@ -80,6 +80,8 @@ export { default as useInputRepresenter } from "./custom-hooks/useInputRepresent
 export { default as useKeyDown } from "./custom-hooks/useKeyDown";
 export { useOnClickOutside, handledClickOutsideEvents } from "./custom-hooks/useOnClickOutside";
 export { default as useAdaptivePosition } from "./custom-hooks/useAdaptivePosition";
+//Layer Manager export
+export { LayerManagerProvider, useLayer } from "./components/atoms/layer-manager/LayerManager";
 //Theme export
 export { createTheme } from "./theme/createTheme";
 export { useTheme } from "./theme/ThemeContext";

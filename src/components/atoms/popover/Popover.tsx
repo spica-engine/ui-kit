@@ -12,7 +12,6 @@ import FlexElement, { TypeFlexElement } from "../flex-element/FlexElement";
 import styles from "./Popover.module.scss";
 import useAdaptivePosition, { Placement } from "@custom-hooks/useAdaptivePosition";
 import useKeyDown from "@custom-hooks/useKeyDown";
-import { useOnClickOutside, handledClickOutsideEvents } from "@custom-hooks/useOnClickOutside";
 import Portal from "../portal/Portal";
 import Backdrop from "@atoms/backdrop/Backdrop";
 
@@ -109,51 +108,13 @@ const Popover: FC<TypePopover> = ({
 
   const handleClickOutside = useCallback(
     (event?: MouseEvent) => {
-      if (!isOpen || trigger !== "click" || !event?.target || !popoverRef.current) {
+      if (!isOpen || trigger !== "click") {
         return;
       }
-
-      if (event && handledClickOutsideEvents.has(event)) {
-        return;
-      }
-
-      const target = event.target as Node;
-      const allPopoverContents = document.querySelectorAll("[data-popover-content]");
-
-      const clickedInsideOtherPopover = Array.from(allPopoverContents).some(
-        (popoverContent) => popoverContent !== popoverRef.current && popoverContent.contains(target)
-      );
-
-      if (clickedInsideOtherPopover) {
-        return;
-      }
-
-      const selectDropdowns = document.querySelectorAll("[data-select-dropdown]");
-      const clickedInsideSelectDropdown = Array.from(selectDropdowns).some((dropdown) => {
-        return dropdown.contains(target);
-      });
-
-      if (clickedInsideSelectDropdown) {
-        return;
-      }
-
-      const visiblePopovers = Array.from(allPopoverContents).filter((el) => {
-        const style = globalThis.getComputedStyle(el);
-        return style.display !== "none" && style.visibility !== "hidden";
-      });
-
-      const topmostPopover = visiblePopovers.at(-1);
-      if (topmostPopover === popoverRef.current) {
-        handleVisibilityChange(false, event);
-      }
+      handleVisibilityChange(false, event);
     },
     [isOpen, trigger, handleVisibilityChange]
   );
-
-  useOnClickOutside({
-    targetElements: [popoverRef, containerRef],
-    onClickOutside: handleClickOutside,
-  });
 
   const handleInteraction = {
     onMouseEnter: () => {
@@ -174,7 +135,11 @@ const Popover: FC<TypePopover> = ({
         {children}
       </FlexElement>
       {isOpen && (
-        <Portal className={portalClassName}>
+        <Portal
+          className={portalClassName}
+          onClickOutside={handleClickOutside}
+          additionalRefs={[containerRef, popoverRef]}
+        >
           <Backdrop showBackdrop={false} />
           <FlexElement
             {...contentProps}
