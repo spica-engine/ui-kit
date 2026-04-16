@@ -14,7 +14,6 @@ jobs:
         uses: actions/checkout@v4
         with:
           fetch-depth: 0
-          token: ${{ secrets.NPM_TOKEN }}
 
       - name: Get latest tag and bump version
         run: |
@@ -26,6 +25,15 @@ jobs:
 
           new_version="v$major.$minor.$((patch + 1))"
           echo "New version: $new_version"
+          echo "NEW_VERSION=$new_version" >> $GITHUB_ENV
 
           git tag "$new_version"
           git push origin "$new_version"
+
+      - name: Trigger publish workflow
+        run: |
+          gh api repos/${{ github.repository }}/dispatches \
+            -f event_type=publish-release \
+            -f "client_payload[tag]=$NEW_VERSION"
+        env:
+          GH_TOKEN: ${{ secrets.GITHUB_TOKEN }}
