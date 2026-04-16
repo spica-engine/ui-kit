@@ -190,6 +190,7 @@ const Select: FC<TypeSelect & TypeFluidContainer> = ({
             if (disableClick) return;
             setIsOpen(false);
           }}
+          additionalRefs={[containerRef]}
         >
           <FlexElement
             ref={dropdownRef}
@@ -198,7 +199,6 @@ const Select: FC<TypeSelect & TypeFluidContainer> = ({
             direction="vertical"
             alignment="leftTop"
             gap={0}
-            data-select-dropdown
           >
             {options.map((option) => {
               const optionValue = typeof option === "object" ? option.value : option;
