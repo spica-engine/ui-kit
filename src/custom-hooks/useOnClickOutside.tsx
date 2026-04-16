@@ -1,5 +1,7 @@
 import { useEffect, type RefObject } from "react";
 
+export const handledClickOutsideEvents = new WeakSet<Event>();
+
 type ElementType = HTMLElement | null;
 type TargetElement = RefObject<ElementType> | ElementType;
 

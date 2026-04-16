@@ -1,7 +1,7 @@
 import React, { type ReactNode, type FC, useEffect, useRef, useId } from "react";
 import ReactDOM from "react-dom";
 import styles from "./Portal.module.scss";
-import { useOnClickOutside } from "index.export";
+import { useOnClickOutside, handledClickOutsideEvents } from "index.export";
 
 const portalRegistry = new Map<string, number>();
 
@@ -21,6 +21,7 @@ const Portal: FC<TypePortalProps> = ({ children, className, onClickOutside }) =>
     onClickOutside: (event) => {
       const record = portalRegistry.get(id);
       if (record !== Math.max(...portalRegistry.values())) return;
+      if (event) handledClickOutsideEvents.add(event);
       onClickOutside?.(event);
     },
   });

@@ -12,7 +12,7 @@ import FlexElement, { TypeFlexElement } from "../flex-element/FlexElement";
 import styles from "./Popover.module.scss";
 import useAdaptivePosition, { Placement } from "@custom-hooks/useAdaptivePosition";
 import useKeyDown from "@custom-hooks/useKeyDown";
-import { useOnClickOutside } from "@custom-hooks/useOnClickOutside";
+import { useOnClickOutside, handledClickOutsideEvents } from "@custom-hooks/useOnClickOutside";
 import Portal from "../portal/Portal";
 import Backdrop from "@atoms/backdrop/Backdrop";
 
@@ -113,6 +113,10 @@ const Popover: FC<TypePopover> = ({
         return;
       }
 
+      if (event && handledClickOutsideEvents.has(event)) {
+        return;
+      }
+
       const target = event.target as Node;
       const allPopoverContents = document.querySelectorAll("[data-popover-content]");
 
@@ -121,15 +125,6 @@ const Popover: FC<TypePopover> = ({
       );
 
       if (clickedInsideOtherPopover) {
-        return;
-      }
-
-      const selectDropdowns = document.querySelectorAll("[data-select-dropdown]");
-      const clickedInsideSelectDropdown = Array.from(selectDropdowns).some((dropdown) => {
-        return dropdown.contains(target);
-      });
-
-      if (clickedInsideSelectDropdown) {
         return;
       }
 
