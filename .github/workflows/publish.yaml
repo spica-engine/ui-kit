@@ -4,8 +4,6 @@ on:
   push:
     tags:
       - "v*"
-  repository_dispatch:
-    types: [publish-release]
 
 jobs:
   publish:
@@ -28,11 +26,7 @@ jobs:
       - name: Get latest tag
         run: |
           git fetch --tags
-          if [ "${{ github.event_name }}" = "repository_dispatch" ]; then
-            latest_tag="${{ github.event.client_payload.tag }}"
-          else
-            latest_tag=$(git describe --tags `git rev-list --tags --max-count=1`)
-          fi
+          latest_tag=$(git describe --tags `git rev-list --tags --max-count=1`)
           echo "Latest tag: $latest_tag"
           echo "LATEST_TAG=$latest_tag" >> $GITHUB_ENV
 
