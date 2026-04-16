@@ -190,7 +190,7 @@ const Select: FC<TypeSelect & TypeFluidContainer> = ({
             if (disableClick) return;
             setIsOpen(false);
           }}
-          additionalRefs={[containerRef]}
+          additionalRefs={[containerRef, dropdownRef]}
         >
           <FlexElement
             ref={dropdownRef}

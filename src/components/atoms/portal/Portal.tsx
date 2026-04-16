@@ -19,7 +19,7 @@ const Portal: FC<TypePortalProps> = ({
   const portalElRef = useRef<HTMLDivElement | null>(null);
 
   useLayer(
-    [portalElRef, ...additionalRefs],
+    additionalRefs,
     onClickOutside as ((event: MouseEvent) => void) | undefined,
     !!onClickOutside
   );
