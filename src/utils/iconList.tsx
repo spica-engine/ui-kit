@@ -84,6 +84,7 @@ import PersonIcon from "@mui/icons-material/Person";
 import AccountTreeIcon from "@mui/icons-material/AccountTree";
 import NotesIcon from "@mui/icons-material/Notes";
 import DataUsageOutlinedIcon from "@mui/icons-material/DataUsageOutlined";
+import LogoutIcon from "@mui/icons-material/Logout";
 
 export type IconName =
   | "article"
@@ -173,7 +174,8 @@ export type IconName =
   | "person"
   | "accountTree"
   | "notes"
-  | "quota";
+  | "quota"
+  | "logout";
 
 export type IconSize = "xs" | "sm" | "md" | "lg" | number;
 
@@ -265,4 +267,5 @@ export const iconMap: {
   accountTree: AccountTreeIcon,
   notes: NotesIcon,
   quota: DataUsageOutlinedIcon,
+  logout: LogoutIcon,
 };
