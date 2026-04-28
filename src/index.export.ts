@@ -185,8 +185,16 @@ export { type TypeSectionComponent } from "./components/organisms/section/Sectio
 //Table exports
 export { type TableColumn } from "./components/organisms/table/Table";
 export { type TableColumnRenderCellParams } from "./components/organisms/table/Table";
+export { type TableCellParams } from "./components/organisms/table/Table";
 export { type TableSaveToLocalStorage } from "./components/organisms/table/Table";
 export { type TableCellKeyDownParams } from "./components/organisms/table/Table";
+export { type TableRowClickParams } from "./components/organisms/table/Table";
+export { type TableSkeletonCellParams } from "./components/organisms/table/Table";
+export { type TableProps } from "./components/organisms/table/Table";
+export { type TableColumnContainerProps } from "./components/organisms/table/Table";
+export { type TableHeaderCellProps } from "./components/organisms/table/Table";
+export { type TableCellProps } from "./components/organisms/table/Table";
+// Deprecated — use the Table-prefixed names above
 export { type TypeTable } from "./components/organisms/table/Table";
 export { type TypeColumn } from "./components/organisms/table/Table";
 export { type TypeColumnComponent } from "./components/organisms/table/Table";
