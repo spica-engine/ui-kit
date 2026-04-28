@@ -1,8 +1,10 @@
 .modalContainer {
-  position: absolute;
+  position: fixed;
+  inset: 0;
   width: 100% !important;
   height: 100% !important;
-  top: 0;
+  padding: 24px;
+  box-sizing: border-box;
 }
 
 .modalContent {
