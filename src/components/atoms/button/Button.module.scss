@@ -8,7 +8,7 @@
   background: none;
   transition: all var(--transition-base) ease-in-out;
   padding: var(--spacing-9);
-  font-size: var(--font-size-base-plus) ;
+  font-size: var(--font-size-base-plus);
   font-family: var(--font-sans);
 
   &:disabled {
@@ -74,7 +74,7 @@
   &.sChip {
     @include button-shape(5px);
     padding: 4px 9px;
-    font-size: var(--font-size-base-plus);
+    font-size: 12px;
     font-weight: 500;
 
     &.vOutlined.cPrimary {
