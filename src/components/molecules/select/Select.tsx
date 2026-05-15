@@ -1,4 +1,4 @@
-import React, {
+import {
   FC,
   KeyboardEvent,
   memo,
@@ -306,16 +306,16 @@ const Select: FC<TypeSelect & TypeFluidContainer> = ({
 
         {groups
           ? groups.map((group, gi) => {
-            const groupItems = renderOptions(group.items, width);
-            if (!groupItems) return null;
-            return (
-              <div key={gi}>
-                {gi > 0 && <div className={styles.groupDivider} />}
-                <div className={styles.groupLabel}>{group.label}</div>
-                {groupItems}
-              </div>
-            );
-          })
+              const groupItems = renderOptions(group.items, width);
+              if (!groupItems) return null;
+              return (
+                <div key={gi}>
+                  {gi > 0 && <div className={styles.groupDivider} />}
+                  <div className={styles.groupLabel}>{group.label}</div>
+                  {groupItems}
+                </div>
+              );
+            })
           : renderOptions(allOptions, width)}
       </div>
     );
@@ -347,21 +347,12 @@ const Select: FC<TypeSelect & TypeFluidContainer> = ({
 
   if (multiple) {
     const tags = Array.isArray(selectedOption) ? (selectedOption as (string | number)[]) : [];
-    const dimensionXStyle: React.CSSProperties =
-      props.dimensionX === "fill"
-        ? { width: "100%" }
-        : props.dimensionX === "hug"
-          ? { width: "max-content" }
-          : typeof props.dimensionX === "number"
-            ? { width: `${props.dimensionX}px` }
-            : {};
 
     return (
       <>
         <div
           ref={containerRef as RefObject<HTMLDivElement>}
           onClick={handleOnClick}
-          style={dimensionXStyle}
           className={`${props.className ?? ""} ${styles.multiTrigger} ${isOpen ? styles.open : ""} ${disabled ? styles.disabled : ""}`}
         >
           {tags.map((v) => (
@@ -440,11 +431,11 @@ const Select: FC<TypeSelect & TypeFluidContainer> = ({
         prefix={
           prefixIcon
             ? {
-              children: <Icon name={prefixIcon} />,
-              className: styles.prefixSlot,
-              alignment: "center",
-              dimensionX: "hug",
-            }
+                children: <Icon name={prefixIcon} />,
+                className: styles.prefixSlot,
+                alignment: "center",
+                dimensionX: "hug",
+              }
             : props.prefix
         }
         root={{

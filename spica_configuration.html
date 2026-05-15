@@ -1,0 +1,538 @@
+<!DOCTYPE html>
+<html lang="tr">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Spica — Configuration</title>
+<link href="https://fonts.googleapis.com/css2?family=DM+Sans:opsz,wght@9..40,300;9..40,400;9..40,500;9..40,600;9..40,700&family=JetBrains+Mono:wght@400;500&display=swap" rel="stylesheet">
+<style>
+:root {
+  --bg:             #f0f0f0;
+  --surface:        #ffffff;
+  --surface2:       #f7f7f7;
+  --surface3:       #eeeeee;
+  --border:         #e4e4e4;
+  --border-mid:     #d8d8d8;
+  --accent:         #1a2448;
+  --accent-hover:   #253060;
+  --accent-subtle:  rgba(26,36,72,0.07);
+  --accent-subtle2: rgba(26,36,72,0.13);
+  --text-primary:   #111827;
+  --text-secondary: #4b5563;
+  --text-muted:     #9ca3af;
+  --text-faint:     #c5cad4;
+  --green:          #10b981;
+  --green-bg:       rgba(16,185,129,0.1);
+  --amber:          #f59e0b;
+  --red:            #ef4444;
+  --blue:           #3b82f6;
+}
+[data-theme="dark"] {
+  --bg:             #0d1017;
+  --surface:        #13181f;
+  --surface2:       #191f28;
+  --surface3:       #202735;
+  --border:         #252e3e;
+  --border-mid:     #2f3b52;
+  --accent:         #4f6ef7;
+  --accent-hover:   #6b84ff;
+  --accent-subtle:  rgba(79,110,247,0.10);
+  --accent-subtle2: rgba(79,110,247,0.18);
+  --text-primary:   #e4e8f2;
+  --text-secondary: #8b96b5;
+  --text-muted:     #4e5e7a;
+  --text-faint:     #2e3a50;
+  --green:          #34d399;
+  --green-bg:       rgba(52,211,153,0.10);
+  --amber:          #fbbf24;
+  --red:            #f87171;
+  --blue:           #60a5fa;
+}
+
+*, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+body {
+  font-family: 'DM Sans', sans-serif;
+  background: var(--bg);
+  color: var(--text-primary);
+  display: flex;
+  height: 100vh;
+  overflow: hidden;
+  font-size: 13px;
+  -webkit-font-smoothing: antialiased;
+}
+
+/* ── Rail ── */
+.rail {
+  width: 44px;
+  background: var(--surface);
+  border-right: 1px solid var(--border);
+  display: flex; flex-direction: column; align-items: center;
+  padding: 10px 0 8px; gap: 2px; flex-shrink: 0;
+}
+.rail-logo {
+  width: 28px; height: 28px; border-radius: 7px;
+  background: var(--accent);
+  display: flex; align-items: center; justify-content: center;
+  font-size: 11px; font-weight: 700; color: #fff;
+  margin-bottom: 10px; letter-spacing: -.5px; flex-shrink: 0;
+}
+.rail-btn {
+  width: 32px; height: 32px; border-radius: 7px;
+  display: flex; align-items: center; justify-content: center;
+  cursor: pointer; color: var(--text-muted);
+  transition: background .12s, color .12s;
+}
+.rail-btn:hover  { background: var(--surface2); color: var(--text-secondary); }
+.rail-btn.active { background: var(--accent-subtle); color: var(--accent); }
+.rail-sep { width: 20px; height: 1px; background: var(--border); margin: 3px 0; }
+.rail-bottom {
+  margin-top: auto;
+  display: flex; flex-direction: column; align-items: center; gap: 2px;
+}
+.theme-toggle {
+  width: 32px; height: 32px; border-radius: 7px;
+  display: flex; align-items: center; justify-content: center;
+  cursor: pointer; background: transparent; border: none;
+  color: var(--text-muted); transition: background .12s, color .12s;
+}
+.theme-toggle:hover { background: var(--surface2); color: var(--text-secondary); }
+.sun-i { display: none; }
+[data-theme="dark"] .sun-i  { display: flex; }
+[data-theme="dark"] .moon-i { display: none; }
+
+/* ── Sidebar ── */
+.sidebar {
+  width: 220px;
+  background: var(--surface);
+  border-right: 1px solid var(--border);
+  display: flex; flex-direction: column;
+  overflow: hidden; flex-shrink: 0;
+}
+.sidebar-head {
+  padding: 14px 14px 10px;
+  border-bottom: 1px solid var(--border);
+}
+.sidebar-head-title {
+  font-size: 14px; font-weight: 600;
+  color: var(--text-primary); letter-spacing: -.2px;
+}
+.sidebar-body {
+  flex: 1; overflow-y: auto; padding: 8px 8px 16px;
+}
+.sidebar-body::-webkit-scrollbar { width: 3px; }
+.sidebar-body::-webkit-scrollbar-thumb { background: var(--border); border-radius: 2px; }
+
+.nav-row {
+  display: flex; align-items: center; gap: 8px;
+  padding: 7px 10px; border-radius: 7px;
+  cursor: pointer; color: var(--text-secondary);
+  font-size: 12.5px; font-weight: 500;
+  transition: background .1s, color .1s; user-select: none;
+  margin-bottom: 1px;
+}
+.nav-row:hover  { background: var(--surface2); color: var(--text-primary); }
+.nav-row.active { background: var(--accent-subtle); color: var(--accent); }
+.nav-row-icon   { flex-shrink: 0; color: var(--text-muted); }
+.nav-row.active .nav-row-icon { color: var(--accent); }
+
+/* ── Main ── */
+.main-wrapper { flex: 1; display: flex; overflow: hidden; min-width: 0; }
+.main { flex: 1; display: flex; flex-direction: column; overflow: hidden; min-width: 0; }
+
+/* ── Topbar ── */
+.topbar {
+  height: 48px;
+  display: flex; align-items: center; gap: 8px;
+  padding: 0 20px; border-bottom: 1px solid var(--border);
+  background: var(--surface); flex-shrink: 0;
+}
+.jwt-chip {
+  display: flex; align-items: center; gap: 5px;
+  background: var(--surface2); border: 1px solid var(--border);
+  border-radius: 6px; padding: 4px 9px;
+  font-family: 'JetBrains Mono', monospace; font-size: 10px; color: var(--text-secondary);
+  cursor: pointer; transition: border-color .15s; max-width: 240px;
+}
+.jwt-chip:hover { border-color: var(--accent); }
+.jwt-label { font-weight: 600; color: var(--amber); }
+.jwt-val { overflow: hidden; text-overflow: ellipsis; white-space: nowrap; max-width: 150px; }
+.topbar-right { margin-left: auto; display: flex; align-items: center; gap: 8px; }
+.avatar {
+  width: 28px; height: 28px; border-radius: 50%;
+  background: var(--accent); color: #fff;
+  display: flex; align-items: center; justify-content: center;
+  font-size: 11px; font-weight: 700; cursor: pointer;
+}
+
+/* ── Content ── */
+.content {
+  flex: 1; overflow-y: auto; padding: 28px 32px 60px;
+}
+.content::-webkit-scrollbar { width: 4px; }
+.content::-webkit-scrollbar-thumb { background: var(--border); border-radius: 2px; }
+
+/* ── Page header ── */
+.page-section-label {
+  font-size: 10px; font-weight: 700; letter-spacing: .12em;
+  text-transform: uppercase; color: var(--text-muted);
+  padding-bottom: 12px; margin-bottom: 24px;
+  border-bottom: 1px solid var(--border);
+}
+
+/* ── Config block ── */
+.config-block {
+  background: var(--surface);
+  border: 1px solid var(--border);
+  border-radius: 12px;
+  overflow: hidden;
+  margin-bottom: 20px;
+}
+.config-block-head {
+  padding: 16px 20px 12px;
+  border-bottom: 1px solid var(--border);
+}
+.config-block-title {
+  font-size: 13.5px; font-weight: 600;
+  color: var(--text-primary); margin-bottom: 3px;
+  letter-spacing: -.1px;
+}
+.config-block-desc {
+  font-size: 12px; color: var(--text-muted); line-height: 1.5;
+}
+
+/* ── Setting row ── */
+.setting-row {
+  display: flex; align-items: center; justify-content: space-between;
+  padding: 14px 20px; gap: 20px;
+  border-bottom: 1px solid var(--border);
+  transition: background .08s;
+}
+.setting-row:last-child { border-bottom: none; }
+.setting-row:hover { background: var(--surface2); }
+.setting-info { flex: 1; min-width: 0; }
+.setting-label {
+  font-size: 13px; font-weight: 500; color: var(--text-primary);
+  margin-bottom: 3px;
+}
+.setting-desc {
+  font-size: 11.5px; color: var(--text-muted); line-height: 1.5;
+}
+
+/* ── Toggle switch ── */
+.toggle-wrap {
+  flex-shrink: 0; cursor: pointer;
+  display: flex; align-items: center;
+}
+.toggle-sw {
+  width: 40px; height: 22px; border-radius: 11px;
+  background: var(--surface3); border: 1.5px solid var(--border);
+  position: relative; transition: background .2s, border-color .2s;
+  cursor: pointer;
+}
+.toggle-sw.on {
+  background: var(--accent); border-color: var(--accent);
+}
+.toggle-sw::after {
+  content: '';
+  position: absolute;
+  width: 16px; height: 16px; border-radius: 50%;
+  background: var(--text-faint);
+  top: 1px; left: 1px;
+  transition: transform .2s, background .2s;
+  box-shadow: 0 1px 3px rgba(0,0,0,.15);
+}
+.toggle-sw.on::after {
+  transform: translateX(18px);
+  background: #fff;
+}
+
+/* ── Actions row ── */
+.actions-row {
+  display: flex; justify-content: flex-end;
+  margin-top: 8px;
+}
+.btn-save {
+  display: inline-flex; align-items: center; gap: 7px;
+  padding: 9px 20px; border-radius: 8px; border: none;
+  background: var(--accent); color: #fff;
+  font-family: 'DM Sans', sans-serif; font-size: 13px; font-weight: 600;
+  cursor: pointer; transition: background .12s, transform .1s;
+  position: relative; overflow: hidden;
+}
+.btn-save::before {
+  content: ''; position: absolute; inset: 0;
+  background: linear-gradient(180deg, rgba(255,255,255,.07) 0%, transparent 100%);
+  pointer-events: none;
+}
+.btn-save:hover { background: var(--accent-hover); transform: translateY(-1px); }
+.btn-save:active { transform: translateY(0); }
+.btn-save.saved { background: var(--green); }
+
+/* ── Unsaved indicator ── */
+.unsaved-badge {
+  display: none; align-items: center; gap: 5px;
+  font-size: 11.5px; color: var(--amber); font-weight: 500;
+  margin-right: 12px;
+}
+.unsaved-badge.show { display: flex; }
+.unsaved-dot { width: 6px; height: 6px; border-radius: 50%; background: var(--amber); }
+</style>
+</head>
+<body>
+
+<!-- ═══ RAIL ═══ -->
+<div class="rail">
+  <div class="rail-logo">S</div>
+
+  <div class="rail-btn" title="Bucket">
+    <svg width="15" height="15" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="1.8">
+      <ellipse cx="12" cy="5" rx="9" ry="3"/>
+      <path d="M3 5v14c0 1.66 4.03 3 9 3s9-1.34 9-3V5"/>
+      <path d="M3 12c0 1.66 4.03 3 9 3s9-1.34 9-3"/>
+    </svg>
+  </div>
+  <div class="rail-btn" title="Dashboard">
+    <svg width="15" height="15" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="1.8">
+      <rect x="3" y="3" width="7" height="7" rx="1"/><rect x="14" y="3" width="7" height="7" rx="1"/>
+      <rect x="3" y="14" width="7" height="7" rx="1"/><rect x="14" y="14" width="7" height="7" rx="1"/>
+    </svg>
+  </div>
+  <div class="rail-btn" title="Functions">
+    <svg width="15" height="15" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="1.8">
+      <polyline points="16 18 22 12 16 6"/><polyline points="8 6 2 12 8 18"/>
+    </svg>
+  </div>
+  <div class="rail-btn" title="IAM">
+    <svg width="15" height="15" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="1.8">
+      <path d="M17 21v-2a4 4 0 0 0-4-4H5a4 4 0 0 0-4 4v2"/>
+      <circle cx="9" cy="7" r="4"/>
+      <path d="M23 21v-2a4 4 0 0 0-3-3.87m-4-12a4 4 0 0 1 0 7.75"/>
+    </svg>
+  </div>
+  <div class="rail-btn" title="Extensions">
+    <svg width="15" height="15" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="1.8">
+      <path d="M20.24 12.24a6 6 0 0 0-8.49-8.49L5 10.5V19h8.5z"/>
+      <line x1="16" y1="8" x2="2" y2="22"/><line x1="17.5" y1="15" x2="9" y2="15"/>
+    </svg>
+  </div>
+  <div class="rail-btn" title="Storage">
+    <svg width="15" height="15" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="1.8">
+      <polyline points="22 12 16 12 14 15 10 15 8 12 2 12"/>
+      <path d="M5.45 5.11L2 12v6a2 2 0 0 0 2 2h16a2 2 0 0 0 2-2v-6l-3.45-6.89A2 2 0 0 0 16.76 4H7.24a2 2 0 0 0-1.79 1.11z"/>
+    </svg>
+  </div>
+  <div class="rail-sep"></div>
+  <div class="rail-btn active" title="Settings">
+    <svg width="15" height="15" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="1.8">
+      <circle cx="12" cy="12" r="3"/>
+      <path d="M19.4 15a1.65 1.65 0 0 0 .33 1.82l.06.06a2 2 0 0 1-2.83 2.83l-.06-.06a1.65 1.65 0 0 0-1.82-.33 1.65 1.65 0 0 0-1 1.51V21a2 2 0 0 1-4 0v-.09A1.65 1.65 0 0 0 9 19.4a1.65 1.65 0 0 0-1.82.33l-.06.06a2 2 0 0 1-2.83-2.83l.06-.06A1.65 1.65 0 0 0 4.68 15a1.65 1.65 0 0 0-1.51-1H3a2 2 0 0 1 0-4h.09A1.65 1.65 0 0 0 4.6 9a1.65 1.65 0 0 0-.33-1.82l-.06-.06a2 2 0 0 1 2.83-2.83l.06.06A1.65 1.65 0 0 0 9 4.68a1.65 1.65 0 0 0 1-1.51V3a2 2 0 0 1 4 0v.09a1.65 1.65 0 0 0 1 1.51 1.65 1.65 0 0 0 1.82-.33l.06-.06a2 2 0 0 1 2.83 2.83l-.06.06A1.65 1.65 0 0 0 19.4 9a1.65 1.65 0 0 0 1.51 1H21a2 2 0 0 1 0 4h-.09a1.65 1.65 0 0 0-1.51 1z"/>
+    </svg>
+  </div>
+  <div class="rail-btn" title="Environment">
+    <svg width="15" height="15" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="1.8">
+      <circle cx="12" cy="12" r="10"/>
+      <line x1="2" y1="12" x2="22" y2="12"/>
+      <path d="M12 2a15.3 15.3 0 0 1 4 10 15.3 15.3 0 0 1-4 10 15.3 15.3 0 0 1-4-10 15.3 15.3 0 0 1 4-10z"/>
+    </svg>
+  </div>
+
+  <div class="rail-bottom">
+    <button class="theme-toggle" onclick="toggleTheme()">
+      <svg class="moon-i" width="14" height="14" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2">
+        <path d="M21 12.79A9 9 0 1 1 11.21 3 7 7 0 0 0 21 12.79z"/>
+      </svg>
+      <svg class="sun-i" width="14" height="14" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2">
+        <circle cx="12" cy="12" r="5"/>
+        <line x1="12" y1="1" x2="12" y2="3"/><line x1="12" y1="21" x2="12" y2="23"/>
+        <line x1="4.22" y1="4.22" x2="5.64" y2="5.64"/><line x1="18.36" y1="18.36" x2="19.78" y2="19.78"/>
+        <line x1="1" y1="12" x2="3" y2="12"/><line x1="21" y1="12" x2="23" y2="12"/>
+        <line x1="4.22" y1="19.78" x2="5.64" y2="18.36"/><line x1="18.36" y1="5.64" x2="19.78" y2="4.22"/>
+      </svg>
+    </button>
+    <div class="rail-btn" title="Git">
+      <svg width="15" height="15" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="1.8">
+        <circle cx="18" cy="18" r="3"/><circle cx="6" cy="6" r="3"/><circle cx="6" cy="18" r="3"/>
+        <line x1="6" y1="9" x2="6" y2="15"/><path d="M18 15V9a3 3 0 0 0-3-3H9"/>
+      </svg>
+    </div>
+  </div>
+</div>
+
+<!-- ═══ SIDEBAR ═══ -->
+<div class="sidebar">
+  <div class="sidebar-head">
+    <div class="sidebar-head-title">Configuration</div>
+  </div>
+  <div class="sidebar-body">
+
+    <div class="nav-row active" onclick="setActive(this)">
+      <svg class="nav-row-icon" width="14" height="14" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2">
+        <circle cx="18" cy="18" r="3"/><circle cx="6" cy="6" r="3"/><circle cx="6" cy="18" r="3"/>
+        <line x1="6" y1="9" x2="6" y2="15"/><path d="M18 15V9a3 3 0 0 0-3-3H9"/>
+      </svg>
+      Versioncontrol
+    </div>
+
+    <div class="nav-row" onclick="setActive(this)">
+      <svg class="nav-row-icon" width="14" height="14" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2">
+        <path d="M20 21v-2a4 4 0 0 0-4-4H8a4 4 0 0 0-4 4v2"/>
+        <circle cx="12" cy="7" r="4"/>
+      </svg>
+      User
+    </div>
+
+    <div class="nav-row" onclick="setActive(this)">
+      <svg class="nav-row-icon" width="14" height="14" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2">
+        <rect x="3" y="11" width="18" height="11" rx="2"/>
+        <path d="M7 11V7a5 5 0 0 1 10 0v4"/>
+      </svg>
+      Identity
+    </div>
+
+  </div>
+</div>
+
+<!-- ═══ MAIN ═══ -->
+<div class="main-wrapper">
+  <div class="main">
+
+    <!-- Topbar -->
+    <div class="topbar">
+      <div class="jwt-chip" title="Copy JWT">
+        <span class="jwt-label">JWT:</span>
+        <span class="jwt-val">eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9…</span>
+        <svg width="11" height="11" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2">
+          <rect x="9" y="9" width="13" height="13" rx="2"/>
+          <path d="M5 15H4a2 2 0 0 1-2-2V4a2 2 0 0 1 2-2h9a2 2 0 0 1 2 2v1"/>
+        </svg>
+      </div>
+      <div class="topbar-right">
+        <div class="avatar">S</div>
+      </div>
+    </div>
+
+    <!-- Content -->
+    <div class="content">
+
+      <div class="page-section-label">Versioncontrol Configuration</div>
+
+      <!-- Config block: Auto-Approving -->
+      <div class="config-block">
+        <div class="config-block-head">
+          <div class="config-block-title">Configuration For Auto-Approving Sync Operations</div>
+          <div class="config-block-desc">Control which resource types are automatically approved when synced.</div>
+        </div>
+
+        <!-- Document -->
+        <div class="setting-row">
+          <div class="setting-info">
+            <div class="setting-label">Document</div>
+            <div class="setting-desc">Whether to auto-approve document changes.</div>
+          </div>
+          <div class="toggle-wrap" onclick="toggle(this)">
+            <div class="toggle-sw on"></div>
+          </div>
+        </div>
+
+        <!-- Representative -->
+        <div class="setting-row">
+          <div class="setting-info">
+            <div class="setting-label">Representative</div>
+            <div class="setting-desc">Whether to auto-approve representative changes.</div>
+          </div>
+          <div class="toggle-wrap" onclick="toggle(this)">
+            <div class="toggle-sw on"></div>
+          </div>
+        </div>
+
+        <!-- Schedule -->
+        <div class="setting-row">
+          <div class="setting-info">
+            <div class="setting-label">Schedule</div>
+            <div class="setting-desc">Whether to auto-approve scheduled task changes.</div>
+          </div>
+          <div class="toggle-wrap" onclick="toggle(this)">
+            <div class="toggle-sw"></div>
+          </div>
+        </div>
+
+        <!-- Preference -->
+        <div class="setting-row">
+          <div class="setting-info">
+            <div class="setting-label">Preference</div>
+            <div class="setting-desc">Whether to auto-approve preference changes.</div>
+          </div>
+          <div class="toggle-wrap" onclick="toggle(this)">
+            <div class="toggle-sw"></div>
+          </div>
+        </div>
+
+      </div>
+
+      <!-- Actions -->
+      <div class="actions-row">
+        <div class="unsaved-badge" id="unsaved-badge">
+          <div class="unsaved-dot"></div>
+          Kaydedilmemiş değişiklikler
+        </div>
+        <button class="btn-save" id="btn-save" onclick="saveChanges()">
+          <svg width="13" height="13" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2.2">
+            <path d="M19 21H5a2 2 0 0 1-2-2V5a2 2 0 0 1 2-2h11l5 5v11a2 2 0 0 1-2 2z"/>
+            <polyline points="17 21 17 13 7 13 7 21"/>
+            <polyline points="7 3 7 8 15 8"/>
+          </svg>
+          Save changes
+        </button>
+      </div>
+
+    </div>
+  </div>
+</div>
+
+<script>
+/* Nav active */
+function setActive(el) {
+  document.querySelectorAll('.nav-row').forEach(r => r.classList.remove('active'));
+  el.classList.add('active');
+}
+
+/* Toggle switch */
+function toggle(wrap) {
+  const sw = wrap.querySelector('.toggle-sw');
+  sw.classList.toggle('on');
+  document.getElementById('unsaved-badge').classList.add('show');
+}
+
+/* Save */
+function saveChanges() {
+  const btn = document.getElementById('btn-save');
+  btn.classList.add('saved');
+  btn.innerHTML = `
+    <svg width="13" height="13" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2.5">
+      <polyline points="20 6 9 17 4 12"/>
+    </svg>
+    Saved`;
+  document.getElementById('unsaved-badge').classList.remove('show');
+  setTimeout(() => {
+    btn.classList.remove('saved');
+    btn.innerHTML = `
+      <svg width="13" height="13" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2.2">
+        <path d="M19 21H5a2 2 0 0 1-2-2V5a2 2 0 0 1 2-2h11l5 5v11a2 2 0 0 1-2 2z"/>
+        <polyline points="17 21 17 13 7 13 7 21"/>
+        <polyline points="7 3 7 8 15 8"/>
+      </svg>
+      Save changes`;
+  }, 2000);
+}
+
+/* Theme */
+function toggleTheme() {
+  const dark = document.documentElement.getAttribute('data-theme') === 'dark';
+  document.documentElement.setAttribute('data-theme', dark ? '' : 'dark');
+  localStorage.setItem('spica-theme', dark ? 'light' : 'dark');
+}
+if (localStorage.getItem('spica-theme') === 'dark')
+  document.documentElement.setAttribute('data-theme', 'dark');
+</script>
+</body>
+</html>
