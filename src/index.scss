@@ -1,123 +1,403 @@
 @use "styles/shared/global.scss";
 
+// ── Spica design tokens ───────────────────────────────────────────────────
+// Inline the token definitions so they are bundled with the component styles.
+// The standalone reference file lives at src/styles/tokens.css.
+
 :root {
-  --oziko-font-size-base: 16px;
-  --oziko-font-size-xs: 0.625rem; /* 10px */
-  --oziko-font-size-sm: 0.75rem; /* 12px */
-  --oziko-font-size-md: 0.875rem; /* 14px */
-  --oziko-font-size-lg: 1rem; /* 16px */
-  --oziko-font-size-xl: 1.125rem; /* 18px */
+  /* ── Colors ──────────────────────────────────────────────────────────── */
+  --color-bg:               #f0f0f0;
+  --color-surface:          #ffffff;
+  --color-surface-2:        #f7f7f7;
+  --color-surface-3:        #eeeeee;
+  --color-border:           #e4e4e4;
+  --color-border-mid:       #d8d8d8;
 
-  --oziko-font-family-base: "Inter", -apple-system, BlinkMacSystemFont, "Segoe UI", "Roboto",
-    "Oxygen", "Ubuntu", "Cantarell", "Fira Sans", "Droid Sans", "Helvetica Neue", sans-serif;
+  --color-accent:           #1a2448;
+  --color-accent-hover:     #253060;
+  --color-accent-dark:      #111833;
+  --color-accent-subtle:    rgba(26, 36, 72, 0.07);
+  --color-accent-subtle-2:  rgba(26, 36, 72, 0.13);
 
-  --oziko-color-primary: #1c1c50;
-  --oziko-color-primary-rgb: 28, 28, 80;
-  --oziko-color-primary-light: #36369c;
-  --oziko-color-primary-light-rgb: 54, 54, 156;
-  --oziko-color-primary-dark: #020204;
-  --oziko-color-primary-dark-rgb: 2, 2, 4;
+  --color-text-primary:     #111827;
+  --color-text-secondary:   #4b5563;
+  --color-text-muted:       #9ca3af;
+  --color-text-faint:       #c5cad4;
 
-  --oziko-color-danger: #f41212;
-  --oziko-color-danger-rgb: 244, 18, 18;
-  --oziko-color-danger-light: #f97373;
-  --oziko-color-danger-light-rgb: 249, 115, 115;
-  --oziko-color-danger-dark: #990707;
-  --oziko-color-danger-dark-rgb: 153, 7, 7;
+  --color-green:            #10b981;
+  --color-green-light:      #6ee7b7;
+  --color-green-bg:         rgba(16, 185, 129, 0.1);
+  --color-amber:            #f59e0b;
+  --color-red:              #ef4444;
+  --color-red-light:        #fca5a5;
+  --color-blue:             #3b82f6;
+  --color-blue-bg:          rgba(59, 130, 246, 0.1);
 
-  --oziko-color-success: #21f412;
-  --oziko-color-success-rgb: 33, 244, 18;
-  --oziko-color-success-light: #7cf973;
-  --oziko-color-success-light-rgb: 124, 249, 115;
-  --oziko-color-success-dark: #119907;
-  --oziko-color-success-dark-rgb: 17, 153, 7;
+  /* ── Semantic aliases ────────────────────────────────────────────────── */
+  --color-on-accent:        #ffffff;
+  --color-overlay:          rgba(0, 0, 0, 0.65);
+  --color-info:             var(--color-blue);
+  --color-success:          var(--color-green);
+  --color-error:            var(--color-red);
+  --color-warning:          var(--color-amber);
 
-  --oziko-color-soft: #f2f2f2;
-  --oziko-color-soft-rgb: 242, 242, 242;
-  --oziko-color-soft-light: #ffffff;
-  --oziko-color-soft-light-rgb: 255, 255, 255;
-  --oziko-color-soft-dark: #c2c2c2;
-  --oziko-color-soft-dark-rgb: 194, 194, 194;
+  /* ── RGB variants (for rgba() blending) ─────────────────────────────── */
+  --color-accent-rgb:         26, 36, 72;
+  --color-accent-hover-rgb:   37, 48, 96;
+  --color-accent-dark-rgb:    17, 24, 51;
+  --color-red-rgb:            239, 68, 68;
+  --color-red-light-rgb:      252, 165, 165;
+  --color-green-rgb:          16, 185, 129;
+  --color-green-light-rgb:    110, 231, 183;
+  --color-surface-rgb:        255, 255, 255;
+  --color-surface-2-rgb:      247, 247, 247;
+  --color-surface-3-rgb:      238, 238, 238;
+  --color-border-rgb:         228, 228, 228;
+  --color-border-mid-rgb:     216, 216, 216;
+  --color-text-primary-rgb:   17, 24, 39;
+  --color-text-muted-rgb:     156, 163, 175;
+  --color-bg-rgb:             240, 240, 240;
+  --color-on-accent-rgb:      255, 255, 255;
 
-  --oziko-color-default: #ffffff;
-  --oziko-color-default-rgb: 255, 255, 255;
+  /* ── Typography ──────────────────────────────────────────────────────── */
+  --font-sans:              'DM Sans',  sans-serif;
+  --font-mono:              'JetBrains Mono', 'Courier New', monospace;
 
-  --oziko-color-transparent: transparent;
+  --font-size-2xs:          9px;
+  --font-size-xs:           10px;
+  --font-size-sm:           11px;
+  --font-size-sm-plus:      11.5px;
+  --font-size-base:         12px;
+  --font-size-base-plus:    12.5px;
+  --font-size-md:           13px;
+  --font-size-lg:           14px;
+  --font-size-xl:           20px;
+  --font-size-2xl:          22px;
 
-  --oziko-color-input-background: #fafafa;
-  --oziko-color-input-background-rgb: 250, 250, 250;
-  --oziko-color-input-placeholder: #9b9b9b;
-  --oziko-color-input-placeholder-rgb: 155, 155, 155;
+  --font-weight-light:      300;
+  --font-weight-regular:    400;
+  --font-weight-medium:     500;
+  --font-weight-semibold:   600;
+  --font-weight-bold:       700;
 
-  --oziko-color-font-primary: #525252;
-  --oziko-color-font-primary-rgb: 82, 82, 82;
-  --oziko-color-font-secondary: #ffffff;
-  --oziko-color-font-secondary-rgb: 255, 255, 255;
-  --oziko-color-border: #d4d0d0;
-  --oziko-color-border-rgb: 212, 208, 208;
-  --oziko-color-zebra: #f6f6f9;
-  --oziko-color-zebra-rgb: 246, 246, 249;
-  --oziko-color-background: #f5f5f5;
-  --oziko-color-background-rgb: 245, 245, 245;
-  --oziko-color-menu-background: #ffffff;
-  --oziko-color-menu-background-rgb: 255, 255, 255;
-  --oziko-color-box-shadow: #0000000d;
-  --oziko-color-background-secondary: #eeeeee;
+  /* ── Spacing ─────────────────────────────────────────────────────────── */
+  --spacing-1:    2px;
+  --spacing-2:    3px;
+  --spacing-3:    4px;
+  --spacing-4:    5px;
+  --spacing-5:    6px;
+  --spacing-6:    7px;
+  --spacing-7:    8px;
+  --spacing-8:    9px;
+  --spacing-9:    10px;
+  --spacing-10:   12px;
+  --spacing-11:   14px;
+  --spacing-12:   16px;
+  --spacing-13:   18px;
+  --spacing-14:   20px;
+  --spacing-15:   24px;
+  --spacing-16:   32px;
 
-  --box-shadow: 0px 0px 10px 5px var(--oziko-color-box-shadow);
+  /* ── Border Radius ───────────────────────────────────────────────────── */
+  --radius-xs:    3px;
+  --radius-sm:    4px;
+  --radius-md-sm: 5px;
+  --radius-md:    6px;
+  --radius-lg:    7px;
+  --radius-xl:    8px;
+  --radius-2xl:   10px;
+  --radius-3xl:   12px;
+  --radius-full:  9999px;
 
-  --oziko-border-radius-sm: 3px;
-  --oziko-border-radius-md: 5px;
-  --oziko-border-radius-lg: 10px;
-  --oziko-border-radius-circle: 50%;
-  --oziko-border-radius-round: 40px;
+  /* ── Layout Dimensions ───────────────────────────────────────────────── */
+  --size-sidebar-w:       232px;
+  --size-rail-w:          44px;
+  --size-topbar-h:        48px;
+  --size-row-h:           36px;
+  --size-rail-btn:        32px;
+  --size-icon-btn:        24px;
+  --size-avatar:          26px;
+  --size-logo:            28px;
+  --size-modal-w:         480px;
+  --size-settings-w:      460px;
+  --size-entry-panel-w:   380px;
+  --size-ctx-menu-min-w:  178px;
+  --size-icon-xs:         12px;
+  --size-icon-sm:         14px;
+  --size-icon-md:         16px;
+  --size-icon-lg:         20px;
 
-  --oziko-padding-xs: 2.5px;
-  --oziko-padding-sm: 5px;
-  --oziko-padding-md: 10px;
-  --oziko-padding-lg: 15px;
-  --oziko-padding-xl: 20px;
+  /* ── Shadows ─────────────────────────────────────────────────────────── */
+  --shadow-sm: 0 1px 3px rgba(0, 0, 0, 0.08);
+  --shadow-md: 0 8px 24px rgba(0, 0, 0, 0.12), 0 2px 8px rgba(0, 0, 0, 0.08);
+  --shadow-lg: 0 20px 48px rgba(0, 0, 0, 0.15);
 
-  --oziko-gap-xs: 2.5px;
-  --oziko-gap-sm: 5px;
-  --oziko-gap-md: 10px;
-  --oziko-gap-lg: 15px;
-  --oziko-gap-xl: 20px;
+  /* ── Transitions ─────────────────────────────────────────────────────── */
+  --transition-fast:      0.1s ease;
+  --transition-base:      0.12s ease;
+  --transition-border:    0.15s ease;
+  --transition-toggle:    0.18s ease;
+  --transition-panel:     0.22s cubic-bezier(0.4, 0, 0.2, 1);
+  --transition-modal-in:  0.15s ease;
+  --transition-ctx-in:    0.1s ease;
 
-  --oziko-icon-size-xs: 12px;
-  --oziko-icon-size-sm: 14px;
-  --oziko-icon-size-md: 16px;
-  --oziko-icon-size-lg: 20px;
-
-  --oziko-border-default: 1px solid #d4d0d0;
-
-  --oziko-transition-duration: 0.3s;
-  --oziko-disabled-opacity: 0.6;
+  /* ── Utility ─────────────────────────────────────────────────────────── */
+  --opacity-disabled:     0.5;
+  --border-default:       1px solid var(--color-border);
 }
 
+:root[data-theme="dark"] {
+  --color-bg:               #0d1017;
+  --color-surface:          #13181f;
+  --color-surface-2:        #191f28;
+  --color-surface-3:        #202735;
+  --color-border:           #252e3e;
+  --color-border-mid:       #2f3b52;
+
+  --color-accent:           #4f6ef7;
+  --color-accent-hover:     #6b84ff;
+  --color-accent-dark:      #3a56d4;
+  --color-accent-subtle:    rgba(79, 110, 247, 0.1);
+  --color-accent-subtle-2:  rgba(79, 110, 247, 0.18);
+
+  --color-text-primary:     #e4e8f2;
+  --color-text-secondary:   #8b96b5;
+  --color-text-muted:       #4e5e7a;
+  --color-text-faint:       #2e3a50;
+
+  --color-green:            #34d399;
+  --color-green-light:      #a7f3d0;
+  --color-green-bg:         rgba(52, 211, 153, 0.1);
+  --color-amber:            #fbbf24;
+  --color-red:              #f87171;
+  --color-red-light:        #fca5a5;
+  --color-blue:             #60a5fa;
+  --color-blue-bg:          rgba(96, 165, 250, 0.1);
+
+  /* ── RGB variants ── */
+  --color-accent-rgb:         79, 110, 247;
+  --color-accent-hover-rgb:   107, 132, 255;
+  --color-accent-dark-rgb:    58, 86, 212;
+  --color-red-rgb:            248, 113, 113;
+  --color-red-light-rgb:      252, 165, 165;
+  --color-green-rgb:          52, 211, 153;
+  --color-green-light-rgb:    167, 243, 208;
+  --color-surface-rgb:        19, 24, 31;
+  --color-surface-2-rgb:      25, 31, 40;
+  --color-surface-3-rgb:      32, 39, 53;
+  --color-border-rgb:         37, 46, 62;
+  --color-border-mid-rgb:     47, 59, 82;
+  --color-text-primary-rgb:   228, 232, 242;
+  --color-text-muted-rgb:     78, 94, 122;
+  --color-bg-rgb:             13, 16, 23;
+
+  /* ── Legacy variable aliases — dark-mode overrides for Spica panel ── */
+  /* These map the old --color-* names used throughout panel SCSS files   */
+  /* to their dark-mode equivalents. Attribute selector wins over :root.  */
+  --color-background:           #0d1017;
+  --color-background-rgb:       13, 16, 23;
+  --color-menu-background:      #13181f;
+  --color-menu-background-rgb:  19, 24, 31;
+  --color-layout-background:    #191f28;
+  --color-layout-background-rgb: 25, 31, 40;
+  --color-soft:                 #202735;
+  --color-soft-rgb:             32, 39, 53;
+  --color-soft-light:           #191f28;
+  --color-soft-light-rgb:       25, 31, 40;
+  --color-soft-dark:            #2f3b52;
+  --color-soft-dark-rgb:        47, 59, 82;
+  --color-hover:                #202735;
+  --color-hover-rgb:            32, 39, 53;
+  --color-menu-contrast:        #191f28;
+  --color-menu-contrast-rgb:    25, 31, 40;
+  --color-zebra:                #191f28;
+  --color-zebra-rgb:            25, 31, 40;
+  --color-font-primary:         #e4e8f2;
+  --color-font-primary-rgb:     228, 232, 242;
+  --color-font-secondary:       #8b96b5;
+  --color-font-secondary-rgb:   139, 150, 181;
+  --color-font-tertiary:        #4e5e7a;
+  --color-font-tertiary-rgb:    78, 94, 122;
+  --color-input-background:     #191f28;
+  --color-input-background-rgb: 25, 31, 40;
+  --color-input-placeholder:    #4e5e7a;
+  --color-input-placeholder-rgb: 78, 94, 122;
+  --color-primary:              #4f6ef7;
+  --color-primary-rgb:          79, 110, 247;
+  --color-primary-light:        #6b84ff;
+  --color-primary-light-rgb:    107, 132, 255;
+  --color-primary-dark:         #3a56d4;
+  --color-primary-dark-rgb:     58, 86, 212;
+  --color-danger:               #f87171;
+  --color-danger-rgb:           248, 113, 113;
+  --color-danger-light:         #fca5a5;
+  --color-danger-light-rgb:     252, 165, 165;
+  --color-danger-dark:          #ef4444;
+  --color-danger-dark-rgb:      239, 68, 68;
+  --color-success:              #34d399;
+  --color-success-rgb:          52, 211, 153;
+  --color-success-light:        #a7f3d0;
+  --color-success-light-rgb:    167, 243, 208;
+  --color-success-dark:         #10b981;
+  --color-success-dark-rgb:     16, 185, 129;
+  --color-icon:                 #8b96b5;
+  --color-icon-rgb:             139, 150, 181;
+  --color-box-shadow:           rgba(0, 0, 0, 0.4);
+  --box-shadow:                 0 8px 24px rgba(0, 0, 0, 0.4), 0 2px 8px rgba(0, 0, 0, 0.3);
+  --border-default:             1px solid #252e3e;
+}
+
+// ── Compatibility bridge ──────────────────────────────────────────────────
+// Maps legacy --oziko-* names to the new Spica tokens so existing component
+// SCSS continues to resolve correctly while the direct refactor is in
+// progress. Remove this block once all component SCSS modules have been
+// updated to use the new token names directly.
+
+:root {
+  /* Colors */
+  --oziko-color-primary:               var(--color-accent);
+  --oziko-color-primary-rgb:           var(--color-accent-rgb);
+  --oziko-color-primary-light:         var(--color-accent-hover);
+  --oziko-color-primary-light-rgb:     var(--color-accent-hover-rgb);
+  --oziko-color-primary-dark:          var(--color-accent-dark);
+  --oziko-color-primary-dark-rgb:      var(--color-accent-dark-rgb);
+
+  --oziko-color-danger:                var(--color-red);
+  --oziko-color-danger-rgb:            var(--color-red-rgb);
+  --oziko-color-danger-light:          var(--color-red-light);
+  --oziko-color-danger-light-rgb:      var(--color-red-light-rgb);
+  --oziko-color-danger-dark:           var(--color-red);
+  --oziko-color-danger-dark-rgb:       var(--color-red-rgb);
+
+  --oziko-color-success:               var(--color-green);
+  --oziko-color-success-rgb:           var(--color-green-rgb);
+  --oziko-color-success-light:         var(--color-green-light);
+  --oziko-color-success-light-rgb:     var(--color-green-light-rgb);
+  --oziko-color-success-dark:          var(--color-green);
+  --oziko-color-success-dark-rgb:      var(--color-green-rgb);
+
+  --oziko-color-soft:                  var(--color-surface-3);
+  --oziko-color-soft-rgb:              var(--color-surface-3-rgb);
+  --oziko-color-soft-light:            var(--color-surface);
+  --oziko-color-soft-light-rgb:        var(--color-surface-rgb);
+  --oziko-color-soft-dark:             var(--color-border-mid);
+  --oziko-color-soft-dark-rgb:         var(--color-border-mid-rgb);
+  --oziko-color-soft-hover:            var(--color-surface-2);
+
+  --oziko-color-default:               var(--color-surface);
+  --oziko-color-default-rgb:           var(--color-surface-rgb);
+  --oziko-color-transparent:           transparent;
+
+  --oziko-color-input-background:      var(--color-surface-2);
+  --oziko-color-input-background-rgb:  var(--color-surface-2-rgb);
+  --oziko-color-input-placeholder:     var(--color-text-muted);
+  --oziko-color-input-placeholder-rgb: var(--color-text-muted-rgb);
+
+  --oziko-color-font-primary:          var(--color-text-primary);
+  --oziko-color-font-primary-rgb:      var(--color-text-primary-rgb);
+  --oziko-color-font-secondary:        var(--color-on-accent);
+  --oziko-color-font-secondary-rgb:    var(--color-on-accent-rgb);
+
+  --oziko-color-border:                var(--color-border);
+  --oziko-color-border-rgb:            var(--color-border-rgb);
+
+  --oziko-color-zebra:                 var(--color-surface-2);
+  --oziko-color-zebra-rgb:             var(--color-surface-2-rgb);
+  --oziko-color-background:            var(--color-bg);
+  --oziko-color-background-rgb:        var(--color-bg-rgb);
+  --oziko-color-background-secondary:  var(--color-surface-3);
+  --oziko-color-menu-background:       var(--color-surface);
+  --oziko-color-menu-background-rgb:   var(--color-surface-rgb);
+  --oziko-color-box-shadow:            var(--color-overlay);
+
+  /* Shadows */
+  --box-shadow: var(--shadow-md);
+
+  /* Typography */
+  --oziko-font-family-base:   var(--font-sans);
+  --oziko-font-size-base:     16px; /* no direct Spica equivalent; kept for legacy rem */
+  --oziko-font-size-xs:       var(--font-size-xs);
+  --oziko-font-size-sm:       var(--font-size-base);
+  --oziko-font-size-md:       var(--font-size-lg);
+  --oziko-font-size-lg:       var(--font-size-lg); /* 14px; closest match */
+  --oziko-font-size-xl:       var(--font-size-xl);
+
+  /* Border radius */
+  --oziko-border-radius-sm:     var(--radius-sm);
+  --oziko-border-radius-md:     var(--radius-md);
+  --oziko-border-radius-lg:     var(--radius-2xl);
+  --oziko-border-radius-circle: var(--radius-full);
+  --oziko-border-radius-round:  var(--radius-full);
+
+  /* Spacing */
+  --oziko-padding-xs:  var(--spacing-2);
+  --oziko-padding-sm:  var(--spacing-4);
+  --oziko-padding-md:  var(--spacing-9);
+  --oziko-padding-lg:  var(--spacing-12);
+  --oziko-padding-xl:  var(--spacing-14);
+  --oziko-gap-xs:      var(--spacing-2);
+  --oziko-gap-sm:      var(--spacing-4);
+  --oziko-gap-md:      var(--spacing-9);
+  --oziko-gap-lg:      var(--spacing-12);
+  --oziko-gap-xl:      var(--spacing-14);
+
+  /* Icon sizes */
+  --oziko-icon-size-xs: var(--size-icon-xs);
+  --oziko-icon-size-sm: var(--size-icon-sm);
+  --oziko-icon-size-md: var(--size-icon-md);
+  --oziko-icon-size-lg: var(--size-icon-lg);
+
+  /* Misc */
+  --oziko-border-default:       var(--border-default);
+  --oziko-transition-duration:  var(--transition-base);
+  --oziko-disabled-opacity:     var(--opacity-disabled);
+}
+
+// ── Local fonts ───────────────────────────────────────────────────────────
+
 @font-face {
-  font-family: "Inter";
-  src: url("./assets/fonts/inter/Inter-VariableFont_opsz\,wght.ttf") format("ttf");
-  font-weight: 400;
+  font-family: 'DM Sans';
+  src: url('./assets/fonts/inter/DMSans-VariableFont_opsz,wght.ttf') format('truetype');
+  font-weight: 100 900;
   font-style: normal;
   font-display: swap;
 }
 
+@font-face {
+  font-family: 'DM Sans';
+  src: url('./assets/fonts/inter/DMSans-Italic-VariableFont_opsz,wght.ttf') format('truetype');
+  font-weight: 100 900;
+  font-style: italic;
+  font-display: swap;
+}
+
+// ── Global base styles ────────────────────────────────────────────────────
+
 html {
-  font-size: var(--oziko-font-size-base);
+  font-size: 16px;
 }
 
 body {
   margin: 0;
-  font-family: var(--oziko-font-family-base);
+  font-family: var(--font-sans);
   -webkit-font-smoothing: antialiased;
   -moz-osx-font-smoothing: grayscale;
+  background-color: var(--color-bg);
+  color: var(--color-text-primary);
 }
 
-code {
-  font-family: source-code-pro, Menlo, Monaco, Consolas, "Courier New", monospace;
-}
-
-* {
+// Force all elements (including MUI overrides) to inherit the body font.
+// Monospace elements opt out explicitly below.
+*,
+*::before,
+*::after {
   box-sizing: border-box;
+  font-family: inherit;
+}
+
+code,
+pre,
+kbd,
+samp {
+  font-family: var(--font-mono);
 }

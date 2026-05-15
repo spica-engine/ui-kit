@@ -1,4 +1,3 @@
-import { helperUtils } from "../utils/helperUtils";
 import {
   TypePaletteTonalOffset,
   TypePalette,
@@ -32,34 +31,52 @@ const DEFAULT_VALUES = {
   PADDING: 10,
   GAP: 10,
   FONT_SIZE: 16,
-  FONT_FAMILY: "Inter",
+  FONT_FAMILY: "DM Sans",
 };
 
 const setCSSVariables = (theme: TypeTheme) => {
   const root = document.documentElement;
 
-  const setVariables = (themeObj: Record<string, any>, prefix: string) => {
-    Object.entries(themeObj).forEach(([key, value]) => {
-      const formattedKey = helperUtils.camelToKebab(key);
-      if (typeof value === "string" && value.startsWith("#")) {
-        const rgbValue = utils.color.hexToRgb(value);
-        root.style.setProperty(`--${prefix}-${formattedKey}-rgb`, rgbValue);
-      }
-      root.style.setProperty(`--${prefix}-${formattedKey}`, value);
-    });
+  // Toggle dark mode via CSS attribute — drives [data-theme="dark"] rules
+  if (theme.palette.mode === "dark") {
+    root.setAttribute("data-theme", "dark");
+  } else {
+    root.removeAttribute("data-theme");
+  }
+
+  // Helper: set a Spica token and its -rgb companion (for rgba() blending)
+  const set = (token: string, value: string | undefined) => {
+    if (!value) return;
+    root.style.setProperty(token, value);
+    if (value.startsWith("#")) {
+      root.style.setProperty(`${token}-rgb`, utils.color.hexToRgb(value));
+    }
   };
 
-  setVariables(theme.palette, "color");
-  setVariables(theme.borderRadius, "border-radius");
-  setVariables(theme.padding, "padding");
-  setVariables(theme.gap, "gap");
+  // Map palette fields to the Spica CSS token names
+  set("--color-accent",        theme.palette.primary);
+  set("--color-accent-hover",  theme.palette.primaryLight);
+  set("--color-accent-dark",   theme.palette.primaryDark);
+  set("--color-red",           theme.palette.danger);
+  set("--color-red-light",     theme.palette.dangerLight);
+  set("--color-green",         theme.palette.success);
+  set("--color-green-light",   theme.palette.successLight);
+  set("--color-surface-3",     theme.palette.soft);
+  set("--color-bg",            theme.palette.background);
+  set("--color-surface",       theme.palette.menuBackground);
+  set("--color-surface-2",     theme.palette.inputBackground);
+  set("--color-border",        theme.palette.border);
+  set("--color-text-primary",  theme.palette.fontPrimary);
+  set("--color-on-accent",     theme.palette.fontSecondary);
+  set("--color-text-muted",    theme.palette.inputPlaceholder);
 
-  root.style.setProperty("--oziko-font-size-base", `${theme.fontSize}px`);
-  root.style.setProperty("--oziko-font-family-base", theme.fontFamily);
+  if (theme.fontFamily) {
+    root.style.setProperty("--font-sans", theme.fontFamily);
+  }
 };
 
 export const createTheme = (theme: Partial<TypeTheme>): TypeTheme => {
-  customTheme = helperUtils.deepCopy(theme);
+  customTheme = JSON.parse(JSON.stringify(theme));
 
   const primaryColors = generateColorVariants(
     theme.palette?.primary || DEFAULT_VALUES.PALETTE.PRIMARY,
@@ -133,6 +150,7 @@ export const createTheme = (theme: Partial<TypeTheme>): TypeTheme => {
         "tonalOffset",
         DEFAULT_VALUES.PALETTE.TONAL_OFFSET
       ) as unknown as TypePaletteTonalOffset,
+      mode: theme.palette?.mode,
     },
     borderRadius: {
       sm: getBorderRadiusValue("sm", 0.6),

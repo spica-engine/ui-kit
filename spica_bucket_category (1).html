@@ -1,0 +1,1675 @@
+<!DOCTYPE html>
+<html lang="tr">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Spica — Bucket Category</title>
+<link href="https://fonts.googleapis.com/css2?family=DM+Sans:opsz,wght@9..40,300;9..40,400;9..40,500;9..40,600;9..40,700&family=JetBrains+Mono:wght@400;500&display=swap" rel="stylesheet">
+<style>
+:root {
+  --bg:             #f0f0f0;
+  --surface:        #ffffff;
+  --surface2:       #f7f7f7;
+  --surface3:       #eeeeee;
+  --border:         #e4e4e4;
+  --border-mid:     #d8d8d8;
+  --accent:         #1a2448;
+  --accent-hover:   #253060;
+  --accent-subtle:  rgba(26,36,72,0.07);
+  --accent-subtle2: rgba(26,36,72,0.13);
+  --text-primary:   #111827;
+  --text-secondary: #4b5563;
+  --text-muted:     #9ca3af;
+  --text-faint:     #c5cad4;
+  --green:          #10b981;
+  --green-bg:       rgba(16,185,129,0.1);
+  --amber:          #f59e0b;
+  --red:            #ef4444;
+  --red-bg:         rgba(239,68,68,0.08);
+  --blue:           #3b82f6;
+  --blue-bg:        rgba(59,130,246,0.1);
+  --sidebar-w:      232px;
+  --rail-w:         44px;
+  --topbar-h:       48px;
+}
+[data-theme="dark"] {
+  --bg:             #0d1017;
+  --surface:        #13181f;
+  --surface2:       #191f28;
+  --surface3:       #202735;
+  --border:         #252e3e;
+  --border-mid:     #2f3b52;
+  --accent:         #4f6ef7;
+  --accent-hover:   #6b84ff;
+  --accent-subtle:  rgba(79,110,247,0.1);
+  --accent-subtle2: rgba(79,110,247,0.18);
+  --text-primary:   #e4e8f2;
+  --text-secondary: #8b96b5;
+  --text-muted:     #4e5e7a;
+  --text-faint:     #2e3a50;
+  --green:          #34d399;
+  --green-bg:       rgba(52,211,153,0.1);
+  --amber:          #fbbf24;
+  --red:            #f87171;
+  --red-bg:         rgba(248,113,113,0.08);
+  --blue:           #60a5fa;
+  --blue-bg:        rgba(96,165,250,0.1);
+}
+
+*, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+body {
+  font-family: 'DM Sans', sans-serif;
+  background: var(--bg); color: var(--text-primary);
+  display: flex; height: 100vh; overflow: hidden;
+  font-size: 13px; -webkit-font-smoothing: antialiased;
+}
+
+/* ── Rail ── */
+.rail {
+  width: var(--rail-w); background: var(--surface);
+  border-right: 1px solid var(--border);
+  display: flex; flex-direction: column; align-items: center;
+  padding: 10px 0 8px; gap: 2px; flex-shrink: 0;
+}
+.rail-logo {
+  width: 28px; height: 28px; background: var(--accent);
+  border-radius: 7px; display: flex; align-items: center; justify-content: center;
+  font-size: 12px; font-weight: 700; color: #fff; margin-bottom: 10px; letter-spacing: -0.5px;
+}
+.rail-btn {
+  width: 32px; height: 32px; border-radius: 7px;
+  display: flex; align-items: center; justify-content: center;
+  cursor: pointer; color: var(--text-muted); transition: background .12s, color .12s;
+}
+.rail-btn:hover  { background: var(--surface2); color: var(--text-secondary); }
+.rail-btn.active { background: var(--accent-subtle); color: var(--accent); }
+.rail-sep { width: 20px; height: 1px; background: var(--border); margin: 3px 0; }
+.rail-bottom { margin-top: auto; display: flex; flex-direction: column; align-items: center; gap: 2px; }
+.theme-toggle {
+  width: 32px; height: 32px; border-radius: 7px;
+  display: flex; align-items: center; justify-content: center;
+  cursor: pointer; background: transparent; border: none;
+  color: var(--text-muted); transition: background .12s, color .12s;
+}
+.theme-toggle:hover { background: var(--surface2); }
+.sun-i { display: none; }
+[data-theme="dark"] .sun-i  { display: flex; }
+[data-theme="dark"] .moon-i { display: none; }
+
+/* ── Sidebar ── */
+.sidebar {
+  width: var(--sidebar-w); background: var(--surface);
+  border-right: 1px solid var(--border);
+  display: flex; flex-direction: column; overflow: hidden; flex-shrink: 0;
+}
+.sidebar-head {
+  padding: 12px 10px 8px; border-bottom: 1px solid var(--border);
+  display: flex; align-items: center; justify-content: space-between;
+}
+.sidebar-label {
+  font-size: 11px; font-weight: 600; letter-spacing: .06em;
+  text-transform: uppercase; color: var(--text-muted);
+}
+.icon-btn {
+  width: 24px; height: 24px; border-radius: 5px;
+  display: flex; align-items: center; justify-content: center;
+  cursor: pointer; color: var(--text-muted);
+  border: none; background: transparent; transition: background .12s, color .12s;
+}
+.icon-btn:hover { background: var(--surface2); color: var(--text-secondary); }
+.sidebar-body { flex: 1; overflow-y: auto; padding: 6px 8px 12px; }
+.sidebar-body::-webkit-scrollbar { width: 3px; }
+.sidebar-body::-webkit-scrollbar-thumb { background: var(--border); border-radius: 2px; }
+
+/* Category group */
+.cat-group { margin-bottom: 8px; }
+.cat-group-head {
+  display: flex; align-items: center; gap: 6px;
+  padding: 5px 6px; border-radius: 6px;
+  font-size: 11px; font-weight: 600; color: var(--text-muted);
+  letter-spacing: .06em; text-transform: uppercase;
+  cursor: pointer; user-select: none;
+  transition: background .1s;
+}
+.cat-group-head:hover { background: var(--surface2); }
+.cat-group-head svg { transition: transform .2s; }
+.cat-group.collapsed .cat-group-head svg { transform: rotate(-90deg); }
+.cat-group-items { padding-left: 8px; }
+.cat-group.collapsed .cat-group-items { display: none; }
+
+/* Bucket nav row */
+.nav-row {
+  display: flex; align-items: center; gap: 7px;
+  padding: 5px 6px; border-radius: 6px;
+  cursor: pointer; color: var(--text-secondary);
+  transition: background .1s, color .1s; font-size: 12.5px;
+  user-select: none; position: relative;
+}
+.nav-row:hover { background: var(--surface2); color: var(--text-primary); }
+.nav-row.active { background: var(--accent-subtle); color: var(--accent); font-weight: 500; }
+.nav-row-icon { flex-shrink: 0; opacity: 0.5; }
+.nav-row.active .nav-row-icon { opacity: 1; }
+.nav-row-dots {
+  margin-left: auto; padding: 2px 4px; border-radius: 4px;
+  color: var(--text-muted); display: flex; align-items: center;
+  opacity: 0; transition: opacity .1s, background .1s; flex-shrink: 0;
+}
+.nav-row:hover .nav-row-dots { opacity: 1; }
+.nav-row-dots:hover { background: var(--surface3); color: var(--text-secondary); }
+
+/* Uncategorized group */
+.nav-group-lbl {
+  font-size: 9.5px; font-weight: 600; letter-spacing: .08em;
+  text-transform: uppercase; color: var(--text-faint); padding: 8px 6px 3px;
+}
+.nav-add {
+  display: flex; align-items: center; gap: 6px;
+  padding: 5px 6px; border-radius: 6px;
+  cursor: pointer; color: var(--text-muted); font-size: 12px;
+  transition: all .1s; border: 1px dashed var(--border); margin-top: 6px;
+}
+.nav-add:hover { border-color: var(--accent); color: var(--accent); background: var(--accent-subtle); }
+
+/* ── Sidebar drag handle ── */
+.nav-drag-handle {
+  width: 16px; height: 16px; border-radius: 3px;
+  display: flex; align-items: center; justify-content: center;
+  color: var(--text-faint); cursor: grab; flex-shrink: 0;
+  opacity: 0; transition: opacity .1s, color .1s;
+  margin-left: auto;
+}
+.nav-drag-handle:active { cursor: grabbing; }
+.nav-row:hover .nav-drag-handle { opacity: 1; }
+.nav-drag-handle:hover { color: var(--text-muted); }
+
+/* Sidebar nav-row-dots: push to right of handle */
+.nav-row-dots { margin-left: 0; }
+
+/* Category head drag handle */
+.cat-group-drag {
+  width: 16px; height: 16px; border-radius: 3px;
+  display: flex; align-items: center; justify-content: center;
+  color: var(--text-faint); cursor: grab; flex-shrink: 0;
+  opacity: 0; transition: opacity .1s, color .1s;
+  margin-left: auto;
+}
+.cat-group-drag:active { cursor: grabbing; }
+.cat-group-head:hover .cat-group-drag { opacity: 1; }
+.cat-group-drag:hover { color: var(--text-muted); }
+
+/* Sidebar drag states */
+.nav-row.sb-dragging {
+  opacity: 0.3; background: var(--surface2) !important;
+  border-radius: 6px;
+}
+.cat-group.sb-dragging-cat { opacity: 0.3; }
+
+/* Sidebar drop indicator */
+.sb-drop-line {
+  height: 2px; border-radius: 2px; background: var(--accent);
+  margin: 1px 4px; position: relative; pointer-events: none;
+}
+.sb-drop-line::before {
+  content: ''; position: absolute;
+  left: -3px; top: -3px;
+  width: 8px; height: 8px; border-radius: 50%;
+  background: var(--accent);
+}
+
+/* Sidebar drop zone highlight */
+.cat-group-items.sb-drop-zone {
+  border-radius: 6px;
+  background: var(--accent-subtle);
+  outline: 1.5px dashed var(--accent-subtle2);
+  outline-offset: 1px;
+  min-height: 32px;
+  padding: 2px;
+  transition: all .1s;
+}
+
+/* ── Main ── */
+.main-wrapper { flex: 1; display: flex; overflow: hidden; min-width: 0; }
+.main { flex: 1; display: flex; flex-direction: column; overflow: hidden; min-width: 0; }
+.topbar {
+  height: var(--topbar-h); display: flex; align-items: center; gap: 8px;
+  padding: 0 16px; border-bottom: 1px solid var(--border);
+  background: var(--surface); flex-shrink: 0;
+}
+.jwt-chip {
+  display: flex; align-items: center; gap: 5px;
+  background: var(--surface2); border: 1px solid var(--border);
+  border-radius: 6px; padding: 4px 9px;
+  font-family: 'JetBrains Mono', monospace; font-size: 10px; color: var(--text-secondary);
+  cursor: pointer; max-width: 220px; transition: border-color .15s;
+}
+.jwt-chip:hover { border-color: var(--accent); }
+.jwt-label { font-weight: 600; color: var(--amber); }
+.jwt-val { overflow: hidden; text-overflow: ellipsis; white-space: nowrap; max-width: 140px; }
+.topbar-right { margin-left: auto; display: flex; align-items: center; gap: 8px; }
+.topbar-user { font-size: 12px; font-weight: 500; color: var(--text-secondary); }
+.avatar {
+  width: 26px; height: 26px; border-radius: 50%;
+  background: var(--accent); color: #fff;
+  display: flex; align-items: center; justify-content: center;
+  font-size: 10px; font-weight: 700; cursor: pointer;
+}
+
+/* Content area */
+.content { flex: 1; overflow-y: auto; padding: 20px 24px; }
+.content::-webkit-scrollbar { width: 4px; }
+.content::-webkit-scrollbar-thumb { background: var(--border); border-radius: 2px; }
+
+/* Page title */
+.page-head {
+  display: flex; align-items: center; justify-content: space-between; margin-bottom: 20px;
+}
+.page-title { font-size: 18px; font-weight: 600; letter-spacing: -.3px; }
+.btn {
+  display: inline-flex; align-items: center; gap: 5px;
+  padding: 7px 14px; border-radius: 7px; font-size: 12.5px;
+  font-weight: 500; font-family: inherit; cursor: pointer;
+  border: none; transition: all .12s;
+}
+.btn-primary { background: var(--accent); color: #fff; }
+.btn-primary:hover { background: var(--accent-hover); }
+.btn-ghost { background: transparent; color: var(--text-secondary); border: 1px solid var(--border); }
+.btn-ghost:hover { background: var(--surface2); color: var(--text-primary); }
+
+/* Bucket list */
+.bucket-list { display: flex; flex-direction: column; gap: 6px; }
+.bucket-category-head {
+  display: flex; align-items: center; gap: 8px;
+  padding: 7px 10px; border-radius: 7px;
+  background: var(--surface2); border: 1px solid var(--border);
+  font-size: 11px; font-weight: 600; letter-spacing: .06em;
+  text-transform: uppercase; color: var(--text-muted);
+  cursor: pointer; user-select: none; margin-bottom: 3px;
+  transition: background .1s;
+}
+.bucket-category-head:hover { background: var(--surface3); }
+.bucket-category-head .cat-icon {
+  width: 18px; height: 18px; border-radius: 4px;
+  background: var(--accent-subtle); color: var(--accent);
+  display: flex; align-items: center; justify-content: center;
+}
+.bucket-category-chevron { margin-left: auto; color: var(--text-muted); transition: transform .2s; }
+.bucket-category-head.collapsed .bucket-category-chevron { transform: rotate(-90deg); }
+.bucket-category-count {
+  font-family: 'JetBrains Mono', monospace; font-size: 9.5px;
+  background: var(--accent-subtle2); color: var(--accent);
+  padding: 1px 6px; border-radius: 4px;
+}
+
+/* Bucket row card */
+.bucket-row {
+  display: flex; align-items: center; gap: 10px;
+  padding: 10px 14px; border-radius: 9px;
+  background: var(--surface); border: 1px solid var(--border);
+  cursor: pointer; transition: border-color .12s, box-shadow .12s;
+  position: relative;
+}
+.bucket-row:hover {
+  border-color: var(--border-mid);
+  box-shadow: 0 2px 8px rgba(0,0,0,.05);
+}
+.bucket-row.active { border-color: var(--accent); box-shadow: 0 0 0 3px var(--accent-subtle); }
+.bucket-icon {
+  width: 32px; height: 32px; border-radius: 7px;
+  background: var(--accent-subtle); border: 1px solid var(--accent-subtle2);
+  display: flex; align-items: center; justify-content: center;
+  color: var(--accent); flex-shrink: 0;
+}
+.bucket-info { flex: 1; min-width: 0; }
+.bucket-name { font-size: 13px; font-weight: 500; color: var(--text-primary); }
+.bucket-meta { font-size: 11.5px; color: var(--text-muted); margin-top: 1px; }
+.bucket-tag {
+  font-size: 10px; font-weight: 600; font-family: 'JetBrains Mono', monospace;
+  padding: 2px 7px; border-radius: 4px;
+  background: var(--surface2); color: var(--text-muted);
+  border: 1px solid var(--border);
+}
+.bucket-action-btn {
+  width: 28px; height: 28px; border-radius: 6px;
+  display: flex; align-items: center; justify-content: center;
+  color: var(--text-muted); cursor: pointer;
+  background: transparent; border: none;
+  transition: background .1s, color .1s; flex-shrink: 0;
+  opacity: 0;
+}
+.bucket-row:hover .bucket-action-btn,
+.bucket-row:hover .drag-handle { opacity: 1; }
+.bucket-action-btn:hover { background: var(--surface2); color: var(--text-primary); }
+
+/* Category section container */
+.cat-section { margin-bottom: 14px; }
+.cat-section-items { display: flex; flex-direction: column; gap: 5px; padding-left: 0; }
+.cat-section.collapsed .cat-section-items { display: none; }
+
+/* ── Drag handle ── */
+.drag-handle {
+  width: 24px; height: 24px; border-radius: 5px;
+  display: flex; align-items: center; justify-content: center;
+  color: var(--text-faint); cursor: grab; flex-shrink: 0;
+  transition: color .1s, background .1s;
+  opacity: 0;
+}
+.drag-handle:active { cursor: grabbing; }
+.bucket-row:hover .drag-handle,
+.cat-section:hover > .bucket-category-head .drag-handle { opacity: 1; }
+.drag-handle:hover { color: var(--text-muted); background: var(--surface2); }
+
+/* Category drag handle (on header) */
+.bucket-category-head .drag-handle { opacity: 0; }
+.bucket-category-head:hover .drag-handle { opacity: 1; }
+
+/* ── Drag states ── */
+.bucket-row.dragging {
+  opacity: 0.35;
+  border: 1.5px dashed var(--border-mid) !important;
+  box-shadow: none !important;
+  background: var(--surface2) !important;
+}
+.cat-section.dragging-cat {
+  opacity: 0.35;
+}
+.cat-section.dragging-cat .bucket-category-head {
+  border: 1.5px dashed var(--border-mid) !important;
+  background: var(--surface2) !important;
+}
+
+/* Drop indicator — between items */
+.drop-indicator {
+  height: 3px; border-radius: 2px;
+  background: var(--accent);
+  margin: 1px 0;
+  opacity: 0; pointer-events: none;
+  transition: opacity .1s;
+  position: relative;
+}
+.drop-indicator::before {
+  content: '';
+  position: absolute; left: -4px; top: -3px;
+  width: 9px; height: 9px; border-radius: 50%;
+  background: var(--accent);
+}
+.drop-indicator.active { opacity: 1; }
+
+/* Drop zone highlight inside category */
+.cat-section-items.drag-over-zone {
+  border-radius: 8px;
+  outline: 2px dashed var(--accent-subtle2);
+  outline-offset: 2px;
+  background: var(--accent-subtle);
+  min-height: 48px;
+  padding: 4px;
+  transition: all .15s;
+}
+
+/* Category head drop target */
+.cat-section.drop-target-cat > .bucket-category-head {
+  border-color: var(--accent) !important;
+  background: var(--accent-subtle) !important;
+  box-shadow: 0 0 0 3px var(--accent-subtle);
+}
+
+/* ════════════════════════════
+   CONTEXT MENU
+════════════════════════════ */
+.ctx-menu {
+  position: fixed; z-index: 300;
+  background: var(--surface); border: 1px solid var(--border);
+  border-radius: 10px;
+  box-shadow: 0 8px 28px rgba(0,0,0,.13), 0 2px 8px rgba(0,0,0,.07);
+  padding: 5px; min-width: 188px;
+  display: none;
+  animation: ctxIn .12s cubic-bezier(.16,1,.3,1);
+}
+.ctx-menu.open { display: block; }
+@keyframes ctxIn {
+  from { opacity:0; transform: scale(.96) translateY(-4px); }
+  to   { opacity:1; transform: scale(1) translateY(0); }
+}
+.ctx-item {
+  display: flex; align-items: center; gap: 9px;
+  padding: 7px 11px; border-radius: 7px; font-size: 13px;
+  color: var(--text-secondary); cursor: pointer;
+  transition: background .1s, color .1s; user-select: none;
+}
+.ctx-item:hover { background: var(--surface2); color: var(--text-primary); }
+.ctx-item.danger { color: var(--red); }
+.ctx-item.danger:hover { background: var(--red-bg); color: var(--red); }
+.ctx-item svg { flex-shrink: 0; }
+.ctx-sep { height: 1px; background: var(--border); margin: 4px 0; }
+
+/* ════════════════════════════
+   MODAL OVERLAY
+════════════════════════════ */
+.modal-overlay {
+  position: fixed; inset: 0; z-index: 200;
+  background: rgba(0,0,0,.35); backdrop-filter: blur(3px);
+  display: none; align-items: center; justify-content: center;
+  animation: overlayIn .15s ease;
+}
+.modal-overlay.open { display: flex; }
+@keyframes overlayIn { from { opacity:0; } to { opacity:1; } }
+
+/* Modal box */
+.modal {
+  width: min(540px, 92vw);
+  background: var(--surface); border: 1px solid var(--border);
+  border-radius: 14px;
+  box-shadow: 0 24px 64px rgba(0,0,0,.18), 0 4px 16px rgba(0,0,0,.08);
+  display: flex; flex-direction: column; overflow: hidden;
+  animation: modalIn .18s cubic-bezier(.16,1,.3,1);
+}
+@keyframes modalIn {
+  from { opacity:0; transform: translateY(12px) scale(.97); }
+  to   { opacity:1; transform: translateY(0) scale(1); }
+}
+
+.modal-head {
+  padding: 16px 20px;
+  border-bottom: 1px solid var(--border); flex-shrink: 0;
+}
+.modal-title {
+  font-size: 15px; font-weight: 700; color: var(--text-primary); letter-spacing: -.2px;
+}
+.modal-title span { color: var(--accent); }
+
+/* Search field */
+.modal-body { padding: 16px 16px 8px; flex-shrink: 0; }
+.cat-search-wrap {
+  display: flex; align-items: center; gap: 0;
+  border: 1.5px solid var(--border); border-radius: 9px;
+  background: var(--surface2); overflow: hidden;
+  transition: border-color .15s, box-shadow .15s;
+}
+.cat-search-wrap:focus-within {
+  border-color: var(--accent); background: var(--surface);
+  box-shadow: 0 0 0 3px var(--accent-subtle);
+}
+.cat-search-icon {
+  width: 40px; display: flex; align-items: center; justify-content: center;
+  color: var(--text-muted); flex-shrink: 0;
+}
+.cat-search-input {
+  flex: 1; border: none; outline: none; background: transparent;
+  padding: 11px 12px 11px 0; font-family: 'DM Sans', sans-serif;
+  font-size: 13px; color: var(--text-primary);
+}
+.cat-search-input::placeholder { color: var(--text-muted); }
+
+/* Category list */
+.cat-list-wrap {
+  max-height: 280px; overflow-y: auto;
+  border-top: 1px solid var(--border);
+  display: none;
+}
+.cat-list-wrap.visible { display: block; }
+.cat-list-wrap::-webkit-scrollbar { width: 3px; }
+.cat-list-wrap::-webkit-scrollbar-thumb { background: var(--border); border-radius: 2px; }
+
+.cat-list-item {
+  display: flex; align-items: center; gap: 10px;
+  padding: 11px 16px; cursor: pointer;
+  font-size: 13px; color: var(--text-secondary);
+  transition: background .1s, color .1s;
+  border-bottom: 1px solid var(--border);
+}
+.cat-list-item:last-child { border-bottom: none; }
+.cat-list-item:hover { background: var(--surface2); color: var(--text-primary); }
+.cat-list-item.selected {
+  background: var(--accent-subtle); color: var(--accent); font-weight: 500;
+}
+.cat-list-item.selected .cat-item-icon { color: var(--accent); }
+.cat-item-icon { color: var(--text-muted); flex-shrink: 0; }
+.cat-item-count {
+  margin-left: auto; font-size: 10.5px; font-weight: 600;
+  font-family: 'JetBrains Mono', monospace; color: var(--text-muted);
+  background: var(--surface3); border: 1px solid var(--border);
+  padding: 1px 6px; border-radius: 4px;
+}
+.cat-list-item.hidden { display: none; }
+
+/* No results in list */
+.cat-no-results {
+  padding: 20px 16px; text-align: center;
+  font-size: 12.5px; color: var(--text-muted); display: none;
+}
+
+/* Modal footer */
+.modal-foot {
+  display: flex; align-items: center; justify-content: flex-end; gap: 8px;
+  padding: 12px 16px 14px; flex-shrink: 0;
+}
+.modal-foot-left { margin-right: auto; }
+
+/* Add as new category button */
+.btn-add-cat {
+  display: inline-flex; align-items: center; gap: 7px;
+  padding: 9px 18px; border-radius: 8px; border: none;
+  background: var(--accent); color: #fff;
+  font-family: 'DM Sans', sans-serif; font-size: 13px; font-weight: 600;
+  cursor: pointer; transition: background .12s;
+  white-space: nowrap;
+}
+.btn-add-cat:hover { background: var(--accent-hover); }
+.btn-add-cat:disabled { opacity: .45; cursor: not-allowed; }
+.btn-add-cat .cat-name-in-btn {
+  font-style: normal; background: rgba(255,255,255,.15);
+  padding: 1px 7px; border-radius: 5px; font-weight: 700;
+}
+
+.btn-cancel {
+  display: inline-flex; align-items: center; gap: 6px;
+  padding: 9px 14px; border-radius: 8px;
+  background: transparent; border: 1px solid var(--border);
+  font-family: 'DM Sans', sans-serif; font-size: 13px; font-weight: 500;
+  color: var(--text-secondary); cursor: pointer; transition: all .12s;
+}
+.btn-cancel:hover { background: var(--surface2); color: var(--text-primary); }
+
+/* Move confirm button */
+.btn-move {
+  display: inline-flex; align-items: center; gap: 6px;
+  padding: 9px 18px; border-radius: 8px; border: none;
+  background: var(--accent); color: #fff;
+  font-family: 'DM Sans', sans-serif; font-size: 13px; font-weight: 600;
+  cursor: pointer; transition: background .12s;
+  display: none;
+}
+.btn-move.visible { display: inline-flex; }
+.btn-move:hover { background: var(--accent-hover); }
+
+/* Toast */
+.toast {
+  position: fixed; bottom: 24px; left: 50%; transform: translateX(-50%);
+  background: var(--accent); color: #fff;
+  padding: 9px 18px; border-radius: 9px; font-size: 12.5px; font-weight: 500;
+  box-shadow: 0 8px 24px rgba(0,0,0,.15);
+  opacity: 0; pointer-events: none; transition: opacity .15s; z-index: 999;
+  white-space: nowrap;
+}
+.toast.show { opacity: 1; }
+</style>
+</head>
+<body>
+
+<!-- ═══ RAIL ═══ -->
+<div class="rail">
+  <div class="rail-logo">S</div>
+  <div class="rail-btn" title="Dashboard">
+    <svg width="15" height="15" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="1.8">
+      <rect x="3" y="3" width="7" height="7" rx="1"/><rect x="14" y="3" width="7" height="7" rx="1"/>
+      <rect x="3" y="14" width="7" height="7" rx="1"/><rect x="14" y="14" width="7" height="7" rx="1"/>
+    </svg>
+  </div>
+  <div class="rail-btn active" title="Bucket">
+    <svg width="15" height="15" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="1.8">
+      <ellipse cx="12" cy="5" rx="9" ry="3"/>
+      <path d="M3 5v14c0 1.66 4.03 3 9 3s9-1.34 9-3V5"/>
+      <path d="M3 12c0 1.66 4.03 3 9 3s9-1.34 9-3"/>
+    </svg>
+  </div>
+  <div class="rail-sep"></div>
+  <div class="rail-btn" title="Functions">
+    <svg width="15" height="15" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="1.8">
+      <polyline points="16 18 22 12 16 6"/><polyline points="8 6 2 12 8 18"/>
+    </svg>
+  </div>
+  <div class="rail-btn" title="IAM">
+    <svg width="15" height="15" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="1.8">
+      <path d="M17 21v-2a4 4 0 0 0-4-4H5a4 4 0 0 0-4 4v2"/>
+      <circle cx="9" cy="7" r="4"/>
+      <path d="M23 21v-2a4 4 0 0 0-3-3.87m-4-12a4 4 0 0 1 0 7.75"/>
+    </svg>
+  </div>
+  <div class="rail-btn" title="Settings">
+    <svg width="15" height="15" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="1.8">
+      <circle cx="12" cy="12" r="3"/>
+      <path d="M19.4 15a1.65 1.65 0 0 0 .33 1.82l.06.06a2 2 0 0 1-2.83 2.83l-.06-.06a1.65 1.65 0 0 0-1.82-.33 1.65 1.65 0 0 0-1 1.51V21a2 2 0 0 1-4 0v-.09A1.65 1.65 0 0 0 9 19.4a1.65 1.65 0 0 0-1.82.33l-.06.06a2 2 0 0 1-2.83-2.83l.06-.06A1.65 1.65 0 0 0 4.68 15a1.65 1.65 0 0 0-1.51-1H3a2 2 0 0 1 0-4h.09A1.65 1.65 0 0 0 4.6 9a1.65 1.65 0 0 0-.33-1.82l-.06-.06a2 2 0 0 1 2.83-2.83l.06.06A1.65 1.65 0 0 0 9 4.68a1.65 1.65 0 0 0 1-1.51V3a2 2 0 0 1 4 0v.09a1.65 1.65 0 0 0 1 1.51 1.65 1.65 0 0 0 1.82-.33l.06-.06a2 2 0 0 1 2.83 2.83l-.06.06A1.65 1.65 0 0 0 19.4 9a1.65 1.65 0 0 0 1.51 1H21a2 2 0 0 1 0 4h-.09a1.65 1.65 0 0 0-1.51 1z"/>
+    </svg>
+  </div>
+  <div class="rail-bottom">
+    <button class="theme-toggle" onclick="toggleTheme()">
+      <svg class="moon-i" width="14" height="14" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2">
+        <path d="M21 12.79A9 9 0 1 1 11.21 3 7 7 0 0 0 21 12.79z"/>
+      </svg>
+      <svg class="sun-i" width="14" height="14" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2">
+        <circle cx="12" cy="12" r="5"/>
+        <line x1="12" y1="1" x2="12" y2="3"/><line x1="12" y1="21" x2="12" y2="23"/>
+        <line x1="4.22" y1="4.22" x2="5.64" y2="5.64"/><line x1="18.36" y1="18.36" x2="19.78" y2="19.78"/>
+        <line x1="1" y1="12" x2="3" y2="12"/><line x1="21" y1="12" x2="23" y2="12"/>
+        <line x1="4.22" y1="19.78" x2="5.64" y2="18.36"/><line x1="18.36" y1="5.64" x2="19.78" y2="4.22"/>
+      </svg>
+    </button>
+  </div>
+</div>
+
+<!-- ═══ SIDEBAR ═══ -->
+<div class="sidebar">
+  <div class="sidebar-head">
+    <span class="sidebar-label">Buckets</span>
+    <button class="icon-btn">
+      <svg width="13" height="13" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2">
+        <polyline points="15 18 9 12 15 6"/>
+      </svg>
+    </button>
+  </div>
+  <div class="sidebar-body" id="sidebar-body">
+
+    <!-- Category: Stripe -->
+    <div class="cat-group" id="sg-stripe" data-cat="stripe">
+      <div class="cat-group-head" onclick="toggleCatGroup('sg-stripe')">
+        <svg width="12" height="12" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2.5">
+          <polyline points="6 9 12 15 18 9"/>
+        </svg>
+        Stripe
+        <span class="cat-group-drag" title="Kategoriyi sürükle" data-cat-handle="stripe">
+          <svg width="12" height="12" viewBox="0 0 24 24" fill="currentColor">
+            <circle cx="9"  cy="5"  r="1.5"/><circle cx="15" cy="5"  r="1.5"/>
+            <circle cx="9"  cy="12" r="1.5"/><circle cx="15" cy="12" r="1.5"/>
+            <circle cx="9"  cy="19" r="1.5"/><circle cx="15" cy="19" r="1.5"/>
+          </svg>
+        </span>
+      </div>
+      <div class="cat-group-items" id="sbi-stripe">
+        <div class="nav-row" onclick="setActive(this)" data-bucket="Logs">
+          <svg class="nav-row-icon" width="13" height="13" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2"><ellipse cx="12" cy="5" rx="9" ry="3"/><path d="M3 5v14c0 1.66 4.03 3 9 3s9-1.34 9-3V5"/><path d="M3 12c0 1.66 4.03 3 9 3s9-1.34 9-3"/></svg>
+          Logs
+          <span class="nav-row-dots" onclick="openCtx(event,'Logs')"><svg width="12" height="12" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2.5"><circle cx="12" cy="5" r="1"/><circle cx="12" cy="12" r="1"/><circle cx="12" cy="19" r="1"/></svg></span>
+          <span class="nav-drag-handle" title="Sürükle"><svg width="12" height="12" viewBox="0 0 24 24" fill="currentColor"><circle cx="9" cy="5" r="1.5"/><circle cx="15" cy="5" r="1.5"/><circle cx="9" cy="12" r="1.5"/><circle cx="15" cy="12" r="1.5"/><circle cx="9" cy="19" r="1.5"/><circle cx="15" cy="19" r="1.5"/></svg></span>
+        </div>
+        <div class="nav-row" onclick="setActive(this)" data-bucket="Subscriptions">
+          <svg class="nav-row-icon" width="13" height="13" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2"><ellipse cx="12" cy="5" rx="9" ry="3"/><path d="M3 5v14c0 1.66 4.03 3 9 3s9-1.34 9-3V5"/><path d="M3 12c0 1.66 4.03 3 9 3s9-1.34 9-3"/></svg>
+          Subscriptions
+          <span class="nav-row-dots" onclick="openCtx(event,'Subscriptions')"><svg width="12" height="12" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2.5"><circle cx="12" cy="5" r="1"/><circle cx="12" cy="12" r="1"/><circle cx="12" cy="19" r="1"/></svg></span>
+          <span class="nav-drag-handle" title="Sürükle"><svg width="12" height="12" viewBox="0 0 24 24" fill="currentColor"><circle cx="9" cy="5" r="1.5"/><circle cx="15" cy="5" r="1.5"/><circle cx="9" cy="12" r="1.5"/><circle cx="15" cy="12" r="1.5"/><circle cx="9" cy="19" r="1.5"/><circle cx="15" cy="19" r="1.5"/></svg></span>
+        </div>
+        <div class="nav-row" onclick="setActive(this)" data-bucket="Prices">
+          <svg class="nav-row-icon" width="13" height="13" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2"><ellipse cx="12" cy="5" rx="9" ry="3"/><path d="M3 5v14c0 1.66 4.03 3 9 3s9-1.34 9-3V5"/><path d="M3 12c0 1.66 4.03 3 9 3s9-1.34 9-3"/></svg>
+          Prices
+          <span class="nav-row-dots" onclick="openCtx(event,'Prices')"><svg width="12" height="12" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2.5"><circle cx="12" cy="5" r="1"/><circle cx="12" cy="12" r="1"/><circle cx="12" cy="19" r="1"/></svg></span>
+          <span class="nav-drag-handle" title="Sürükle"><svg width="12" height="12" viewBox="0 0 24 24" fill="currentColor"><circle cx="9" cy="5" r="1.5"/><circle cx="15" cy="5" r="1.5"/><circle cx="9" cy="12" r="1.5"/><circle cx="15" cy="12" r="1.5"/><circle cx="9" cy="19" r="1.5"/><circle cx="15" cy="19" r="1.5"/></svg></span>
+        </div>
+        <div class="nav-row" onclick="setActive(this)" data-bucket="Products">
+          <svg class="nav-row-icon" width="13" height="13" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2"><ellipse cx="12" cy="5" rx="9" ry="3"/><path d="M3 5v14c0 1.66 4.03 3 9 3s9-1.34 9-3V5"/><path d="M3 12c0 1.66 4.03 3 9 3s9-1.34 9-3"/></svg>
+          Products
+          <span class="nav-row-dots" onclick="openCtx(event,'Products')"><svg width="12" height="12" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2.5"><circle cx="12" cy="5" r="1"/><circle cx="12" cy="12" r="1"/><circle cx="12" cy="19" r="1"/></svg></span>
+          <span class="nav-drag-handle" title="Sürükle"><svg width="12" height="12" viewBox="0 0 24 24" fill="currentColor"><circle cx="9" cy="5" r="1.5"/><circle cx="15" cy="5" r="1.5"/><circle cx="9" cy="12" r="1.5"/><circle cx="15" cy="12" r="1.5"/><circle cx="9" cy="19" r="1.5"/><circle cx="15" cy="19" r="1.5"/></svg></span>
+        </div>
+      </div>
+    </div>
+
+    <!-- Category: AI -->
+    <div class="cat-group" id="sg-ai" data-cat="ai">
+      <div class="cat-group-head" onclick="toggleCatGroup('sg-ai')">
+        <svg width="12" height="12" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2.5">
+          <polyline points="6 9 12 15 18 9"/>
+        </svg>
+        AI
+        <span class="cat-group-drag" title="Kategoriyi sürükle" data-cat-handle="ai">
+          <svg width="12" height="12" viewBox="0 0 24 24" fill="currentColor">
+            <circle cx="9"  cy="5"  r="1.5"/><circle cx="15" cy="5"  r="1.5"/>
+            <circle cx="9"  cy="12" r="1.5"/><circle cx="15" cy="12" r="1.5"/>
+            <circle cx="9"  cy="19" r="1.5"/><circle cx="15" cy="19" r="1.5"/>
+          </svg>
+        </span>
+      </div>
+      <div class="cat-group-items" id="sbi-ai">
+        <div class="nav-row" onclick="setActive(this)" data-bucket="Models">
+          <svg class="nav-row-icon" width="13" height="13" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2"><ellipse cx="12" cy="5" rx="9" ry="3"/><path d="M3 5v14c0 1.66 4.03 3 9 3s9-1.34 9-3V5"/><path d="M3 12c0 1.66 4.03 3 9 3s9-1.34 9-3"/></svg>
+          Models
+          <span class="nav-row-dots" onclick="openCtx(event,'Models')"><svg width="12" height="12" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2.5"><circle cx="12" cy="5" r="1"/><circle cx="12" cy="12" r="1"/><circle cx="12" cy="19" r="1"/></svg></span>
+          <span class="nav-drag-handle" title="Sürükle"><svg width="12" height="12" viewBox="0 0 24 24" fill="currentColor"><circle cx="9" cy="5" r="1.5"/><circle cx="15" cy="5" r="1.5"/><circle cx="9" cy="12" r="1.5"/><circle cx="15" cy="12" r="1.5"/><circle cx="9" cy="19" r="1.5"/><circle cx="15" cy="19" r="1.5"/></svg></span>
+        </div>
+        <div class="nav-row active" onclick="setActive(this)" data-bucket="Completions">
+          <svg class="nav-row-icon" width="13" height="13" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2"><ellipse cx="12" cy="5" rx="9" ry="3"/><path d="M3 5v14c0 1.66 4.03 3 9 3s9-1.34 9-3V5"/><path d="M3 12c0 1.66 4.03 3 9 3s9-1.34 9-3"/></svg>
+          Completions
+          <span class="nav-row-dots" onclick="openCtx(event,'Completions')"><svg width="12" height="12" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2.5"><circle cx="12" cy="5" r="1"/><circle cx="12" cy="12" r="1"/><circle cx="12" cy="19" r="1"/></svg></span>
+          <span class="nav-drag-handle" title="Sürükle"><svg width="12" height="12" viewBox="0 0 24 24" fill="currentColor"><circle cx="9" cy="5" r="1.5"/><circle cx="15" cy="5" r="1.5"/><circle cx="9" cy="12" r="1.5"/><circle cx="15" cy="12" r="1.5"/><circle cx="9" cy="19" r="1.5"/><circle cx="15" cy="19" r="1.5"/></svg></span>
+        </div>
+      </div>
+    </div>
+
+    <!-- Uncategorized -->
+    <div style="margin-top:8px">
+      <div class="nav-group-lbl">Kategorisiz</div>
+      <div id="sbi-uncategorized">
+        <div class="nav-row" onclick="setActive(this)" data-bucket="Users">
+          <svg class="nav-row-icon" width="13" height="13" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2"><ellipse cx="12" cy="5" rx="9" ry="3"/><path d="M3 5v14c0 1.66 4.03 3 9 3s9-1.34 9-3V5"/><path d="M3 12c0 1.66 4.03 3 9 3s9-1.34 9-3"/></svg>
+          Users
+          <span class="nav-row-dots" onclick="openCtx(event,'Users')"><svg width="12" height="12" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2.5"><circle cx="12" cy="5" r="1"/><circle cx="12" cy="12" r="1"/><circle cx="12" cy="19" r="1"/></svg></span>
+          <span class="nav-drag-handle" title="Sürükle"><svg width="12" height="12" viewBox="0 0 24 24" fill="currentColor"><circle cx="9" cy="5" r="1.5"/><circle cx="15" cy="5" r="1.5"/><circle cx="9" cy="12" r="1.5"/><circle cx="15" cy="12" r="1.5"/><circle cx="9" cy="19" r="1.5"/><circle cx="15" cy="19" r="1.5"/></svg></span>
+        </div>
+        <div class="nav-row" onclick="setActive(this)" data-bucket="Orders">
+          <svg class="nav-row-icon" width="13" height="13" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2"><ellipse cx="12" cy="5" rx="9" ry="3"/><path d="M3 5v14c0 1.66 4.03 3 9 3s9-1.34 9-3V5"/><path d="M3 12c0 1.66 4.03 3 9 3s9-1.34 9-3"/></svg>
+          Orders
+          <span class="nav-row-dots" onclick="openCtx(event,'Orders')"><svg width="12" height="12" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2.5"><circle cx="12" cy="5" r="1"/><circle cx="12" cy="12" r="1"/><circle cx="12" cy="19" r="1"/></svg></span>
+          <span class="nav-drag-handle" title="Sürükle"><svg width="12" height="12" viewBox="0 0 24 24" fill="currentColor"><circle cx="9" cy="5" r="1.5"/><circle cx="15" cy="5" r="1.5"/><circle cx="9" cy="12" r="1.5"/><circle cx="15" cy="12" r="1.5"/><circle cx="9" cy="19" r="1.5"/><circle cx="15" cy="19" r="1.5"/></svg></span>
+        </div>
+      </div>
+      <div class="nav-add">
+        <svg width="12" height="12" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2.5"><line x1="12" y1="5" x2="12" y2="19"/><line x1="5" y1="12" x2="19" y2="12"/></svg>
+        New Bucket
+      </div>
+    </div>
+
+  </div>
+</div>
+
+<!-- ═══ MAIN ═══ -->
+<div class="main-wrapper">
+  <div class="main">
+    <div class="topbar">
+      <div class="jwt-chip">
+        <span class="jwt-label">JWT:</span>
+        <span class="jwt-val">eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9...</span>
+        <svg width="11" height="11" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2">
+          <rect x="9" y="9" width="13" height="13" rx="2"/>
+          <path d="M5 15H4a2 2 0 0 1-2-2V4a2 2 0 0 1 2-2h9a2 2 0 0 1 2 2v1"/>
+        </svg>
+      </div>
+      <div class="topbar-right">
+        <span class="topbar-user">Spica</span>
+        <div class="avatar">S</div>
+      </div>
+    </div>
+
+    <div class="content">
+      <div class="page-head">
+        <div class="page-title">Buckets</div>
+        <button class="btn btn-primary">
+          <svg width="13" height="13" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2.5">
+            <line x1="12" y1="5" x2="12" y2="19"/><line x1="5" y1="12" x2="19" y2="12"/>
+          </svg>
+          New Bucket
+        </button>
+      </div>
+
+      <div class="bucket-list">
+
+        <!-- ── Category: Stripe ── -->
+        <div class="cat-section" id="cs-stripe" draggable="false" data-cat-id="stripe">
+          <div class="bucket-category-head" onclick="toggleCatSection('cs-stripe')">
+            <div class="cat-icon">
+              <svg width="10" height="10" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2.5">
+                <polyline points="6 9 12 15 18 9"/>
+              </svg>
+            </div>
+            Stripe
+            <span class="bucket-category-count">4</span>
+            <div class="drag-handle cat-drag-handle" title="Kategoriyi sürükle">
+              <svg width="13" height="13" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2">
+                <circle cx="9" cy="5" r="1" fill="currentColor" stroke="none"/><circle cx="15" cy="5" r="1" fill="currentColor" stroke="none"/>
+                <circle cx="9" cy="12" r="1" fill="currentColor" stroke="none"/><circle cx="15" cy="12" r="1" fill="currentColor" stroke="none"/>
+                <circle cx="9" cy="19" r="1" fill="currentColor" stroke="none"/><circle cx="15" cy="19" r="1" fill="currentColor" stroke="none"/>
+              </svg>
+            </div>
+            <svg class="bucket-category-chevron" width="13" height="13" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2.5">
+              <polyline points="6 9 12 15 18 9"/>
+            </svg>
+          </div>
+          <div class="cat-section-items">
+            <div class="bucket-row" onclick="setActive(null)" oncontextmenu="ctxFromRow(event,'Logs')">
+              <div class="bucket-icon">
+                <svg width="16" height="16" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2">
+                  <ellipse cx="12" cy="5" rx="9" ry="3"/>
+                  <path d="M3 5v14c0 1.66 4.03 3 9 3s9-1.34 9-3V5"/>
+                  <path d="M3 12c0 1.66 4.03 3 9 3s9-1.34 9-3"/>
+                </svg>
+              </div>
+              <div class="bucket-info">
+                <div class="bucket-name">Logs</div>
+                <div class="bucket-meta">1.2k documents · 4 fields</div>
+              </div>
+              <span class="bucket-tag">stripe</span>              <div class="drag-handle bucket-drag-handle" title="Sürükle">
+                <svg width="14" height="14" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2">
+                  <circle cx="9" cy="5" r="1" fill="currentColor" stroke="none"/><circle cx="15" cy="5" r="1" fill="currentColor" stroke="none"/>
+                  <circle cx="9" cy="12" r="1" fill="currentColor" stroke="none"/><circle cx="15" cy="12" r="1" fill="currentColor" stroke="none"/>
+                  <circle cx="9" cy="19" r="1" fill="currentColor" stroke="none"/><circle cx="15" cy="19" r="1" fill="currentColor" stroke="none"/>
+                </svg>
+              </div>
+              <button class="bucket-action-btn" onclick="ctxFromRow(event,'Logs')" title="Options">
+                <svg width="14" height="14" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2">
+                  <circle cx="12" cy="5" r="1"/><circle cx="12" cy="12" r="1"/><circle cx="12" cy="19" r="1"/>
+                </svg>
+              </button>
+            </div>
+            <div class="bucket-row" oncontextmenu="ctxFromRow(event,'Subscriptions')">
+              <div class="bucket-icon">
+                <svg width="16" height="16" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2">
+                  <ellipse cx="12" cy="5" rx="9" ry="3"/>
+                  <path d="M3 5v14c0 1.66 4.03 3 9 3s9-1.34 9-3V5"/>
+                  <path d="M3 12c0 1.66 4.03 3 9 3s9-1.34 9-3"/>
+                </svg>
+              </div>
+              <div class="bucket-info">
+                <div class="bucket-name">Subscriptions</div>
+                <div class="bucket-meta">348 documents · 7 fields</div>
+              </div>
+              <span class="bucket-tag">stripe</span>              <div class="drag-handle bucket-drag-handle" title="Sürükle">
+                <svg width="14" height="14" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2">
+                  <circle cx="9" cy="5" r="1" fill="currentColor" stroke="none"/><circle cx="15" cy="5" r="1" fill="currentColor" stroke="none"/>
+                  <circle cx="9" cy="12" r="1" fill="currentColor" stroke="none"/><circle cx="15" cy="12" r="1" fill="currentColor" stroke="none"/>
+                  <circle cx="9" cy="19" r="1" fill="currentColor" stroke="none"/><circle cx="15" cy="19" r="1" fill="currentColor" stroke="none"/>
+                </svg>
+              </div>
+              <button class="bucket-action-btn" onclick="ctxFromRow(event,'Subscriptions')" title="Options">
+                <svg width="14" height="14" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2">
+                  <circle cx="12" cy="5" r="1"/><circle cx="12" cy="12" r="1"/><circle cx="12" cy="19" r="1"/>
+                </svg>
+              </button>
+            </div>
+            <div class="bucket-row" oncontextmenu="ctxFromRow(event,'Prices')">
+              <div class="bucket-icon">
+                <svg width="16" height="16" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2">
+                  <ellipse cx="12" cy="5" rx="9" ry="3"/>
+                  <path d="M3 5v14c0 1.66 4.03 3 9 3s9-1.34 9-3V5"/>
+                  <path d="M3 12c0 1.66 4.03 3 9 3s9-1.34 9-3"/>
+                </svg>
+              </div>
+              <div class="bucket-info">
+                <div class="bucket-name">Prices</div>
+                <div class="bucket-meta">56 documents · 3 fields</div>
+              </div>
+              <span class="bucket-tag">stripe</span>              <div class="drag-handle bucket-drag-handle" title="Sürükle">
+                <svg width="14" height="14" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2">
+                  <circle cx="9" cy="5" r="1" fill="currentColor" stroke="none"/><circle cx="15" cy="5" r="1" fill="currentColor" stroke="none"/>
+                  <circle cx="9" cy="12" r="1" fill="currentColor" stroke="none"/><circle cx="15" cy="12" r="1" fill="currentColor" stroke="none"/>
+                  <circle cx="9" cy="19" r="1" fill="currentColor" stroke="none"/><circle cx="15" cy="19" r="1" fill="currentColor" stroke="none"/>
+                </svg>
+              </div>
+              <button class="bucket-action-btn" onclick="ctxFromRow(event,'Prices')" title="Options">
+                <svg width="14" height="14" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2">
+                  <circle cx="12" cy="5" r="1"/><circle cx="12" cy="12" r="1"/><circle cx="12" cy="19" r="1"/>
+                </svg>
+              </button>
+            </div>
+          </div>
+        </div>
+
+        <!-- ── Category: AI ── -->
+        <div class="cat-section" id="cs-ai" draggable="false" data-cat-id="ai">
+          <div class="bucket-category-head" onclick="toggleCatSection('cs-ai')">
+            <div class="cat-icon">
+              <svg width="10" height="10" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2.5">
+                <polyline points="6 9 12 15 18 9"/>
+              </svg>
+            </div>
+            AI
+            <span class="bucket-category-count">2</span>
+            <div class="drag-handle cat-drag-handle" title="Kategoriyi sürükle">
+              <svg width="13" height="13" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2">
+                <circle cx="9" cy="5" r="1" fill="currentColor" stroke="none"/><circle cx="15" cy="5" r="1" fill="currentColor" stroke="none"/>
+                <circle cx="9" cy="12" r="1" fill="currentColor" stroke="none"/><circle cx="15" cy="12" r="1" fill="currentColor" stroke="none"/>
+                <circle cx="9" cy="19" r="1" fill="currentColor" stroke="none"/><circle cx="15" cy="19" r="1" fill="currentColor" stroke="none"/>
+              </svg>
+            </div>
+            <svg class="bucket-category-chevron" width="13" height="13" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2.5">
+              <polyline points="6 9 12 15 18 9"/>
+            </svg>
+          </div>
+          <div class="cat-section-items">
+            <div class="bucket-row" oncontextmenu="ctxFromRow(event,'Models')">
+              <div class="bucket-icon">
+                <svg width="16" height="16" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2">
+                  <ellipse cx="12" cy="5" rx="9" ry="3"/>
+                  <path d="M3 5v14c0 1.66 4.03 3 9 3s9-1.34 9-3V5"/>
+                  <path d="M3 12c0 1.66 4.03 3 9 3s9-1.34 9-3"/>
+                </svg>
+              </div>
+              <div class="bucket-info">
+                <div class="bucket-name">Models</div>
+                <div class="bucket-meta">12 documents · 5 fields</div>
+              </div>
+              <span class="bucket-tag">ai</span>              <div class="drag-handle bucket-drag-handle" title="Sürükle">
+                <svg width="14" height="14" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2">
+                  <circle cx="9" cy="5" r="1" fill="currentColor" stroke="none"/><circle cx="15" cy="5" r="1" fill="currentColor" stroke="none"/>
+                  <circle cx="9" cy="12" r="1" fill="currentColor" stroke="none"/><circle cx="15" cy="12" r="1" fill="currentColor" stroke="none"/>
+                  <circle cx="9" cy="19" r="1" fill="currentColor" stroke="none"/><circle cx="15" cy="19" r="1" fill="currentColor" stroke="none"/>
+                </svg>
+              </div>
+              <button class="bucket-action-btn" onclick="ctxFromRow(event,'Models')" title="Options">
+                <svg width="14" height="14" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2">
+                  <circle cx="12" cy="5" r="1"/><circle cx="12" cy="12" r="1"/><circle cx="12" cy="19" r="1"/>
+                </svg>
+              </button>
+            </div>
+            <div class="bucket-row active" oncontextmenu="ctxFromRow(event,'Completions')">
+              <div class="bucket-icon">
+                <svg width="16" height="16" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2">
+                  <ellipse cx="12" cy="5" rx="9" ry="3"/>
+                  <path d="M3 5v14c0 1.66 4.03 3 9 3s9-1.34 9-3V5"/>
+                  <path d="M3 12c0 1.66 4.03 3 9 3s9-1.34 9-3"/>
+                </svg>
+              </div>
+              <div class="bucket-info">
+                <div class="bucket-name">Completions</div>
+                <div class="bucket-meta">4.5k documents · 8 fields</div>
+              </div>
+              <span class="bucket-tag">ai</span>              <div class="drag-handle bucket-drag-handle" title="Sürükle">
+                <svg width="14" height="14" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2">
+                  <circle cx="9" cy="5" r="1" fill="currentColor" stroke="none"/><circle cx="15" cy="5" r="1" fill="currentColor" stroke="none"/>
+                  <circle cx="9" cy="12" r="1" fill="currentColor" stroke="none"/><circle cx="15" cy="12" r="1" fill="currentColor" stroke="none"/>
+                  <circle cx="9" cy="19" r="1" fill="currentColor" stroke="none"/><circle cx="15" cy="19" r="1" fill="currentColor" stroke="none"/>
+                </svg>
+              </div>
+              <button class="bucket-action-btn" onclick="ctxFromRow(event,'Completions')" title="Options">
+                <svg width="14" height="14" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2">
+                  <circle cx="12" cy="5" r="1"/><circle cx="12" cy="12" r="1"/><circle cx="12" cy="19" r="1"/>
+                </svg>
+              </button>
+            </div>
+          </div>
+        </div>
+
+        <!-- ── Uncategorized ── -->
+        <div style="margin-top:4px">
+          <div style="font-size:9.5px;font-weight:600;letter-spacing:.08em;text-transform:uppercase;color:var(--text-faint);padding:6px 2px;margin-bottom:4px">Kategorisiz</div>
+          <div style="display:flex;flex-direction:column;gap:5px">
+            <div class="bucket-row" oncontextmenu="ctxFromRow(event,'Users')">
+              <div class="bucket-icon">
+                <svg width="16" height="16" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2">
+                  <ellipse cx="12" cy="5" rx="9" ry="3"/>
+                  <path d="M3 5v14c0 1.66 4.03 3 9 3s9-1.34 9-3V5"/>
+                  <path d="M3 12c0 1.66 4.03 3 9 3s9-1.34 9-3"/>
+                </svg>
+              </div>
+              <div class="bucket-info">
+                <div class="bucket-name">Users</div>
+                <div class="bucket-meta">892 documents · 11 fields</div>
+              </div>              <div class="drag-handle bucket-drag-handle" title="Sürükle">
+                <svg width="14" height="14" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2">
+                  <circle cx="9" cy="5" r="1" fill="currentColor" stroke="none"/><circle cx="15" cy="5" r="1" fill="currentColor" stroke="none"/>
+                  <circle cx="9" cy="12" r="1" fill="currentColor" stroke="none"/><circle cx="15" cy="12" r="1" fill="currentColor" stroke="none"/>
+                  <circle cx="9" cy="19" r="1" fill="currentColor" stroke="none"/><circle cx="15" cy="19" r="1" fill="currentColor" stroke="none"/>
+                </svg>
+              </div>
+              <button class="bucket-action-btn" onclick="ctxFromRow(event,'Users')" title="Options">
+                <svg width="14" height="14" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2">
+                  <circle cx="12" cy="5" r="1"/><circle cx="12" cy="12" r="1"/><circle cx="12" cy="19" r="1"/>
+                </svg>
+              </button>
+            </div>
+            <div class="bucket-row" oncontextmenu="ctxFromRow(event,'Orders')">
+              <div class="bucket-icon">
+                <svg width="16" height="16" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2">
+                  <ellipse cx="12" cy="5" rx="9" ry="3"/>
+                  <path d="M3 5v14c0 1.66 4.03 3 9 3s9-1.34 9-3V5"/>
+                  <path d="M3 12c0 1.66 4.03 3 9 3s9-1.34 9-3"/>
+                </svg>
+              </div>
+              <div class="bucket-info">
+                <div class="bucket-name">Orders</div>
+                <div class="bucket-meta">2.1k documents · 9 fields</div>
+              </div>              <div class="drag-handle bucket-drag-handle" title="Sürükle">
+                <svg width="14" height="14" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2">
+                  <circle cx="9" cy="5" r="1" fill="currentColor" stroke="none"/><circle cx="15" cy="5" r="1" fill="currentColor" stroke="none"/>
+                  <circle cx="9" cy="12" r="1" fill="currentColor" stroke="none"/><circle cx="15" cy="12" r="1" fill="currentColor" stroke="none"/>
+                  <circle cx="9" cy="19" r="1" fill="currentColor" stroke="none"/><circle cx="15" cy="19" r="1" fill="currentColor" stroke="none"/>
+                </svg>
+              </div>
+              <button class="bucket-action-btn" onclick="ctxFromRow(event,'Orders')" title="Options">
+                <svg width="14" height="14" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2">
+                  <circle cx="12" cy="5" r="1"/><circle cx="12" cy="12" r="1"/><circle cx="12" cy="19" r="1"/>
+                </svg>
+              </button>
+            </div>
+          </div>
+        </div>
+
+      </div>
+    </div>
+  </div>
+</div>
+
+<!-- ═══ CONTEXT MENU ═══ -->
+<div class="ctx-menu" id="ctx-menu">
+  <div class="ctx-item" onclick="openMoveModal()">
+    <svg width="14" height="14" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2">
+      <line x1="12" y1="5" x2="12" y2="19"/><line x1="5" y1="12" x2="19" y2="12"/>
+    </svg>
+    Add to category
+  </div>
+  <div class="ctx-item" onclick="closeCtx()">
+    <svg width="14" height="14" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2">
+      <path d="M11 4H4a2 2 0 0 0-2 2v14a2 2 0 0 0 2 2h14a2 2 0 0 0 2-2v-7"/>
+      <path d="M18.5 2.5a2.121 2.121 0 0 1 3 3L12 15l-4 1 1-4 9.5-9.5z"/>
+    </svg>
+    Edit
+  </div>
+  <div class="ctx-sep"></div>
+  <div class="ctx-item danger" onclick="closeCtx()">
+    <svg width="14" height="14" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2">
+      <polyline points="3 6 5 6 21 6"/>
+      <path d="M19 6l-1 14a2 2 0 0 1-2 2H8a2 2 0 0 1-2-2L5 6"/>
+      <path d="M10 11v6"/><path d="M14 11v6"/>
+    </svg>
+    Delete
+  </div>
+</div>
+
+<!-- ═══ MOVE TO CATEGORY MODAL ═══ -->
+<div class="modal-overlay" id="modal-overlay" onclick="closeOnOverlay(event)">
+  <div class="modal">
+    <div class="modal-head">
+      <div class="modal-title">
+        Move <span id="modal-bucket-name">Logs</span> to Category <span>"<span id="modal-cat-preview"></span>"</span>
+      </div>
+    </div>
+
+    <div class="modal-body">
+      <div class="cat-search-wrap">
+        <div class="cat-search-icon">
+          <svg width="14" height="14" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2">
+            <polyline points="4 7 4 4 20 4 20 7"/>
+            <line x1="9" y1="20" x2="15" y2="20"/>
+            <line x1="12" y1="4" x2="12" y2="20"/>
+          </svg>
+        </div>
+        <input
+          class="cat-search-input"
+          id="cat-search"
+          type="text"
+          placeholder="Find a category"
+          oninput="filterCategories(this.value)"
+          onfocus="showCatList()"
+          autocomplete="off"
+        />
+      </div>
+    </div>
+
+    <!-- Category dropdown list -->
+    <div class="cat-list-wrap" id="cat-list-wrap">
+      <div id="cat-no-results" class="cat-no-results">Eşleşen kategori bulunamadı.</div>
+    </div>
+
+    <div class="modal-foot">
+      <div class="modal-foot-left">
+        <button class="btn-move" id="btn-move" onclick="doMove()">
+          <svg width="13" height="13" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2.2">
+            <polyline points="20 6 9 17 4 12"/>
+          </svg>
+          Taşı
+        </button>
+      </div>
+      <button class="btn-add-cat" id="btn-add-cat" onclick="addNewCategory()" disabled>
+        <svg width="13" height="13" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2.5">
+          <line x1="12" y1="5" x2="12" y2="19"/><line x1="5" y1="12" x2="19" y2="12"/>
+        </svg>
+        Add &nbsp;<span class="cat-name-in-btn" id="btn-cat-label">"Category Name"</span>&nbsp; as new category
+      </button>
+      <button class="btn-cancel" onclick="closeModal()">
+        <svg width="12" height="12" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2.5">
+          <line x1="18" y1="6" x2="6" y2="18"/><line x1="6" y1="6" x2="18" y2="18"/>
+        </svg>
+        Cancel
+      </button>
+    </div>
+  </div>
+</div>
+
+<div class="toast" id="toast"></div>
+
+<script>
+/* ── Categories data ── */
+let categories = [
+  { id:'stripe',  name:'Stripe',             count: 4 },
+  { id:'ai',      name:'AI',                 count: 2 },
+  { id:'rbac',    name:'RBAC',               count: 1 },
+  { id:'pub',     name:'Publishing',         count: 3 },
+  { id:'analytics',name:'Analytics',         count: 2 },
+  { id:'auth',    name:'Auth',               count: 5 },
+  { id:'proj',    name:'Projects',           count: 1 },
+  { id:'pc',      name:'Platform Comms',     count: 2 },
+  { id:'vi',      name:'Visitor Integrations',count:3 },
+  { id:'util',    name:'Utilities',          count: 4 },
+  { id:'comp',    name:'Components',         count: 2 },
+  { id:'cms',     name:'CMS',               count: 6 },
+];
+
+let activeBucket   = '';
+let selectedCatId  = null;
+let ctxOpen        = false;
+
+/* ── Theme ── */
+function toggleTheme() {
+  const dark = document.documentElement.getAttribute('data-theme') === 'dark';
+  document.documentElement.setAttribute('data-theme', dark ? '' : 'dark');
+  localStorage.setItem('spica-theme', dark ? 'light' : 'dark');
+}
+if (localStorage.getItem('spica-theme') === 'dark')
+  document.documentElement.setAttribute('data-theme', 'dark');
+
+/* ── Active nav row ── */
+function setActive(el) {
+  document.querySelectorAll('.nav-row').forEach(r => r.classList.remove('active'));
+  if (el) el.classList.add('active');
+}
+
+/* ── Toggle sidebar cat group ── */
+function toggleCatGroup(id) {
+  document.getElementById(id).classList.toggle('collapsed');
+}
+function toggleCatSection(id) {
+  const sec = document.getElementById(id);
+  const head = sec.querySelector('.bucket-category-head');
+  sec.classList.toggle('collapsed');
+  head.classList.toggle('collapsed');
+}
+
+/* ── Context menu ── */
+function openCtx(e, bucketName) {
+  e.preventDefault(); e.stopPropagation();
+  activeBucket = bucketName;
+  const menu = document.getElementById('ctx-menu');
+  const x = Math.min(e.clientX, window.innerWidth - 200);
+  const y = Math.min(e.clientY, window.innerHeight - 160);
+  menu.style.left = x + 'px';
+  menu.style.top  = y + 'px';
+  menu.classList.add('open');
+  ctxOpen = true;
+}
+function ctxFromRow(e, name) { openCtx(e, name); }
+function closeCtx() {
+  document.getElementById('ctx-menu').classList.remove('open');
+  ctxOpen = false;
+}
+
+document.addEventListener('click', () => { if (ctxOpen) closeCtx(); });
+document.addEventListener('contextmenu', (e) => {
+  if (!e.target.closest('.ctx-menu') && !e.target.closest('.bucket-row') && !e.target.closest('.nav-row-dots')) {
+    closeCtx();
+  }
+});
+document.addEventListener('keydown', e => {
+  if (e.key === 'Escape') { closeCtx(); closeModal(); }
+});
+
+/* ── Modal ── */
+function openMoveModal() {
+  closeCtx();
+  document.getElementById('modal-bucket-name').textContent = activeBucket;
+  document.getElementById('modal-cat-preview').textContent = '';
+  document.getElementById('cat-search').value = '';
+  document.getElementById('btn-cat-label').textContent = '"Category Name"';
+  document.getElementById('btn-add-cat').disabled = true;
+  document.getElementById('btn-move').classList.remove('visible');
+  selectedCatId = null;
+  buildCatList('');
+  document.getElementById('cat-list-wrap').classList.remove('visible');
+  document.getElementById('modal-overlay').classList.add('open');
+  setTimeout(() => document.getElementById('cat-search').focus(), 80);
+}
+function closeModal() {
+  document.getElementById('modal-overlay').classList.remove('open');
+}
+function closeOnOverlay(e) {
+  if (e.target === document.getElementById('modal-overlay')) closeModal();
+}
+
+/* ── Build category list ── */
+function buildCatList(query) {
+  const wrap = document.getElementById('cat-list-wrap');
+  const noRes = document.getElementById('cat-no-results');
+  const q = query.toLowerCase().trim();
+
+  // Remove old items except no-results
+  wrap.querySelectorAll('.cat-list-item').forEach(el => el.remove());
+
+  let count = 0;
+  categories.forEach(cat => {
+    if (q && !cat.name.toLowerCase().includes(q)) return;
+    count++;
+    const div = document.createElement('div');
+    div.className = 'cat-list-item' + (selectedCatId === cat.id ? ' selected' : '');
+    div.dataset.id = cat.id;
+    div.dataset.name = cat.name;
+    div.innerHTML = `
+      <svg class="cat-item-icon" width="13" height="13" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2">
+        <polyline points="4 7 4 4 20 4 20 7"/>
+        <line x1="9" y1="20" x2="15" y2="20"/>
+        <line x1="12" y1="4" x2="12" y2="20"/>
+      </svg>
+      ${cat.name}
+      <span class="cat-item-count">${cat.count}</span>`;
+    div.onclick = () => selectCat(cat.id, cat.name);
+    wrap.insertBefore(div, noRes);
+  });
+
+  noRes.style.display = count === 0 ? 'block' : 'none';
+}
+
+function showCatList() {
+  const wrap = document.getElementById('cat-list-wrap');
+  wrap.classList.add('visible');
+  buildCatList(document.getElementById('cat-search').value);
+}
+
+function filterCategories(val) {
+  const wrap = document.getElementById('cat-list-wrap');
+  wrap.classList.add('visible');
+  buildCatList(val);
+
+  // Update add button
+  const trimmed = val.trim();
+  const btn = document.getElementById('btn-add-cat');
+  const lbl = document.getElementById('btn-cat-label');
+  if (trimmed) {
+    lbl.textContent = `"${trimmed}"`;
+    btn.disabled = false;
+  } else {
+    lbl.textContent = '"Category Name"';
+    btn.disabled = true;
+  }
+
+  // Update title preview
+  document.getElementById('modal-cat-preview').textContent = selectedCatId
+    ? categories.find(c => c.id === selectedCatId)?.name || ''
+    : trimmed;
+}
+
+function selectCat(id, name) {
+  selectedCatId = id;
+  document.querySelectorAll('.cat-list-item').forEach(el => {
+    el.classList.toggle('selected', el.dataset.id === id);
+  });
+  document.getElementById('cat-search').value = name;
+  document.getElementById('modal-cat-preview').textContent = name;
+  document.getElementById('btn-cat-label').textContent = `"${name}"`;
+  document.getElementById('btn-add-cat').disabled = false;
+  document.getElementById('btn-move').classList.add('visible');
+}
+
+function doMove() {
+  if (!selectedCatId) return;
+  const catName = categories.find(c => c.id === selectedCatId)?.name;
+  closeModal();
+  toast(`"${activeBucket}" → "${catName}" kategorisine taşındı`);
+}
+
+function addNewCategory() {
+  const val = document.getElementById('cat-search').value.trim();
+  if (!val) return;
+  const newId = val.toLowerCase().replace(/\s+/g,'-');
+  if (!categories.find(c => c.id === newId)) {
+    categories.push({ id: newId, name: val, count: 1 });
+  }
+  closeModal();
+  toast(`"${val}" kategorisi oluşturuldu ve "${activeBucket}" eklendi`);
+}
+
+/* ════════════════════════════════════════
+   DRAG & DROP — Buckets & Categories
+════════════════════════════════════════ */
+let dragSrc      = null;   // bucket-row being dragged
+let dragCatSrc   = null;   // cat-section being dragged
+let dragType     = null;   // 'bucket' | 'category'
+let lastIndicator = null;
+
+const DRAG_SVG = `<svg width="14" height="14" fill="none" viewBox="0 0 24 24">
+  <circle cx="9" cy="5" r="1.2" fill="currentColor"/>
+  <circle cx="15" cy="5" r="1.2" fill="currentColor"/>
+  <circle cx="9" cy="12" r="1.2" fill="currentColor"/>
+  <circle cx="15" cy="12" r="1.2" fill="currentColor"/>
+  <circle cx="9" cy="19" r="1.2" fill="currentColor"/>
+  <circle cx="15" cy="19" r="1.2" fill="currentColor"/>
+</svg>`;
+
+/* ── Init drag on all bucket rows & category sections ── */
+function initDrag() {
+  /* Bucket rows */
+  document.querySelectorAll('.bucket-row').forEach(row => {
+    const handle = row.querySelector('.bucket-drag-handle');
+    if (!handle) return;
+
+    handle.addEventListener('mousedown', () => { row.draggable = true; });
+    handle.addEventListener('mouseup',   () => { row.draggable = false; });
+
+    row.addEventListener('dragstart', e => {
+      dragType = 'bucket';
+      dragSrc  = row;
+      e.dataTransfer.effectAllowed = 'move';
+      e.dataTransfer.setData('text/plain', row.querySelector('.bucket-name')?.textContent || '');
+      setTimeout(() => row.classList.add('dragging'), 0);
+    });
+    row.addEventListener('dragend', () => {
+      row.draggable = false;
+      row.classList.remove('dragging');
+      clearDropState();
+      dragSrc = null; dragType = null;
+    });
+  });
+
+  /* Category sections */
+  document.querySelectorAll('.cat-section').forEach(sec => {
+    const handle = sec.querySelector('.cat-drag-handle');
+    if (!handle) return;
+
+    handle.addEventListener('mousedown', e => {
+      e.stopPropagation();
+      sec.draggable = true;
+    });
+    handle.addEventListener('mouseup', () => { sec.draggable = false; });
+
+    sec.addEventListener('dragstart', e => {
+      if (e.target.closest('.bucket-row')) return; // let bucket take over
+      dragType   = 'category';
+      dragCatSrc = sec;
+      e.dataTransfer.effectAllowed = 'move';
+      e.dataTransfer.setData('text/plain', sec.dataset.catId || '');
+      setTimeout(() => sec.classList.add('dragging-cat'), 0);
+    });
+    sec.addEventListener('dragend', () => {
+      sec.draggable = false;
+      sec.classList.remove('dragging-cat');
+      clearDropState();
+      dragCatSrc = null; dragType = null;
+    });
+  });
+
+  /* Drop zones — bucket items containers */
+  document.querySelectorAll('.cat-section-items').forEach(zone => {
+    zone.addEventListener('dragover', e => {
+      if (dragType !== 'bucket') return;
+      e.preventDefault(); e.dataTransfer.dropEffect = 'move';
+      zone.classList.add('drag-over-zone');
+
+      const afterEl = getDragAfterElement(zone, e.clientY);
+      clearIndicators();
+      const ind = makeIndicator();
+      if (!afterEl) {
+        zone.appendChild(ind);
+      } else {
+        zone.insertBefore(ind, afterEl);
+      }
+      lastIndicator = ind;
+    });
+
+    zone.addEventListener('dragleave', e => {
+      if (!zone.contains(e.relatedTarget)) {
+        zone.classList.remove('drag-over-zone');
+        clearIndicators();
+      }
+    });
+
+    zone.addEventListener('drop', e => {
+      e.preventDefault(); e.stopPropagation();
+      if (dragType !== 'bucket' || !dragSrc) return;
+      zone.classList.remove('drag-over-zone');
+      clearIndicators();
+
+      const afterEl = getDragAfterElement(zone, e.clientY);
+      if (afterEl && afterEl !== dragSrc) {
+        zone.insertBefore(dragSrc, afterEl);
+      } else if (!afterEl) {
+        zone.appendChild(dragSrc);
+      }
+
+      const catName = zone.closest('.cat-section')?.querySelector('.bucket-category-head')
+        ?.textContent?.replace(/[0-9]/g,'').trim() || 'Kategorisiz';
+      const bucketName = dragSrc.querySelector('.bucket-name')?.textContent || '';
+      toast(`"${bucketName}" sıralandı — ${catName}`);
+      initDrag(); // re-bind after DOM change
+    });
+  });
+
+  /* Drop zones — bucket list (category reorder) */
+  const bucketList = document.querySelector('.bucket-list');
+  if (bucketList) {
+    bucketList.addEventListener('dragover', e => {
+      if (dragType !== 'category') return;
+      e.preventDefault(); e.dataTransfer.dropEffect = 'move';
+
+      const afterEl = getCatAfterElement(bucketList, e.clientY);
+      clearIndicators();
+      const ind = makeCatIndicator();
+      if (!afterEl) {
+        bucketList.appendChild(ind);
+      } else {
+        bucketList.insertBefore(ind, afterEl);
+      }
+      lastIndicator = ind;
+    });
+
+    bucketList.addEventListener('dragleave', e => {
+      if (!bucketList.contains(e.relatedTarget)) clearIndicators();
+    });
+
+    bucketList.addEventListener('drop', e => {
+      if (dragType !== 'category' || !dragCatSrc) return;
+      e.preventDefault();
+      clearIndicators();
+
+      const afterEl = getCatAfterElement(bucketList, e.clientY);
+      if (afterEl && afterEl !== dragCatSrc) {
+        bucketList.insertBefore(dragCatSrc, afterEl);
+      } else if (!afterEl) {
+        bucketList.appendChild(dragCatSrc);
+      }
+      toast(`Kategori yeniden sıralandı`);
+      initDrag();
+    });
+  }
+}
+
+/* ── Helpers ── */
+function getDragAfterElement(container, y) {
+  const els = [...container.querySelectorAll('.bucket-row:not(.dragging):not(.drop-indicator)')];
+  return els.reduce((closest, el) => {
+    const box = el.getBoundingClientRect();
+    const offset = y - box.top - box.height / 2;
+    if (offset < 0 && offset > closest.offset) return { offset, el };
+    return closest;
+  }, { offset: Number.NEGATIVE_INFINITY }).el;
+}
+
+function getCatAfterElement(container, y) {
+  const els = [...container.querySelectorAll('.cat-section:not(.dragging-cat):not(.drop-indicator)')];
+  return els.reduce((closest, el) => {
+    const box = el.getBoundingClientRect();
+    const offset = y - box.top - box.height / 2;
+    if (offset < 0 && offset > closest.offset) return { offset, el };
+    return closest;
+  }, { offset: Number.NEGATIVE_INFINITY }).el;
+}
+
+function makeIndicator() {
+  const d = document.createElement('div');
+  d.className = 'drop-indicator active';
+  return d;
+}
+function makeCatIndicator() {
+  const d = document.createElement('div');
+  d.className = 'drop-indicator active';
+  d.style.margin = '4px 0';
+  return d;
+}
+function clearIndicators() {
+  document.querySelectorAll('.drop-indicator').forEach(el => el.remove());
+  lastIndicator = null;
+}
+function clearDropState() {
+  clearIndicators();
+  document.querySelectorAll('.drag-over-zone').forEach(el => el.classList.remove('drag-over-zone'));
+  document.querySelectorAll('.drop-target-cat').forEach(el => el.classList.remove('drop-target-cat'));
+}
+
+/* ── Toast ── */
+function toast(msg) {
+  const t = document.getElementById('toast');
+  t.textContent = msg;
+  t.classList.add('show');
+  setTimeout(() => t.classList.remove('show'), 2800);
+}
+
+/* ════════════════════════════════════════
+   SIDEBAR DRAG & DROP
+════════════════════════════════════════ */
+let sbDragRow    = null;   // nav-row being dragged
+let sbDragCat    = null;   // cat-group being dragged
+let sbDragType   = null;   // 'row' | 'cat'
+
+function initSidebarDrag() {
+  /* ── Bucket nav-rows ── */
+  document.querySelectorAll('.nav-row[data-bucket]').forEach(row => {
+    const handle = row.querySelector('.nav-drag-handle');
+    if (!handle) return;
+
+    handle.addEventListener('mousedown', e => {
+      e.stopPropagation();
+      row.draggable = true;
+    });
+    handle.addEventListener('mouseup', () => { row.draggable = false; });
+
+    row.addEventListener('dragstart', e => {
+      sbDragType = 'row';
+      sbDragRow  = row;
+      e.dataTransfer.effectAllowed = 'move';
+      e.dataTransfer.setData('text/plain', row.dataset.bucket || '');
+      setTimeout(() => row.classList.add('sb-dragging'), 0);
+    });
+
+    row.addEventListener('dragend', () => {
+      row.draggable = false;
+      row.classList.remove('sb-dragging');
+      sbClearDrop();
+      sbDragRow = null; sbDragType = null;
+    });
+  });
+
+  /* ── Cat-group items containers — drop zones for rows ── */
+  document.querySelectorAll('.cat-group-items, #sbi-uncategorized').forEach(zone => {
+    zone.addEventListener('dragover', e => {
+      if (sbDragType !== 'row') return;
+      e.preventDefault(); e.dataTransfer.dropEffect = 'move';
+      zone.classList.add('sb-drop-zone');
+      sbClearLines();
+      const after = sbGetAfterRow(zone, e.clientY);
+      const line  = makeSbLine();
+      after ? zone.insertBefore(line, after) : zone.appendChild(line);
+    });
+
+    zone.addEventListener('dragleave', e => {
+      if (!zone.contains(e.relatedTarget)) {
+        zone.classList.remove('sb-drop-zone');
+        sbClearLines();
+      }
+    });
+
+    zone.addEventListener('drop', e => {
+      e.preventDefault(); e.stopPropagation();
+      if (sbDragType !== 'row' || !sbDragRow) return;
+      zone.classList.remove('sb-drop-zone');
+      sbClearLines();
+
+      const after = sbGetAfterRow(zone, e.clientY);
+      after ? zone.insertBefore(sbDragRow, after) : zone.appendChild(sbDragRow);
+
+      const catName = zone.closest('.cat-group')?.querySelector('.cat-group-head')
+        ?.childNodes[2]?.textContent?.trim()
+        || 'Kategorisiz';
+      toast(`"${sbDragRow.dataset.bucket}" → ${catName}`);
+      initSidebarDrag();
+    });
+  });
+
+  /* ── Cat-groups — draggable ── */
+  document.querySelectorAll('.cat-group[data-cat]').forEach(group => {
+    const handle = group.querySelector('.cat-group-drag');
+    if (!handle) return;
+
+    handle.addEventListener('mousedown', e => {
+      e.stopPropagation();
+      group.draggable = true;
+    });
+    handle.addEventListener('mouseup', () => { group.draggable = false; });
+
+    group.addEventListener('dragstart', e => {
+      if (e.target.closest('.nav-row')) return;
+      sbDragType = 'cat';
+      sbDragCat  = group;
+      e.dataTransfer.effectAllowed = 'move';
+      e.dataTransfer.setData('text/plain', group.dataset.cat || '');
+      setTimeout(() => group.classList.add('sb-dragging-cat'), 0);
+    });
+
+    group.addEventListener('dragend', () => {
+      group.draggable = false;
+      group.classList.remove('sb-dragging-cat');
+      sbClearDrop();
+      sbDragCat = null; sbDragType = null;
+    });
+  });
+
+  /* ── Sidebar-body — drop zone for categories ── */
+  const sidebarBody = document.getElementById('sidebar-body');
+  if (sidebarBody) {
+    sidebarBody.addEventListener('dragover', e => {
+      if (sbDragType !== 'cat') return;
+      e.preventDefault(); e.dataTransfer.dropEffect = 'move';
+      sbClearLines();
+      const after = sbGetAfterCat(sidebarBody, e.clientY);
+      const line  = makeSbLine();
+      line.style.margin = '3px 4px';
+      after ? sidebarBody.insertBefore(line, after) : sidebarBody.insertBefore(line, sidebarBody.querySelector('[style]'));
+    });
+
+    sidebarBody.addEventListener('dragleave', e => {
+      if (!sidebarBody.contains(e.relatedTarget)) sbClearLines();
+    });
+
+    sidebarBody.addEventListener('drop', e => {
+      if (sbDragType !== 'cat' || !sbDragCat) return;
+      e.preventDefault();
+      sbClearLines();
+      const after = sbGetAfterCat(sidebarBody, e.clientY);
+      after ? sidebarBody.insertBefore(sbDragCat, after) : sidebarBody.insertBefore(sbDragCat, sidebarBody.querySelector('[style]'));
+      toast('Kategori yeniden sıralandı');
+      initSidebarDrag();
+    });
+  }
+}
+
+/* ── Sidebar helpers ── */
+function sbGetAfterRow(container, y) {
+  const items = [...container.querySelectorAll('.nav-row:not(.sb-dragging):not(.sb-drop-line)')];
+  return items.reduce((closest, el) => {
+    const box = el.getBoundingClientRect();
+    const offset = y - box.top - box.height / 2;
+    if (offset < 0 && offset > closest.offset) return { offset, el };
+    return closest;
+  }, { offset: Number.NEGATIVE_INFINITY }).el;
+}
+
+function sbGetAfterCat(container, y) {
+  const items = [...container.querySelectorAll('.cat-group:not(.sb-dragging-cat)')];
+  return items.reduce((closest, el) => {
+    const box = el.getBoundingClientRect();
+    const offset = y - box.top - box.height / 2;
+    if (offset < 0 && offset > closest.offset) return { offset, el };
+    return closest;
+  }, { offset: Number.NEGATIVE_INFINITY }).el;
+}
+
+function makeSbLine() {
+  const d = document.createElement('div');
+  d.className = 'sb-drop-line';
+  return d;
+}
+
+function sbClearLines() {
+  document.querySelectorAll('.sb-drop-line').forEach(el => el.remove());
+}
+
+function sbClearDrop() {
+  sbClearLines();
+  document.querySelectorAll('.sb-drop-zone').forEach(el => el.classList.remove('sb-drop-zone'));
+}
+
+initSidebarDrag();
+initDrag();
+</script>
+</body>
+</html>

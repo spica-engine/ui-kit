@@ -12,7 +12,6 @@ const InputWithIcon: FC<TypeInputWithIcon> = ({ className, inputProps, ...props 
     <FluidContainer
       ref={props.ref}
       className={`${styles.container} ${className} ${inputProps?.disabled && styles.disabled}`}
-      dimensionY={36}
       root={{
         children: <Input {...inputProps} className={`${inputProps?.className} ${styles.input}`} />,
         dimensionX: "fill",

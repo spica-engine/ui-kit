@@ -1,38 +1,101 @@
-@use "styles/mixins";
+/* ep-field layout */
+.field {
+  display: flex;
+  flex-direction: column;
+  gap: var(--spacing-4); /* 5px */
+  width: 100%;
+}
 
-.container {
-  @include mixins.inputContainer;
-  padding: var(--oziko-padding-md);
+/* ep-field-head */
+.fieldHead {
+  display: flex;
+  align-items: center;
+  gap: var(--spacing-4); /* 5px */
+}
 
-  .top {
-    padding: var(--oziko-padding-md);
+/* ep-field-name */
+.fieldName {
+  font-size: var(--font-size-sm); /* 11px */
+  font-weight: var(--font-weight-semibold); /* 600 */
+  letter-spacing: 0.03em;
+  color: var(--color-text-muted);
+  display: flex;
+  align-items: center;
+  gap: var(--spacing-3); /* 4px */
+}
+
+/* ep-field-type badge */
+.fieldType {
+  font-size: var(--font-size-2xs); /* 9px */
+  font-weight: var(--font-weight-medium); /* 500 */
+  font-family: var(--font-mono);
+  color: var(--color-text-faint);
+  background: var(--color-surface-3);
+  padding: 1px var(--spacing-4); /* 1px 5px */
+  border-radius: var(--radius-xs); /* 3px */
+  margin-left: var(--spacing-2); /* 3px */
+}
+
+/* field icon: 10×10 */
+.icon {
+  color: var(--color-text-muted) !important;
+  width: 10px !important;
+  height: 10px !important;
+  flex-shrink: 0;
+}
+
+/* ep-storage dropzone */
+.storage {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  gap: var(--spacing-4); /* 5px */
+  padding: var(--spacing-11); /* 14px */
+  text-align: center;
+  border: 1.5px dashed var(--color-border);
+  border-radius: var(--radius-xl); /* 8px */
+  cursor: pointer;
+  color: var(--color-text-muted);
+  font-size: var(--font-size-base); /* 12px */
+  transition: border-color var(--transition-border), color var(--transition-border),
+    background var(--transition-border);
+  width: 100%;
+
+  &:hover {
+    border-color: var(--color-accent);
+    color: var(--color-accent);
+    background: var(--color-accent-subtle);
   }
 
-  .storage {
+  .uploadIcon {
+    color: inherit !important;
+    width: 20px !important;
+    height: 20px !important;
+    flex-shrink: 0;
+  }
+
+  /* file preview */
+  .previewIcon {
+    position: absolute;
+    z-index: 1;
+    color: #ffd740;
+    transition: transform var(--transition-base) ease-in-out;
+  }
+
+  &.hasFile {
     position: relative;
-    cursor: pointer;
-    opacity: 0.8;
-    transition: all var(--oziko-transition-duration) ease-in-out;
-
-    .previewIcon {
-      position: absolute;
-      z-index: 1;
-      color: #ffd740;
-      transition: all var(--oziko-transition-duration) ease-in-out;
-    }
-
-    .text {
-      span {
-        text-align: center;
-      }
-    }
-
+    opacity: 0.85;
     &:hover {
       opacity: 1;
-
       .previewIcon {
         transform: rotate(180deg);
       }
     }
   }
+}
+
+/* description / helper text */
+.helperText {
+  color: var(--color-text-muted);
 }

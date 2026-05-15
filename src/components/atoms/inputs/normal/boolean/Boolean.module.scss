@@ -1,10 +1,108 @@
-@use "styles/mixins";
-
-.container {
-  @include mixins.inputContainer;
+/* ep-field layout */
+.field {
+  display: flex;
+  flex-direction: column;
+  gap: var(--spacing-4); /* 5px */
+  width: 100%;
 }
 
+/* ep-field-head */
+.fieldHead {
+  display: flex;
+  align-items: center;
+  gap: var(--spacing-4); /* 5px */
+}
+
+/* ep-field-name */
+.fieldName {
+  font-size: var(--font-size-sm); /* 11px */
+  font-weight: var(--font-weight-semibold);
+  letter-spacing: 0.03em;
+  color: var(--color-text-muted);
+  display: flex;
+  align-items: center;
+  gap: var(--spacing-3); /* 4px */
+}
+
+/* field icon */
+.icon {
+  color: var(--color-text-muted) !important;
+  width: 10px !important;
+  height: 10px !important;
+  flex-shrink: 0;
+}
+
+/* ep-field-type badge */
+.fieldType {
+  font-size: var(--font-size-2xs); /* 9px */
+  font-weight: var(--font-weight-medium);
+  font-family: var(--font-mono);
+  color: var(--color-text-faint);
+  background: var(--color-surface-3);
+  padding: 1px var(--spacing-4); /* 1px 5px */
+  border-radius: var(--radius-xs); /* 3px */
+  margin-left: var(--spacing-2); /* 3px */
+}
+
+/* ep-toggle-row */
+.toggleRow {
+  display: flex;
+  align-items: center;
+  gap: var(--spacing-7); /* 8px */
+}
+
+/* ep-toggle */
+.toggle {
+  width: 32px;
+  height: 18px;
+  border-radius: 9px;
+  background: var(--color-surface-3);
+  border: 1px solid var(--color-border-mid);
+  position: relative;
+  cursor: pointer;
+  flex-shrink: 0;
+  transition: background var(--transition-border), border-color var(--transition-border);
+  outline: none;
+
+  &::after {
+    content: '';
+    position: absolute;
+    width: 12px;
+    height: 12px;
+    border-radius: 50%;
+    background: #fff;
+    top: 2px;
+    left: 2px;
+    transition: transform var(--transition-toggle);
+    box-shadow: 0 1px 2px rgba(0, 0, 0, 0.2);
+  }
+
+  &:focus-visible {
+    box-shadow: 0 0 0 2px var(--color-accent-subtle-2);
+  }
+}
+
+.toggleOn {
+  background: var(--color-accent);
+  border-color: var(--color-accent);
+
+  &::after {
+    transform: translateX(14px);
+  }
+}
+
+.toggleDisabled {
+  opacity: var(--opacity-disabled);
+  cursor: not-allowed;
+}
+
+/* ep-toggle-label */
+.toggleLabel {
+  font-size: var(--font-size-base-plus); /* 12.5px */
+  color: var(--color-text-secondary);
+}
+
+/* description */
 .description {
-  width: 100% !important;
-  @include mixins.inputDescriptionContainer;
+  color: var(--color-text-muted);
 }

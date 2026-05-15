@@ -1,80 +1,176 @@
-.table {
-  display: flex;
-  border: 1px solid var(--oziko-color-border);
-}
-
-.fixedColumns {
-  position: sticky !important;
-  left: 0;
-  z-index: 1;
-}
-
-.scrollableColumns {
-  overflow-x: auto;
-}
-
-.column {
-  flex: 1;
-  position: relative;
-
-  &:not(:last-child) {
-    border-right: 1px solid var(--oziko-color-border);
-  }
-}
-
-.header {
-  padding: var(--oziko-padding-md);
-  &.border {
-    border-bottom: 1px solid var(--oziko-color-border);
-  }
-}
-
-.cellContainer {
+/* ── Table root wrapper ──────────────────────────────────────────────────── */
+.tableRoot {
   display: flex;
   flex-direction: column;
+  flex: 1;
+  min-height: 0;
+  overflow: hidden;
 }
 
-.cell {
-  padding: var(--oziko-padding-sm) var(--oziko-padding-md);
+/* ── Table scroll area ────────────────────────────────────────────────────── */
+.tableArea {
+  overflow: auto;
+  position: relative;
+
+  &::-webkit-scrollbar {
+    width: 6px;
+    height: 6px;
+  }
+
+  &::-webkit-scrollbar-thumb {
+    background: var(--color-border-mid);
+    border-radius: 3px;
+  }
+
+  &::-webkit-scrollbar-track {
+    background: transparent;
+  }
+}
+
+/* ── Table element ─────────────────────────────────────────────────────────── */
+.table {
+  min-width: 100%;
+  border-collapse: separate;
+  border-spacing: 0;
+  table-layout: fixed;
+  font-family: var(--font-sans);
+  font-size: var(--font-size-base-plus);
+  color: var(--color-text-primary);
+}
+
+/* ── Header ────────────────────────────────────────────────────────────────── */
+.thead {
+  position: sticky;
+  top: 0;
+  z-index: 10;
+}
+
+.th {
+  height: 34px;
+  padding: 0 12px;
+  text-align: left;
+  font-size: var(--font-size-sm-plus);
+  font-weight: var(--font-weight-medium);
+  color: var(--color-text-secondary);
+  background: var(--color-surface-2);
+  border-bottom: 1px solid var(--color-border);
+  border-right: 1px solid var(--color-border);
+  white-space: nowrap;
+  overflow: hidden;
+  user-select: none;
+  cursor: default;
+  position: relative;
+
+  &:last-child {
+    border-right: none;
+  }
+
+  &:hover {
+    background: var(--color-surface-3);
+  }
+}
+
+.thContent {
   display: flex;
   align-items: center;
-  width: 100%;
-  box-sizing: border-box;
-  min-height: 30px;
-  height: 30px;
-
-  &:not(:last-child) {
-    border-bottom: 1px solid var(--oziko-color-border);
-  }
-
-  > * {
-    width: 100%;
-  }
+  gap: 5px;
+  height: 100%;
+  overflow: hidden;
 }
 
-.resizer {
-  width: 3px;
-  height: 100%;
-  cursor: ew-resize;
+.thResizer {
   position: absolute;
   right: 0;
   top: 0;
+  width: 4px;
+  height: 100%;
+  cursor: ew-resize;
+  z-index: 1;
   opacity: 0;
-  transition: opacity var(--oziko-transition-duration) ease;
+  background: var(--color-accent-subtle-2);
+  border-radius: 0 2px 2px 0;
+  transition: opacity 0.15s;
+
+  .th:hover & {
+    opacity: 1;
+  }
 }
 
-.focusedCell {
-  border: 1px solid var(--oziko-color-primary) !important;
+/* ── Body rows ─────────────────────────────────────────────────────────────── */
+.tr {
+  background: var(--color-surface);
+  transition: background 0.08s;
 }
 
+.trClickable {
+  cursor: pointer;
+
+  &:hover {
+    background: var(--color-surface-2);
+  }
+}
+
+.skeletonRow {
+  background: var(--color-surface);
+}
+
+/* ── Cells ─────────────────────────────────────────────────────────────────── */
+.td {
+  height: 36px;
+  padding: 0;
+  border-bottom: 1px solid var(--color-border);
+  border-right: 1px solid var(--color-border);
+  vertical-align: middle;
+  overflow: hidden;
+
+  &:last-child {
+    border-right: none;
+  }
+}
+
+.cellInner {
+  padding: 0 12px;
+  display: flex;
+  align-items: center;
+  height: 100%;
+  overflow: hidden;
+  font-size: var(--font-size-base-plus);
+  color: var(--color-text-primary);
+  white-space: nowrap;
+}
+
+/* ── Sticky (fixed) columns ────────────────────────────────────────────────── */
+.stickyCell {
+  position: sticky !important;
+  z-index: 2;
+  background: inherit;
+
+  &::after {
+    content: "";
+    position: absolute;
+    right: 0;
+    top: 0;
+    bottom: 0;
+    width: 1px;
+    background: var(--color-border);
+  }
+}
+
+thead .stickyCell {
+  z-index: 11;
+  background: var(--color-surface-2);
+}
+
+/* ── Skeleton shimmer ──────────────────────────────────────────────────────── */
 .skeletonCell {
   width: 100%;
-  height: 100%;
+  height: 14px;
+  border-radius: 4px;
   background: linear-gradient(
     90deg,
-    var(--oziko-color-soft) 0%,
-    var(--oziko-color-soft-light) 50%,
-    var(--oziko-color-soft) 100%
+    var(--color-surface-3) 0%,
+    var(--color-surface) 50%,
+    var(--color-surface-3) 100%
   );
   background-size: 200% 100%;
   animation: shimmer 1.5s ease-in-out infinite;
@@ -88,3 +184,78 @@
     background-position: 200% 0;
   }
 }
+
+/* ── Empty state ──────────────────────────────────────────────────────────── */
+.emptyState {
+  flex: 1;
+  min-height: 300px;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  padding: 40px 24px 32px;
+}
+
+.emptyGhostTable {
+  background: var(--color-surface);
+  border: 1px solid var(--color-border);
+  border-radius: 8px;
+  padding: 6px 16px;
+  margin-bottom: 24px;
+  overflow: hidden;
+  width: 100%;
+  max-width: 560px;
+}
+
+.emptyGhostRow {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  height: 32px;
+  border-bottom: 1px solid var(--color-border);
+
+  &:last-child {
+    border-bottom: none;
+  }
+}
+
+.emptyGhostBar {
+  height: 8px;
+  border-radius: 4px;
+  background: var(--color-border-mid);
+  flex-shrink: 0;
+}
+
+.emptyGhostDot {
+  width: 18px;
+  height: 18px;
+  border-radius: 50%;
+  background: var(--color-border-mid);
+  margin-left: auto;
+  flex-shrink: 0;
+}
+
+.emptyTitle {
+  font-size: var(--font-size-sm);
+  font-weight: var(--font-weight-semibold);
+  color: var(--color-text-primary);
+  margin-bottom: 6px;
+  text-align: center;
+}
+
+.emptyDescription {
+  font-size: var(--font-size-xs);
+  color: var(--color-text-secondary);
+  max-width: 320px;
+  line-height: 1.6;
+  margin-bottom: 16px;
+  text-align: center;
+}
+
+.emptyActions {
+  display: flex;
+  gap: 8px;
+  align-items: center;
+  justify-content: center;
+}
+

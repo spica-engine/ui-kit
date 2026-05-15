@@ -1,25 +1,80 @@
-@use "styles/mixins";
+/* ep-field layout */
+.field {
+  display: flex;
+  flex-direction: column;
+  gap: var(--spacing-4); /* 5px */
+  width: 100%;
+}
 
-.location {
-  background: var(--oziko-color-input-background);
-  padding: var(--oziko-gap-md);
-  border-radius: var(--oziko-border-radius-md);
+/* ep-field-head */
+.fieldHead {
+  display: flex;
+  align-items: center;
+  gap: var(--spacing-4);
+}
 
-  .icon {
-    color: var(--oziko-color-font-primary);
+/* ep-field-name */
+.fieldName {
+  font-size: var(--font-size-sm); /* 11px */
+  font-weight: var(--font-weight-semibold);
+  letter-spacing: 0.03em;
+  color: var(--color-text-muted);
+  display: flex;
+  align-items: center;
+  gap: var(--spacing-3); /* 4px */
+
+  svg {
+    flex-shrink: 0;
+    color: var(--color-text-muted);
+  }
+}
+
+/* ep-field-type badge */
+.fieldType {
+  font-size: var(--font-size-2xs); /* 9px */
+  font-weight: var(--font-weight-medium);
+  font-family: var(--font-mono);
+  color: var(--color-text-faint);
+  background: var(--color-surface-3);
+  padding: 1px var(--spacing-4);
+  border-radius: var(--radius-xs); /* 3px */
+  margin-left: var(--spacing-2); /* 3px */
+}
+
+/* map container — dimensions only; Map.module.scss handles internals */
+.map {
+  border: 1px solid var(--color-border);
+  border-radius: var(--radius-md);
+  overflow: hidden;
+  height: 100px;
+  width: 100%;
+}
+
+/* ep-coords-row */
+.coordsRow {
+  display: flex;
+  gap: 6px;
+}
+
+/* ep-input for coord fields */
+.coordInput {
+  flex: 1;
+  background: var(--color-surface-2);
+  border: 1px solid var(--color-border);
+  border-radius: var(--radius-md);
+  padding: var(--spacing-6) var(--spacing-9); /* 7px 10px */
+  font-family: var(--font-mono);
+  font-size: var(--font-size-sm); /* 11px */
+  color: var(--color-text-primary);
+  outline: none;
+  transition: border-color 0.15s;
+  width: 100%;
+
+  &::placeholder {
+    color: var(--color-text-muted);
   }
 
-  .map {
-    height: 100%;
-    width: 100%;
-    border-radius: var(--oziko-border-radius-md);
-  }
-  .mapMarker {
-    width: 35px;
-    height: 35px;
-  }
-  .description {
-    width: 100% !important;
-    @include mixins.inputDescriptionContainer;
+  &:focus {
+    border-color: var(--color-accent);
   }
 }

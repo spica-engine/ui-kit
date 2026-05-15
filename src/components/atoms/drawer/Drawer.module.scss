@@ -7,16 +7,18 @@
 
 .contentContainer {
   position: fixed;
-  background-color: var(--oziko-color-menu-background);
-  overflow: auto;
+  background-color: var(--color-surface);
+  overflow: hidden;
   display: flex;
   flex-direction: column;
-  align-items: flex-end;
+  align-items: stretch;
+  transition: transform 0.22s cubic-bezier(0.4, 0, 0.2, 1);
+  box-shadow: var(--shadow-lg);
 
   .closeButton {
     position: sticky;
     top: 0;
-    padding: var(--oziko-padding-md);
+    padding: var(--spacing-9);
     cursor: pointer;
     align-self: flex-end;
 
@@ -68,85 +70,45 @@
 
   &.top {
     top: 0;
+    transform: translateY(-100%);
+    border-bottom: 1px solid var(--border);
+    &.open {
+      transform: translateY(0);
+    }
   }
   &.right {
     right: 0;
+    transform: translateX(100%);
+    border-left: 1px solid var(--border);
+    &.open {
+      transform: translateX(0);
+    }
   }
   &.bottom {
     bottom: 0;
+    transform: translateY(100%);
+    border-top: 1px solid var(--border);
+    &.open {
+      transform: translateY(0);
+    }
   }
   &.left {
     left: 0;
-  }
-
-  &.leftToMiddle {
-    animation: slideFromLeft var(--oziko-transition-duration) forwards ease;
-  }
-
-  &.rightToMiddle {
-    animation: slideFromRight var(--oziko-transition-duration) forwards ease;
-  }
-
-  &.topToBottom {
-    animation: slideFromTop var(--oziko-transition-duration) forwards ease;
-  }
-
-  &.bottomToTop {
-    animation: slideFromBottom var(--oziko-transition-duration) forwards ease;
+    transform: translateX(-100%);
+    border-right: 1px solid var(--border);
+    &.open {
+      transform: translateX(0);
+    }
   }
 
   &.shake {
-    animation: shake var(--oziko-transition-duration) ease-in-out;
-  }
-
-  @keyframes slideFromLeft {
-    0% {
-      transform: translateX(-100%);
-      opacity: 0;
-    }
-    100% {
-      transform: translateX(0);
-      opacity: 1;
-    }
-  }
-
-  @keyframes slideFromRight {
-    0% {
-      transform: translateX(100%);
-      opacity: 0;
-    }
-    100% {
-      transform: translateX(0);
-      opacity: 1;
-    }
-  }
-
-  @keyframes slideFromTop {
-    0% {
-      transform: translateY(-100%);
-      opacity: 0;
-    }
-    100% {
-      transform: translateY(0);
-      opacity: 1;
-    }
-  }
-
-  @keyframes slideFromBottom {
-    0% {
-      transform: translateY(100%);
-      opacity: 0;
-    }
-    100% {
-      transform: translateY(0);
-      opacity: 1;
-    }
+    animation: shake 0.4s ease-in-out;
   }
 
   @keyframes shake {
     0%,
     100% {
-      transform: 0;
+      transform: translateX(0);
     }
     20%,
     60% {

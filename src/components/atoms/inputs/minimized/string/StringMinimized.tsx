@@ -1,10 +1,7 @@
-import React, { FC, memo, useState } from "react";
+import React, { FC, memo } from "react";
 import styles from "./StringMinimized.module.scss";
 import FluidContainer, { TypeFluidContainer } from "@atoms/fluid-container/FluidContainer";
-import Input from "@atoms/input/Input";
-import Select from "@molecules/select/Select";
-import Button from "@atoms/button/Button";
-import Icon from "@atoms/icon/Icon";
+import Text from "@atoms/text/Text";
 
 export type TypeStringMinimized = {
   onClear?: () => void;
@@ -15,11 +12,7 @@ export type TypeStringMinimized = {
 } & TypeFluidContainer;
 
 const StringMinimized: FC<TypeStringMinimized> = ({
-  onClear,
   value,
-  options,
-  inputProps,
-  enumOnChange,
   ...props
 }) => {
   return (
@@ -31,30 +24,10 @@ const StringMinimized: FC<TypeStringMinimized> = ({
       root={{
         dimensionX: "fill",
         alignment: "leftCenter",
-        children: options ? (
-          <Select
-            className={styles.select}
-            placeholder={value || " "}
-            options={options || []}
-            onChange={(value) => enumOnChange?.(String(value))}
-          />
-        ) : (
-          <Input value={value} {...inputProps} />
+        children: (
+          <Text size="medium">{value}</Text>
         ),
         ...props.root,
-      }}
-      suffix={{
-        dimensionX: "hug",
-        alignment: "center",
-        children: (
-          <Button
-            children={<Icon name="close" />}
-            color="transparent"
-            onClick={onClear}
-            className={styles.closeIcon}
-          />
-        ),
-        ...props.suffix,
       }}
     />
   );

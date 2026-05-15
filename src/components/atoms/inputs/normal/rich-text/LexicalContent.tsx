@@ -30,7 +30,6 @@ const LexicalContent: FC<TypeLexicalContent> = memo(({ onChange, placeHolder, ..
     <FlexElement
       direction="vertical"
       dimensionX={"fill"}
-      dimensionY={472}
       alignment="leftTop"
       {...props}
     >

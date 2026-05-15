@@ -1,19 +1,129 @@
-@use "styles/mixins";
-
 .container {
-  @include mixins.inputContainer;
-  border: var(--oziko-border-default);
-  border-radius: var(--oziko-border-radius-md);
-}
-
-.header {
-  width: 100%;
+  // layout wrapper only — visual styling lives in .wrap
 }
 
 .inputHeader {
   padding-left: 0;
 }
 
+.icon {
+  color: var(--color-text-muted);
+}
+
+/* ── array wrap container ── */
+.wrap {
+  border: var(--border-default);
+  border-radius: var(--radius-2xl); /* 10px */
+  background: var(--color-surface);
+  box-shadow: var(--shadow-sm);
+  overflow: hidden;
+  width: 100%;
+}
+
+/* ── each item row ── */
+.item {
+  display: flex;
+  align-items: stretch;
+  border-bottom: var(--border-default);
+  min-height: 38px;
+
+  &:last-child {
+    border-bottom: none;
+  }
+}
+
+/* ── index badge ── */
+.itemIdx {
+  width: 36px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-size: var(--font-size-xs); /* 10px */
+  font-family: var(--font-mono);
+  color: var(--color-text-muted);
+  border-right: var(--border-default);
+  flex-shrink: 0;
+  background: var(--color-surface-2);
+}
+
+/* ── input content area ── */
+.itemContent {
+  flex: 1;
+  min-width: 0;
+  display: flex;
+  align-items: center;
+
+  > * {
+    width: 100%;
+  }
+}
+
+/* ── stripped input container class injected via items.className ── */
+.itemInput {
+  border: none !important;
+  border-radius: 0 !important;
+  box-shadow: none !important;
+  background: transparent !important;
+  padding: var(--spacing-8) var(--spacing-10) !important; /* 9px 12px */
+  font-family: var(--font-mono) !important;
+  font-size: var(--font-size-base-plus) !important; /* 12.5px */
+}
+
+/* ── remove button ── */
+.itemRemove {
+  width: 32px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  cursor: pointer;
+  color: var(--color-text-muted);
+  transition:
+    color var(--transition-fast),
+    background var(--transition-fast);
+  flex-shrink: 0;
+  border: none;
+  background: transparent;
+  border-left: var(--border-default);
+  padding: 0;
+
+  &:hover {
+    background: rgba(var(--color-red-rgb), 0.08);
+    color: var(--color-red);
+  }
+}
+
+/* ── add item footer button ── */
+.addBtn {
+  display: flex;
+  align-items: center;
+  gap: var(--spacing-5); /* 6px */
+  padding: var(--spacing-7) var(--spacing-10); /* 8px 12px */
+  cursor: pointer;
+  font-size: var(--font-size-base-plus); /* 12.5px */
+  color: var(--color-text-muted);
+  background: var(--color-surface-2);
+  border: none;
+  border-top: var(--border-default);
+  width: 100%;
+  font-family: var(--font-sans);
+  transition:
+    color var(--transition-base),
+    background var(--transition-base);
+
+  &:first-child {
+    border-top: none;
+  }
+
+  &:hover {
+    color: var(--color-accent);
+    background: var(--color-accent-subtle);
+  }
+}
+
+/* ── empty state ── */
 .emptyStateText {
-  font-size: var(--oziko-icon-size-sm);
+  display: block;
+  padding: var(--spacing-7) var(--spacing-10);
+  font-size: var(--font-size-base);
+  color: var(--color-text-muted);
 }

@@ -9,15 +9,15 @@
 
 .modalContent {
   position: relative;
-  background-color: var(--oziko-color-menu-background);
+  background-color: var(--color-surface);
   min-height: 250px;
   min-width: 400px;
   max-width: 90%;
   max-height: 90%;
 
-  padding: var(--oziko-padding-md);
-  box-shadow: var(--box-shadow);
-  border-radius: var(--oziko-border-radius-md);
+  padding: var(--spacing-9);
+  box-shadow: var(--shadow-md);
+  border-radius: var(--radius-md);
 
   &.noOverflow {
     max-height: none;
@@ -29,20 +29,20 @@
     position: absolute;
     top: 0;
     right: 0;
-    padding: var(--oziko-padding-md);
+    padding: var(--spacing-9);
     cursor: pointer;
   }
 
   &.growFromCenter {
-    animation: growFromCenter var(--oziko-transition-duration) forwards ease;
+    animation: growFromCenter var(--transition-base) forwards ease;
   }
 
   &.zoomIn {
-    animation: classicModalZoom var(--oziko-transition-duration) forwards linear;
+    animation: classicModalZoom var(--transition-base) forwards linear;
   }
 
   &.shake {
-    animation: shake var(--oziko-transition-duration) ease-in-out;
+    animation: shake var(--transition-base) ease-in-out;
   }
 
   @keyframes growFromCenter {

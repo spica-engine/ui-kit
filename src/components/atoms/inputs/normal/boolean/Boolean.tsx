@@ -1,70 +1,74 @@
 import { FC, memo } from "react";
 import styles from "./Boolean.module.scss";
-import Text, { TypeText } from "@atoms/text/Text";
-import FluidContainer, { TypeFluidContainer } from "@atoms/fluid-container/FluidContainer";
-import Switch, { TypeSwitch } from "@atoms/switch/Switch";
+import Text from "@atoms/text/Text";
 import FlexElement, { TypeFlexElement } from "@atoms/flex-element/FlexElement";
+import Icon from "@atoms/icon/Icon";
+import { IconName } from "@utils/iconList";
 
 export type TypeBooleanInput = {
   checked?: boolean;
   label?: string;
+  hideLabel?: boolean;
   disabled?: boolean;
-  containerProps?: TypeFluidContainer;
-  switchContainerProps?: TypeFlexElement;
-  suffixProps?: TypeFlexElement;
-  rootProps?: TypeFlexElement;
-  labelProps?: TypeText;
   description?: string;
   onChange?: (checked: boolean) => void;
-  size?: TypeSwitch["size"];
+  iconName?: IconName;
   className?: string;
 };
 
-const BooleanInput: FC<TypeBooleanInput> = ({
+const BooleanInput: FC<TypeBooleanInput & TypeFlexElement> = ({
   checked = false,
   disabled = false,
   label,
-  containerProps,
-  switchContainerProps,
-  suffixProps,
-  rootProps,
-  labelProps,
+  hideLabel = false,
   description,
   onChange,
-  size,
+  iconName = "toggleSwitchOutline",
   className,
+  ...props
 }) => {
+  const handleToggle = () => {
+    if (!disabled) onChange?.(!checked);
+  };
+
+  const handleKeyDown = (e: React.KeyboardEvent) => {
+    if (e.key === " " || e.key === "Enter") {
+      e.preventDefault();
+      handleToggle();
+    }
+  };
+
   return (
     <FlexElement
-      dimensionX="fill"
-      alignment="leftCenter"
       direction="vertical"
-      className={className || ""}
+      alignment="leftTop"
+      dimensionX="fill"
+      {...props}
+      className={`${styles.field} ${className ?? ""} ${props.className ?? ""}`}
     >
-      <FluidContainer
-        dimensionY={36}
-        dimensionX="fill"
-        root={{
-          children: (
-            <Switch
-              checked={checked}
-              disabled={disabled}
-              {...switchContainerProps}
-              onChange={onChange}
-              size={size}
-            />
-          ),
-          ...rootProps,
-        }}
-        suffix={{
-          children: label && <Text {...labelProps}>{label}</Text>,
-          ...suffixProps,
-        }}
-        className={`${containerProps?.className} ${styles.container}`}
-        {...containerProps}
-      />
+      {label && (
+        <div className={styles.fieldHead}>
+          <div className={styles.fieldName}>
+            <Icon className={styles.icon} name={iconName} />
+            <span>{label}</span>
+          </div>
+          <span className={styles.fieldType}>boolean</span>
+        </div>
+      )}
+      <div className={styles.toggleRow}>
+        <div
+          role="switch"
+          aria-checked={checked}
+          aria-disabled={disabled}
+          tabIndex={disabled ? -1 : 0}
+          onClick={handleToggle}
+          onKeyDown={handleKeyDown}
+          className={`${styles.toggle} ${checked ? styles.toggleOn : ""} ${disabled ? styles.toggleDisabled : ""}`}
+        />
+        <span className={styles.toggleLabel}>{!hideLabel && (checked ? "true" : "false")}</span>
+      </div>
       {description && (
-        <Text size="xsmall" className={`${styles.description}`}>
+        <Text size="xsmall" variant="secondary" className={styles.description}>
           {description}
         </Text>
       )}

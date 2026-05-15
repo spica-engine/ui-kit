@@ -85,6 +85,64 @@ import AccountTreeIcon from "@mui/icons-material/AccountTree";
 import NotesIcon from "@mui/icons-material/Notes";
 import DataUsageOutlinedIcon from "@mui/icons-material/DataUsageOutlined";
 import LogoutIcon from "@mui/icons-material/Logout";
+import {
+  SvgSearch,
+  SvgDashboard,
+  SvgHome,
+  SvgChevronLeft,
+  SvgChevronDown,
+  SvgChevronRight,
+  SvgThreeDotsV,
+  SvgClose,
+  SvgList,
+  SvgBucket,
+  SvgStorage,
+  SvgCopy,
+  SvgSave,
+  SvgAdd,
+  SvgCheck,
+  SvgTrash,
+  SvgTrashSimple,
+  SvgEdit,
+  SvgRename,
+  SvgDownload,
+  SvgSettings,
+  SvgExtensions,
+  SvgFields,
+  SvgFilter,
+  SvgUser,
+  SvgUsers,
+  SvgLock,
+  SvgLogin,
+  SvgEye,
+  SvgEyeOff,
+  SvgMoon,
+  SvgSun,
+  SvgPlay,
+  SvgDocument,
+  SvgCalendar,
+  SvgNumberField,
+  SvgFunctions,
+  SvgGit,
+  SvgGithub,
+  SvgArrowUp,
+  SvgArrowDown,
+  SvgExternal,
+  SvgGrip,
+  SvgFieldText,
+  SvgFieldNumber,
+  SvgFieldBoolean,
+  SvgFieldDate,
+  SvgFieldRelation,
+  SvgFieldLocation,
+  SvgFieldArray,
+  SvgFieldObject,
+  SvgFieldFile,
+  SvgFieldRichtext,
+  SvgFieldSelect,
+  SvgFieldColor,
+  SvgFieldTextarea,
+} from "./spicaSvgIcons";
 
 export type IconName =
   | "article"
@@ -175,7 +233,39 @@ export type IconName =
   | "accountTree"
   | "notes"
   | "quota"
-  | "logout";
+  | "logout"
+  | "home"
+  | "list"
+  | "trashSimple"
+  | "rename"
+  | "download"
+  | "extensions"
+  | "fields"
+  | "eyeOff"
+  | "moon"
+  | "sun"
+  | "play"
+  | "numberField"
+  | "git"
+  | "arrowUp"
+  | "arrowDown"
+  | "external"
+  | "users"
+  | "grip"
+  | "search"
+  | "fieldText"
+  | "fieldNumber"
+  | "fieldBoolean"
+  | "fieldDate"
+  | "fieldRelation"
+  | "fieldLocation"
+  | "fieldArray"
+  | "fieldObject"
+  | "fieldFile"
+  | "fieldRichtext"
+  | "fieldSelect"
+  | "fieldColor"
+  | "fieldTextarea";
 
 export type IconSize = "xs" | "sm" | "md" | "lg" | number;
 
@@ -184,12 +274,12 @@ export const iconMap: {
 } = {
   article: ArticleIcon,
   clockOutline: QueryBuilderIcon,
-  login: LoginIcon,
+  login: SvgLogin,
   google: GoogleIcon,
   facebook: FacebookOutlinedIcon,
-  github: GitHubIcon,
+  github: SvgGithub,
   sourceCommit: CommitIcon,
-  check: CheckIcon,
+  check: SvgCheck,
   replay: ReplayIcon,
   magnify: SearchIcon,
   bug: BugReportIcon,
@@ -205,45 +295,45 @@ export const iconMap: {
   formatListChecks: ChecklistIcon,
   formatQuoteClose: FormatQuoteIcon,
   numericBox: LooksOneIcon,
-  calendarBlank: CalendarTodayIcon,
+  calendarBlank: SvgCalendar,
   checkboxBlankOutline: CheckBoxOutlineBlankIcon,
   security: SecurityIcon,
   formatSize: FormatSizeIcon,
-  lock: LockIcon,
-  filter: FilterAltIcon,
+  lock: SvgLock,
+  filter: SvgFilter,
   layers: LayersIcon,
   key: VpnKeyIcon,
   accountCircle: AccountCircleIcon,
   fileMultiple: FileCopyIcon,
-  contentCopy: ContentCopyIcon,
+  contentCopy: SvgCopy,
   swapHorizontal: SwapHorizOutlinedIcon,
-  fileDocument: DescriptionIcon,
+  fileDocument: SvgDocument,
   folder: FolderIcon,
   fullscreen: FullscreenIcon,
-  pencil: EditIcon,
-  chevronRight: ChevronRightIcon,
+  pencil: SvgEdit,
+  chevronRight: SvgChevronRight,
   codeTags: CodeIcon,
-  chevronDown: ExpandMoreIcon,
+  chevronDown: SvgChevronDown,
   notificationClearAll: ClearAllIcon,
   dragHorizontalVariant: DragHandleIcon,
   dotsHorizontal: MoreHorizIcon,
-  dotsVertical: MoreVertIcon,
-  eye: VisibilityIcon,
+  dotsVertical: SvgThreeDotsV,
+  eye: SvgEye,
   refresh: RefreshIcon,
-  plus: AddIcon,
-  delete: DeleteIcon,
+  plus: SvgAdd,
+  delete: SvgTrash,
   minus: RemoveIcon,
-  close: CloseIcon,
+  close: SvgClose,
   help: QuestionMarkOutlinedIcon,
-  cog: SettingsIcon,
-  identities: PeopleIcon,
+  cog: SvgSettings,
+  identities: SvgUsers,
   assetstore: LocalGroceryStoreIcon,
-  dashboard: DashboardIcon,
-  bucket: ViewAgendaSharpIcon,
-  function: MemoryIcon,
+  dashboard: SvgDashboard,
+  bucket: SvgBucket,
+  function: SvgFunctions,
   webhook: WebhookIcon,
-  storage: CloudUploadIcon,
-  chevronLeft: ChevronLeftIcon,
+  storage: SvgStorage,
+  chevronLeft: SvgChevronLeft,
   formatBold: FormatBoldIcon,
   formatItalic: FormatItalicIcon,
   formatUnderlined: FormatUnderlinedIcon,
@@ -262,10 +352,42 @@ export const iconMap: {
   sort: SortIcon,
   forkRight: ForkRightIcon,
   filterCenterFocus: FilterCenterFocusIcon,
-  save: SaveIcon,
-  person: PersonIcon,
+  save: SvgSave,
+  person: SvgUser,
   accountTree: AccountTreeIcon,
   notes: NotesIcon,
   quota: DataUsageOutlinedIcon,
   logout: LogoutIcon,
+  home: SvgHome,
+  list: SvgList,
+  trashSimple: SvgTrashSimple,
+  rename: SvgRename,
+  download: SvgDownload,
+  extensions: SvgExtensions,
+  fields: SvgFields,
+  eyeOff: SvgEyeOff,
+  moon: SvgMoon,
+  sun: SvgSun,
+  play: SvgPlay,
+  numberField: SvgNumberField,
+  git: SvgGit,
+  arrowUp: SvgArrowUp,
+  arrowDown: SvgArrowDown,
+  external: SvgExternal,
+  users: SvgUsers,
+  grip: SvgGrip,
+  search: SvgSearch,
+  fieldText: SvgFieldText,
+  fieldNumber: SvgFieldNumber,
+  fieldBoolean: SvgFieldBoolean,
+  fieldDate: SvgFieldDate,
+  fieldRelation: SvgFieldRelation,
+  fieldLocation: SvgFieldLocation,
+  fieldArray: SvgFieldArray,
+  fieldObject: SvgFieldObject,
+  fieldFile: SvgFieldFile,
+  fieldRichtext: SvgFieldRichtext,
+  fieldSelect: SvgFieldSelect,
+  fieldColor: SvgFieldColor,
+  fieldTextarea: SvgFieldTextarea,
 };

@@ -1,28 +1,349 @@
 @use "styles/mixins";
 
+// ─── Single select trigger ───────────────────────────────────────────────────
+
 .container {
-  background: var(--oziko-color-zebra);
-  padding: var(--oziko-padding-md) var(--oziko-padding-lg);
-  border-radius: var(--oziko-border-radius-md);
+  background: var(--color-surface);
+  border: 1px solid var(--color-border);
+  border-radius: var(--radius-md);
+  box-shadow: var(--shadow-sm);
   cursor: pointer;
+  overflow: hidden;
+  transition: border-color var(--transition-border), box-shadow var(--transition-border);
+
+  &:hover {
+    border-color: var(--color-border-strong);
+  }
 
   &.disabled {
-    cursor: default;
-    opacity: var(--oziko-disabled-opacity);
+    cursor: not-allowed;
+    opacity: var(--opacity-disabled);
+    pointer-events: none;
   }
 
   .displayer {
     @include mixins.textEllipsis(1);
+    padding: 0 var(--spacing-10);
+    font-size: var(--font-size-md);
+    color: var(--color-text-primary);
+
+    &.placeholder {
+      color: var(--color-text-muted);
+    }
+  }
+
+  // inline search input inside single trigger
+  .searchInline {
+    flex: 1;
+    border: none;
+    outline: none;
+    background: transparent;
+    font-family: inherit;
+    font-size: var(--font-size-md);
+    color: var(--color-text-primary);
+    padding: 0 var(--spacing-10);
+    width: 100%;
+
+    &::placeholder {
+      color: var(--color-text-muted);
+    }
   }
 }
 
+// Left prefix icon slot (single trigger)
+.prefixSlot {
+  width: 36px;
+  border-right: 1px solid var(--color-border);
+  color: var(--color-text-muted);
+  flex-shrink: 0;
+}
+
+// Right suffix group (clear + separator + chevron)
+.suffixGroup {
+  display: flex;
+  align-items: stretch;
+  height: 100%;
+}
+
+.arrowSep {
+  width: 1px;
+  background: var(--color-border);
+  align-self: stretch;
+}
+
+.arrowBtn {
+  width: 32px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  color: var(--color-text-muted);
+  flex-shrink: 0;
+  background: transparent;
+  border: none;
+  cursor: pointer;
+  padding: 0;
+  transition: color var(--transition-fast);
+
+  &:hover {
+    color: var(--color-text-primary);
+  }
+
+  &.arrowBtnOpen {
+    color: var(--color-accent);
+  }
+}
+
+.clearBtn {
+  width: 28px;
+  color: var(--color-text-muted);
+  transition: color var(--transition-fast);
+
+  &:hover {
+    color: var(--color-danger);
+  }
+}
+
+.arrowOpen {
+  transform: rotate(180deg);
+  transition: transform var(--transition-base);
+}
+
+// ─── Multiselect trigger ─────────────────────────────────────────────────────
+
+.multiTrigger {
+  display: flex;
+  align-items: center;
+  flex-wrap: wrap;
+  gap: var(--spacing-5);
+  border: 1px solid var(--color-border);
+  border-radius: var(--radius-md);
+  background: var(--color-surface);
+  box-shadow: var(--shadow-sm);
+  padding: var(--spacing-6) var(--spacing-8);
+  min-height: 40px;
+  cursor: text;
+  transition: border-color var(--transition-border), box-shadow var(--transition-border);
+
+  &:hover {
+    border-color: var(--color-border-strong);
+  }
+
+  &.open {
+    border-color: var(--color-accent);
+    box-shadow: 0 0 0 3px var(--color-accent-subtle), var(--shadow-sm);
+  }
+
+  &.disabled {
+    opacity: var(--opacity-disabled);
+    cursor: not-allowed;
+    pointer-events: none;
+  }
+}
+
+.msInput {
+  border: none;
+  outline: none;
+  background: transparent;
+  font-family: inherit;
+  font-size: var(--font-size-md);
+  color: var(--color-text-primary);
+  min-width: 80px;
+  flex: 1;
+  padding: var(--spacing-2) var(--spacing-4);
+
+  &::placeholder {
+    color: var(--color-text-muted);
+  }
+}
+
+.msControls {
+  display: flex;
+  align-items: center;
+  margin-left: auto;
+  flex-shrink: 0;
+  align-self: flex-start;
+  margin-top: 2px;
+}
+
+.msCtrlBtn {
+  width: 26px;
+  height: 26px;
+  border-radius: var(--radius-sm);
+  border: none;
+  background: transparent;
+  cursor: pointer;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  color: var(--color-text-muted);
+  transition: background var(--transition-fast), color var(--transition-fast);
+  padding: 0;
+
+  &:hover {
+    background: var(--color-surface-2);
+    color: var(--color-text-secondary);
+  }
+
+  &.clearBtn:hover {
+    color: var(--color-danger);
+  }
+}
+
+.msSep {
+  width: 1px;
+  height: 16px;
+  background: var(--color-border);
+  margin: 0 var(--spacing-2);
+}
+
+// ─── Dropdown ─────────────────────────────────────────────────────────────────
+
 .selectDropdown {
   position: fixed;
-  border-radius: var(--oziko-border-radius-md);
+  border-radius: var(--radius-md);
   z-index: 1000;
-  height: 100%;
-  max-height: 200px;
-  overflow-y: auto;
-  box-shadow: var(--box-shadow);
-  background: var(--oziko-color-menu-background);
+  box-shadow: var(--shadow-lg);
+  background: var(--color-surface);
+  border: 1px solid var(--color-border);
+  overflow: hidden;
 }
+
+// Search row inside dropdown (single + searchable multiselect)
+.searchRow {
+  display: flex;
+  align-items: center;
+  gap: var(--spacing-8);
+  padding: var(--spacing-8) var(--spacing-12);
+  border-bottom: 1px solid var(--color-border);
+  flex-shrink: 0;
+}
+
+.searchInput {
+  flex: 1;
+  border: none;
+  outline: none;
+  background: transparent;
+  font-family: inherit;
+  font-size: var(--font-size-md);
+  color: var(--color-text-primary);
+
+  &::placeholder {
+    color: var(--color-text-muted);
+  }
+}
+
+// Scrollable option list
+.optionList {
+  max-height: 220px;
+  overflow-y: auto;
+  padding: var(--spacing-4);
+
+  &::-webkit-scrollbar {
+    width: 4px;
+  }
+
+  &::-webkit-scrollbar-thumb {
+    background: var(--color-border);
+    border-radius: var(--radius-sm);
+  }
+}
+
+// Group labels + dividers
+.groupLabel {
+  padding: var(--spacing-7) var(--spacing-10) var(--spacing-4);
+  font-size: var(--font-size-2xs);
+  font-weight: 700;
+  letter-spacing: 0.09em;
+  text-transform: uppercase;
+  color: var(--color-text-muted);
+}
+
+.groupDivider {
+  height: 1px;
+  background: var(--color-border);
+  margin: var(--spacing-4) 0;
+}
+
+// Freeform "Add '...'" row
+.addNewRow {
+  display: flex;
+  align-items: center;
+  gap: var(--spacing-9);
+  padding: var(--spacing-7) var(--spacing-10);
+  border-radius: var(--radius-sm);
+  cursor: pointer;
+  font-size: var(--font-size-sm);
+  color: var(--color-accent);
+  font-weight: 500;
+  transition: background var(--transition-fast);
+
+  &:hover {
+    background: var(--color-accent-subtle);
+  }
+}
+
+.addNewIcon {
+  width: 16px;
+  height: 16px;
+  border-radius: var(--radius-xs);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  border: 1.5px solid var(--color-accent);
+  background: var(--color-accent-subtle);
+  flex-shrink: 0;
+}
+
+// Empty state
+.emptyState {
+  padding: var(--spacing-16);
+  text-align: center;
+  font-size: var(--font-size-sm);
+  color: var(--color-text-muted);
+}
+
+// ─── Footer ───────────────────────────────────────────────────────────────────
+
+.footer {
+  padding: var(--spacing-8) var(--spacing-12);
+  border-top: 1px solid var(--color-border);
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  flex-shrink: 0;
+  gap: var(--spacing-8);
+}
+
+.selectAll {
+  font-size: var(--font-size-xs);
+  color: var(--color-accent);
+  cursor: pointer;
+  font-weight: 500;
+  transition: opacity var(--transition-fast);
+
+  &:hover {
+    opacity: 0.7;
+  }
+}
+
+.clearAll {
+  font-size: var(--font-size-xs);
+  color: var(--color-text-muted);
+  cursor: pointer;
+  transition: color var(--transition-fast);
+
+  &:hover {
+    color: var(--color-danger);
+  }
+}
+
+.countBadge {
+  font-size: var(--font-size-2xs);
+  font-weight: 600;
+  background: var(--color-accent-subtle);
+  color: var(--color-accent);
+  padding: 2px var(--spacing-7);
+  border-radius: var(--radius-sm);
+  flex-shrink: 0;
+}
+

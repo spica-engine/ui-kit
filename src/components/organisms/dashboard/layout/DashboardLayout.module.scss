@@ -11,14 +11,14 @@
       width: 100px;
       height: 100px;
 
-      color: var(--oziko-color-font-primary);
+      color: var(--color-text-primary);
     }
   }
 }
 
 .gridItem {
   display: flex;
-  background-color: var(--oziko-color-menu-background);
-  border-radius: var(--oziko-border-radius-md);
+  background-color: var(--color-surface);
+  border-radius: var(--radius-md);
   overflow: hidden;
 }

@@ -1,52 +1,78 @@
-import React, { FC, memo } from "react";
+import React, { FC, memo, useState, useCallback } from "react";
 import styles from "./Location.module.scss";
-import "../../../../../../node_modules/leaflet/dist/leaflet.css";
-import FlexElement, { TypeFlexElement } from "@atoms/flex-element/FlexElement";
-import Icon from "@atoms/icon/Icon";
-import Text from "@atoms/text/Text";
-import InputHeader from "@atoms/input-header/InputHeader";
 import Map, { TypeCoordinates } from "@atoms/map/Map";
 
 export type TypeLocationInput = {
   coordinates?: TypeCoordinates;
   title?: string;
   onChange?: (coordinates: TypeCoordinates) => void;
-  description?: string;
+  className?: string;
 };
 
-const LocationInput: FC<TypeLocationInput & TypeFlexElement> = ({
+const LocationInput: FC<TypeLocationInput> = ({
   coordinates,
-  title,
+  title = "Location Coords",
   onChange,
-  description,
-  ...props
+  className,
 }) => {
+  const [lat, setLat] = useState<string>(coordinates?.lat?.toString() ?? "");
+  const [lng, setLng] = useState<string>(coordinates?.lng?.toString() ?? "");
+
+  const handleLatChange = useCallback(
+    (e: React.ChangeEvent<HTMLInputElement>) => {
+      const val = e.target.value;
+      setLat(val);
+      const num = parseFloat(val);
+      if (!isNaN(num)) onChange?.({ lat: num, lng: parseFloat(lng) || 0 });
+    },
+    [lng, onChange]
+  );
+
+  const handleLngChange = useCallback(
+    (e: React.ChangeEvent<HTMLInputElement>) => {
+      const val = e.target.value;
+      setLng(val);
+      const num = parseFloat(val);
+      if (!isNaN(num)) onChange?.({ lat: parseFloat(lat) || 0, lng: num });
+    },
+    [lat, onChange]
+  );
+
   return (
-    <FlexElement
-      dimensionX={500}
-      dimensionY={500}
-      gap={10}
-      direction="vertical"
-      alignment="leftCenter"
-      {...props}
-      className={`${props.className} ${styles.location}`}
-    >
-      <InputHeader
-        prefix={{ children: <Icon name="mapMarker" className={styles.icon} /> }}
-        root={{ children: <Text variant="secondary">{title}</Text> }}
-      />
+    <div className={`${styles.field} ${className ?? ""}`}>
+      <div className={styles.fieldHead}>
+        <div className={styles.fieldName}>
+          <svg width="10" height="10" fill="none" viewBox="0 0 24 24" stroke="currentColor" strokeWidth="2">
+            <path d="M21 10c0 7-9 13-9 13s-9-6-9-13a9 9 0 0118 0z" />
+            <circle cx="12" cy="10" r="3" />
+          </svg>
+          {title}
+        </div>
+        <span className={styles.fieldType}>location</span>
+      </div>
 
       <Map
-        coordinates={coordinates}
-        markerIcon={{
-          icon: <Icon name="mapMarker" size="lg" className={styles.mapMarker} />,
-        }}
+        coordinates={coordinates?.lat != null && coordinates?.lng != null ? coordinates : undefined}
         onChange={onChange}
+        className={styles.map}
+        scrollWheelZoom={false}
       />
-      <Text size="xsmall" className={`${styles.description}`}>
-        {description}
-      </Text>
-    </FlexElement>
+
+      <div className={styles.coordsRow}>
+        <input
+          className={styles.coordInput}
+          placeholder="Latitude"
+          value={lat}
+          onChange={handleLatChange}
+        />
+        <input
+          className={styles.coordInput}
+          placeholder="Longitude"
+          value={lng}
+          onChange={handleLngChange}
+        />
+      </div>
+    </div>
   );
 };
 
