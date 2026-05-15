@@ -1,0 +1,1353 @@
+<!DOCTYPE html>
+<html lang="tr">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width,initial-scale=1.0">
+<title>Spica — New Entry Form</title>
+<link href="https://fonts.googleapis.com/css2?family=DM+Sans:opsz,wght@9..40,300;9..40,400;9..40,500;9..40,600;9..40,700&family=JetBrains+Mono:wght@400;500&display=swap" rel="stylesheet">
+<style>
+:root{
+  --bg:#f0f2f5;--sf:#fff;--sf2:#f7f8fa;--sf3:#eef0f3;
+  --bd:#e4e7ec;--bd2:#d0d5dd;
+  --ac:#1a2448;--ach:#253060;
+  --as:rgba(26,36,72,.07);--as2:rgba(26,36,72,.13);
+  --tx:#101828;--tx2:#344054;--txm:#98a2b3;--txf:#d0d5dd;
+  --gr:#12b76a;--grb:rgba(18,183,106,.1);
+  --am:#f79009;--amb:rgba(247,144,9,.1);
+  --rd:#f04438;--rdb:rgba(240,68,56,.08);
+  --bl:#2e90fa;--blb:rgba(46,144,250,.1);
+  --pu:#7f56d9;--pub:rgba(127,86,217,.1);
+  --sh:0 1px 3px rgba(16,24,40,.1),0 1px 2px rgba(16,24,40,.06);
+  --shmd:0 4px 8px rgba(16,24,40,.08),0 2px 4px rgba(16,24,40,.04);
+}
+[data-theme=dark]{
+  --bg:#0d1017;--sf:#13181f;--sf2:#191f28;--sf3:#202735;
+  --bd:#252e3e;--bd2:#2f3b52;
+  --ac:#4f6ef7;--ach:#6b84ff;
+  --as:rgba(79,110,247,.1);--as2:rgba(79,110,247,.18);
+  --tx:#f2f4f7;--tx2:#c8cfe0;--txm:#4e5e7a;--txf:#2e3a50;
+  --gr:#32d583;--grb:rgba(50,213,131,.1);
+  --am:#fdb022;--amb:rgba(253,176,34,.1);
+  --rd:#f97066;--rdb:rgba(249,112,102,.08);
+  --bl:#53b1fd;--blb:rgba(83,177,253,.1);
+  --pu:#9b8afb;--pub:rgba(155,138,251,.1);
+  --sh:0 1px 3px rgba(0,0,0,.35);
+  --shmd:0 4px 8px rgba(0,0,0,.4);
+}
+
+*,*::before,*::after{box-sizing:border-box;margin:0;padding:0}
+body{font-family:'DM Sans',sans-serif;font-size:13.5px;background:var(--bg);color:var(--tx);
+  -webkit-font-smoothing:antialiased;min-height:100vh;padding:52px 0 40px}
+
+/* ── demo bar ── */
+.dbar{position:fixed;top:0;left:0;right:0;z-index:99;height:48px;background:var(--sf);
+  border-bottom:1px solid var(--bd);display:flex;align-items:center;justify-content:space-between;padding:0 24px}
+.dtitle{font-size:13px;font-weight:600;color:var(--tx2)}
+.tbtn{width:30px;height:30px;border-radius:7px;display:flex;align-items:center;justify-content:center;
+  background:var(--sf2);border:1px solid var(--bd);cursor:pointer;color:var(--txm);transition:all .12s}
+.tbtn:hover{background:var(--sf3);color:var(--tx)}
+.sun{display:none}[data-theme=dark] .sun{display:block}[data-theme=dark] .moon{display:none}
+
+/* ── form container ── */
+.form-wrap{max-width:640px;margin:0 auto;padding:24px 16px}
+
+/* ── field row ── */
+.field-row{margin-bottom:16px}
+
+/* field label */
+.field-label{
+  display:flex;align-items:center;gap:7px;margin-bottom:6px;
+}
+.fl-icon{flex-shrink:0;color:var(--txm)}
+.fl-name{font-size:13px;font-weight:600;color:var(--tx2)}
+.fl-type{font-size:10.5px;font-family:'JetBrains Mono',monospace;font-weight:500;
+  color:var(--txm);background:var(--sf3);border:1px solid var(--bd);
+  border-radius:4px;padding:1px 7px}
+
+/* ── base input ── */
+.finput-wrap{display:flex;align-items:center;
+  border:1px solid var(--bd);border-radius:9px;background:var(--sf);overflow:hidden;
+  box-shadow:var(--sh);transition:border-color .15s,box-shadow .15s}
+.finput-wrap:focus-within{border-color:var(--ac);box-shadow:0 0 0 4px var(--as),var(--sh)}
+.ficon{width:38px;height:40px;display:flex;align-items:center;justify-content:center;
+  color:var(--txm);flex-shrink:0;border-right:1px solid var(--bd)}
+.finput-wrap:focus-within .ficon{color:var(--ac)}
+.finput{flex:1;border:none;outline:none;background:transparent;padding:10px 12px;
+  font-family:'DM Sans',sans-serif;font-size:13px;color:var(--tx)}
+.finput::placeholder{color:var(--txm)}
+.finput[type=number]{-moz-appearance:textfield}
+.finput[type=number]::-webkit-inner-spin-button{opacity:0}
+.finput-suffix{padding:0 12px;font-size:12px;color:var(--txm);flex-shrink:0;
+  border-left:1px solid var(--bd);height:40px;display:flex;align-items:center;
+  font-family:'JetBrains Mono',monospace}
+
+/* ── textarea ── */
+.ftextarea-wrap{border:1px solid var(--bd);border-radius:9px;background:var(--sf);
+  box-shadow:var(--sh);overflow:hidden;transition:border-color .15s,box-shadow .15s}
+.ftextarea-wrap:focus-within{border-color:var(--ac);box-shadow:0 0 0 4px var(--as),var(--sh)}
+.ftextarea-head{display:flex;align-items:center;gap:6px;padding:8px 12px 0;color:var(--txm);font-size:12px}
+.ftextarea{width:100%;border:none;outline:none;background:transparent;
+  padding:6px 12px 10px;font-family:'DM Sans',sans-serif;font-size:13px;color:var(--tx);
+  resize:vertical;min-height:80px;line-height:1.5}
+.ftextarea::placeholder{color:var(--txm)}
+
+/* ── boolean toggle ── */
+.bool-wrap{display:flex;align-items:center;gap:10px;
+  padding:9px 14px;border:1px solid var(--bd);border-radius:9px;background:var(--sf);
+  box-shadow:var(--sh);cursor:pointer;user-select:none;transition:border-color .12s}
+.bool-wrap:hover{border-color:var(--bd2)}
+.bool-wrap.on{border-color:var(--ac);background:var(--as)}
+.bool-label{font-size:13px;font-weight:500;color:var(--tx2);flex:1}
+.bool-wrap.on .bool-label{color:var(--ac)}
+.bool-val{font-size:12px;font-family:'JetBrains Mono',monospace;color:var(--txm)}
+.bool-wrap.on .bool-val{color:var(--ac);opacity:.7}
+.tsw{width:40px;height:22px;border-radius:11px;flex-shrink:0;
+  background:var(--sf3);border:1.5px solid var(--bd);position:relative;
+  transition:background .2s,border-color .2s}
+.tsw.on{background:var(--ac);border-color:var(--ac)}
+.tsw::after{content:'';position:absolute;width:16px;height:16px;border-radius:50%;
+  background:var(--txf);top:1px;left:1px;transition:transform .2s,background .2s;
+  box-shadow:0 1px 3px rgba(0,0,0,.15)}
+.tsw.on::after{transform:translateX(18px);background:#fff}
+
+/* ── date ── */
+.fdate{flex:1;border:none;outline:none;background:transparent;padding:10px 12px;
+  font-family:'JetBrains Mono',monospace;font-size:12.5px;color:var(--tx);
+  color-scheme:light dark}
+
+/* ── multiselect / tag input ── */
+.tag-wrap{display:flex;align-items:center;flex-wrap:wrap;gap:5px;
+  border:1px solid var(--bd);border-radius:9px;background:var(--sf);
+  padding:7px 10px;min-height:42px;cursor:text;box-shadow:var(--sh);
+  transition:border-color .15s,box-shadow .15s}
+.tag-wrap:focus-within{border-color:var(--ac);box-shadow:0 0 0 4px var(--as),var(--sh)}
+.tag{display:inline-flex;align-items:center;gap:4px;
+  background:var(--as);border:1px solid var(--as2);color:var(--ac);
+  border-radius:6px;padding:3px 8px 3px 9px;font-size:12px;font-weight:500;
+  font-family:'JetBrains Mono',monospace}
+.tag-rm{cursor:pointer;opacity:.6;display:flex;transition:opacity .1s;padding:1px}
+.tag-rm:hover{opacity:1}
+.tag-inp{border:none;outline:none;background:transparent;font-family:'DM Sans',sans-serif;
+  font-size:12.5px;color:var(--tx);min-width:120px;flex:1}
+.tag-inp::placeholder{color:var(--txm)}
+
+/* ── relation ── */
+.rel-wrap{display:flex;align-items:center;border:1px solid var(--bd);border-radius:9px;
+  background:var(--sf);box-shadow:var(--sh);overflow:hidden;cursor:pointer;
+  transition:border-color .15s,box-shadow .15s}
+.rel-wrap:hover{border-color:var(--bd2)}
+.rel-wrap:focus-within{border-color:var(--ac);box-shadow:0 0 0 4px var(--as),var(--sh)}
+.rel-icon{width:38px;height:40px;display:flex;align-items:center;justify-content:center;
+  color:var(--txm);flex-shrink:0;border-right:1px solid var(--bd)}
+.rel-text{flex:1;padding:10px 12px;font-size:13px;color:var(--txm);user-select:none}
+.rel-text.selected{color:var(--tx)}
+.rel-chev{width:32px;height:40px;display:flex;align-items:center;justify-content:center;
+  color:var(--txm);flex-shrink:0}
+
+/* ── location ── */
+.loc-wrap{border:1px solid var(--bd);border-radius:9px;background:var(--sf);
+  box-shadow:var(--sh);overflow:hidden}
+.loc-map{height:120px;background:linear-gradient(135deg,var(--sf2) 25%,var(--sf3) 75%);
+  display:flex;align-items:center;justify-content:center;position:relative;cursor:pointer;
+  border-bottom:1px solid var(--bd)}
+.loc-map-grid{position:absolute;inset:0;opacity:.3;
+  background-image:linear-gradient(var(--bd) 1px,transparent 1px),linear-gradient(90deg,var(--bd) 1px,transparent 1px);
+  background-size:20px 20px}
+.loc-pin{position:relative;z-index:1;color:var(--rd);filter:drop-shadow(0 2px 4px rgba(0,0,0,.2))}
+.loc-inputs{display:flex;gap:0}
+.loc-coord{flex:1;display:flex;align-items:center;border-right:1px solid var(--bd);overflow:hidden}
+.loc-coord:last-child{border-right:none}
+.loc-lbl{padding:0 8px 0 12px;font-size:11px;font-weight:600;letter-spacing:.05em;
+  text-transform:uppercase;color:var(--txm);white-space:nowrap}
+.loc-inp{flex:1;border:none;outline:none;background:transparent;padding:9px 10px 9px 0;
+  font-family:'JetBrains Mono',monospace;font-size:12px;color:var(--tx)}
+.loc-inp::placeholder{color:var(--txm)}
+
+/* ── array ── */
+.arr-wrap{border:1px solid var(--bd);border-radius:9px;background:var(--sf);
+  box-shadow:var(--sh);overflow:hidden}
+.arr-item{display:flex;align-items:center;border-bottom:1px solid var(--bd);min-height:38px}
+.arr-item:last-child{border-bottom:none}
+.arr-idx{width:36px;height:38px;display:flex;align-items:center;justify-content:center;
+  font-size:10.5px;font-family:'JetBrains Mono',monospace;color:var(--txm);
+  border-right:1px solid var(--bd);flex-shrink:0;background:var(--sf2)}
+.arr-val{flex:1;border:none;outline:none;background:transparent;padding:9px 12px;
+  font-family:'JetBrains Mono',monospace;font-size:12.5px;color:var(--tx)}
+.arr-val::placeholder{color:var(--txm)}
+.arr-rm{width:32px;height:38px;display:flex;align-items:center;justify-content:center;
+  cursor:pointer;color:var(--txm);transition:color .1s,background .1s;flex-shrink:0;
+  border:none;background:transparent;border-left:1px solid var(--bd)}
+.arr-rm:hover{background:var(--rdb);color:var(--rd)}
+.arr-add{display:flex;align-items:center;gap:6px;padding:8px 12px;cursor:pointer;
+  font-size:12.5px;color:var(--txm);background:var(--sf2);border-top:1px solid var(--bd);
+  transition:color .12s,background .12s}
+.arr-add:hover{color:var(--ac);background:var(--as)}
+
+/* ── object (nested table) ── */
+.obj-wrap{border:1px solid var(--bd);border-radius:9px;background:var(--sf);
+  box-shadow:var(--sh);overflow:hidden}
+.obj-row{display:grid;grid-template-columns:140px 1fr auto;
+  border-bottom:1px solid var(--bd);min-height:38px}
+.obj-row:last-child{border-bottom:none}
+.obj-key{padding:9px 12px;font-family:'JetBrains Mono',monospace;font-size:12px;
+  font-weight:500;color:var(--tx2);border-right:1px solid var(--bd);background:var(--sf2);
+  overflow:hidden;text-overflow:ellipsis;white-space:nowrap}
+.obj-val{border:none;outline:none;background:transparent;padding:9px 12px;
+  font-family:'JetBrains Mono',monospace;font-size:12px;color:var(--tx);width:100%}
+.obj-val::placeholder{color:var(--txm)}
+.obj-type-badge{display:flex;align-items:center;padding:0 10px;flex-shrink:0;
+  font-size:10.5px;font-family:'JetBrains Mono',monospace;color:var(--txm);
+  background:var(--sf2);border-left:1px solid var(--bd)}
+
+/* ── storage / file ── */
+.storage-wrap{border:1px solid var(--bd);border-radius:9px;background:var(--sf);
+  box-shadow:var(--sh);overflow:hidden}
+.storage-drop{display:flex;flex-direction:column;align-items:center;justify-content:center;
+  gap:8px;padding:20px;cursor:pointer;border:1.5px dashed var(--bd);border-radius:8px;
+  margin:8px;background:var(--sf2);transition:border-color .12s,background .12s;min-height:80px}
+.storage-drop:hover{border-color:var(--ac);background:var(--as)}
+.storage-drop-icon{color:var(--txm)}
+.storage-drop-text{font-size:12.5px;color:var(--txm);text-align:center}
+.storage-drop-text strong{color:var(--ac);font-weight:600}
+
+/* ── richtext ── */
+.rt-wrap{border:1px solid var(--bd);border-radius:9px;background:var(--sf);
+  box-shadow:var(--sh);overflow:hidden}
+.rt-toolbar{display:flex;align-items:center;gap:1px;padding:6px 8px;
+  border-bottom:1px solid var(--bd);background:var(--sf2)}
+.rt-btn{width:28px;height:26px;border-radius:5px;border:none;background:transparent;
+  cursor:pointer;color:var(--tx2);display:flex;align-items:center;justify-content:center;
+  font-family:inherit;font-size:12px;font-weight:700;transition:background .1s,color .1s}
+.rt-btn:hover{background:var(--sf3);color:var(--tx)}
+.rt-sep{width:1px;height:18px;background:var(--bd);margin:0 4px}
+.rt-area{width:100%;border:none;outline:none;background:transparent;padding:10px 12px;
+  font-family:'DM Sans',sans-serif;font-size:13px;color:var(--tx);
+  resize:vertical;min-height:88px;line-height:1.6}
+.rt-area::placeholder{color:var(--txm)}
+
+/* ── color ── */
+.color-wrap{display:flex;align-items:center;gap:0;
+  border:1px solid var(--bd);border-radius:9px;background:var(--sf);
+  box-shadow:var(--sh);overflow:hidden}
+.color-preview{width:42px;height:42px;flex-shrink:0;cursor:pointer;
+  display:flex;align-items:center;justify-content:center;
+  border-right:1px solid var(--bd);position:relative}
+.color-preview input[type=color]{position:absolute;inset:0;opacity:0;cursor:pointer;width:100%;height:100%}
+.color-dot{width:22px;height:22px;border-radius:50%;border:2px solid rgba(0,0,0,.1);
+  pointer-events:none;transition:background .1s}
+.color-hex{flex:1;border:none;outline:none;background:transparent;padding:10px 12px;
+  font-family:'JetBrains Mono',monospace;font-size:13px;color:var(--tx)}
+.color-hex::placeholder{color:var(--txm)}
+.color-pick-btn{padding:0 12px;height:42px;display:flex;align-items:center;justify-content:center;
+  border-left:1px solid var(--bd);cursor:pointer;color:var(--txm);font-size:12px;
+  transition:background .1s,color .1s;flex-shrink:0}
+.color-pick-btn:hover{background:var(--sf2);color:var(--tx)}
+
+/* ── json ── */
+.json-wrap{border:1px solid var(--bd);border-radius:9px;background:var(--sf);
+  box-shadow:var(--sh);overflow:hidden}
+.json-header{display:flex;align-items:center;justify-content:space-between;
+  padding:7px 12px;border-bottom:1px solid var(--bd);background:var(--sf2)}
+.json-title{font-size:11px;font-weight:600;letter-spacing:.06em;text-transform:uppercase;color:var(--txm)}
+.json-fmt-btn{font-size:11.5px;font-weight:500;color:var(--ac);cursor:pointer;
+  background:transparent;border:none;font-family:inherit;transition:opacity .12s}
+.json-fmt-btn:hover{opacity:.7}
+.json-area{width:100%;border:none;outline:none;background:transparent;
+  padding:10px 14px;font-family:'JetBrains Mono',monospace;font-size:12px;color:var(--tx);
+  resize:vertical;min-height:100px;line-height:1.6;tab-size:2}
+.json-area::placeholder{color:var(--txm)}
+
+/* ══ Object field rows (new design) ══ */
+.of-row{display:flex;align-items:stretch;border-bottom:1px solid var(--bd)}
+.of-row:last-child{border-bottom:none}
+.of-row-tall{align-items:stretch}
+
+.of-key{
+  width:150px;flex-shrink:0;padding:10px 12px;
+  display:flex;align-items:flex-start;gap:6px;
+  background:var(--sf2);border-right:1px solid var(--bd);
+  font-family:'JetBrains Mono',monospace;font-size:11.5px;font-weight:500;color:var(--tx2);
+  overflow:hidden;
+}
+.of-key span:first-of-type{overflow:hidden;text-overflow:ellipsis;white-space:nowrap;flex:1;min-width:0}
+
+.of-badge{
+  flex-shrink:0;font-size:9.5px;font-family:'JetBrains Mono',monospace;font-weight:600;
+  letter-spacing:.04em;padding:1px 5px;border-radius:4px;
+  color:var(--txm);background:var(--sf3);border:1px solid var(--bd);white-space:nowrap;
+  margin-top:1px;
+}
+
+.of-val{flex:1;min-width:0;padding:8px 12px;display:flex;align-items:center}
+
+.of-input{
+  width:100%;border:none;outline:none;background:transparent;
+  font-family:'DM Sans',sans-serif;font-size:13px;color:var(--tx);
+  transition:color .12s;
+}
+.of-input::placeholder{color:var(--txm)}
+.of-input:focus{color:var(--tx)}
+.of-input[type=number]{-moz-appearance:textfield}
+.of-input[type=number]::-webkit-inner-spin-button{opacity:0}
+
+/* textarea inside object */
+.of-textarea{
+  width:100%;border:none;outline:none;background:transparent;
+  font-family:'DM Sans',sans-serif;font-size:13px;color:var(--tx);
+  resize:vertical;min-height:60px;line-height:1.5;
+}
+.of-textarea::placeholder{color:var(--txm)}
+
+/* date display */
+.of-date-display{font-size:13px;color:var(--txm);user-select:none}
+.of-date-display.set{color:var(--tx);font-family:'JetBrains Mono',monospace;font-size:12px}
+.of-date-picker{
+  position:absolute;top:100%;left:0;right:0;z-index:60;margin-top:2px;
+  background:var(--sf);border:1px solid var(--bd);border-radius:10px;
+  box-shadow:0 8px 24px rgba(0,0,0,.12);overflow:hidden;
+}
+
+/* multiselect tags inside object */
+.of-tag-wrap{
+  display:flex;flex-wrap:wrap;align-items:center;gap:5px;
+  width:100%;cursor:text;
+}
+.of-tag{
+  display:inline-flex;align-items:center;gap:3px;
+  background:var(--as);border:1px solid var(--as2);color:var(--ac);
+  border-radius:5px;padding:2px 7px 2px 8px;
+  font-size:11.5px;font-weight:500;font-family:'JetBrains Mono',monospace;
+}
+.of-tag-rm{cursor:pointer;font-size:14px;line-height:1;opacity:.6;margin-left:2px}
+.of-tag-rm:hover{opacity:1}
+.of-tag-inp{
+  border:none;outline:none;background:transparent;
+  font-family:'DM Sans',sans-serif;font-size:12.5px;color:var(--tx);min-width:100px;
+}
+.of-tag-inp::placeholder{color:var(--txm)}
+
+/* relation inside object */
+.of-relation{
+  cursor:pointer;justify-content:space-between;
+  position:relative;transition:background .1s;
+}
+.of-relation:hover{background:var(--sf2)}
+.of-rel-text{font-size:13px;color:var(--txm);flex:1}
+.of-rel-text.set{color:var(--tx)}
+.of-rel-dropdown{
+  position:absolute;top:100%;left:-1px;right:-1px;z-index:60;
+  background:var(--sf);border:1px solid var(--bd);border-radius:8px;
+  box-shadow:0 8px 24px rgba(0,0,0,.12);overflow:hidden;margin-top:2px;
+}
+.of-rel-item{
+  padding:8px 14px;font-size:13px;color:var(--tx2);cursor:pointer;
+  transition:background .1s;
+}
+.of-rel-item:hover{background:var(--as);color:var(--ac)}
+
+/* array inside object */
+.of-arr{display:flex;flex-direction:column}
+.of-arr-item{display:flex;align-items:center;border-bottom:1px solid var(--bd)}
+.of-arr-item:last-child{border-bottom:none}
+.of-arr-idx{
+  width:28px;height:34px;display:flex;align-items:center;justify-content:center;
+  font-size:10px;font-family:'JetBrains Mono',monospace;color:var(--txm);
+  border-right:1px solid var(--bd);flex-shrink:0;background:var(--sf2);
+}
+.of-arr-val{
+  flex:1;border:none;outline:none;background:transparent;
+  padding:7px 10px;font-family:'DM Sans',sans-serif;font-size:12.5px;color:var(--tx);
+}
+.of-arr-val::placeholder{color:var(--txm)}
+.of-arr-rm{
+  width:28px;height:34px;border:none;background:transparent;cursor:pointer;
+  color:var(--txm);font-size:16px;display:flex;align-items:center;justify-content:center;
+  border-left:1px solid var(--bd);transition:background .1s,color .1s;flex-shrink:0;
+}
+.of-arr-rm:hover{background:var(--rdb);color:var(--rd)}
+.of-arr-add{
+  display:flex;align-items:center;gap:5px;padding:7px 10px;cursor:pointer;
+  font-size:12px;color:var(--txm);background:var(--sf2);border-top:1px solid var(--bd);
+  transition:color .12s,background .12s;
+}
+.of-arr-add:hover{color:var(--ac);background:var(--as)}
+
+/* nested object block */
+.of-nested-block{border-bottom:1px solid var(--bd)}
+.of-nested-head{
+  display:flex;align-items:center;gap:7px;
+  padding:9px 12px;background:var(--sf2);cursor:default;
+}
+.of-nested-name{font-size:12px;font-weight:600;font-family:'JetBrains Mono',monospace;color:var(--tx2)}
+.of-nested-toggle{
+  margin-left:auto;width:22px;height:22px;border-radius:5px;border:none;
+  background:transparent;cursor:pointer;display:flex;align-items:center;justify-content:center;
+  color:var(--txm);transition:background .1s,color .1s;
+}
+.of-nested-toggle:hover{background:var(--sf3);color:var(--tx)}
+
+/* storage inside object */
+.of-storage-drop{
+  display:flex;flex-direction:column;align-items:center;justify-content:center;gap:6px;
+  padding:14px;width:100%;cursor:pointer;border:1.5px dashed var(--bd);border-radius:8px;
+  background:var(--sf2);transition:border-color .12s,background .12s;text-align:center;
+}
+.of-storage-drop:hover{border-color:var(--ac);background:var(--as)}
+
+/* richtext inside object */
+.of-rt-toolbar{
+  display:flex;align-items:center;gap:1px;padding:5px 8px;
+  border-bottom:1px solid var(--bd);background:var(--sf2);flex-shrink:0;flex-wrap:wrap;
+}
+.of-rt-btn{
+  width:26px;height:24px;border-radius:4px;border:none;background:transparent;
+  cursor:pointer;color:var(--tx2);display:flex;align-items:center;justify-content:center;
+  font-family:inherit;font-size:12px;transition:background .1s;
+}
+.of-rt-btn:hover{background:var(--sf3)}
+.of-rt-sep{width:1px;height:14px;background:var(--bd);margin:0 3px;flex-shrink:0}
+.of-rt-area{
+  width:100%;border:none;outline:none;background:transparent;
+  padding:8px 12px;font-family:'DM Sans',sans-serif;font-size:13px;color:var(--tx);
+  resize:vertical;min-height:72px;line-height:1.5;
+}
+.of-rt-area::placeholder{color:var(--txm)}
+
+/* color inside object */
+.of-color-swatch{
+  width:38px;height:40px;flex-shrink:0;cursor:pointer;position:relative;
+  display:flex;align-items:center;justify-content:center;
+  border-right:1px solid var(--bd);
+}
+.of-color-dot{width:20px;height:20px;border-radius:50%;border:2px solid rgba(0,0,0,.1);pointer-events:none}
+.of-color-hex{
+  flex:1;border:none;outline:none;background:transparent;
+  padding:10px 10px;font-family:'JetBrains Mono',monospace;font-size:13px;color:var(--tx);
+}
+
+/* json inside object */
+.of-json-head{
+  display:flex;align-items:center;justify-content:space-between;
+  padding:6px 12px;border-bottom:1px solid var(--bd);background:var(--sf2);flex-shrink:0;
+}
+.of-json-head span{font-size:10px;font-weight:700;letter-spacing:.08em;text-transform:uppercase;color:var(--txm)}
+.of-json-fmt{font-size:11.5px;font-weight:500;color:var(--ac);border:none;background:transparent;cursor:pointer;font-family:inherit}
+.of-json-fmt:hover{opacity:.7}
+.of-json-area{
+  width:100%;border:none;outline:none;background:transparent;
+  padding:8px 12px;font-family:'JetBrains Mono',monospace;font-size:12px;color:var(--tx);
+  resize:vertical;min-height:80px;line-height:1.6;tab-size:2;
+}
+.of-json-area::placeholder{color:var(--txm)}
+
+/* focus highlight for whole of-row */
+.of-row:focus-within{background:rgba(26,36,72,.015)}
+[data-theme=dark] .of-row:focus-within{background:rgba(79,110,247,.04)}
+
+</style>
+</head>
+<body>
+
+<div class="dbar">
+  <span class="dtitle">Spica — New Entry Form</span>
+  <button class="tbtn" onclick="toggleTheme()">
+    <svg class="moon" width="14" height="14" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2"><path d="M21 12.79A9 9 0 1 1 11.21 3 7 7 0 0 0 21 12.79z"/></svg>
+    <svg class="sun"  width="14" height="14" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2"><circle cx="12" cy="12" r="5"/><line x1="12" y1="1" x2="12" y2="3"/><line x1="12" y1="21" x2="12" y2="23"/><line x1="4.22" y1="4.22" x2="5.64" y2="5.64"/><line x1="18.36" y1="18.36" x2="19.78" y2="19.78"/><line x1="1" y1="12" x2="3" y2="12"/><line x1="21" y1="12" x2="23" y2="12"/><line x1="4.22" y1="19.78" x2="5.64" y2="18.36"/><line x1="18.36" y1="5.64" x2="19.78" y2="4.22"/></svg>
+  </button>
+</div>
+
+<div class="form-wrap">
+
+  <!-- ── String ── -->
+  <div class="field-row">
+    <div class="field-label">
+      <svg class="fl-icon" width="13" height="13" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2"><polyline points="4 7 4 4 20 4 20 7"/><line x1="9" y1="20" x2="15" y2="20"/><line x1="12" y1="4" x2="12" y2="20"/></svg>
+      <span class="fl-name">title</span>
+      <span class="fl-type">string</span>
+    </div>
+    <div class="finput-wrap">
+      <div class="ficon"><svg width="13" height="13" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2"><polyline points="4 7 4 4 20 4 20 7"/><line x1="9" y1="20" x2="15" y2="20"/><line x1="12" y1="4" x2="12" y2="20"/></svg></div>
+      <input class="finput" type="text" placeholder="Enter title"/>
+    </div>
+  </div>
+
+  <!-- ── Number ── -->
+  <div class="field-row">
+    <div class="field-label">
+      <svg class="fl-icon" width="13" height="13" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2"><rect x="3" y="3" width="18" height="18" rx="2"/><path d="M9 9h.01M15 9h.01M9 15h.01M15 15h.01"/></svg>
+      <span class="fl-name">price</span>
+      <span class="fl-type">number</span>
+    </div>
+    <div class="finput-wrap">
+      <div class="ficon"><svg width="13" height="13" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2"><rect x="3" y="3" width="18" height="18" rx="2"/><path d="M9 9h.01M15 9h.01M9 15h.01M15 15h.01"/></svg></div>
+      <input class="finput" type="number" placeholder="0" value=""/>
+      <span class="finput-suffix">USD</span>
+    </div>
+  </div>
+
+  <!-- ── Date ── -->
+  <div class="field-row">
+    <div class="field-label">
+      <svg class="fl-icon" width="13" height="13" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2"><rect x="3" y="4" width="18" height="18" rx="2"/><line x1="16" y1="2" x2="16" y2="6"/><line x1="8" y1="2" x2="8" y2="6"/><line x1="3" y1="10" x2="21" y2="10"/></svg>
+      <span class="fl-name">createdat</span>
+      <span class="fl-type">date</span>
+    </div>
+
+    <!-- custom date picker trigger -->
+    <div class="finput-wrap" style="cursor:pointer" onclick="toggleDatePicker()">
+      <div class="ficon"><svg width="13" height="13" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2"><rect x="3" y="4" width="18" height="18" rx="2"/><line x1="16" y1="2" x2="16" y2="6"/><line x1="8" y1="2" x2="8" y2="6"/><line x1="3" y1="10" x2="21" y2="10"/></svg></div>
+      <span class="finput" id="date-display" style="color:var(--txm);user-select:none">Select date & time</span>
+      <div style="padding:0 10px;color:var(--txm);flex-shrink:0">
+        <svg width="13" height="13" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2.5"><polyline points="6 9 12 15 18 9"/></svg>
+      </div>
+    </div>
+
+    <!-- calendar dropdown -->
+    <div id="date-picker" style="display:none;position:relative;z-index:50;margin-top:4px">
+      <div style="background:var(--sf);border:1px solid var(--bd);border-radius:12px;
+                  box-shadow:0 8px 24px rgba(0,0,0,.12),0 2px 8px rgba(0,0,0,.06);
+                  overflow:hidden;">
+
+        <!-- Month nav -->
+        <div style="display:flex;align-items:center;justify-content:space-between;
+                    padding:12px 16px;border-bottom:1px solid var(--bd)">
+          <button onclick="changeMonth(-1)" style="width:28px;height:28px;border-radius:6px;border:1px solid var(--bd);
+                  background:var(--sf2);cursor:pointer;display:flex;align-items:center;justify-content:center;
+                  color:var(--tx2);transition:background .1s">
+            <svg width="12" height="12" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2.5"><polyline points="15 18 9 12 15 6"/></svg>
+          </button>
+          <span id="cal-month-label" style="font-size:13.5px;font-weight:600;color:var(--tx)"></span>
+          <button onclick="changeMonth(1)" style="width:28px;height:28px;border-radius:6px;border:1px solid var(--bd);
+                  background:var(--sf2);cursor:pointer;display:flex;align-items:center;justify-content:center;
+                  color:var(--tx2);transition:background .1s">
+            <svg width="12" height="12" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2.5"><polyline points="9 18 15 12 9 6"/></svg>
+          </button>
+        </div>
+
+        <!-- Day grid -->
+        <div style="padding:12px 14px">
+          <!-- weekday headers -->
+          <div style="display:grid;grid-template-columns:repeat(7,1fr);margin-bottom:4px">
+            <div style="text-align:center;font-size:10.5px;font-weight:700;letter-spacing:.06em;
+                        text-transform:uppercase;color:var(--txm);padding:4px 0">Su</div>
+            <div style="text-align:center;font-size:10.5px;font-weight:700;letter-spacing:.06em;
+                        text-transform:uppercase;color:var(--txm);padding:4px 0">Mo</div>
+            <div style="text-align:center;font-size:10.5px;font-weight:700;letter-spacing:.06em;
+                        text-transform:uppercase;color:var(--txm);padding:4px 0">Tu</div>
+            <div style="text-align:center;font-size:10.5px;font-weight:700;letter-spacing:.06em;
+                        text-transform:uppercase;color:var(--txm);padding:4px 0">We</div>
+            <div style="text-align:center;font-size:10.5px;font-weight:700;letter-spacing:.06em;
+                        text-transform:uppercase;color:var(--txm);padding:4px 0">Th</div>
+            <div style="text-align:center;font-size:10.5px;font-weight:700;letter-spacing:.06em;
+                        text-transform:uppercase;color:var(--txm);padding:4px 0">Fr</div>
+            <div style="text-align:center;font-size:10.5px;font-weight:700;letter-spacing:.06em;
+                        text-transform:uppercase;color:var(--txm);padding:4px 0">Sa</div>
+          </div>
+          <!-- day cells -->
+          <div id="cal-grid" style="display:grid;grid-template-columns:repeat(7,1fr);gap:2px"></div>
+        </div>
+
+        <!-- Time -->
+        <div style="padding:10px 16px 14px;border-top:1px solid var(--bd);
+                    display:flex;align-items:center;gap:8px">
+          <svg width="13" height="13" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2" style="color:var(--txm);flex-shrink:0">
+            <circle cx="12" cy="12" r="10"/><polyline points="12 6 12 12 16 14"/>
+          </svg>
+          <span style="font-size:12px;color:var(--txm);font-weight:500">Time</span>
+          <input id="cal-hour" type="number" min="0" max="23" value="0"
+            style="width:48px;border:1px solid var(--bd);border-radius:6px;background:var(--sf2);
+                   padding:5px 7px;font-family:'JetBrains Mono',monospace;font-size:13px;
+                   color:var(--tx);outline:none;text-align:center"
+            oninput="updateDateTime()"/>
+          <span style="color:var(--txm);font-weight:700">:</span>
+          <input id="cal-min" type="number" min="0" max="59" value="0"
+            style="width:48px;border:1px solid var(--bd);border-radius:6px;background:var(--sf2);
+                   padding:5px 7px;font-family:'JetBrains Mono',monospace;font-size:13px;
+                   color:var(--tx);outline:none;text-align:center"
+            oninput="updateDateTime()"/>
+          <div style="margin-left:auto;display:flex;gap:6px">
+            <button onclick="clearDate()" style="padding:5px 10px;border-radius:6px;border:1px solid var(--bd);
+                    background:transparent;font-family:inherit;font-size:12px;color:var(--txm);cursor:pointer">Clear</button>
+            <button onclick="applyDate()" style="padding:5px 12px;border-radius:6px;border:none;
+                    background:var(--ac);color:#fff;font-family:inherit;font-size:12px;font-weight:600;cursor:pointer">Done</button>
+          </div>
+        </div>
+
+      </div>
+    </div>
+  </div>
+
+  <!-- ── Textarea ── -->
+  <div class="field-row">
+    <div class="field-label">
+      <svg class="fl-icon" width="13" height="13" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2"><line x1="17" y1="10" x2="3" y2="10"/><line x1="21" y1="6" x2="3" y2="6"/><line x1="21" y1="14" x2="3" y2="14"/><line x1="17" y1="18" x2="3" y2="18"/></svg>
+      <span class="fl-name">description</span>
+      <span class="fl-type">textarea</span>
+    </div>
+    <div class="ftextarea-wrap">
+      <div class="ftextarea-head">
+        <svg width="12" height="12" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2"><line x1="17" y1="10" x2="3" y2="10"/><line x1="21" y1="6" x2="3" y2="6"/><line x1="21" y1="14" x2="3" y2="14"/><line x1="17" y1="18" x2="3" y2="18"/></svg>
+        description
+      </div>
+      <textarea class="ftextarea" placeholder="textarea value…"></textarea>
+    </div>
+  </div>
+
+  <!-- ── Boolean ── -->
+  <div class="field-row">
+    <div class="field-label">
+      <svg class="fl-icon" width="13" height="13" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2"><rect x="1" y="5" width="22" height="14" rx="7"/><circle cx="16" cy="12" r="3" fill="currentColor" stroke="none"/></svg>
+      <span class="fl-name">is_active</span>
+      <span class="fl-type">boolean</span>
+    </div>
+    <div class="bool-wrap" id="boolWrap" onclick="toggleBool()">
+      <span class="bool-label" id="boolLabel">is_active</span>
+      <span class="bool-val" id="boolVal">false</span>
+      <div class="tsw" id="boolSw"></div>
+    </div>
+  </div>
+
+  <!-- ── Multiselect ── -->
+  <div class="field-row">
+    <div class="field-label">
+      <svg class="fl-icon" width="13" height="13" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2"><polyline points="9 11 12 14 22 4"/><path d="M21 12v7a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2V5a2 2 0 0 1 2-2h11"/></svg>
+      <span class="fl-name">tags</span>
+      <span class="fl-type">multiselect</span>
+    </div>
+    <div class="tag-wrap" id="tagWrap" onclick="document.getElementById('tagInp').focus()">
+      <span class="tag">frontend <span class="tag-rm" onclick="removeTag(this)"><svg width="10" height="10" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2.5"><line x1="18" y1="6" x2="6" y2="18"/><line x1="6" y1="6" x2="18" y2="18"/></svg></span></span>
+      <span class="tag">design <span class="tag-rm" onclick="removeTag(this)"><svg width="10" height="10" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2.5"><line x1="18" y1="6" x2="6" y2="18"/><line x1="6" y1="6" x2="18" y2="18"/></svg></span></span>
+      <input class="tag-inp" id="tagInp" type="text" placeholder="Add value, press Enter"
+        onkeydown="handleTag(event)"/>
+    </div>
+  </div>
+
+  <!-- ── Relation ── -->
+  <div class="field-row">
+    <div class="field-label">
+      <svg class="fl-icon" width="13" height="13" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2"><circle cx="18" cy="18" r="3"/><circle cx="6" cy="6" r="3"/><circle cx="6" cy="18" r="3"/><line x1="6" y1="9" x2="6" y2="15"/><path d="M18 15V9a3 3 0 0 0-3-3H9"/></svg>
+      <span class="fl-name">category</span>
+      <span class="fl-type">relation</span>
+    </div>
+    <div class="rel-wrap">
+      <div class="rel-icon"><svg width="13" height="13" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2"><circle cx="18" cy="18" r="3"/><circle cx="6" cy="6" r="3"/><circle cx="6" cy="18" r="3"/><line x1="6" y1="9" x2="6" y2="15"/><path d="M18 15V9a3 3 0 0 0-3-3H9"/></svg></div>
+      <span class="rel-text">› Select…</span>
+      <div class="rel-chev"><svg width="12" height="12" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2.5"><polyline points="6 9 12 15 18 9"/></svg></div>
+    </div>
+  </div>
+
+  <!-- ── Location ── -->
+  <div class="field-row">
+    <div class="field-label">
+      <svg class="fl-icon" width="13" height="13" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2"><path d="M21 10c0 7-9 13-9 13s-9-6-9-13a9 9 0 0 1 18 0z"/><circle cx="12" cy="10" r="3"/></svg>
+      <span class="fl-name">location</span>
+      <span class="fl-type">location</span>
+    </div>
+    <div class="loc-wrap">
+      <div class="loc-map">
+        <div class="loc-map-grid"></div>
+        <div class="loc-pin">
+          <svg width="28" height="28" fill="none" viewBox="0 0 24 24" fill="var(--rd)">
+            <path fill="var(--rd)" d="M12 2C8.13 2 5 5.13 5 9c0 5.25 7 13 7 13s7-7.75 7-13c0-3.87-3.13-7-7-7zm0 9.5c-1.38 0-2.5-1.12-2.5-2.5s1.12-2.5 2.5-2.5 2.5 1.12 2.5 2.5-1.12 2.5-2.5 2.5z"/>
+          </svg>
+        </div>
+      </div>
+      <div class="loc-inputs">
+        <div class="loc-coord">
+          <span class="loc-lbl">Lat</span>
+          <input class="loc-inp" type="number" placeholder="0.000000" step="0.000001"/>
+        </div>
+        <div class="loc-coord" style="border-left:1px solid var(--bd)">
+          <span class="loc-lbl">Lng</span>
+          <input class="loc-inp" type="number" placeholder="0.000000" step="0.000001"/>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- ── Array ── -->
+  <div class="field-row">
+    <div class="field-label">
+      <svg class="fl-icon" width="13" height="13" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2"><line x1="8" y1="6" x2="21" y2="6"/><line x1="8" y1="12" x2="21" y2="12"/><line x1="8" y1="18" x2="21" y2="18"/><line x1="3" y1="6" x2="3.01" y2="6"/><line x1="3" y1="12" x2="3.01" y2="12"/><line x1="3" y1="18" x2="3.01" y2="18"/></svg>
+      <span class="fl-name">images</span>
+      <span class="fl-type">array</span>
+    </div>
+    <div class="arr-wrap" id="arrWrap">
+      <div class="arr-item">
+        <span class="arr-idx">0</span>
+        <input class="arr-val" type="text" placeholder="array value…"/>
+        <button class="arr-rm" onclick="removeArrItem(this)"><svg width="12" height="12" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2.5"><line x1="18" y1="6" x2="6" y2="18"/><line x1="6" y1="6" x2="18" y2="18"/></svg></button>
+      </div>
+      <div class="arr-item">
+        <span class="arr-idx">1</span>
+        <input class="arr-val" type="text" placeholder="array value…"/>
+        <button class="arr-rm" onclick="removeArrItem(this)"><svg width="12" height="12" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2.5"><line x1="18" y1="6" x2="6" y2="18"/><line x1="6" y1="6" x2="18" y2="18"/></svg></button>
+      </div>
+      <div class="arr-add" onclick="addArrItem()">
+        <svg width="12" height="12" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2.5"><line x1="12" y1="5" x2="12" y2="19"/><line x1="5" y1="12" x2="19" y2="12"/></svg>
+        Add item
+      </div>
+    </div>
+  </div>
+
+  <!-- ── Object ── -->
+  <div class="field-row">
+    <div class="field-label">
+      <svg class="fl-icon" width="13" height="13" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2"><polyline points="16 18 22 12 16 6"/><polyline points="8 6 2 12 8 18"/></svg>
+      <span class="fl-name">level_1_object</span>
+      <span class="fl-type">object</span>
+    </div>
+
+    <div style="border:1px solid var(--bd);border-radius:12px;background:var(--sf);box-shadow:var(--sh);overflow:hidden">
+
+      <!-- string -->
+      <div class="of-row">
+        <div class="of-key">
+          <svg width="11" height="11" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2" style="color:var(--bl);flex-shrink:0"><polyline points="4 7 4 4 20 4 20 7"/><line x1="9" y1="20" x2="15" y2="20"/><line x1="12" y1="4" x2="12" y2="20"/></svg>
+          <span>level2_str</span>
+          <span class="of-badge" style="color:var(--bl);background:var(--blb)">string</span>
+        </div>
+        <div class="of-val"><input type="text" class="of-input" placeholder="string value…"/></div>
+      </div>
+
+      <!-- number -->
+      <div class="of-row">
+        <div class="of-key">
+          <svg width="11" height="11" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2" style="color:var(--gr);flex-shrink:0"><rect x="3" y="3" width="18" height="18" rx="2"/><path d="M9 9h.01M15 9h.01M9 15h.01M15 15h.01"/></svg>
+          <span>level2_num</span>
+          <span class="of-badge" style="color:var(--gr);background:var(--grb)">number</span>
+        </div>
+        <div class="of-val"><input type="number" class="of-input" placeholder="0"/></div>
+      </div>
+
+      <!-- date -->
+      <div class="of-row">
+        <div class="of-key">
+          <svg width="11" height="11" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2" style="color:var(--am);flex-shrink:0"><rect x="3" y="4" width="18" height="18" rx="2"/><line x1="16" y1="2" x2="16" y2="6"/><line x1="8" y1="2" x2="8" y2="6"/><line x1="3" y1="10" x2="21" y2="10"/></svg>
+          <span>level2_dat</span>
+          <span class="of-badge" style="color:var(--am);background:var(--amb)">date</span>
+        </div>
+        <div class="of-val" style="cursor:pointer;position:relative" onclick="toggleObjDate(this)">
+          <span class="of-date-display">Select date…</span>
+          <div class="of-date-picker" style="display:none"></div>
+        </div>
+      </div>
+
+      <!-- boolean -->
+      <div class="of-row">
+        <div class="of-key">
+          <svg width="11" height="11" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2" style="color:var(--pu);flex-shrink:0"><rect x="1" y="5" width="22" height="14" rx="7"/><circle cx="16" cy="12" r="3" fill="currentColor" stroke="none"/></svg>
+          <span>level2_boo</span>
+          <span class="of-badge" style="color:var(--pu);background:var(--pub)">boolean</span>
+        </div>
+        <div class="of-val">
+          <div style="display:flex;align-items:center;gap:8px;cursor:pointer" onclick="toggleObjBool(this)">
+            <div class="tsw"></div>
+            <span style="font-size:12px;font-family:'JetBrains Mono',monospace;color:var(--txm)">false</span>
+          </div>
+        </div>
+      </div>
+
+      <!-- textarea -->
+      <div class="of-row of-row-tall">
+        <div class="of-key">
+          <svg width="11" height="11" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2" style="color:var(--txm);flex-shrink:0"><line x1="17" y1="10" x2="3" y2="10"/><line x1="21" y1="6" x2="3" y2="6"/><line x1="21" y1="14" x2="3" y2="14"/><line x1="17" y1="18" x2="3" y2="18"/></svg>
+          <span>level2_tex</span>
+          <span class="of-badge">textarea</span>
+        </div>
+        <div class="of-val"><textarea class="of-textarea" placeholder="textarea value…"></textarea></div>
+      </div>
+
+      <!-- multiselect -->
+      <div class="of-row of-row-tall">
+        <div class="of-key">
+          <svg width="11" height="11" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2" style="color:var(--ac);flex-shrink:0"><polyline points="9 11 12 14 22 4"/><path d="M21 12v7a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2V5a2 2 0 0 1 2-2h11"/></svg>
+          <span>level2_mul</span>
+          <span class="of-badge" style="color:var(--ac);background:var(--as)">multiselect</span>
+        </div>
+        <div class="of-val">
+          <div class="of-tag-wrap" onclick="this.querySelector('.of-tag-inp').focus()">
+            <span class="of-tag">baku <span class="of-tag-rm" onclick="removeOfTag(this)">×</span></span>
+            <span class="of-tag">antalya <span class="of-tag-rm" onclick="removeOfTag(this)">×</span></span>
+            <input class="of-tag-inp" type="text" placeholder="Add value, press Enter" onkeydown="handleOfTag(event)"/>
+          </div>
+        </div>
+      </div>
+
+      <!-- relation -->
+      <div class="of-row">
+        <div class="of-key">
+          <svg width="11" height="11" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2" style="color:var(--rd);flex-shrink:0"><circle cx="18" cy="18" r="3"/><circle cx="6" cy="6" r="3"/><circle cx="6" cy="18" r="3"/><line x1="6" y1="9" x2="6" y2="15"/><path d="M18 15V9a3 3 0 0 0-3-3H9"/></svg>
+          <span>level2_rel</span>
+          <span class="of-badge" style="color:var(--rd);background:var(--rdb)">relation</span>
+        </div>
+        <div class="of-val of-relation" onclick="toggleOfRelation(this)">
+          <span class="of-rel-text">› Select…</span>
+          <svg width="11" height="11" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2.5" style="color:var(--txm);flex-shrink:0"><polyline points="6 9 12 15 18 9"/></svg>
+          <div class="of-rel-dropdown" style="display:none">
+            <div class="of-rel-item" onclick="selectOfRelation(this,'User A')">User A</div>
+            <div class="of-rel-item" onclick="selectOfRelation(this,'User B')">User B</div>
+            <div class="of-rel-item" onclick="selectOfRelation(this,'User C')">User C</div>
+          </div>
+        </div>
+      </div>
+
+      <!-- array -->
+      <div class="of-row of-row-tall">
+        <div class="of-key">
+          <svg width="11" height="11" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2" style="color:var(--ac);flex-shrink:0"><line x1="8" y1="6" x2="21" y2="6"/><line x1="8" y1="12" x2="21" y2="12"/><line x1="8" y1="18" x2="21" y2="18"/><line x1="3" y1="6" x2="3.01" y2="6"/><line x1="3" y1="12" x2="3.01" y2="12"/><line x1="3" y1="18" x2="3.01" y2="18"/></svg>
+          <span>level2_arr</span>
+          <span class="of-badge" style="color:var(--ac);background:var(--as)">array</span>
+        </div>
+        <div class="of-val" style="padding:0">
+          <div class="of-arr" id="ofArr">
+            <div class="of-arr-item"><span class="of-arr-idx">0</span><input class="of-arr-val" type="text" placeholder="value…"/><button class="of-arr-rm" onclick="removeOfArrItem(this)">×</button></div>
+            <div class="of-arr-item"><span class="of-arr-idx">1</span><input class="of-arr-val" type="text" placeholder="value…"/><button class="of-arr-rm" onclick="removeOfArrItem(this)">×</button></div>
+            <div class="of-arr-add" onclick="addOfArrItem()">
+              <svg width="10" height="10" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2.5"><line x1="12" y1="5" x2="12" y2="19"/><line x1="5" y1="12" x2="19" y2="12"/></svg>
+              Add item
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <!-- nested object (level2_obj) -->
+      <div class="of-nested-block">
+        <div class="of-nested-head">
+          <svg width="12" height="12" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2" style="color:var(--txm)"><polyline points="16 18 22 12 16 6"/><polyline points="8 6 2 12 8 18"/></svg>
+          <span class="of-nested-name">level2_obj</span>
+          <span class="of-badge">object</span>
+          <button class="of-nested-toggle" onclick="toggleNested(this)">
+            <svg width="11" height="11" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2.5" style="transition:transform .18s"><polyline points="6 9 12 15 18 9"/></svg>
+          </button>
+        </div>
+        <div class="of-nested-body">
+          <div class="of-row" style="border-top:1px solid var(--bd)">
+            <div class="of-key">
+              <svg width="11" height="11" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2" style="color:var(--bl);flex-shrink:0"><polyline points="4 7 4 4 20 4 20 7"/><line x1="9" y1="20" x2="15" y2="20"/><line x1="12" y1="4" x2="12" y2="20"/></svg>
+              <span>level3_str</span>
+              <span class="of-badge" style="color:var(--bl);background:var(--blb)">string</span>
+            </div>
+            <div class="of-val"><input type="text" class="of-input" placeholder="string value…"/></div>
+          </div>
+          <div class="of-row">
+            <div class="of-key">
+              <svg width="11" height="11" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2" style="color:var(--pu);flex-shrink:0"><rect x="1" y="5" width="22" height="14" rx="7"/><circle cx="16" cy="12" r="3" fill="currentColor" stroke="none"/></svg>
+              <span>level3_bool</span>
+              <span class="of-badge" style="color:var(--pu);background:var(--pub)">boolean</span>
+            </div>
+            <div class="of-val">
+              <div style="display:flex;align-items:center;gap:8px;cursor:pointer" onclick="toggleObjBool(this)">
+                <div class="tsw"></div>
+                <span style="font-size:12px;font-family:'JetBrains Mono',monospace;color:var(--txm)">false</span>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <!-- storage -->
+      <div class="of-row of-row-tall">
+        <div class="of-key">
+          <svg width="11" height="11" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2" style="color:var(--am);flex-shrink:0"><polyline points="22 12 16 12 14 15 10 15 8 12 2 12"/><path d="M5.45 5.11L2 12v6a2 2 0 0 0 2 2h16a2 2 0 0 0 2-2v-6l-3.45-6.89A2 2 0 0 0 16.76 4H7.24a2 2 0 0 0-1.79 1.11z"/></svg>
+          <span>level2_sto</span>
+          <span class="of-badge" style="color:var(--am);background:var(--amb)">storage</span>
+        </div>
+        <div class="of-val" style="padding:8px">
+          <div class="of-storage-drop">
+            <svg width="18" height="18" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="1.5" style="color:var(--txm)"><path d="M21 15v4a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2v-4"/><polyline points="17 8 12 3 7 8"/><line x1="12" y1="3" x2="12" y2="15"/></svg>
+            <span style="font-size:11.5px;color:var(--txm)">Upload one image or pick an image from library</span>
+          </div>
+        </div>
+      </div>
+
+      <!-- richtext -->
+      <div class="of-row of-row-tall">
+        <div class="of-key">
+          <svg width="11" height="11" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2" style="color:var(--bl);flex-shrink:0"><path d="M14 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V8z"/><polyline points="14 2 14 8 20 8"/><line x1="16" y1="13" x2="8" y2="13"/></svg>
+          <span>level2_ric</span>
+          <span class="of-badge" style="color:var(--bl);background:var(--blb)">richtext</span>
+        </div>
+        <div class="of-val" style="padding:0;display:flex;flex-direction:column">
+          <div class="of-rt-toolbar">
+            <button class="of-rt-btn" title="Undo">↩</button>
+            <button class="of-rt-btn" title="Redo">↪</button>
+            <span class="of-rt-sep"></span>
+            <button class="of-rt-btn" style="font-weight:700">B</button>
+            <button class="of-rt-btn" style="font-style:italic">I</button>
+            <button class="of-rt-btn" style="text-decoration:underline">U</button>
+            <span class="of-rt-sep"></span>
+            <button class="of-rt-btn" style="font-size:10px">H1</button>
+            <button class="of-rt-btn" style="font-size:10px">H2</button>
+          </div>
+          <textarea class="of-rt-area" placeholder="Enter your text here"></textarea>
+        </div>
+      </div>
+
+      <!-- color -->
+      <div class="of-row">
+        <div class="of-key">
+          <svg width="11" height="11" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2" style="color:var(--gr);flex-shrink:0"><circle cx="12" cy="12" r="10"/><path d="M12 2a10 10 0 0 1 0 20"/></svg>
+          <span>level2_col</span>
+          <span class="of-badge" style="color:var(--gr);background:var(--grb)">color</span>
+        </div>
+        <div class="of-val" style="padding:0;display:flex;align-items:center">
+          <div class="of-color-swatch">
+            <input type="color" value="#111827" oninput="updateOfColor(this)" style="position:absolute;inset:0;opacity:0;cursor:pointer;width:100%;height:100%"/>
+            <div class="of-color-dot" style="background:#111827"></div>
+          </div>
+          <input class="of-color-hex" type="text" value="#111827" oninput="syncOfColorHex(this)"/>
+          <div style="padding:0 10px;cursor:pointer;color:var(--txm)" onclick="this.previousElementSibling.previousElementSibling.querySelector('input').click()">
+            <svg width="13" height="13" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2"><circle cx="12" cy="12" r="10"/><path d="M12 2a10 10 0 0 1 0 20"/></svg>
+          </div>
+        </div>
+      </div>
+
+      <!-- json -->
+      <div class="of-row of-row-tall" style="border-bottom:none">
+        <div class="of-key">
+          <svg width="11" height="11" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2" style="color:var(--txm);flex-shrink:0"><polyline points="16 18 22 12 16 6"/><polyline points="8 6 2 12 8 18"/></svg>
+          <span>level2_jso</span>
+          <span class="of-badge">json</span>
+        </div>
+        <div class="of-val" style="padding:0;display:flex;flex-direction:column">
+          <div class="of-json-head">
+            <span>JSON EDITOR</span>
+            <button class="of-json-fmt" onclick="formatOfJson(this)">Format</button>
+          </div>
+          <textarea class="of-json-area" placeholder='{"key":"value"}'>{
+  "title": "",
+  "description": ""
+}</textarea>
+        </div>
+      </div>
+
+    </div>
+  </div>
+
+  <!-- ── Storage / File ── -->
+  <div class="field-row">
+    <div class="field-label">
+      <svg class="fl-icon" width="13" height="13" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2"><polyline points="22 12 16 12 14 15 10 15 8 12 2 12"/><path d="M5.45 5.11L2 12v6a2 2 0 0 0 2 2h16a2 2 0 0 0 2-2v-6l-3.45-6.89A2 2 0 0 0 16.76 4H7.24a2 2 0 0 0-1.79 1.11z"/></svg>
+      <span class="fl-name">cover_image</span>
+      <span class="fl-type">storage</span>
+    </div>
+    <div class="storage-wrap">
+      <div class="storage-drop">
+        <div class="storage-drop-icon">
+          <svg width="24" height="24" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="1.5">
+            <path d="M21 15v4a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2v-4"/>
+            <polyline points="17 8 12 3 7 8"/>
+            <line x1="12" y1="3" x2="12" y2="15"/>
+          </svg>
+        </div>
+        <div class="storage-drop-text"><strong>Click to upload</strong> or drag & drop</div>
+        <div class="storage-drop-text" style="font-size:11.5px">PNG, JPG, GIF up to 10MB</div>
+      </div>
+    </div>
+  </div>
+
+  <!-- ── Rich Text ── -->
+  <div class="field-row">
+    <div class="field-label">
+      <svg class="fl-icon" width="13" height="13" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2"><path d="M14 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V8z"/><polyline points="14 2 14 8 20 8"/><line x1="16" y1="13" x2="8" y2="13"/><line x1="16" y1="17" x2="8" y2="17"/></svg>
+      <span class="fl-name">content</span>
+      <span class="fl-type">richtext</span>
+    </div>
+    <div class="rt-wrap">
+      <div class="rt-toolbar">
+        <button class="rt-btn" title="Bold"><b>B</b></button>
+        <button class="rt-btn" title="Italic"><i>I</i></button>
+        <button class="rt-btn" title="Underline"><u>U</u></button>
+        <div class="rt-sep"></div>
+        <button class="rt-btn" title="H1" style="font-size:11px">H1</button>
+        <button class="rt-btn" title="H2" style="font-size:11px">H2</button>
+        <div class="rt-sep"></div>
+        <button class="rt-btn" title="List">
+          <svg width="12" height="12" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2"><line x1="8" y1="6" x2="21" y2="6"/><line x1="8" y1="12" x2="21" y2="12"/><line x1="8" y1="18" x2="21" y2="18"/><line x1="3" y1="6" x2="3.01" y2="6"/><line x1="3" y1="12" x2="3.01" y2="12"/><line x1="3" y1="18" x2="3.01" y2="18"/></svg>
+        </button>
+        <button class="rt-btn" title="Link">
+          <svg width="12" height="12" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2"><path d="M10 13a5 5 0 0 0 7.54.54l3-3a5 5 0 0 0-7.07-7.07l-1.72 1.71"/><path d="M14 11a5 5 0 0 0-7.54-.54l-3 3a5 5 0 0 0 7.07 7.07l1.71-1.71"/></svg>
+        </button>
+      </div>
+      <textarea class="rt-area" placeholder="Enter your text here"></textarea>
+    </div>
+  </div>
+
+  <!-- ── Color ── -->
+  <div class="field-row">
+    <div class="field-label">
+      <svg class="fl-icon" width="13" height="13" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2"><circle cx="12" cy="12" r="10"/><path d="M12 2a10 10 0 0 1 0 20"/></svg>
+      <span class="fl-name">color</span>
+      <span class="fl-type">color</span>
+    </div>
+    <div class="color-wrap">
+      <div class="color-preview">
+        <input type="color" id="colorPicker" value="#111827" oninput="updateColor(this.value)"/>
+        <div class="color-dot" id="colorDot" style="background:#111827"></div>
+      </div>
+      <input class="color-hex" id="colorHex" type="text" value="#111827" placeholder="#000000"
+        oninput="updateColorFromHex(this.value)"/>
+      <div class="color-pick-btn" onclick="document.getElementById('colorPicker').click()">
+        <svg width="13" height="13" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2"><circle cx="12" cy="12" r="10"/><path d="M12 2a10 10 0 0 1 0 20"/></svg>
+      </div>
+    </div>
+  </div>
+
+  <!-- ── JSON ── -->
+  <div class="field-row">
+    <div class="field-label">
+      <svg class="fl-icon" width="13" height="13" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2"><polyline points="16 18 22 12 16 6"/><polyline points="8 6 2 12 8 18"/></svg>
+      <span class="fl-name">metadata</span>
+      <span class="fl-type">json</span>
+    </div>
+    <div class="json-wrap">
+      <div class="json-header">
+        <span class="json-title">JSON Editor</span>
+        <button class="json-fmt-btn" onclick="formatJson()">Format</button>
+      </div>
+      <textarea class="json-area" id="jsonArea" placeholder='{"key": "value"}'>{
+  "title": "",
+  "description": ""
+}</textarea>
+    </div>
+  </div>
+
+</div>
+
+<script>
+/* boolean */
+function toggleBool() {
+  const w = document.getElementById('boolWrap');
+  const s = document.getElementById('boolSw');
+  const v = document.getElementById('boolVal');
+  w.classList.toggle('on');
+  s.classList.toggle('on');
+  v.textContent = s.classList.contains('on') ? 'true' : 'false';
+}
+
+/* obj boolean */
+document.getElementById('objBool').addEventListener('click', function() {
+  const v = document.getElementById('objBoolVal');
+  v.textContent = this.classList.contains('on') ? 'true' : 'false';
+});
+
+/* tags */
+function handleTag(e) {
+  if (e.key !== 'Enter' && e.key !== ',') return;
+  e.preventDefault();
+  const val = e.target.value.trim();
+  if (!val) return;
+  const wrap = document.getElementById('tagWrap');
+  const inp  = document.getElementById('tagInp');
+  const tag  = document.createElement('span');
+  tag.className = 'tag';
+  tag.innerHTML = `${val} <span class="tag-rm" onclick="removeTag(this)"><svg width="10" height="10" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2.5"><line x1="18" y1="6" x2="6" y2="18"/><line x1="6" y1="6" x2="18" y2="18"/></svg></span>`;
+  wrap.insertBefore(tag, inp);
+  inp.value = '';
+}
+function removeTag(rm) { rm.closest('.tag').remove(); }
+
+/* array */
+function addArrItem() {
+  const wrap = document.getElementById('arrWrap');
+  const addBtn = wrap.querySelector('.arr-add');
+  const idx = wrap.querySelectorAll('.arr-item').length;
+  const item = document.createElement('div');
+  item.className = 'arr-item';
+  item.innerHTML = `<span class="arr-idx">${idx}</span><input class="arr-val" type="text" placeholder="array value…"/><button class="arr-rm" onclick="removeArrItem(this)"><svg width="12" height="12" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2.5"><line x1="18" y1="6" x2="6" y2="18"/><line x1="6" y1="6" x2="18" y2="18"/></svg></button>`;
+  wrap.insertBefore(item, addBtn);
+}
+function removeArrItem(btn) {
+  btn.closest('.arr-item').remove();
+  document.querySelectorAll('.arr-idx').forEach((el,i) => el.textContent = i);
+}
+
+/* color */
+function updateColor(val) {
+  document.getElementById('colorDot').style.background = val;
+  document.getElementById('colorHex').value = val;
+}
+function updateColorFromHex(val) {
+  if (/^#[0-9a-fA-F]{6}$/.test(val)) {
+    document.getElementById('colorDot').style.background = val;
+    document.getElementById('colorPicker').value = val;
+  }
+}
+
+/* json format */
+function formatJson() {
+  const ta = document.getElementById('jsonArea');
+  try {
+    ta.value = JSON.stringify(JSON.parse(ta.value), null, 2);
+    ta.style.borderColor = '';
+  } catch(e) {
+    ta.style.borderColor = 'var(--rd)';
+    setTimeout(() => ta.style.borderColor = '', 1500);
+  }
+}
+
+/* ── Object field helpers ── */
+
+// boolean toggle inside object
+function toggleObjBool(wrap) {
+  const sw  = wrap.querySelector('.tsw');
+  const lbl = wrap.querySelector('span');
+  sw.classList.toggle('on');
+  lbl.textContent = sw.classList.contains('on') ? 'true' : 'false';
+  lbl.style.color  = sw.classList.contains('on') ? 'var(--ac)' : 'var(--txm)';
+}
+
+// multiselect tags inside object
+function handleOfTag(e) {
+  if (e.key !== 'Enter' && e.key !== ',') return;
+  e.preventDefault();
+  const val = e.target.value.trim();
+  if (!val) return;
+  const wrap = e.target.closest('.of-tag-wrap');
+  const tag  = document.createElement('span');
+  tag.className = 'of-tag';
+  tag.innerHTML = `${val} <span class="of-tag-rm" onclick="removeOfTag(this)">×</span>`;
+  wrap.insertBefore(tag, e.target);
+  e.target.value = '';
+}
+function removeOfTag(rm) { rm.closest('.of-tag').remove(); }
+
+// relation dropdown inside object
+function toggleOfRelation(wrap) {
+  const dd = wrap.querySelector('.of-rel-dropdown');
+  dd.style.display = dd.style.display === 'none' ? 'block' : 'none';
+}
+function selectOfRelation(item, val) {
+  const wrap = item.closest('.of-relation');
+  const txt  = wrap.querySelector('.of-rel-text');
+  txt.textContent = val;
+  txt.classList.add('set');
+  item.closest('.of-rel-dropdown').style.display = 'none';
+}
+document.addEventListener('click', e => {
+  document.querySelectorAll('.of-rel-dropdown').forEach(dd => {
+    if (!dd.closest('.of-relation').contains(e.target)) dd.style.display = 'none';
+  });
+});
+
+// array inside object
+function addOfArrItem() {
+  const wrap   = document.getElementById('ofArr');
+  const addBtn = wrap.querySelector('.of-arr-add');
+  const idx    = wrap.querySelectorAll('.of-arr-item').length;
+  const item   = document.createElement('div');
+  item.className = 'of-arr-item';
+  item.innerHTML = `<span class="of-arr-idx">${idx}</span><input class="of-arr-val" type="text" placeholder="value…"/><button class="of-arr-rm" onclick="removeOfArrItem(this)">×</button>`;
+  wrap.insertBefore(item, addBtn);
+}
+function removeOfArrItem(btn) {
+  btn.closest('.of-arr-item').remove();
+  document.querySelectorAll('#ofArr .of-arr-idx').forEach((el,i) => el.textContent = i);
+}
+
+// nested object toggle
+function toggleNested(btn) {
+  const body = btn.closest('.of-nested-block').querySelector('.of-nested-body');
+  const svg  = btn.querySelector('svg');
+  const open = body.style.display !== 'none';
+  body.style.display = open ? 'none' : '';
+  svg.style.transform = open ? 'rotate(-90deg)' : '';
+}
+
+// date inside object (simple toggle)
+function toggleObjDate(cell) {
+  const dp   = cell.querySelector('.of-date-picker');
+  const open = dp.style.display !== 'none';
+  if (open) { dp.style.display = 'none'; return; }
+  dp.innerHTML = buildMiniCal(cell);
+  dp.style.display = 'block';
+}
+
+let objCalDate = new Date();
+function buildMiniCal(cell) {
+  const d = objCalDate;
+  const today = new Date();
+  const first = new Date(d.getFullYear(), d.getMonth(), 1).getDay();
+  const days  = new Date(d.getFullYear(), d.getMonth()+1, 0).getDate();
+  const mnLabel = MONTHS[d.getMonth()] + ' ' + d.getFullYear();
+
+  let dayBtns = '';
+  for (let i=0;i<first;i++) dayBtns += '<div></div>';
+  for (let day=1;day<=days;day++) {
+    const isToday = new Date(d.getFullYear(),d.getMonth(),day).toDateString()===today.toDateString();
+    dayBtns += `<div onclick="pickObjDay(this.closest('.of-date-picker').closest('.of-val'),${day})"
+      style="aspect-ratio:1;display:flex;align-items:center;justify-content:center;
+             border-radius:6px;cursor:pointer;font-size:12px;font-family:'DM Sans',sans-serif;
+             background:${isToday?'var(--as)':'transparent'};color:${isToday?'var(--ac)':'var(--tx)'};
+             font-weight:${isToday?'600':'400'}"
+      onmouseenter="this.style.background='var(--sf3)'"
+      onmouseleave="this.style.background='${isToday?'var(--as)':'transparent'}'">
+      ${day}</div>`;
+  }
+
+  return `<div style="padding:10px 12px;border-bottom:1px solid var(--bd);display:flex;align-items:center;justify-content:space-between">
+    <button onclick="objCalMonth(-1,this)" style="width:24px;height:24px;border-radius:5px;border:1px solid var(--bd);background:var(--sf2);cursor:pointer;color:var(--tx2);display:flex;align-items:center;justify-content:center">
+      <svg width="10" height="10" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2.5"><polyline points="15 18 9 12 15 6"/></svg>
+    </button>
+    <span style="font-size:12.5px;font-weight:600;color:var(--tx)">${mnLabel}</span>
+    <button onclick="objCalMonth(1,this)" style="width:24px;height:24px;border-radius:5px;border:1px solid var(--bd);background:var(--sf2);cursor:pointer;color:var(--tx2);display:flex;align-items:center;justify-content:center">
+      <svg width="10" height="10" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2.5"><polyline points="9 18 15 12 9 6"/></svg>
+    </button>
+  </div>
+  <div style="padding:8px 10px;display:grid;grid-template-columns:repeat(7,1fr);gap:2px">
+    ${['Su','Mo','Tu','We','Th','Fr','Sa'].map(x=>`<div style="text-align:center;font-size:9.5px;font-weight:700;letter-spacing:.06em;text-transform:uppercase;color:var(--txm);padding:3px 0">${x}</div>`).join('')}
+    ${dayBtns}
+  </div>
+  <div style="padding:8px 12px 10px;border-top:1px solid var(--bd);display:flex;align-items:center;gap:6px">
+    <svg width="12" height="12" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2" style="color:var(--txm)"><circle cx="12" cy="12" r="10"/><polyline points="12 6 12 12 16 14"/></svg>
+    <input type="number" min="0" max="23" value="0" style="width:42px;border:1px solid var(--bd);border-radius:5px;background:var(--sf2);padding:4px 6px;font-family:'JetBrains Mono',monospace;font-size:12px;color:var(--tx);outline:none;text-align:center" id="objH"/>
+    <span style="color:var(--txm);font-weight:700">:</span>
+    <input type="number" min="0" max="59" value="0" style="width:42px;border:1px solid var(--bd);border-radius:5px;background:var(--sf2);padding:4px 6px;font-family:'JetBrains Mono',monospace;font-size:12px;color:var(--tx);outline:none;text-align:center" id="objM"/>
+    <button onclick="this.closest('.of-date-picker').style.display='none'" style="margin-left:auto;padding:4px 10px;border-radius:6px;border:none;background:var(--ac);color:#fff;font-family:inherit;font-size:12px;font-weight:600;cursor:pointer">Done</button>
+  </div>`;
+}
+
+function objCalMonth(dir, btn) {
+  objCalDate = new Date(objCalDate.getFullYear(), objCalDate.getMonth()+dir, 1);
+  const cell = btn.closest('.of-val');
+  const dp   = cell.querySelector('.of-date-picker');
+  dp.innerHTML = buildMiniCal(cell);
+}
+
+function pickObjDay(cell, day) {
+  const d   = objCalDate;
+  const h   = document.getElementById('objH')?.value || 0;
+  const m   = document.getElementById('objM')?.value || 0;
+  const str = `${d.getFullYear()}-${String(d.getMonth()+1).padStart(2,'0')}-${String(day).padStart(2,'0')} ${String(h).padStart(2,'0')}:${String(m).padStart(2,'0')}`;
+  const disp = cell.querySelector('.of-date-display');
+  disp.textContent = str;
+  disp.classList.add('set');
+  cell.querySelector('.of-date-picker').style.display = 'none';
+}
+
+// color inside object
+function updateOfColor(inp) {
+  const wrap = inp.closest('.of-val');
+  wrap.querySelector('.of-color-dot').style.background = inp.value;
+  wrap.querySelector('.of-color-hex').value = inp.value;
+}
+function syncOfColorHex(inp) {
+  if (/^#[0-9a-fA-F]{6}$/.test(inp.value)) {
+    const wrap = inp.closest('.of-val');
+    wrap.querySelector('.of-color-dot').style.background = inp.value;
+    wrap.querySelector('input[type=color]').value = inp.value;
+  }
+}
+
+// json inside object
+function formatOfJson(btn) {
+  const ta = btn.closest('.of-val').querySelector('.of-json-area');
+  try {
+    ta.value = JSON.stringify(JSON.parse(ta.value), null, 2);
+  } catch(e) {
+    ta.style.color = 'var(--rd)';
+    setTimeout(() => ta.style.color = '', 1200);
+  }
+}
+
+
+const MONTHS = ['January','February','March','April','May','June',
+                'July','August','September','October','November','December'];
+let calDate = new Date();
+let selDate = null;
+let pickerOpen = false;
+
+function toggleDatePicker() {
+  pickerOpen = !pickerOpen;
+  document.getElementById('date-picker').style.display = pickerOpen ? 'block' : 'none';
+  if (pickerOpen) renderCal();
+}
+
+function renderCal() {
+  const d = calDate;
+  document.getElementById('cal-month-label').textContent = `${MONTHS[d.getMonth()]} ${d.getFullYear()}`;
+  const grid = document.getElementById('cal-grid');
+  grid.innerHTML = '';
+  const first = new Date(d.getFullYear(), d.getMonth(), 1).getDay();
+  const days  = new Date(d.getFullYear(), d.getMonth()+1, 0).getDate();
+  const today = new Date();
+
+  // empty cells
+  for (let i=0;i<first;i++) {
+    const e = document.createElement('div'); grid.appendChild(e);
+  }
+  for (let day=1;day<=days;day++) {
+    const btn = document.createElement('button');
+    const thisDate = new Date(d.getFullYear(), d.getMonth(), day);
+    const isToday = thisDate.toDateString() === today.toDateString();
+    const isSel   = selDate && thisDate.toDateString() === selDate.toDateString();
+    btn.textContent = day;
+    btn.style.cssText = `
+      width:100%;aspect-ratio:1;border:none;border-radius:7px;cursor:pointer;
+      font-family:'DM Sans',sans-serif;font-size:12.5px;font-weight:${isToday||isSel?'600':'400'};
+      background:${isSel ? 'var(--ac)' : isToday ? 'var(--as)' : 'transparent'};
+      color:${isSel ? '#fff' : isToday ? 'var(--ac)' : 'var(--tx)'};
+      transition:background .1s,color .1s;`;
+    btn.onmouseenter = () => { if(!isSel) btn.style.background='var(--sf2)'; };
+    btn.onmouseleave = () => { if(!isSel) btn.style.background=isToday?'var(--as)':'transparent'; };
+    btn.onclick = () => {
+      selDate = new Date(d.getFullYear(), d.getMonth(), day);
+      updateDateTime();
+      renderCal();
+    };
+    grid.appendChild(btn);
+  }
+}
+
+function changeMonth(dir) {
+  calDate = new Date(calDate.getFullYear(), calDate.getMonth()+dir, 1);
+  renderCal();
+}
+
+function updateDateTime() {
+  if (!selDate) return;
+  const h = String(document.getElementById('cal-hour').value||0).padStart(2,'0');
+  const m = String(document.getElementById('cal-min').value||0).padStart(2,'0');
+  const dateStr = `${selDate.getFullYear()}-${String(selDate.getMonth()+1).padStart(2,'0')}-${String(selDate.getDate()).padStart(2,'0')}`;
+  const disp = document.getElementById('date-display');
+  disp.textContent = `${dateStr}  ${h}:${m}`;
+  disp.style.color = 'var(--tx)';
+}
+
+function applyDate() {
+  pickerOpen = false;
+  document.getElementById('date-picker').style.display = 'none';
+}
+
+function clearDate() {
+  selDate = null;
+  const disp = document.getElementById('date-display');
+  disp.textContent = 'Select date & time';
+  disp.style.color = 'var(--txm)';
+  document.getElementById('cal-hour').value = 0;
+  document.getElementById('cal-min').value  = 0;
+  pickerOpen = false;
+  document.getElementById('date-picker').style.display = 'none';
+}
+
+// close on outside click
+document.addEventListener('click', e => {
+  const dp = document.getElementById('date-picker');
+  const trigger = dp?.previousElementSibling;
+  if (pickerOpen && !dp.contains(e.target) && !trigger?.contains(e.target)) {
+    pickerOpen = false;
+    dp.style.display = 'none';
+  }
+});
+
+function toggleTheme() {
+  const dark = document.documentElement.getAttribute('data-theme') === 'dark';
+  document.documentElement.setAttribute('data-theme', dark?'':'dark');
+  localStorage.setItem('spica-theme', dark?'light':'dark');
+}
+if (localStorage.getItem('spica-theme') === 'dark')
+  document.documentElement.setAttribute('data-theme','dark');
+</script>
+</body>
+</html>

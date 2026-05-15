@@ -8,7 +8,6 @@ import { IconName } from "@utils/iconList";
 export type TypeBooleanInput = {
   checked?: boolean;
   label?: string;
-  hideLabel?: boolean;
   disabled?: boolean;
   description?: string;
   onChange?: (checked: boolean) => void;
@@ -20,7 +19,6 @@ const BooleanInput: FC<TypeBooleanInput & TypeFlexElement> = ({
   checked = false,
   disabled = false,
   label,
-  hideLabel = false,
   description,
   onChange,
   iconName = "toggleSwitchOutline",
@@ -65,7 +63,7 @@ const BooleanInput: FC<TypeBooleanInput & TypeFlexElement> = ({
           onKeyDown={handleKeyDown}
           className={`${styles.toggle} ${checked ? styles.toggleOn : ""} ${disabled ? styles.toggleDisabled : ""}`}
         />
-        <span className={styles.toggleLabel}>{!hideLabel && (checked ? "true" : "false")}</span>
+        <span className={styles.toggleLabel}>{checked ? "true" : "false"}</span>
       </div>
       {description && (
         <Text size="xsmall" variant="secondary" className={styles.description}>

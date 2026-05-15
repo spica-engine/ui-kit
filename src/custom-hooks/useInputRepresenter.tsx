@@ -397,6 +397,33 @@ const types: TypeInputTypeMap = {
       />
     );
   },
+  json: (props) => {
+    const stringified =
+      props.value === undefined || props.value === null
+        ? ""
+        : typeof props.value === "string"
+        ? props.value
+        : JSON.stringify(props.value, null, 2);
+    return (
+      <TextAreaInput
+        title={props.title}
+        containerProps={{ className: props.className }}
+        value={stringified}
+        onChange={(event) => {
+          const raw = event.target.value;
+          let parsed: any = raw;
+          try {
+            parsed = JSON.parse(raw);
+          } catch {
+            parsed = raw;
+          }
+          props.onChange?.({ key: props.key, value: parsed });
+        }}
+        icon="fieldObject"
+        placeholder={props.placeholder ?? "Enter JSON value\u2026"}
+      />
+    );
+  },
 };
 
 type TypeUseInputRepresenter = {

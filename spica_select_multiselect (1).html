@@ -1,0 +1,1468 @@
+<!DOCTYPE html>
+<html lang="tr">
+
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width,initial-scale=1.0">
+  <title>Spica — Select & Multiselect</title>
+  <link
+    href="https://fonts.googleapis.com/css2?family=DM+Sans:opsz,wght@9..40,300;9..40,400;9..40,500;9..40,600;9..40,700&family=JetBrains+Mono:wght@400;500&display=swap"
+    rel="stylesheet">
+  <style>
+    :root {
+      --bg: #f0f2f5;
+      --sf: #fff;
+      --sf2: #f7f8fa;
+      --sf3: #eef0f3;
+      --bd: #e4e7ec;
+      --bd2: #d0d5dd;
+      --ac: #1a2448;
+      --ach: #253060;
+      --as: rgba(26, 36, 72, .07);
+      --as2: rgba(26, 36, 72, .13);
+      --tx: #101828;
+      --tx2: #344054;
+      --txm: #98a2b3;
+      --txf: #d0d5dd;
+      --gr: #12b76a;
+      --grb: rgba(18, 183, 106, .10);
+      --am: #f79009;
+      --amb: rgba(247, 144, 9, .10);
+      --rd: #f04438;
+      --rdb: rgba(240, 68, 56, .08);
+      --bl: #2e90fa;
+      --blb: rgba(46, 144, 250, .10);
+      --sh: 0 1px 3px rgba(16, 24, 40, .10), 0 1px 2px rgba(16, 24, 40, .06);
+      --sh-dropdown: 0 8px 24px rgba(16, 24, 40, .12), 0 2px 8px rgba(16, 24, 40, .06);
+    }
+
+    [data-theme=dark] {
+      --bg: #0d1017;
+      --sf: #13181f;
+      --sf2: #191f28;
+      --sf3: #202735;
+      --bd: #252e3e;
+      --bd2: #2f3b52;
+      --ac: #4f6ef7;
+      --ach: #6b84ff;
+      --as: rgba(79, 110, 247, .10);
+      --as2: rgba(79, 110, 247, .18);
+      --tx: #f2f4f7;
+      --tx2: #c8cfe0;
+      --txm: #4e5e7a;
+      --txf: #2e3a50;
+      --gr: #32d583;
+      --grb: rgba(50, 213, 131, .10);
+      --am: #fdb022;
+      --amb: rgba(253, 176, 34, .10);
+      --rd: #f97066;
+      --rdb: rgba(249, 112, 102, .08);
+      --bl: #53b1fd;
+      --blb: rgba(83, 177, 253, .10);
+      --sh: 0 1px 3px rgba(0, 0, 0, .4);
+      --sh-dropdown: 0 8px 24px rgba(0, 0, 0, .5), 0 2px 8px rgba(0, 0, 0, .3);
+    }
+
+    *,
+    *::before,
+    *::after {
+      box-sizing: border-box;
+      margin: 0;
+      padding: 0
+    }
+
+    html {
+      font-family: 'DM Sans', sans-serif;
+      font-size: 13px;
+      background: var(--bg);
+      color: var(--tx);
+      -webkit-font-smoothing: antialiased
+    }
+
+    body {
+      min-height: 100vh;
+      padding: 48px 0 64px
+    }
+
+    /* ── Demo bar ── */
+    .dbar {
+      position: fixed;
+      top: 0;
+      left: 0;
+      right: 0;
+      z-index: 99;
+      height: 44px;
+      background: var(--sf);
+      border-bottom: 1px solid var(--bd);
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      padding: 0 24px
+    }
+
+    .dtitle {
+      font-size: 12.5px;
+      font-weight: 600;
+      color: var(--tx2)
+    }
+
+    .tbtn {
+      width: 28px;
+      height: 28px;
+      border-radius: 6px;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      background: var(--sf2);
+      border: 1px solid var(--bd);
+      cursor: pointer;
+      color: var(--txm);
+      transition: all .12s
+    }
+
+    .tbtn:hover {
+      background: var(--sf3);
+      color: var(--tx)
+    }
+
+    .sun {
+      display: none
+    }
+
+    [data-theme=dark] .sun {
+      display: block
+    }
+
+    [data-theme=dark] .moon {
+      display: none
+    }
+
+    /* ── Page layout ── */
+    .page {
+      max-width: 680px;
+      margin: 0 auto;
+      padding: 24px 20px
+    }
+
+    .sec-label {
+      font-size: 10px;
+      font-weight: 700;
+      letter-spacing: .12em;
+      text-transform: uppercase;
+      color: var(--txm);
+      margin-bottom: 14px;
+      padding-bottom: 8px;
+      border-bottom: 1px solid var(--bd)
+    }
+
+    .field-wrap {
+      margin-bottom: 28px
+    }
+
+    .field-label-row {
+      display: flex;
+      align-items: center;
+      gap: 7px;
+      margin-bottom: 6px
+    }
+
+    .fl-name {
+      font-size: 12.5px;
+      font-weight: 600;
+      color: var(--tx2)
+    }
+
+    .fl-badge {
+      font-size: 10px;
+      font-family: 'JetBrains Mono', monospace;
+      font-weight: 500;
+      color: var(--txm);
+      background: var(--sf3);
+      border: 1px solid var(--bd);
+      border-radius: 4px;
+      padding: 1px 6px
+    }
+
+    /* ════════════════════════════════════
+   SELECT COMPONENT
+════════════════════════════════════ */
+    .spica-select {
+      position: relative;
+      user-select: none
+    }
+
+    /* Trigger */
+    .sel-trigger {
+      display: flex;
+      align-items: center;
+      gap: 0;
+      border: 1px solid var(--bd);
+      border-radius: 8px;
+      background: var(--sf);
+      box-shadow: var(--sh);
+      cursor: pointer;
+      transition: border-color .15s, box-shadow .15s;
+      min-height: 40px;
+      overflow: hidden;
+    }
+
+    .sel-trigger:hover {
+      border-color: var(--bd2)
+    }
+
+    .sel-trigger.open {
+      border-color: var(--ac);
+      box-shadow: 0 0 0 3px var(--as), var(--sh)
+    }
+
+    .sel-trigger.disabled {
+      opacity: .5;
+      cursor: not-allowed;
+      pointer-events: none
+    }
+
+    .sel-icon {
+      width: 36px;
+      height: 40px;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      color: var(--txm);
+      flex-shrink: 0;
+      border-right: 1px solid var(--bd)
+    }
+
+    .sel-trigger.open .sel-icon {
+      color: var(--ac)
+    }
+
+    .sel-value {
+      flex: 1;
+      padding: 0 10px;
+      font-size: 13px;
+      color: var(--tx);
+      overflow: hidden;
+      text-overflow: ellipsis;
+      white-space: nowrap
+    }
+
+    .sel-value.placeholder {
+      color: var(--txm)
+    }
+
+    .sel-clear {
+      width: 28px;
+      height: 40px;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      color: var(--txm);
+      flex-shrink: 0;
+      transition: color .1s
+    }
+
+    .sel-clear:hover {
+      color: var(--rd)
+    }
+
+    .sel-arrow {
+      width: 32px;
+      height: 40px;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      color: var(--txm);
+      flex-shrink: 0;
+      border-left: 1px solid var(--bd);
+      transition: color .12s
+    }
+
+    .sel-trigger.open .sel-arrow {
+      color: var(--ac)
+    }
+
+    .sel-arrow svg {
+      transition: transform .18s
+    }
+
+    .sel-trigger.open .sel-arrow svg {
+      transform: rotate(180deg)
+    }
+
+    /* Dropdown */
+    .sel-dropdown {
+      position: absolute;
+      top: calc(100% + 5px);
+      left: 0;
+      right: 0;
+      z-index: 50;
+      background: var(--sf);
+      border: 1px solid var(--bd);
+      border-radius: 10px;
+      box-shadow: var(--sh-dropdown);
+      overflow: hidden;
+      animation: dropIn .14s cubic-bezier(.16, 1, .3, 1);
+      display: none;
+    }
+
+    .sel-dropdown.open {
+      display: block
+    }
+
+    @keyframes dropIn {
+      from {
+        opacity: 0;
+        transform: translateY(-6px)
+      }
+
+      to {
+        opacity: 1;
+        transform: none
+      }
+    }
+
+    /* Search inside dropdown */
+    .sel-search {
+      display: flex;
+      align-items: center;
+      gap: 8px;
+      padding: 8px 12px;
+      border-bottom: 1px solid var(--bd);
+    }
+
+    .sel-search input {
+      flex: 1;
+      border: none;
+      outline: none;
+      background: transparent;
+      font-family: 'DM Sans', sans-serif;
+      font-size: 12.5px;
+      color: var(--tx);
+    }
+
+    .sel-search input::placeholder {
+      color: var(--txm)
+    }
+
+    /* Option list */
+    .sel-list {
+      max-height: 220px;
+      overflow-y: auto;
+      padding: 4px
+    }
+
+    .sel-list::-webkit-scrollbar {
+      width: 4px
+    }
+
+    .sel-list::-webkit-scrollbar-thumb {
+      background: var(--bd);
+      border-radius: 2px
+    }
+
+    .sel-opt {
+      display: flex;
+      align-items: center;
+      gap: 9px;
+      padding: 8px 10px;
+      border-radius: 7px;
+      cursor: pointer;
+      font-size: 12.5px;
+      color: var(--tx2);
+      transition: background .08s;
+    }
+
+    .sel-opt:hover {
+      background: var(--sf2);
+      color: var(--tx)
+    }
+
+    .sel-opt.selected {
+      background: var(--as);
+      color: var(--ac);
+      font-weight: 600
+    }
+
+    .sel-opt-check {
+      width: 16px;
+      height: 16px;
+      border-radius: 4px;
+      flex-shrink: 0;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      border: 1.5px solid var(--bd);
+      background: var(--sf);
+      transition: all .12s
+    }
+
+    .sel-opt.selected .sel-opt-check {
+      background: var(--ac);
+      border-color: var(--ac)
+    }
+
+    .sel-opt-label {
+      flex: 1;
+      overflow: hidden;
+      text-overflow: ellipsis;
+      white-space: nowrap
+    }
+
+    .sel-opt-desc {
+      font-size: 11.5px;
+      color: var(--txm);
+      flex-shrink: 0
+    }
+
+    /* Group label */
+    .sel-group-label {
+      padding: 7px 10px 4px;
+      font-size: 9.5px;
+      font-weight: 700;
+      letter-spacing: .09em;
+      text-transform: uppercase;
+      color: var(--txm);
+    }
+
+    .sel-divider {
+      height: 1px;
+      background: var(--bd);
+      margin: 4px 0
+    }
+
+    /* Empty state */
+    .sel-empty {
+      padding: 16px;
+      text-align: center;
+      font-size: 12.5px;
+      color: var(--txm)
+    }
+
+    /* Footer */
+    .sel-footer {
+      padding: 8px 12px;
+      border-top: 1px solid var(--bd);
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      font-size: 12px;
+      color: var(--txm)
+    }
+
+    .sel-count-badge {
+      font-family: 'JetBrains Mono', monospace;
+      font-size: 10.5px;
+      font-weight: 600;
+      background: var(--as);
+      color: var(--ac);
+      padding: 2px 7px;
+      border-radius: 4px
+    }
+
+    /* ════════════════════════════════════
+   MULTISELECT COMPONENT
+════════════════════════════════════ */
+    .spica-multiselect {
+      position: relative;
+      user-select: none
+    }
+
+    /* Trigger — expands with tags */
+    .ms-trigger {
+      display: flex;
+      align-items: center;
+      flex-wrap: wrap;
+      gap: 5px;
+      border: 1px solid var(--bd);
+      border-radius: 8px;
+      background: var(--sf);
+      box-shadow: var(--sh);
+      padding: 6px 8px;
+      min-height: 40px;
+      cursor: text;
+      transition: border-color .15s, box-shadow .15s;
+    }
+
+    .ms-trigger:hover {
+      border-color: var(--bd2)
+    }
+
+    .ms-trigger.open {
+      border-color: var(--ac);
+      box-shadow: 0 0 0 3px var(--as), var(--sh)
+    }
+
+    .ms-trigger.disabled {
+      opacity: .5;
+      cursor: not-allowed;
+      pointer-events: none
+    }
+
+    /* Tag */
+    .ms-tag {
+      display: inline-flex;
+      align-items: center;
+      gap: 4px;
+      background: var(--as);
+      border: 1px solid var(--as2);
+      color: var(--ac);
+      border-radius: 5px;
+      padding: 3px 8px 3px 9px;
+      font-size: 12px;
+      font-weight: 500;
+      font-family: 'JetBrains Mono', monospace;
+      animation: tagIn .12s cubic-bezier(.16, 1, .3, 1);
+      max-width: 160px;
+    }
+
+    @keyframes tagIn {
+      from {
+        opacity: 0;
+        transform: scale(.85)
+      }
+
+      to {
+        opacity: 1;
+        transform: scale(1)
+      }
+    }
+
+    .ms-tag-txt {
+      overflow: hidden;
+      text-overflow: ellipsis;
+      white-space: nowrap
+    }
+
+    .ms-tag-rm {
+      display: flex;
+      align-items: center;
+      cursor: pointer;
+      color: var(--ac);
+      opacity: .6;
+      transition: opacity .1s;
+      flex-shrink: 0;
+    }
+
+    .ms-tag-rm:hover {
+      opacity: 1
+    }
+
+    /* Input inside trigger */
+    .ms-input {
+      border: none;
+      outline: none;
+      background: transparent;
+      font-family: 'DM Sans', sans-serif;
+      font-size: 12.5px;
+      color: var(--tx);
+      min-width: 80px;
+      flex: 1;
+      padding: 2px 4px;
+    }
+
+    .ms-input::placeholder {
+      color: var(--txm)
+    }
+
+    /* Right side controls */
+    .ms-controls {
+      display: flex;
+      align-items: center;
+      gap: 0;
+      margin-left: auto;
+      flex-shrink: 0;
+      align-self: flex-start;
+      margin-top: 2px;
+    }
+
+    .ms-ctrl-btn {
+      width: 26px;
+      height: 26px;
+      border-radius: 5px;
+      border: none;
+      background: transparent;
+      cursor: pointer;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      color: var(--txm);
+      transition: background .1s, color .1s
+    }
+
+    .ms-ctrl-btn:hover {
+      background: var(--sf2);
+      color: var(--tx2)
+    }
+
+    .ms-ctrl-btn.clear:hover {
+      color: var(--rd)
+    }
+
+    .ms-ctrl-sep {
+      width: 1px;
+      height: 16px;
+      background: var(--bd);
+      margin: 0 2px
+    }
+
+    .ms-ctrl-arrow svg {
+      transition: transform .18s
+    }
+
+    .ms-trigger.open .ms-ctrl-arrow svg {
+      transform: rotate(180deg)
+    }
+
+    /* Dropdown */
+    .ms-dropdown {
+      position: absolute;
+      top: calc(100% + 5px);
+      left: 0;
+      right: 0;
+      z-index: 50;
+      background: var(--sf);
+      border: 1px solid var(--bd);
+      border-radius: 10px;
+      box-shadow: var(--sh-dropdown);
+      overflow: hidden;
+      animation: dropIn .14s cubic-bezier(.16, 1, .3, 1);
+      display: none;
+    }
+
+    .ms-dropdown.open {
+      display: block
+    }
+
+    .ms-search {
+      display: flex;
+      align-items: center;
+      gap: 8px;
+      padding: 8px 12px;
+      border-bottom: 1px solid var(--bd)
+    }
+
+    .ms-search input {
+      flex: 1;
+      border: none;
+      outline: none;
+      background: transparent;
+      font-family: 'DM Sans', sans-serif;
+      font-size: 12.5px;
+      color: var(--tx)
+    }
+
+    .ms-search input::placeholder {
+      color: var(--txm)
+    }
+
+    .ms-list {
+      max-height: 200px;
+      overflow-y: auto;
+      padding: 4px
+    }
+
+    .ms-list::-webkit-scrollbar {
+      width: 4px
+    }
+
+    .ms-list::-webkit-scrollbar-thumb {
+      background: var(--bd);
+      border-radius: 2px
+    }
+
+    .ms-opt {
+      display: flex;
+      align-items: center;
+      gap: 9px;
+      padding: 7px 10px;
+      border-radius: 7px;
+      cursor: pointer;
+      font-size: 12.5px;
+      color: var(--tx2);
+      transition: background .08s;
+    }
+
+    .ms-opt:hover {
+      background: var(--sf2);
+      color: var(--tx)
+    }
+
+    .ms-opt.sel {
+      background: var(--as)
+    }
+
+    .ms-opt-cb {
+      width: 16px;
+      height: 16px;
+      border-radius: 4px;
+      flex-shrink: 0;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      border: 1.5px solid var(--bd);
+      background: var(--sf);
+      transition: background .12s, border-color .12s, transform .12s;
+    }
+
+    .ms-opt.sel .ms-opt-cb {
+      background: var(--ac);
+      border-color: var(--ac)
+    }
+
+    .ms-opt-lbl {
+      flex: 1;
+      overflow: hidden;
+      text-overflow: ellipsis;
+      white-space: nowrap
+    }
+
+    .ms-opt.sel .ms-opt-lbl {
+      color: var(--ac);
+      font-weight: 600
+    }
+
+    .ms-footer {
+      padding: 8px 12px;
+      border-top: 1px solid var(--bd);
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+    }
+
+    .ms-sel-all {
+      font-size: 12px;
+      color: var(--ac);
+      cursor: pointer;
+      font-weight: 500;
+      transition: opacity .12s
+    }
+
+    .ms-sel-all:hover {
+      opacity: .7
+    }
+
+    .ms-clear-all {
+      font-size: 12px;
+      color: var(--txm);
+      cursor: pointer;
+      transition: color .12s
+    }
+
+    .ms-clear-all:hover {
+      color: var(--rd)
+    }
+
+    .ms-count {
+      font-family: 'JetBrains Mono', monospace;
+      font-size: 10.5px;
+      font-weight: 600;
+      background: var(--as);
+      color: var(--ac);
+      padding: 2px 7px;
+      border-radius: 4px
+    }
+
+    .ms-empty {
+      padding: 16px;
+      text-align: center;
+      font-size: 12.5px;
+      color: var(--txm)
+    }
+
+    /* ── Variant chips (enum select) ── */
+    .enum-wrap {
+      display: flex;
+      flex-wrap: wrap;
+      gap: 6px
+    }
+
+    .enum-chip {
+      display: inline-flex;
+      align-items: center;
+      gap: 5px;
+      padding: 6px 12px;
+      border-radius: 20px;
+      cursor: pointer;
+      border: 1.5px solid var(--bd);
+      background: var(--sf);
+      font-size: 12.5px;
+      font-weight: 500;
+      color: var(--tx2);
+      transition: all .12s;
+      box-shadow: var(--sh);
+    }
+
+    .enum-chip:hover {
+      border-color: var(--bd2);
+      background: var(--sf2);
+      color: var(--tx)
+    }
+
+    .enum-chip.sel {
+      border-color: var(--ac);
+      background: var(--as);
+      color: var(--ac);
+      font-weight: 600;
+    }
+
+    .enum-chip .chip-dot {
+      width: 7px;
+      height: 7px;
+      border-radius: 50%;
+      flex-shrink: 0
+    }
+
+    /* State label */
+    .state-hint {
+      font-size: 11.5px;
+      color: var(--txm);
+      margin-top: 6px;
+      line-height: 1.5
+    }
+  </style>
+</head>
+
+<body>
+
+  <div class="dbar">
+    <span class="dtitle">Spica — Select & Multiselect Components</span>
+    <button class="tbtn" onclick="toggleTheme()">
+      <svg class="moon" width="13" height="13" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2">
+        <path d="M21 12.79A9 9 0 1 1 11.21 3 7 7 0 0 0 21 12.79z" />
+      </svg>
+      <svg class="sun" width="13" height="13" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2">
+        <circle cx="12" cy="12" r="5" />
+        <line x1="12" y1="1" x2="12" y2="3" />
+        <line x1="12" y1="21" x2="12" y2="23" />
+        <line x1="4.22" y1="4.22" x2="5.64" y2="5.64" />
+        <line x1="18.36" y1="18.36" x2="19.78" y2="19.78" />
+        <line x1="1" y1="12" x2="3" y2="12" />
+        <line x1="21" y1="12" x2="23" y2="12" />
+        <line x1="4.22" y1="19.78" x2="5.64" y2="18.36" />
+        <line x1="18.36" y1="5.64" x2="19.78" y2="4.22" />
+      </svg>
+    </button>
+  </div>
+
+  <div class="page">
+
+    <!-- ═══════════════════════════════
+       SELECT — Single
+  ═══════════════════════════════ -->
+    <div class="sec-label" style="margin-top:8px">Select — Single Value</div>
+
+    <!-- Basic select -->
+    <div class="field-wrap">
+      <div class="field-label-row">
+        <span class="fl-name">payment_type</span>
+        <span class="fl-badge">select</span>
+      </div>
+      <div class="spica-select" id="sel1">
+        <div class="sel-trigger" onclick="toggleSelect('sel1')">
+          <div class="sel-icon">
+            <svg width="13" height="13" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2">
+              <polyline points="9 11 12 14 22 4" />
+              <path d="M21 12v7a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2V5a2 2 0 0 1 2-2h11" />
+            </svg>
+          </div>
+          <span class="sel-value placeholder" id="sel1-val">Select an option…</span>
+          <div class="sel-clear" id="sel1-clear" style="display:none" onclick="clearSelect(event,'sel1')">
+            <svg width="12" height="12" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2.5">
+              <line x1="18" y1="6" x2="6" y2="18" />
+              <line x1="6" y1="6" x2="18" y2="18" />
+            </svg>
+          </div>
+          <div class="sel-arrow">
+            <svg width="12" height="12" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2.5">
+              <polyline points="6 9 12 15 18 9" />
+            </svg>
+          </div>
+        </div>
+        <div class="sel-dropdown" id="sel1-drop">
+          <div class="sel-search">
+            <svg width="12" height="12" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2.2"
+              style="color:var(--txm);flex-shrink:0">
+              <circle cx="11" cy="11" r="8" />
+              <path d="M21 21l-4.35-4.35" />
+            </svg>
+            <input type="text" placeholder="Search…" oninput="filterSelect('sel1',this.value)" autocomplete="off" />
+          </div>
+          <div class="sel-list" id="sel1-list"></div>
+        </div>
+      </div>
+    </div>
+
+    <!-- Select with groups -->
+    <div class="field-wrap">
+      <div class="field-label-row">
+        <span class="fl-name">trigger</span>
+        <span class="fl-badge">select</span>
+      </div>
+      <div class="spica-select" id="sel2">
+        <div class="sel-trigger" onclick="toggleSelect('sel2')">
+          <div class="sel-icon">
+            <svg width="13" height="13" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2">
+              <polyline points="22 12 18 12 15 21 9 3 6 12 2 12" />
+            </svg>
+          </div>
+          <span class="sel-value placeholder" id="sel2-val">Select a trigger…</span>
+          <div class="sel-clear" id="sel2-clear" style="display:none" onclick="clearSelect(event,'sel2')">
+            <svg width="12" height="12" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2.5">
+              <line x1="18" y1="6" x2="6" y2="18" />
+              <line x1="6" y1="6" x2="18" y2="18" />
+            </svg>
+          </div>
+          <div class="sel-arrow">
+            <svg width="12" height="12" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2.5">
+              <polyline points="6 9 12 15 18 9" />
+            </svg>
+          </div>
+        </div>
+        <div class="sel-dropdown" id="sel2-drop">
+          <div class="sel-search">
+            <svg width="12" height="12" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2.2"
+              style="color:var(--txm);flex-shrink:0">
+              <circle cx="11" cy="11" r="8" />
+              <path d="M21 21l-4.35-4.35" />
+            </svg>
+            <input type="text" placeholder="Search…" oninput="filterSelect('sel2',this.value)" autocomplete="off" />
+          </div>
+          <div class="sel-list" id="sel2-list"></div>
+        </div>
+      </div>
+    </div>
+
+    <!-- ═══════════════════════════════
+       MULTISELECT
+  ═══════════════════════════════ -->
+    <div class="sec-label" style="margin-top:8px">Multiselect — Multiple Values</div>
+
+    <!-- Basic multiselect -->
+    <div class="field-wrap">
+      <div class="field-label-row">
+        <span class="fl-name">tags</span>
+        <span class="fl-badge">multiselect</span>
+      </div>
+      <div class="spica-multiselect" id="ms1">
+        <div class="ms-trigger" id="ms1-trigger" onclick="handleMsTriggerClick(event,'ms1')">
+          <div id="ms1-tags" style="display:contents"></div>
+          <input class="ms-input" id="ms1-input" type="text" placeholder="Add value, press Enter"
+            oninput="filterMs('ms1',this.value)" onkeydown="handleMsKey(event,'ms1')" />
+          <div class="ms-controls">
+            <button class="ms-ctrl-btn clear" id="ms1-clear" onclick="clearMs(event,'ms1')" style="display:none">
+              <svg width="11" height="11" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2.5">
+                <line x1="18" y1="6" x2="6" y2="18" />
+                <line x1="6" y1="6" x2="18" y2="18" />
+              </svg>
+            </button>
+            <div class="ms-ctrl-sep"></div>
+            <button class="ms-ctrl-btn ms-ctrl-arrow" onclick="toggleMs(event,'ms1')">
+              <svg width="11" height="11" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2.5">
+                <polyline points="6 9 12 15 18 9" />
+              </svg>
+            </button>
+          </div>
+        </div>
+        <div class="ms-dropdown" id="ms1-drop">
+          <div class="ms-search">
+            <svg width="12" height="12" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2.2"
+              style="color:var(--txm);flex-shrink:0">
+              <circle cx="11" cy="11" r="8" />
+              <path d="M21 21l-4.35-4.35" />
+            </svg>
+            <input type="text" placeholder="Search options…" oninput="filterMs('ms1',this.value)" id="ms1-search"
+              autocomplete="off" />
+          </div>
+          <div class="ms-list" id="ms1-list"></div>
+          <div class="ms-footer">
+            <span class="ms-sel-all" onclick="msSelectAll('ms1')">Select all</span>
+            <span class="ms-count" id="ms1-count" style="display:none">0 selected</span>
+            <span class="ms-clear-all" onclick="clearMs(event,'ms1')">Clear all</span>
+          </div>
+        </div>
+      </div>
+    </div>
+
+
+  </div><!-- /page -->
+
+  <script>
+    /* ═══════════════════════════════════════
+       DATA
+    ═══════════════════════════════════════ */
+    const SEL1_OPTS = [
+      { v: 'stripe', l: 'Stripe' },
+      { v: 'paypal', l: 'PayPal' },
+      { v: 'bank', l: 'Bank Transfer' },
+      { v: 'crypto', l: 'Crypto' },
+      { v: 'null', l: 'None', desc: 'No payment' },
+    ];
+
+    const SEL2_OPTS = [
+      {
+        group: 'Bucket', items: [
+          { v: 'bucket_insert', l: 'Insert on Users bucket' },
+          { v: 'bucket_update', l: 'Update on Users bucket' },
+          { v: 'bucket_delete', l: 'Delete on Users bucket' },
+          { v: 'bucket_get', l: 'Get on Products bucket' },
+        ]
+      },
+      {
+        group: 'Schedule', items: [
+          { v: 'every_minute', l: 'Every minute' },
+          { v: 'every_hour', l: 'Every hour' },
+          { v: 'every_day', l: 'Every day at midnight' },
+        ]
+      },
+      {
+        group: 'System', items: [
+          { v: 'sys_ready', l: 'READY' },
+          { v: 'sys_halt', l: 'HALT' },
+        ]
+      },
+    ];
+
+    const MS1_OPTS = [
+      { v: 'frontend', l: 'frontend' },
+      { v: 'backend', l: 'backend' },
+      { v: 'design', l: 'design' },
+      { v: 'mobile', l: 'mobile' },
+      { v: 'devops', l: 'devops' },
+      { v: 'ai', l: 'ai / ml' },
+      { v: 'security', l: 'security' },
+      { v: 'data', l: 'data science' },
+    ];
+
+    const MS2_OPTS = [
+      { v: 'istanbul', l: 'Istanbul' },
+      { v: 'antalya', l: 'Antalya' },
+      { v: 'ankara', l: 'Ankara' },
+      { v: 'izmir', l: 'İzmir' },
+      { v: 'bursa', l: 'Bursa' },
+      { v: 'baku', l: 'Baku' },
+      { v: 'london', l: 'London' },
+      { v: 'berlin', l: 'Berlin' },
+    ];
+
+    const ENUM1_OPTS = [
+      { v: 'active', l: 'Active', color: 'var(--gr)', dot: 'var(--gr)' },
+      { v: 'inactive', l: 'Inactive', color: 'var(--txm)', dot: 'var(--txf)' },
+      { v: 'pending', l: 'Pending', color: 'var(--am)', dot: 'var(--am)' },
+      { v: 'banned', l: 'Banned', color: 'var(--rd)', dot: 'var(--rd)' },
+    ];
+
+    const ENUM2_OPTS = [
+      { v: 'read', l: 'Read' },
+      { v: 'write', l: 'Write' },
+      { v: 'delete', l: 'Delete' },
+      { v: 'admin', l: 'Admin' },
+    ];
+
+    /* ═══════════════════════════════════════
+       STATE
+    ═══════════════════════════════════════ */
+    const STATE = {
+      sel1: { selected: null, opts: SEL1_OPTS, flat: true },
+      sel2: { selected: null, opts: SEL2_OPTS, flat: false },
+      ms1: { selected: [], opts: MS1_OPTS, freeform: false },
+      ms2: { selected: ['istanbul', 'antalya'], opts: MS2_OPTS, freeform: true },
+    };
+
+    let openDropdown = null; // id of currently open dropdown
+
+    /* ═══════════════════════════════════════
+       SELECT
+    ═══════════════════════════════════════ */
+    function renderSelect(id) {
+      const s = STATE[id];
+      const list = document.getElementById(id + '-list');
+      const valEl = document.getElementById(id + '-val');
+      const clrEl = document.getElementById(id + '-clear');
+      const q = document.querySelector('#' + id + '-drop .sel-search input')?.value.toLowerCase() || '';
+
+      // value display
+      if (s.selected) {
+        let lbl = '';
+        if (s.flat) {
+          lbl = s.opts.find(o => o.v === s.selected)?.l || s.selected;
+        } else {
+          for (const g of s.opts)
+            for (const o of g.items) if (o.v === s.selected) { lbl = o.l; break; }
+        }
+        valEl.textContent = lbl;
+        valEl.classList.remove('placeholder');
+        clrEl.style.display = 'flex';
+      } else {
+        valEl.textContent = valEl.dataset.ph || 'Select an option…';
+        valEl.classList.add('placeholder');
+        clrEl.style.display = 'none';
+      }
+
+      // option list
+      const IC_CHECK = `<svg width="11" height="11" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="3"><polyline points="20 6 9 17 4 12"/></svg>`;
+      list.innerHTML = '';
+
+      const render = (opt) => {
+        if (q && !opt.l.toLowerCase().includes(q)) return;
+        const isSel = s.selected === opt.v;
+        const d = document.createElement('div');
+        d.className = 'sel-opt' + (isSel ? ' selected' : '');
+        d.innerHTML = `
+      <div class="sel-opt-check">${isSel ? IC_CHECK : ''}</div>
+      <span class="sel-opt-label">${hl(opt.l, q)}</span>
+      ${opt.desc ? `<span class="sel-opt-desc">${opt.desc}</span>` : ''}`;
+        d.onclick = () => { s.selected = isSel ? null : opt.v; renderSelect(id); };
+        list.appendChild(d);
+      };
+
+      if (s.flat) {
+        s.opts.forEach(render);
+      } else {
+        let any = false;
+        s.opts.forEach(g => {
+          const vis = g.items.filter(o => !q || o.l.toLowerCase().includes(q));
+          if (!vis.length) return;
+          any = true;
+          const gl = document.createElement('div');
+          gl.className = 'sel-group-label';
+          gl.textContent = g.group;
+          list.appendChild(gl);
+          vis.forEach(o => render(o));
+          const div = document.createElement('div');
+          div.className = 'sel-divider';
+          list.appendChild(div);
+        });
+        if (!any) list.innerHTML = '<div class="sel-empty">No results</div>';
+      }
+
+      if (!list.children.length) list.innerHTML = '<div class="sel-empty">No results</div>';
+    }
+
+    function toggleSelect(id) {
+      const drop = document.getElementById(id + '-drop');
+      const trig = document.querySelector('#' + id + ' .sel-trigger');
+      const isOpen = drop.classList.contains('open');
+      closeAll();
+      if (!isOpen) {
+        drop.classList.add('open');
+        trig.classList.add('open');
+        openDropdown = id;
+        renderSelect(id);
+        drop.querySelector('input')?.focus();
+      }
+    }
+
+    function clearSelect(e, id) {
+      e.stopPropagation();
+      STATE[id].selected = null;
+      renderSelect(id);
+    }
+
+    function filterSelect(id, q) {
+      renderSelect(id);
+    }
+
+    /* ═══════════════════════════════════════
+       MULTISELECT
+    ═══════════════════════════════════════ */
+    /* ═══════════════════════════════════════
+       MULTISELECT — improved UX
+    ═══════════════════════════════════════ */
+    function renderMs(id) {
+      const s = STATE[id];
+      const tagsEl = document.getElementById(id + '-tags');
+      const listEl = document.getElementById(id + '-list');
+      const countEl = document.getElementById(id + '-count');
+      const clrBtn = document.getElementById(id + '-clear');
+      const q = (document.getElementById(id + '-search')?.value || '').toLowerCase().trim();
+
+      /* ── Tags ── */
+      tagsEl.innerHTML = s.selected.map(v => {
+        const lbl = s.opts.find(o => o.v === v)?.l || v;
+        return `<span class="ms-tag">
+      <span class="ms-tag-txt">${esc(lbl)}</span>
+      <span class="ms-tag-rm" onclick="msRemove(event,'${id}','${v}')">
+        <svg width="10" height="10" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2.5"><line x1="18" y1="6" x2="6" y2="18"/><line x1="6" y1="6" x2="18" y2="18"/></svg>
+      </span>
+    </span>`;
+      }).join('');
+
+      /* ── Controls ── */
+      clrBtn.style.display = s.selected.length ? 'flex' : 'none';
+      if (s.selected.length) {
+        countEl.textContent = s.selected.length + ' selected';
+        countEl.style.display = 'inline-flex';
+      } else {
+        countEl.style.display = 'none';
+      }
+
+      /* ── Option list — patch in place (no full reset → preserves scroll) ── */
+      const IC = `<svg width="11" height="11" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="3"><polyline points="20 6 9 17 4 12"/></svg>`;
+
+      const visOpts = s.opts.filter(o => !q || o.l.toLowerCase().includes(q));
+
+      // Build keyed map of existing rows to reuse DOM nodes
+      const existing = {};
+      listEl.querySelectorAll('.ms-opt[data-v]').forEach(el => existing[el.dataset.v] = el);
+
+      // Remove old "add-new" row if present
+      listEl.querySelector('.ms-opt-addnew')?.remove();
+
+      // freeform "Add X" row at top
+      if (s.freeform && q && !s.opts.find(o => o.l.toLowerCase() === q.toLowerCase())) {
+        const d = document.createElement('div');
+        d.className = 'ms-opt ms-opt-addnew';
+        d.innerHTML = `<div class="ms-opt-cb" style="border-color:var(--ac);background:var(--as)">
+        <svg width="10" height="10" fill="none" viewBox="0 0 24 24" stroke="var(--ac)" stroke-width="2.5"><line x1="12" y1="5" x2="12" y2="19"/><line x1="5" y1="12" x2="19" y2="12"/></svg>
+      </div>
+      <span class="ms-opt-lbl" style="color:var(--ac);font-weight:500">Add "<strong>${esc(q)}</strong>"</span>`;
+        d.onclick = () => {
+          const v = q.trim();
+          if (!s.opts.find(o => o.v === v)) s.opts.push({ v, l: v });
+          if (!s.selected.includes(v)) s.selected.push(v);
+          const srch = document.getElementById(id + '-search');
+          const inp = document.getElementById(id + '-input');
+          if (srch) srch.value = '';
+          if (inp) inp.value = '';
+          renderMs(id);
+          document.getElementById(id + '-search')?.focus();
+        };
+        listEl.insertBefore(d, listEl.firstChild);
+      }
+
+      // Reorder / update existing rows, append new ones
+      const fragment = document.createDocumentFragment();
+      visOpts.forEach(opt => {
+        const isSel = s.selected.includes(opt.v);
+        let row = existing[opt.v];
+        if (!row) {
+          // Create new row
+          row = document.createElement('div');
+          row.className = 'ms-opt';
+          row.dataset.v = opt.v;
+          row.innerHTML = `
+        <div class="ms-opt-cb">${isSel ? IC : ''}</div>
+        <span class="ms-opt-lbl">${hl(opt.l, q)}</span>`;
+          row.addEventListener('click', e => {
+            e.stopPropagation();
+            toggleMsOpt(id, opt.v);
+          });
+        } else {
+          // Update existing row in place — just toggle class + checkbox, no full rebuild
+          delete existing[opt.v]; // remove from "to-remove" map
+          row.querySelector('.ms-opt-lbl').innerHTML = hl(opt.l, q);
+        }
+
+        // Sync selected class + checkbox without triggering reflow flicker
+        const wasSel = row.classList.contains('sel');
+        if (isSel !== wasSel) {
+          row.classList.toggle('sel', isSel);
+          const cb = row.querySelector('.ms-opt-cb');
+          if (cb) {
+            cb.innerHTML = isSel ? IC : '';
+            // Tiny pulse animation on the checkbox
+            cb.style.transform = 'scale(1.25)';
+            setTimeout(() => cb.style.transform = '', 120);
+          }
+        }
+        fragment.appendChild(row);
+      });
+
+      // Remove rows that no longer match filter
+      Object.values(existing).forEach(el => el.remove());
+
+      // Append new + reordered rows after the addnew row
+      const addNewRow = listEl.querySelector('.ms-opt-addnew');
+      if (addNewRow) {
+        addNewRow.after(fragment);
+      } else {
+        listEl.appendChild(fragment);
+      }
+
+      if (!listEl.querySelector('.ms-opt[data-v]') && !listEl.querySelector('.ms-opt-addnew'))
+        listEl.innerHTML = '<div class="ms-empty">No results</div>';
+    }
+
+    /* Toggle a single option — keeps dropdown open */
+    function toggleMsOpt(id, v) {
+      const s = STATE[id];
+      if (s.selected.includes(v)) s.selected = s.selected.filter(x => x !== v);
+      else s.selected.push(v);
+      renderMs(id);
+      // keep focus on search input so keyboard still works
+      document.getElementById(id + '-search')?.focus();
+    }
+
+    function handleMsTriggerClick(e, id) {
+      if (e.target.closest('.ms-tag-rm')) return;
+      if (e.target.closest('.ms-ctrl-btn')) return;
+      openMsDrop(id);
+      document.getElementById(id + '-input').focus();
+    }
+
+    function toggleMs(e, id) {
+      e.stopPropagation();
+      const drop = document.getElementById(id + '-drop');
+      if (drop.classList.contains('open')) closeDrop(id);
+      else openMsDrop(id);
+    }
+
+    function openMsDrop(id) {
+      closeAll();
+      const drop = document.getElementById(id + '-drop');
+      const trig = document.getElementById(id + '-trigger');
+      drop.classList.add('open');
+      trig.classList.add('open');
+      openDropdown = id;
+      renderMs(id);
+      document.getElementById(id + '-search')?.focus();
+    }
+
+    function closeDrop(id) {
+      document.getElementById(id + '-drop')?.classList.remove('open');
+      document.getElementById(id + '-trigger')?.classList.remove('open');
+      document.querySelector('#' + id + ' .sel-trigger')?.classList.remove('open');
+      if (openDropdown === id) openDropdown = null;
+    }
+
+    function closeAll() {
+      document.querySelectorAll('.sel-dropdown.open,.ms-dropdown.open').forEach(d => d.classList.remove('open'));
+      document.querySelectorAll('.sel-trigger.open,.ms-trigger.open').forEach(t => t.classList.remove('open'));
+      openDropdown = null;
+    }
+
+    function msRemove(e, id, v) {
+      e.stopPropagation();
+      STATE[id].selected = STATE[id].selected.filter(x => x !== v);
+      renderMs(id);
+    }
+
+    function clearMs(e, id) {
+      e.stopPropagation();
+      STATE[id].selected = [];
+      ['input', 'search'].forEach(s => {
+        const el = document.getElementById(id + '-' + s);
+        if (el) el.value = '';
+      });
+      renderMs(id);
+    }
+
+    function msSelectAll(id) {
+      STATE[id].selected = STATE[id].opts.map(o => o.v);
+      renderMs(id);
+    }
+
+    function filterMs(id, q) {
+      renderMs(id);
+      // Make sure dropdown stays open while typing
+      const drop = document.getElementById(id + '-drop');
+      if (!drop?.classList.contains('open')) openMsDrop(id);
+    }
+
+    function handleMsKey(e, id) {
+      const inp = e.target;
+      const val = inp.value.trim();
+      const s = STATE[id];
+
+      if ((e.key === 'Enter' || e.key === ',') && val) {
+        e.preventDefault();
+        const match = s.opts.find(o => o.v === val || o.l.toLowerCase() === val.toLowerCase());
+        if (match) {
+          toggleMsOpt(id, match.v);
+        } else if (s.freeform) {
+          s.opts.push({ v: val, l: val });
+          s.selected.push(val);
+        }
+        inp.value = '';
+        const srch = document.getElementById(id + '-search');
+        if (srch) srch.value = '';
+        renderMs(id);
+        return;
+      }
+      if (e.key === 'Backspace' && !val && s.selected.length) {
+        s.selected.pop();
+        renderMs(id);
+        return;
+      }
+      if (e.key === 'Escape') { closeDrop(id); return; }
+      if (val.length >= 0) openMsDrop(id);
+    }
+
+    /* ═══════════════════════════════════════
+       ENUM CHIPS
+    ═══════════════════════════════════════ */
+    let enum1Sel = null;
+    let enum2Sel = [];
+
+    function renderEnum1() {
+      document.getElementById('enum1').innerHTML = ENUM1_OPTS.map(o => `
+    <div class="enum-chip ${enum1Sel === o.v ? 'sel' : ''}" onclick="selEnum1('${o.v}')">
+      <div class="chip-dot" style="background:${o.dot}"></div>
+      ${o.l}
+    </div>`).join('');
+    }
+    function selEnum1(v) { enum1Sel = enum1Sel === v ? null : v; renderEnum1(); }
+
+    function renderEnum2() {
+      document.getElementById('enum2').innerHTML = ENUM2_OPTS.map(o => `
+    <div class="enum-chip ${enum2Sel.includes(o.v) ? 'sel' : ''}" onclick="selEnum2('${o.v}')">
+      ${o.l}
+    </div>`).join('');
+      const hint = document.getElementById('enum2-hint');
+      hint.textContent = enum2Sel.length
+        ? 'Seçili: ' + enum2Sel.map(v => ENUM2_OPTS.find(o => o.v === v)?.l).join(', ')
+        : 'Seçili: —';
+    }
+    function selEnum2(v) {
+      if (enum2Sel.includes(v)) enum2Sel = enum2Sel.filter(x => x !== v);
+      else enum2Sel.push(v);
+      renderEnum2();
+    }
+
+    /* ═══════════════════════════════════════
+       HELPERS
+    ═══════════════════════════════════════ */
+    function esc(s) { return (s || '').replace(/&/g, '&amp;').replace(/</g, '&lt;').replace(/>/g, '&gt;'); }
+    function hl(str, q) {
+      if (!q) return esc(str);
+      const idx = str.toLowerCase().indexOf(q.toLowerCase());
+      if (idx < 0) return esc(str);
+      return esc(str.slice(0, idx)) +
+        `<strong style="color:var(--ac)">${esc(str.slice(idx, idx + q.length))}</strong>` +
+        esc(str.slice(idx + q.length));
+    }
+
+    /* store placeholder text */
+    document.querySelectorAll('.sel-value').forEach(el => {
+      el.dataset.ph = el.textContent;
+    });
+
+    /* close on outside click */
+    document.addEventListener('click', e => {
+      if (!e.target.closest('.spica-select') && !e.target.closest('.spica-multiselect')) closeAll();
+    });
+    document.addEventListener('keydown', e => { if (e.key === 'Escape') closeAll(); });
+
+    /* ═══════════════════════════════════════
+       INIT
+    ═══════════════════════════════════════ */
+    renderSelect('sel1');
+    renderSelect('sel2');
+    renderMs('ms1');
+    renderMs('ms2');
+    renderEnum1();
+    enum2Sel = ['read', 'write'];
+    renderEnum2();
+
+    /* theme */
+    function toggleTheme() {
+      const d = document.documentElement.getAttribute('data-theme') === 'dark';
+      document.documentElement.setAttribute('data-theme', d ? '' : 'dark');
+      localStorage.setItem('spica-theme', d ? 'light' : 'dark');
+    }
+    if (localStorage.getItem('spica-theme') === 'dark')
+      document.documentElement.setAttribute('data-theme', 'dark');
+  </script>
+</body>
+
+</html>
