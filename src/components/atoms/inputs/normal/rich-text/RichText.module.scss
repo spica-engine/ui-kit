@@ -1,12 +1,50 @@
-@use "styles/mixins";
+/* ep-field layout */
+.field {
+  display: flex;
+  flex-direction: column;
+  gap: var(--spacing-4); /* 5px */
+  width: 100%;
+}
 
-.container {
-  @include mixins.inputContainer;
-  color: #000;
-  padding: var(--oziko-padding-md);
+/* ep-field-head */
+.fieldHead {
+  display: flex;
+  align-items: center;
+  gap: var(--spacing-4); /* 5px */
+}
 
-  .description {
-    width: 100% !important;
-    @include mixins.inputDescriptionContainer;
-  }
+/* ep-field-name */
+.fieldName {
+  font-size: var(--font-size-sm); /* 11px */
+  font-weight: var(--font-weight-semibold); /* 600 */
+  letter-spacing: 0.03em;
+  color: var(--color-text-muted);
+  display: flex;
+  align-items: center;
+  gap: var(--spacing-3); /* 4px */
+}
+
+/* ep-field-type badge */
+.fieldType {
+  font-size: var(--font-size-2xs); /* 9px */
+  font-weight: var(--font-weight-medium); /* 500 */
+  font-family: var(--font-mono);
+  color: var(--color-text-faint);
+  background: var(--color-surface-3);
+  padding: 1px var(--spacing-4); /* 1px 5px */
+  border-radius: var(--radius-xs); /* 3px */
+  margin-left: var(--spacing-2); /* 3px */
+}
+
+/* field icon: 10×10 */
+.icon {
+  color: var(--color-text-muted) !important;
+  width: 10px !important;
+  height: 10px !important;
+  flex-shrink: 0;
+}
+
+/* description / helper text */
+.description {
+  color: var(--color-text-muted);
 }

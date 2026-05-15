@@ -86,15 +86,15 @@
     position: absolute;
     left: 3px;
     transition: transform 0.3s ease;
-    background: var(--oziko-color-font-primary);
+    background: var(--color-text-primary);
     border-radius: 100%;
   }
 }
 
 input:checked + .slider {
-  background-color: rgba(var(--oziko-color-primary-rgb), 0.3);
+  background-color: rgba(var(--color-accent-rgb), 0.3);
 }
 
 input:checked + .slider::before {
-  background: var(--oziko-color-primary);
+  background: var(--color-accent);
 }

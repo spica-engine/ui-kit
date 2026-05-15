@@ -2,22 +2,30 @@
 
 .option {
   cursor: pointer;
-  padding: var(--oziko-padding-md) var(--oziko-padding-lg);
+  padding: var(--spacing-9) var(--spacing-12);
 
   &:not(.disabled):hover {
-    background: var(--oziko-color-zebra);
+    background: var(--color-surface-2);
   }
 
   &.selected {
-    background: var(--oziko-color-zebra);
+    background: var(--color-surface-2);
   }
 
   &.disabled {
     cursor: default;
-    opacity: var(--oziko-disabled-opacity);
+    opacity: var(--opacity-disabled);
   }
 
   .displayer {
     @include mixins.textEllipsis(1);
+  }
+
+  .description {
+    font-size: var(--font-size-xs);
+    color: var(--color-text-muted);
+    flex-shrink: 0;
+    white-space: nowrap;
+    padding-right: var(--spacing-4);
   }
 }

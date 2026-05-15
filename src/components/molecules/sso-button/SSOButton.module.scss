@@ -1,10 +1,10 @@
 @use "styles/mixins";
 
 .ssoButton {
-  border-radius: var(--oziko-border-radius-lg);
-  padding: var(--oziko-padding-xl);
-  background: var(--oziko-color-menu-background);
-  border: 1px solid var(--oziko-color-border);
+  border-radius: var(--radius-2xl);
+  padding: var(--spacing-14);
+  background: var(--color-surface);
+  border: 1px solid var(--color-border);
 
   .text {
     @include mixins.textEllipsis(1);
@@ -13,10 +13,10 @@
   }
 
   &.clicked {
-    border-color: var(--oziko-color-primary);
+    border-color: var(--color-accent);
   }
 
   .active {
-    color: var(--oziko-color-primary) !important;
+    color: var(--color-accent) !important;
   }
 }

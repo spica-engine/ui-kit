@@ -1,0 +1,234 @@
+<!DOCTYPE html>
+<html lang="tr">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Spica — Add New Bucket</title>
+<link href="https://fonts.googleapis.com/css2?family=DM+Sans:opsz,wght@9..40,400;9..40,500;9..40,600;9..40,700&family=JetBrains+Mono:wght@400;500&display=swap" rel="stylesheet">
+<style>
+:root {
+  --bg:            #f0f0f0;
+  --surface:       #ffffff;
+  --surface2:      #f7f7f7;
+  --surface3:      #eeeeee;
+  --border:        #e4e4e4;
+  --accent:        #1a2448;
+  --accent-hover:  #253060;
+  --accent-subtle: rgba(26,36,72,0.07);
+  --text-primary:  #111827;
+  --text-muted:    #9ca3af;
+  --green:         #10b981;
+}
+[data-theme="dark"] {
+  --bg:            #0d1017;
+  --surface:       #13181f;
+  --surface2:      #191f28;
+  --surface3:      #202735;
+  --border:        #252e3e;
+  --accent:        #4f6ef7;
+  --accent-hover:  #6b84ff;
+  --accent-subtle: rgba(79,110,247,0.10);
+  --text-primary:  #e4e8f2;
+  --text-muted:    #4e5e7a;
+  --green:         #34d399;
+}
+
+*,*::before,*::after { box-sizing:border-box; margin:0; padding:0; }
+body {
+  font-family:'DM Sans',sans-serif;
+  background:rgba(0,0,0,0.22);
+  backdrop-filter:blur(2px);
+  min-height:100vh;
+  display:flex; align-items:center; justify-content:center;
+  padding:24px;
+  -webkit-font-smoothing:antialiased;
+}
+[data-theme="dark"] body { background:rgba(0,0,0,0.45); }
+
+/* ── Modal ── */
+.modal {
+  width:min(400px,100%);
+  background:var(--surface);
+  border:1px solid var(--border);
+  border-radius:12px;
+  box-shadow:0 20px 60px rgba(0,0,0,0.13), 0 4px 16px rgba(0,0,0,0.07);
+  overflow:hidden;
+  animation:in .18s cubic-bezier(.16,1,.3,1);
+}
+[data-theme="dark"] .modal { box-shadow:0 20px 60px rgba(0,0,0,0.55), 0 4px 16px rgba(0,0,0,0.3); }
+@keyframes in {
+  from { opacity:0; transform:translateY(8px) scale(.97); }
+  to   { opacity:1; transform:translateY(0) scale(1); }
+}
+
+/* Head */
+.modal-head {
+  padding:16px 18px 14px;
+  border-bottom:1px solid var(--border);
+  display:flex; align-items:center; justify-content:space-between;
+}
+.modal-title {
+  font-size:12px; font-weight:700;
+  letter-spacing:.08em; text-transform:uppercase;
+  color:var(--text-primary);
+}
+.modal-close {
+  width:24px; height:24px; border-radius:5px;
+  display:flex; align-items:center; justify-content:center;
+  cursor:pointer; color:var(--text-muted); border:none; background:transparent;
+  transition:background .1s, color .1s;
+}
+.modal-close:hover { background:var(--surface2); color:var(--text-primary); }
+
+/* Body */
+.modal-body { padding:16px 18px; }
+
+.f-field {
+  display:flex; align-items:center;
+  border:1px solid var(--border); border-radius:8px;
+  background:var(--surface2); overflow:hidden;
+  transition:border-color .15s, box-shadow .15s, background .15s;
+}
+.f-field:focus-within {
+  border-color:var(--accent); background:var(--surface);
+  box-shadow:0 0 0 3px var(--accent-subtle);
+}
+.f-icon {
+  width:38px; display:flex; align-items:center; justify-content:center;
+  color:var(--text-muted); flex-shrink:0;
+  border-right:1px solid var(--border); align-self:stretch;
+  transition:color .15s;
+}
+.f-field:focus-within .f-icon { color:var(--accent); }
+.f-input {
+  flex:1; border:none; outline:none; background:transparent;
+  padding:10px 12px; font-family:'DM Sans',sans-serif;
+  font-size:13px; color:var(--text-primary);
+}
+.f-input::placeholder { color:var(--text-muted); }
+
+/* Foot */
+.modal-foot {
+  display:flex; align-items:center; justify-content:flex-end; gap:6px;
+  padding:10px 18px 14px;
+}
+.btn-save {
+  display:inline-flex; align-items:center; gap:6px;
+  padding:8px 18px; border-radius:7px; border:none;
+  background:var(--accent); color:#fff;
+  font-family:'DM Sans',sans-serif; font-size:12.5px; font-weight:600;
+  cursor:pointer; transition:background .12s, transform .1s;
+}
+.btn-save:hover { background:var(--accent-hover); transform:translateY(-1px); }
+.btn-save:active { transform:translateY(0); }
+.btn-cancel {
+  display:inline-flex; align-items:center; gap:5px;
+  padding:8px 12px; border-radius:7px;
+  background:transparent; border:none;
+  font-family:'DM Sans',sans-serif; font-size:12.5px; font-weight:500;
+  color:var(--text-muted); cursor:pointer; transition:color .12s;
+}
+.btn-cancel:hover { color:var(--text-primary); }
+
+/* Theme toggle */
+.theme-btn {
+  position:fixed; top:16px; right:16px;
+  width:30px; height:30px; border-radius:7px;
+  display:flex; align-items:center; justify-content:center;
+  background:var(--surface); border:1px solid var(--border);
+  cursor:pointer; color:var(--text-muted); transition:all .12s;
+}
+.theme-btn:hover { background:var(--surface3); color:var(--text-primary); }
+.sun-i { display:none; }
+[data-theme="dark"] .sun-i  { display:block; }
+[data-theme="dark"] .moon-i { display:none; }
+</style>
+</head>
+<body>
+
+<button class="theme-btn" onclick="toggleTheme()">
+  <svg class="moon-i" width="14" height="14" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2">
+    <path d="M21 12.79A9 9 0 1 1 11.21 3 7 7 0 0 0 21 12.79z"/>
+  </svg>
+  <svg class="sun-i" width="14" height="14" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2">
+    <circle cx="12" cy="12" r="5"/>
+    <line x1="12" y1="1" x2="12" y2="3"/><line x1="12" y1="21" x2="12" y2="23"/>
+    <line x1="4.22" y1="4.22" x2="5.64" y2="5.64"/><line x1="18.36" y1="18.36" x2="19.78" y2="19.78"/>
+    <line x1="1" y1="12" x2="3" y2="12"/><line x1="21" y1="12" x2="23" y2="12"/>
+    <line x1="4.22" y1="19.78" x2="5.64" y2="18.36"/><line x1="18.36" y1="5.64" x2="19.78" y2="4.22"/>
+  </svg>
+</button>
+
+<div class="modal">
+
+  <div class="modal-head">
+    <span class="modal-title">Add New Bucket</span>
+    <button class="modal-close" onclick="reset()">
+      <svg width="13" height="13" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2.5">
+        <line x1="18" y1="6" x2="6" y2="18"/><line x1="6" y1="6" x2="18" y2="18"/>
+      </svg>
+    </button>
+  </div>
+
+  <div class="modal-body">
+    <div class="f-field">
+      <div class="f-icon">
+        <svg width="13" height="13" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2">
+          <polyline points="4 7 4 4 20 4 20 7"/>
+          <line x1="9" y1="20" x2="15" y2="20"/>
+          <line x1="12" y1="4" x2="12" y2="20"/>
+        </svg>
+      </div>
+      <input class="f-input" id="name" type="text" placeholder="New Bucket"
+        onkeydown="handleKey(event)" autocomplete="off" autofocus/>
+    </div>
+  </div>
+
+  <div class="modal-foot">
+    <button class="btn-cancel" onclick="reset()">
+      <svg width="12" height="12" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2.5">
+        <line x1="18" y1="6" x2="6" y2="18"/><line x1="6" y1="6" x2="18" y2="18"/>
+      </svg>
+      Cancel
+    </button>
+    <button class="btn-save" id="save" onclick="save()">
+      <svg width="13" height="13" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2.2">
+        <path d="M19 21H5a2 2 0 0 1-2-2V5a2 2 0 0 1 2-2h11l5 5v11a2 2 0 0 1-2 2z"/>
+        <polyline points="17 21 17 13 7 13 7 21"/><polyline points="7 3 7 8 15 8"/>
+      </svg>
+      Save
+    </button>
+  </div>
+
+</div>
+
+<script>
+function save() {
+  const val = document.getElementById('name').value.trim();
+  if (!val) { document.getElementById('name').focus(); return; }
+  const btn = document.getElementById('save');
+  btn.style.background = 'var(--green)';
+  btn.innerHTML = `<svg width="13" height="13" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2.5"><polyline points="20 6 9 17 4 12"/></svg> Saved`;
+  setTimeout(reset, 1400);
+}
+function reset() {
+  document.getElementById('name').value = '';
+  document.getElementById('name').focus();
+  const btn = document.getElementById('save');
+  btn.style.background = '';
+  btn.innerHTML = `<svg width="13" height="13" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2.2"><path d="M19 21H5a2 2 0 0 1-2-2V5a2 2 0 0 1 2-2h11l5 5v11a2 2 0 0 1-2 2z"/><polyline points="17 21 17 13 7 13 7 21"/><polyline points="7 3 7 8 15 8"/></svg> Save`;
+}
+function handleKey(e) {
+  if (e.key === 'Enter') save();
+  if (e.key === 'Escape') reset();
+}
+function toggleTheme() {
+  const dark = document.documentElement.getAttribute('data-theme') === 'dark';
+  document.documentElement.setAttribute('data-theme', dark ? '' : 'dark');
+  localStorage.setItem('spica-theme', dark ? 'light' : 'dark');
+}
+if (localStorage.getItem('spica-theme') === 'dark')
+  document.documentElement.setAttribute('data-theme', 'dark');
+</script>
+</body>
+</html>

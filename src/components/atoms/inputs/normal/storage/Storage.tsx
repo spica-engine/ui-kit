@@ -3,43 +3,24 @@ import styles from "./Storage.module.scss";
 import FlexElement, { TypeFlexElement } from "@atoms/flex-element/FlexElement";
 import Icon from "@atoms/icon/Icon";
 import Dropzone from "react-dropzone";
-import { TypeFluidContainer } from "@atoms/fluid-container/FluidContainer";
 import Text, { TypeText } from "@atoms/text/Text";
 import { IconName } from "@utils/iconList";
-import InputGroup from "@atoms/base-input/InputGroup";
-import InputHeader from "@atoms/input-header/InputHeader";
 import useFileView from "@custom-hooks/useFileView";
 import { TypeFile } from "@utils/interface";
-import Button from "@atoms/button/Button";
 
 export type TypeStorageInput = {
   label?: string;
   file?: TypeFile;
   containerProps?: TypeFlexElement;
-  topContainerProps?: {
-    container?: TypeFluidContainer;
-    root?: TypeFlexElement;
-    rootChildren?: TypeText;
-    suffix?: TypeFlexElement;
-    suffixChildren?: TypeFlexElement;
-    editIcon?: IconName;
-    deleteIcon?: IconName;
-    hideActions?: boolean;
-    disableEditIcon?: boolean;
-    disableDeleteIcon?: boolean;
-  };
   dropzoneContainerProps?: {
-    container?: TypeFlexElement;
     uploadIcon?: IconName;
     previewIcon?: IconName;
     description?: ReactNode;
   };
   description?: string;
   errorMessage?: string;
-  helperTextContainerProps?: TypeFlexElement;
   helperTextProps?: TypeText;
   onUpload?: (file: File) => void;
-  onDelete?: (event: React.MouseEvent<HTMLButtonElement, MouseEvent>) => void;
   onPreview?: () => void;
   onClickShowFileSelect?: () => void;
 };
@@ -48,15 +29,12 @@ const StorageInput: FC<TypeStorageInput> = ({
   file,
   label,
   containerProps,
-  topContainerProps,
   dropzoneContainerProps,
   description,
   errorMessage,
-  helperTextContainerProps,
   helperTextProps,
   onClickShowFileSelect,
   onUpload,
-  onDelete,
   onPreview,
 }) => {
   const imgEmbedStyles: CSSProperties = {
@@ -74,127 +52,75 @@ const StorageInput: FC<TypeStorageInput> = ({
     },
   });
 
-  const handleClickDelete = (event: React.MouseEvent<HTMLButtonElement, MouseEvent>) => {
-    onDelete?.(event);
-  };
-
   return (
     <FlexElement
       direction="vertical"
+      alignment="leftTop"
       dimensionX="fill"
-      dimensionY={472}
-      alignment="top"
-      gap={10}
-      className={`${containerProps?.className}`}
+      {...containerProps}
+      className={`${styles.field} ${containerProps?.className ?? ""}`}
     >
-      <FlexElement
-        direction="vertical"
-        dimensionX="fill"
-        gap={10}
-        className={`${containerProps?.className} ${styles.container}`}
+      {label && (
+        <div className={styles.fieldHead}>
+          <div className={styles.fieldName}>
+            <Icon className={styles.icon} name="storage" />
+            <span>{label}</span>
+          </div>
+          <span className={styles.fieldType}>storage</span>
+        </div>
+      )}
+      <Dropzone
+        multiple={false}
+        onDrop={(acceptedFiles) => {
+          if (!acceptedFiles.length) return;
+          onUpload?.(acceptedFiles[0]);
+        }}
       >
-        <InputHeader
-          prefix={{ children: <Icon name="storage" className={styles.icon} /> }}
-          root={{ children: <Text variant="secondary">{label}</Text> }}
-          suffix={{
-            children: !topContainerProps?.hideActions ? (
-              <>
-                <Button
-                  variant="icon"
-                  onClick={onClickShowFileSelect}
-                  disabled={topContainerProps?.disableEditIcon}
-                >
-                  {topContainerProps?.editIcon || <Icon name="pencil" />}
-                </Button>
-                <Button
-                  variant="icon"
-                  color="danger"
-                  onClick={handleClickDelete}
-                  disabled={topContainerProps?.disableDeleteIcon}
-                >
-                  {topContainerProps?.deleteIcon || <Icon name="delete" />}
-                </Button>
-              </>
-            ) : null,
-            gap: 0,
-            ...topContainerProps?.suffix,
-          }}
-          {...topContainerProps?.container}
-        />
-        <Dropzone
-          multiple={false}
-          onDrop={(acceptedFiles) => {
-            if (!acceptedFiles.length) return;
-            onUpload?.(acceptedFiles[0]);
-          }}
-        >
-          {({ getRootProps, getInputProps }) => {
-            const handleClick = (event: any) => {
-              if (!file?.url) {
+        {({ getRootProps, getInputProps }) => (
+          <div
+            className={`${styles.storage} ${file ? styles.hasFile : ""}`}
+            {...getRootProps()}
+            onClick={() => {
+              if (file?.url) {
+                onPreview?.();
+              } else {
                 onClickShowFileSelect?.();
-                return;
               }
-
-              onPreview?.();
-            };
-
-            return (
-              <FlexElement
-                className={`${dropzoneContainerProps?.container?.className} ${styles.storage}`}
-                alignment="center"
-                dimensionX={"fill"}
-                dimensionY={407}
-                direction="vertical"
-                gap={10}
-                {...getRootProps()}
-                {...dropzoneContainerProps?.container}
-                onClick={handleClick}
-              >
-                <>
-                  {file ? (
-                    <>
-                      {fileView}
-                      <Icon
-                        name={dropzoneContainerProps?.previewIcon || "filterCenterFocus"}
-                        size={32}
-                        className={styles.previewIcon}
-                      />
-                    </>
-                  ) : (
-                    <>
-                      <Icon name={dropzoneContainerProps?.uploadIcon || "storage"} size={80} />
-                      <Text className={styles.text}>
-                        {dropzoneContainerProps?.description || (
-                          <span>
-                            Upload your file or <br /> pick an file from storage
-                          </span>
-                        )}
-                      </Text>
-                    </>
-                  )}
-                  <input {...getInputProps()} />
-                </>
-              </FlexElement>
-            );
-          }}
-        </Dropzone>
-      </FlexElement>
-      {(errorMessage || description) && (
-        <InputGroup.HelperText
-          alignment="leftCenter"
-          dimensionX="fill"
-          {...helperTextContainerProps}
-          className={`${styles.helperText} ${helperTextContainerProps?.className}`}
-        >
-          <Text
-            {...helperTextProps}
-            size="small"
-            variant={errorMessage ? "danger" : "secondary"}
-            className={`${helperTextProps?.className}`}
+            }}
           >
-            {errorMessage || description}
-          </Text>
-        </InputGroup.HelperText>
+            {file ? (
+              <>
+                {fileView}
+                <Icon
+                  name={dropzoneContainerProps?.previewIcon || "filterCenterFocus"}
+                  size={32}
+                  className={styles.previewIcon}
+                />
+              </>
+            ) : (
+              <>
+                <Icon
+                  name={dropzoneContainerProps?.uploadIcon || "storage"}
+                  className={styles.uploadIcon}
+                />
+                <span>
+                  {dropzoneContainerProps?.description ??
+                    "Upload one image or pick an image from library"}
+                </span>
+              </>
+            )}
+            <input {...getInputProps()} />
+          </div>
+        )}
+      </Dropzone>
+      {(errorMessage || description) && (
+        <Text
+          {...helperTextProps}
+          size="xsmall"
+          variant={errorMessage ? "danger" : "secondary"}
+        >
+          {errorMessage || description}
+        </Text>
       )}
     </FlexElement>
   );

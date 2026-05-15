@@ -1,0 +1,549 @@
+<!DOCTYPE html>
+<html lang="tr">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>New Dashboard — Per-Component Visual Selection</title>
+<link href="https://fonts.googleapis.com/css2?family=DM+Sans:opsz,wght@9..40,300;9..40,400;9..40,500;9..40,600;9..40,700&family=JetBrains+Mono:wght@400;500&display=swap" rel="stylesheet">
+<style>
+:root {
+  --bg:             #f0f0f0;
+  --surface:        #ffffff;
+  --surface2:       #f7f7f7;
+  --surface3:       #eeeeee;
+  --border:         #e4e4e4;
+  --border-mid:     #d8d8d8;
+  --accent:         #1a2448;
+  --accent-hover:   #253060;
+  --accent-subtle:  rgba(26,36,72,0.07);
+  --accent-subtle2: rgba(26,36,72,0.13);
+  --text-primary:   #111827;
+  --text-secondary: #4b5563;
+  --text-muted:     #9ca3af;
+  --green:          #10b981;
+  --green-bg:       rgba(16,185,129,0.1);
+  --red:            #ef4444;
+  --red-bg:         rgba(239,68,68,0.08);
+  --blue:           #3b82f6;
+  --blue-bg:        rgba(59,130,246,0.1);
+}
+[data-theme="dark"] {
+  --bg:             #0d1017;
+  --surface:        #13181f;
+  --surface2:       #191f28;
+  --surface3:       #202735;
+  --border:         #252e3e;
+  --border-mid:     #2f3b52;
+  --accent:         #4f6ef7;
+  --accent-hover:   #6b84ff;
+  --accent-subtle:  rgba(79,110,247,0.10);
+  --accent-subtle2: rgba(79,110,247,0.18);
+  --text-primary:   #e4e8f2;
+  --text-secondary: #8b96b5;
+  --text-muted:     #4e5e7a;
+  --green:          #34d399;
+  --green-bg:       rgba(52,211,153,0.1);
+  --red:            #f87171;
+  --red-bg:         rgba(248,113,113,0.08);
+  --blue:           #60a5fa;
+  --blue-bg:        rgba(96,165,250,0.1);
+}
+
+*, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+body {
+  font-family: 'DM Sans', sans-serif;
+  background: var(--bg); color: var(--text-primary);
+  min-height: 100vh; display: flex; flex-direction: column;
+  align-items: center; padding: 56px 24px 64px;
+  -webkit-font-smoothing: antialiased;
+}
+
+/* Demo bar */
+.demo-bar {
+  position: fixed; top: 0; left: 0; right: 0; z-index: 99;
+  height: 48px; background: var(--surface); border-bottom: 1px solid var(--border);
+  display: flex; align-items: center; justify-content: space-between; padding: 0 22px;
+}
+.demo-bar-title { font-size: 12.5px; font-weight: 600; }
+.theme-btn {
+  width: 30px; height: 30px; border-radius: 7px;
+  display: flex; align-items: center; justify-content: center;
+  background: var(--surface2); border: 1px solid var(--border);
+  cursor: pointer; color: var(--text-muted); transition: all .12s;
+}
+.theme-btn:hover { background: var(--surface3); color: var(--text-primary); }
+
+/* Popup shell */
+.popup {
+  width: min(900px, 95vw); margin-top: 8px;
+  background: var(--surface); border: 1px solid var(--border);
+  border-radius: 14px;
+  box-shadow: 0 24px 64px rgba(0,0,0,.13), 0 4px 16px rgba(0,0,0,.07);
+  display: flex; flex-direction: column; overflow: hidden;
+}
+
+/* Name bar */
+.name-bar { padding: 14px 20px; border-bottom: 1px solid var(--border); flex-shrink: 0; }
+.name-input {
+  width: 100%; border: 1px solid var(--border); border-radius: 8px;
+  padding: 9px 14px; background: var(--surface2);
+  font-family: 'DM Sans', sans-serif; font-size: 13px; font-weight: 500;
+  color: var(--text-primary); outline: none;
+  transition: border-color .15s, box-shadow .15s, background .15s;
+}
+.name-input:focus { border-color: var(--accent); background: var(--surface); box-shadow: 0 0 0 3px var(--accent-subtle); }
+.name-input::placeholder { color: var(--text-muted); font-weight: 400; }
+
+/* Body */
+.popup-body { flex: 1; overflow-y: auto; padding: 18px 20px 8px; max-height: 72vh; }
+.popup-body::-webkit-scrollbar { width: 3px; }
+.popup-body::-webkit-scrollbar-thumb { background: var(--border); border-radius: 2px; }
+
+/* Section divider */
+.sec-divider { display: flex; align-items: center; gap: 10px; margin-bottom: 12px; }
+.sec-line { flex: 1; height: 1px; background: var(--border); }
+.sec-lbl {
+  font-size: 9.5px; font-weight: 700; letter-spacing: .1em;
+  text-transform: uppercase; color: var(--text-muted);
+}
+.sec-count {
+  font-size: 10px; font-weight: 600; font-family: 'JetBrains Mono', monospace;
+  color: var(--text-muted); background: var(--surface2);
+  border: 1px solid var(--border); border-radius: 5px; padding: 1px 7px;
+}
+
+/* Component list */
+.comp-list { display: flex; flex-direction: column; gap: 8px; margin-bottom: 10px; }
+
+/* Component card */
+.comp-card {
+  border: 1px solid var(--border); border-radius: 11px; overflow: hidden;
+  transition: border-color .15s;
+}
+.comp-card:focus-within { border-color: var(--border-mid); }
+
+/* Card header */
+.comp-head {
+  display: flex; align-items: center; gap: 9px;
+  padding: 9px 14px; background: var(--surface2);
+  border-bottom: 1px solid var(--border);
+  cursor: pointer; user-select: none; transition: background .1s;
+}
+.comp-head:hover { background: var(--surface3); }
+.comp-card.collapsed .comp-head { border-bottom-color: transparent; }
+
+.comp-num {
+  width: 20px; height: 20px; border-radius: 5px;
+  background: var(--surface); border: 1px solid var(--border);
+  display: flex; align-items: center; justify-content: center;
+  font-size: 10px; font-weight: 700; font-family: 'JetBrains Mono', monospace;
+  color: var(--text-muted); flex-shrink: 0; transition: all .15s;
+}
+.comp-card:focus-within .comp-num {
+  background: var(--accent-subtle); color: var(--accent); border-color: var(--accent-subtle2);
+}
+.comp-name-prev {
+  font-size: 12.5px; font-weight: 500; color: var(--text-primary);
+  flex: 1; min-width: 0; overflow: hidden; text-overflow: ellipsis; white-space: nowrap;
+}
+.comp-type-badge {
+  font-size: 10px; font-weight: 600; padding: 2px 8px; border-radius: 4px;
+  background: var(--accent-subtle); color: var(--accent);
+  font-family: 'JetBrains Mono', monospace; flex-shrink: 0;
+}
+.comp-ratio-badge {
+  font-size: 10px; font-weight: 500; padding: 2px 7px; border-radius: 4px;
+  background: var(--surface3); color: var(--text-muted);
+  font-family: 'JetBrains Mono', monospace; flex-shrink: 0;
+  border: 1px solid var(--border);
+}
+.comp-chevron { color: var(--text-muted); flex-shrink: 0; transition: transform .2s; }
+.comp-card.collapsed .comp-chevron { transform: rotate(-90deg); }
+
+/* Card body */
+.comp-body { padding: 16px 16px 0; display: flex; flex-direction: column; gap: 14px; }
+.comp-foot { padding: 10px 16px 12px; display: flex; justify-content: flex-end; }
+.comp-card.collapsed .comp-body,
+.comp-card.collapsed .comp-foot { display: none; }
+
+/* 2-col row */
+.two-col { display: grid; grid-template-columns: 1fr 1fr; gap: 12px; }
+
+/* Field */
+.field { display: flex; flex-direction: column; gap: 5px; }
+.field-lbl {
+  font-size: 10px; font-weight: 700; letter-spacing: .08em;
+  text-transform: uppercase; color: var(--text-muted);
+}
+.f-input {
+  width: 100%; border: 1px solid var(--border); border-radius: 7px;
+  padding: 8px 11px; background: var(--surface2);
+  font-family: 'DM Sans', sans-serif; font-size: 12.5px;
+  color: var(--text-primary); outline: none;
+  transition: border-color .15s, box-shadow .15s, background .15s;
+}
+.f-input:focus { border-color: var(--accent); background: var(--surface); box-shadow: 0 0 0 3px var(--accent-subtle); }
+.f-input::placeholder { color: var(--text-muted); }
+.f-hint { font-size: 11px; color: var(--text-muted); line-height: 1.5; margin-top: 2px; }
+
+/* ─────────────────────────────────────
+   TYPE CARDS  (inside each component)
+───────────────────────────────────── */
+.type-grid {
+  display: grid;
+  grid-template-columns: repeat(6, 1fr);
+  gap: 6px;
+}
+.tc {
+  display: flex; flex-direction: column; align-items: center; gap: 8px;
+  padding: 10px 6px 9px; border-radius: 9px;
+  border: 1.5px solid var(--border); background: var(--surface2);
+  cursor: pointer; transition: all .14s; position: relative;
+}
+.tc:hover { border-color: var(--border-mid); background: var(--surface); }
+.tc.sel {
+  border-color: var(--accent); background: var(--accent-subtle);
+  box-shadow: 0 0 0 2px var(--accent-subtle);
+}
+/* check dot */
+.tc-dot {
+  position: absolute; top: 5px; right: 5px;
+  width: 13px; height: 13px; border-radius: 50%;
+  background: var(--accent); display: none;
+  align-items: center; justify-content: center;
+}
+.tc.sel .tc-dot { display: flex; }
+.tc-icon { height: 28px; display: flex; align-items: flex-end; justify-content: center; }
+.tc-lbl { font-size: 10.5px; font-weight: 500; color: var(--text-secondary); line-height: 1; transition: color .14s; }
+.tc.sel .tc-lbl { color: var(--accent); font-weight: 600; }
+
+/* Mini bar chart */
+.mini-bars { display: flex; align-items: flex-end; gap: 3px; height: 28px; }
+.mb { width: 7px; border-radius: 2px 2px 0 0; background: var(--border-mid); transition: background .14s; }
+.mb.hi { background: var(--accent-subtle2); }
+.tc.sel .mb { background: var(--accent-subtle2); }
+.tc.sel .mb.hi { background: var(--accent); }
+
+/* ─────────────────────────────────────
+   RATIO PILLS  (inside each component)
+───────────────────────────────────── */
+.ratio-pills { display: flex; gap: 5px; flex-wrap: wrap; }
+.rp {
+  padding: 5px 13px; border-radius: 6px;
+  border: 1.5px solid var(--border); background: var(--surface2);
+  font-size: 11.5px; font-weight: 500; color: var(--text-secondary);
+  cursor: pointer; transition: all .12s;
+  font-family: 'JetBrains Mono', monospace;
+}
+.rp:hover { border-color: var(--border-mid); background: var(--surface); }
+.rp.sel { border-color: var(--accent); background: var(--accent-subtle); color: var(--accent); }
+
+/* Delete button */
+.del-btn {
+  display: inline-flex; align-items: center; gap: 5px;
+  padding: 5px 12px; border-radius: 6px; font-family: inherit;
+  font-size: 11.5px; font-weight: 500; cursor: pointer;
+  background: var(--red-bg); color: var(--red);
+  border: 1px solid transparent; transition: all .12s;
+}
+.del-btn:hover { background: var(--red); color: #fff; }
+
+/* Add component */
+.add-comp-btn {
+  display: flex; align-items: center; justify-content: center; gap: 8px;
+  width: 100%; padding: 12px; margin-bottom: 16px;
+  border: 1.5px dashed var(--border); border-radius: 10px;
+  background: transparent; cursor: pointer;
+  font-family: 'DM Sans', sans-serif; font-size: 13px;
+  font-weight: 500; color: var(--text-muted); transition: all .15s;
+}
+.add-comp-btn:hover { border-color: var(--accent); color: var(--accent); background: var(--accent-subtle); }
+
+/* Footer */
+.popup-foot {
+  display: flex; align-items: center; justify-content: flex-end;
+  padding: 12px 20px; border-top: 1px solid var(--border); flex-shrink: 0;
+}
+.save-btn {
+  display: inline-flex; align-items: center; gap: 7px;
+  padding: 8px 20px; border-radius: 8px; border: none;
+  background: var(--accent); color: #fff;
+  font-family: 'DM Sans', sans-serif; font-size: 13px; font-weight: 600;
+  cursor: pointer; transition: background .12s, transform .1s;
+}
+.save-btn:hover { background: var(--accent-hover); transform: translateY(-1px); }
+.save-btn:active { transform: translateY(0); }
+</style>
+</head>
+<body>
+
+<div class="demo-bar">
+  <span class="demo-bar-title">New Dashboard</span>
+  <button class="theme-btn" onclick="toggleTheme()">
+    <svg id="ti" width="14" height="14" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2">
+      <path d="M21 12.79A9 9 0 1 1 11.21 3 7 7 0 0 0 21 12.79z"/>
+    </svg>
+  </button>
+</div>
+
+<div class="popup">
+
+  <!-- Dashboard name -->
+  <div class="name-bar">
+    <input class="name-input" type="text" placeholder="New Dashboard" id="dash-name"/>
+  </div>
+
+  <!-- Body -->
+  <div class="popup-body">
+
+    <!-- Components -->
+    <div class="sec-divider">
+      <div class="sec-line"></div>
+      <div class="sec-lbl">Components</div>
+      <div class="sec-count" id="comp-count">1</div>
+      <div class="sec-line"></div>
+    </div>
+
+    <div class="comp-list" id="comp-list">
+      <!-- injected by JS -->
+    </div>
+
+    <button class="add-comp-btn" onclick="addComp()">
+      <svg width="13" height="13" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2.5">
+        <line x1="12" y1="5" x2="12" y2="19"/><line x1="5" y1="12" x2="19" y2="12"/>
+      </svg>
+      Add New Component
+    </button>
+
+  </div>
+
+  <!-- Footer -->
+  <div class="popup-foot">
+    <button class="save-btn" id="save-btn" onclick="save()">
+      <svg width="13" height="13" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2.2">
+        <path d="M19 21H5a2 2 0 0 1-2-2V5a2 2 0 0 1 2-2h11l5 5v11a2 2 0 0 1-2 2z"/>
+        <polyline points="17 21 17 13 7 13 7 21"/><polyline points="7 3 7 8 15 8"/>
+      </svg>
+      Save
+    </button>
+  </div>
+
+</div>
+
+<script>
+/* ── Theme ── */
+function toggleTheme() {
+  const dark = document.documentElement.getAttribute('data-theme') === 'dark';
+  document.documentElement.setAttribute('data-theme', dark ? '' : 'dark');
+  document.getElementById('ti').innerHTML = dark
+    ? '<path d="M21 12.79A9 9 0 1 1 11.21 3 7 7 0 0 0 21 12.79z"/>'
+    : '<circle cx="12" cy="12" r="5"/><line x1="12" y1="1" x2="12" y2="3"/><line x1="12" y1="21" x2="12" y2="23"/><line x1="4.22" y1="4.22" x2="5.64" y2="5.64"/><line x1="18.36" y1="18.36" x2="19.78" y2="19.78"/><line x1="1" y1="12" x2="3" y2="12"/><line x1="21" y1="12" x2="23" y2="12"/><line x1="4.22" y1="19.78" x2="5.64" y2="18.36"/><line x1="18.36" y1="5.64" x2="19.78" y2="4.22"/>';
+}
+
+/* ── Type definitions ── */
+const TYPES = [
+  {
+    id: 'Line', label: 'Line',
+    icon: `<svg width="44" height="28" viewBox="0 0 44 28" fill="none">
+      <path d="M2,25 L10,17 L18,21 L26,9 L34,14 L42,4 L42,28 L2,28Z" fill="var(--accent-subtle)"/>
+      <path d="M2,25 L10,17 L18,21 L26,9 L34,14 L42,4" stroke="var(--accent-subtle2)" stroke-width="2" fill="none" stroke-linecap="round"/>
+      <path d="M2,25 L10,17 L18,21 L26,9 L34,14 L42,4" stroke="var(--accent)" stroke-width="1.8" fill="none" stroke-linecap="round" class="tc-stroke"/>
+      <circle cx="26" cy="9" r="2.5" fill="var(--accent)" class="tc-fill"/>
+    </svg>`
+  },
+  {
+    id: 'Bar', label: 'Bar',
+    icon: `<div class="mini-bars">
+      <div class="mb" style="height:12px"></div>
+      <div class="mb hi" style="height:24px"></div>
+      <div class="mb" style="height:16px"></div>
+      <div class="mb" style="height:20px"></div>
+      <div class="mb hi" style="height:28px"></div>
+    </div>`
+  },
+  {
+    id: 'Area', label: 'Area',
+    icon: `<svg width="44" height="28" viewBox="0 0 44 28" fill="none">
+      <path d="M2,24 L12,13 L20,19 L28,6 L36,11 L42,4 L42,28 L2,28Z" fill="var(--blue-bg)"/>
+      <path d="M2,24 L12,13 L20,19 L28,6 L36,11 L42,4" stroke="var(--blue)" stroke-width="1.8" fill="none" stroke-linecap="round"/>
+    </svg>`
+  },
+  {
+    id: 'Pie', label: 'Pie',
+    icon: `<svg width="30" height="28" viewBox="0 0 30 28" fill="none">
+      <path d="M15,14 L15,2 A12,12 0 0,1 26.4,20 Z" fill="var(--accent-subtle2)"/>
+      <path d="M15,14 L26.4,20 A12,12 0 0,1 2,20 Z" fill="var(--accent)"/>
+      <path d="M15,14 L2,20 A12,12 0 0,1 15,2 Z" fill="var(--border-mid)"/>
+    </svg>`
+  },
+  {
+    id: 'Stat', label: 'Stat',
+    icon: `<div style="display:flex;flex-direction:column;align-items:flex-start;gap:5px">
+      <div style="font-family:'JetBrains Mono',monospace;font-size:17px;font-weight:700;color:var(--accent);letter-spacing:-1px;line-height:1">2.4M</div>
+      <div style="display:flex;align-items:center;gap:4px">
+        <div style="width:26px;height:3px;border-radius:2px;background:var(--green)"></div>
+        <span style="font-size:9px;font-weight:600;color:var(--green);font-family:'JetBrains Mono',monospace">+12%</span>
+      </div>
+    </div>`
+  },
+  {
+    id: 'Table', label: 'Table',
+    icon: `<svg width="38" height="28" viewBox="0 0 38 28" fill="none">
+      <rect x="0" y="0" width="38" height="9" rx="2.5" fill="var(--accent-subtle2)"/>
+      <rect x="0" y="11" width="38" height="7" rx="2" fill="var(--border)"/>
+      <rect x="0" y="20" width="38" height="7" rx="2" fill="var(--border)"/>
+      <line x1="13" y1="0" x2="13" y2="9" stroke="var(--surface)" stroke-width="1"/>
+      <line x1="26" y1="0" x2="26" y2="9" stroke="var(--surface)" stroke-width="1"/>
+    </svg>`
+  }
+];
+
+const RATIOS = ['1/1', '2/2', '2/1', '3/1', '16/9'];
+
+/* ── Build type cards HTML ── */
+function buildTypeCards(cid, selectedType = 'Line') {
+  return `<div class="type-grid" id="${cid}-tg">` +
+    TYPES.map(t => `
+      <div class="tc${t.id === selectedType ? ' sel' : ''}" onclick="selectType(this,'${cid}','${t.id}')">
+        <div class="tc-dot">
+          <svg width="8" height="8" fill="none" viewBox="0 0 24 24" stroke="#fff" stroke-width="3.5">
+            <polyline points="20 6 9 17 4 12"/>
+          </svg>
+        </div>
+        <div class="tc-icon">${t.icon}</div>
+        <div class="tc-lbl">${t.label}</div>
+      </div>`).join('') +
+  '</div>';
+}
+
+/* ── Build ratio pills HTML ── */
+function buildRatioPills(cid, selectedRatio = '2/2') {
+  return `<div class="ratio-pills" id="${cid}-rp">` +
+    RATIOS.map(r =>
+      `<div class="rp${r === selectedRatio ? ' sel' : ''}" onclick="selectRatio(this,'${cid}','${r}')">${r}</div>`
+    ).join('') +
+  '</div>';
+}
+
+/* ── Build full component card HTML ── */
+function buildCard(cid, num) {
+  return `
+  <div class="comp-card" id="${cid}">
+    <div class="comp-head" onclick="toggleCard('${cid}')">
+      <div class="comp-num">${num}</div>
+      <div class="comp-name-prev" id="${cid}-lbl">İsimsiz Component</div>
+      <div class="comp-type-badge" id="${cid}-tbadge">Line</div>
+      <div class="comp-ratio-badge" id="${cid}-rbadge">2/2</div>
+      <svg class="comp-chevron" width="13" height="13" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2.5">
+        <polyline points="6 9 12 15 18 9"/>
+      </svg>
+    </div>
+
+    <div class="comp-body">
+
+      <!-- Name + URL -->
+      <div class="two-col">
+        <div class="field">
+          <label class="field-lbl">Name *</label>
+          <input class="f-input" type="text" placeholder="Component adı"
+            oninput="document.getElementById('${cid}-lbl').textContent=this.value||'İsimsiz Component'"/>
+        </div>
+        <div class="field">
+          <label class="field-lbl">URL *</label>
+          <input class="f-input" type="text" placeholder="https://api.example.com/data"/>
+          <div class="f-hint">Chart-compatible JSON döndürmeli.</div>
+        </div>
+      </div>
+
+      <!-- Type -->
+      <div class="field">
+        <label class="field-lbl">Type</label>
+        ${buildTypeCards(cid, 'Line')}
+      </div>
+
+      <!-- Ratio -->
+      <div class="field">
+        <label class="field-lbl">Aspect Ratio</label>
+        ${buildRatioPills(cid, '2/2')}
+      </div>
+
+    </div>
+
+    <div class="comp-foot">
+      <button class="del-btn" onclick="delComp('${cid}')">
+        <svg width="12" height="12" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2">
+          <polyline points="3 6 5 6 21 6"/>
+          <path d="M19 6l-1 14a2 2 0 0 1-2 2H8a2 2 0 0 1-2-2L5 6"/>
+        </svg>
+        Sil
+      </button>
+    </div>
+  </div>`;
+}
+
+/* ── State ── */
+let idx = 0;
+
+function addComp() {
+  const id = 'c' + idx++;
+  const list = document.getElementById('comp-list');
+  const num = list.querySelectorAll('.comp-card').length + 1;
+  const div = document.createElement('div');
+  div.innerHTML = buildCard(id, num);
+  list.appendChild(div.firstElementChild);
+  updateCount();
+  // focus name input
+  document.getElementById(id).querySelector('.f-input').focus();
+  document.getElementById(id).scrollIntoView({ behavior: 'smooth', block: 'nearest' });
+}
+
+function delComp(id) {
+  const list = document.getElementById('comp-list');
+  if (list.querySelectorAll('.comp-card').length <= 1) return;
+  document.getElementById(id).remove();
+  reNumber();
+  updateCount();
+}
+
+function toggleCard(id) {
+  document.getElementById(id).classList.toggle('collapsed');
+}
+
+function selectType(el, cid, type) {
+  el.closest('.type-grid').querySelectorAll('.tc').forEach(c => c.classList.remove('sel'));
+  el.classList.add('sel');
+  document.getElementById(cid + '-tbadge').textContent = type;
+}
+
+function selectRatio(el, cid, ratio) {
+  el.closest('.ratio-pills').querySelectorAll('.rp').forEach(p => p.classList.remove('sel'));
+  el.classList.add('sel');
+  document.getElementById(cid + '-rbadge').textContent = ratio;
+}
+
+function reNumber() {
+  document.querySelectorAll('#comp-list .comp-card .comp-num').forEach((el, i) => {
+    el.textContent = i + 1;
+  });
+}
+
+function updateCount() {
+  const n = document.querySelectorAll('#comp-list .comp-card').length;
+  document.getElementById('comp-count').textContent = n;
+}
+
+function save() {
+  const btn = document.getElementById('save-btn');
+  btn.style.background = '#10b981';
+  btn.innerHTML = `<svg width="13" height="13" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2.5"><polyline points="20 6 9 17 4 12"/></svg> Kaydedildi`;
+  setTimeout(() => {
+    btn.style.background = '';
+    btn.innerHTML = `<svg width="13" height="13" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2.2"><path d="M19 21H5a2 2 0 0 1-2-2V5a2 2 0 0 1 2-2h11l5 5v11a2 2 0 0 1-2 2z"/><polyline points="17 21 17 13 7 13 7 21"/><polyline points="7 3 7 8 15 8"/></svg> Save`;
+  }, 2000);
+}
+
+/* Init with 1 card */
+addComp();
+</script>
+</body>
+</html>

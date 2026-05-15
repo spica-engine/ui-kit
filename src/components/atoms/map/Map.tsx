@@ -40,6 +40,19 @@ const MapClickHandler = ({ onMapClick }: MapClickHandlerProps) => {
   return null;
 };
 
+const DEFAULT_COORDINATES: TypeCoordinates = { lat: 51.505, lng: -0.09 };
+
+function isValidCoordinates(c: unknown): c is TypeCoordinates {
+  return (
+    c !== null &&
+    typeof c === "object" &&
+    typeof (c as TypeCoordinates).lat === "number" &&
+    typeof (c as TypeCoordinates).lng === "number" &&
+    !isNaN((c as TypeCoordinates).lat) &&
+    !isNaN((c as TypeCoordinates).lng)
+  );
+}
+
 const Map: FC<TypeMapProps> = ({
   coordinates,
   markerIcon,
@@ -53,7 +66,9 @@ const Map: FC<TypeMapProps> = ({
     html: ReactDOMServer.renderToString(markerIcon?.icon || <Icon name="mapMarker" />),
   });
 
-  const [position, setPosition] = useState(coordinates! || { lat: 51.505, lng: -0.09 });
+  const [position, setPosition] = useState<TypeCoordinates>(
+    isValidCoordinates(coordinates) ? coordinates : DEFAULT_COORDINATES
+  );
 
   const handleMapClick = (latlng: TypeCoordinates) => {
     setPosition(latlng);

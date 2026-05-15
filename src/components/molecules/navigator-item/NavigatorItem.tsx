@@ -15,12 +15,14 @@ export type TypeNavigatorItem = {
   label: string;
   prefixIcon?: IconName;
   suffixIcons?: SuffixIcon[];
+  isActive?: boolean;
 } & TypeFluidContainer;
 
 const NavigatorItem: FC<TypeNavigatorItem> = ({
   label,
   prefixIcon,
   suffixIcons = [],
+  isActive,
   ...props
 }) => {
   return (
@@ -53,7 +55,7 @@ const NavigatorItem: FC<TypeNavigatorItem> = ({
         ),
       }}
       {...props}
-      className={`${styles.navigatorItem} ${props.className}`}
+      className={`${styles.navigatorItem} ${isActive ? styles.active : ''} ${props.className ?? ''}`}
     />
   );
 };

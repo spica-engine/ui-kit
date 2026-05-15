@@ -1,9 +1,9 @@
 @use "styles/mixins";
 
 .container {
-  border-radius: var(--oziko-border-radius-md);
+  border-radius: var(--radius-md);
   justify-content: space-between !important;
-  background: var(--oziko-color-menu-background);
+  background: var(--color-surface);
 
   &:hover {
     cursor: pointer;
@@ -12,12 +12,12 @@
   .viewContainer {
     flex: 1;
     overflow: hidden;
-    padding: var(--oziko-padding-md);
+    padding: var(--spacing-9);
 
     img,
     embed {
       width: 100%;
-      max-height: calc(85% - (2 * var(--oziko-padding-lg)));
+      max-height: calc(85% - (2 * var(--spacing-12)));
       object-fit: contain;
     }
 
@@ -29,8 +29,8 @@
 }
 
 .name {
-  border-top: var(--oziko-border-default);
-  padding: var(--oziko-padding-md);
+  border-top: var(--border-default);
+  padding: var(--spacing-9);
   text-align: center;
 
   span {

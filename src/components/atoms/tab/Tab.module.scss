@@ -3,16 +3,16 @@
   display: flex;
   align-items: center;
   justify-content: start !important;
-  padding: var(--oziko-padding-xs);
+  padding: var(--spacing-2);
 
   .indicator {
     position: absolute;
     height: 100%;
-    background-color: var(--oziko-color-primary);
-    border-radius: var(--oziko-border-radius-sm);
+    background-color: var(--color-accent);
+    border-radius: var(--radius-sm);
     transition:
-      transform var(--oziko-transition-duration) ease-out,
-      left var(--oziko-transition-duration) ease-out;
+      transform var(--transition-base) ease-out,
+      left var(--transition-base) ease-out;
     z-index: 1;
   }
 
@@ -21,19 +21,19 @@
   }
 
   &.default {
-    background-color: var(--oziko-color-default);
-    border: var(--oziko-border-default);
+    background-color: var(--color-surface);
+    border: var(--border-default);
     .active {
-      color: var(--oziko-color-default);
+      color: var(--color-surface);
     }
     .indicator {
-      height: calc(100% - 2 * var(--oziko-padding-xs));
+      height: calc(100% - 2 * var(--spacing-2));
     }
   }
 
   &.underline {
     background: transparent;
-    border-bottom: var(--oziko-border-default);
+    border-bottom: var(--border-default);
 
     .indicator {
       bottom: -1px;
@@ -44,14 +44,14 @@
   &.window {
     background-color: transparent;
     .item {
-      border-right: var(--oziko-border-default);
+      border-right: var(--border-default);
 
       .root {
         opacity: 0.25;
       }
     }
     .active {
-      background-color: var(--oziko-color-default);
+      background-color: var(--color-surface);
       opacity: 1;
     }
   }

@@ -1,7 +1,7 @@
 .bar {
   cursor: grab;
   position: absolute;
-  border-left: 2px dashed var(--oziko-color-primary-light);
+  border-left: 2px dashed var(--color-accent-hover);
   height: 100px;
 
   &::after {
@@ -12,6 +12,6 @@
     width: 14px;
     height: 14px;
     border-radius: 100%;
-    background: var(--oziko-color-primary-light);
+    background: var(--color-accent-hover);
   }
 }

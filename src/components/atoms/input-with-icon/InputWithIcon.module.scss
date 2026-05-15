@@ -2,11 +2,17 @@
 
 .container {
   @include mixins.inputContainer;
-  border: var(--oziko-border-default);
+  border: var(--border-default);
+  padding: var(--spacing-4) var(--spacing-9);
+  transition: border-color var(--transition-border);
+
+  &:focus-within {
+    border-color: var(--color-border-mid);
+  }
 
   &.disabled {
     cursor: default;
-    opacity: var(--oziko-disabled-opacity);
+    opacity: var(--opacity-disabled);
   }
 
   .input {
@@ -14,10 +20,14 @@
     outline: none;
     width: 100%;
     background: none;
-    color: var(--oziko-color-font-primary);
+    color: var(--color-text-primary);
+    font-size: var(--font-size-md);
+    font-family: var(--font-sans);
 
     &::placeholder {
-      color: var(--oziko-color-input-placeholder);
+      color: var(--color-text-muted);
+      font-size: var(--font-size-md);
+      font-family: 'DM Sans', sans-serif;
     }
   }
 }
