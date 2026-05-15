@@ -1,0 +1,196 @@
+/* ═══════════════════════════════════════════════════════════════════════════
+   Spica Design Tokens
+   Canonical CSS variable source. Import this file directly in HTML or via
+   your bundler entry point. The SCSS build inlines these tokens through
+   src/index.scss.
+   ═══════════════════════════════════════════════════════════════════════════ */
+
+@import url('https://fonts.googleapis.com/css2?family=DM+Sans:opsz,wght@9..40,300;9..40,400;9..40,500;9..40,600&family=JetBrains+Mono:wght@400;500&display=swap');
+
+:root {
+  /* ── Colors ──────────────────────────────────────────────────────────── */
+  --color-bg:               #f0f0f0;
+  --color-surface:          #ffffff;
+  --color-surface-2:        #f7f7f7;
+  --color-surface-3:        #eeeeee;
+  --color-border:           #e4e4e4;
+  --color-border-mid:       #d8d8d8;
+
+  --color-accent:           #1a2448;
+  --color-accent-hover:     #253060;
+  --color-accent-dark:      #111833;
+  --color-accent-subtle:    rgba(26, 36, 72, 0.07);
+  --color-accent-subtle-2:  rgba(26, 36, 72, 0.13);
+
+  --color-text-primary:     #111827;
+  --color-text-secondary:   #4b5563;
+  --color-text-muted:       #9ca3af;
+  --color-text-faint:       #c5cad4;
+
+  --color-green:            #10b981;
+  --color-green-light:      #6ee7b7;
+  --color-green-bg:         rgba(16, 185, 129, 0.1);
+  --color-amber:            #f59e0b;
+  --color-red:              #ef4444;
+  --color-red-light:        #fca5a5;
+  --color-blue:             #3b82f6;
+  --color-blue-bg:          rgba(59, 130, 246, 0.1);
+
+  /* ── Semantic aliases ────────────────────────────────────────────────── */
+  --color-on-accent:        #ffffff;               /* text on accent-colored surfaces */
+  --color-overlay:          rgba(0, 0, 0, 0.65);   /* backdrop / modal overlay        */
+  --color-info:             var(--color-blue);
+  --color-success:          var(--color-green);
+  --color-error:            var(--color-red);
+  --color-warning:          var(--color-amber);
+
+  /* ── RGB variants (for rgba() blending) ─────────────────────────────── */
+  --color-accent-rgb:         26, 36, 72;
+  --color-accent-hover-rgb:   37, 48, 96;
+  --color-accent-dark-rgb:    17, 24, 51;
+  --color-red-rgb:            239, 68, 68;
+  --color-red-light-rgb:      252, 165, 165;
+  --color-green-rgb:          16, 185, 129;
+  --color-green-light-rgb:    110, 231, 183;
+  --color-surface-rgb:        255, 255, 255;
+  --color-surface-2-rgb:      247, 247, 247;
+  --color-surface-3-rgb:      238, 238, 238;
+  --color-border-rgb:         228, 228, 228;
+  --color-border-mid-rgb:     216, 216, 216;
+  --color-text-primary-rgb:   17, 24, 39;
+  --color-text-muted-rgb:     156, 163, 175;
+  --color-bg-rgb:             240, 240, 240;
+  --color-on-accent-rgb:      255, 255, 255;
+
+  /* ── Typography ──────────────────────────────────────────────────────── */
+  --font-sans:              'DM Sans', -apple-system, BlinkMacSystemFont, 'Segoe UI', sans-serif;
+  --font-mono:              'JetBrains Mono', 'Courier New', monospace;
+
+  --font-size-2xs:          9px;
+  --font-size-xs:           10px;
+  --font-size-sm:           11px;
+  --font-size-sm-plus:      11.5px;
+  --font-size-base:         12px;
+  --font-size-base-plus:    12.5px;
+  --font-size-md:           13px;
+  --font-size-lg:           14px;
+  --font-size-xl:           20px;
+  --font-size-2xl:          22px;
+
+  --font-weight-light:      300;
+  --font-weight-regular:    400;
+  --font-weight-medium:     500;
+  --font-weight-semibold:   600;
+  --font-weight-bold:       700;
+
+  /* ── Spacing ─────────────────────────────────────────────────────────── */
+  --spacing-1:    2px;
+  --spacing-2:    3px;
+  --spacing-3:    4px;
+  --spacing-4:    5px;
+  --spacing-5:    6px;
+  --spacing-6:    7px;
+  --spacing-7:    8px;
+  --spacing-8:    9px;
+  --spacing-9:    10px;
+  --spacing-10:   12px;
+  --spacing-11:   14px;
+  --spacing-12:   16px;
+  --spacing-13:   18px;
+  --spacing-14:   20px;
+  --spacing-15:   24px;
+  --spacing-16:   32px;
+
+  /* ── Border Radius ───────────────────────────────────────────────────── */
+  --radius-xs:    3px;
+  --radius-sm:    4px;
+  --radius-md-sm: 5px;
+  --radius-md:    6px;
+  --radius-lg:    7px;
+  --radius-xl:    8px;
+  --radius-2xl:   10px;
+  --radius-3xl:   12px;
+  --radius-full:  9999px;
+
+  /* ── Layout Dimensions ───────────────────────────────────────────────── */
+  --size-sidebar-w:       232px;
+  --size-rail-w:          44px;
+  --size-topbar-h:        48px;
+  --size-row-h:           36px;
+  --size-rail-btn:        32px;
+  --size-icon-btn:        24px;
+  --size-avatar:          26px;
+  --size-logo:            28px;
+  --size-modal-w:         480px;
+  --size-settings-w:      460px;
+  --size-entry-panel-w:   380px;
+  --size-ctx-menu-min-w:  178px;
+  --size-icon-xs:         12px;
+  --size-icon-sm:         14px;
+  --size-icon-md:         16px;
+  --size-icon-lg:         20px;
+
+  /* ── Shadows ─────────────────────────────────────────────────────────── */
+  --shadow-sm: 0 1px 3px rgba(0, 0, 0, 0.08);
+  --shadow-md: 0 8px 24px rgba(0, 0, 0, 0.12), 0 2px 8px rgba(0, 0, 0, 0.08);
+  --shadow-lg: 0 20px 48px rgba(0, 0, 0, 0.15);
+
+  /* ── Transitions ─────────────────────────────────────────────────────── */
+  --transition-fast:      0.1s ease;
+  --transition-base:      0.12s ease;
+  --transition-border:    0.15s ease;
+  --transition-toggle:    0.18s ease;
+  --transition-panel:     0.22s cubic-bezier(0.4, 0, 0.2, 1);
+  --transition-modal-in:  0.15s ease;
+  --transition-ctx-in:    0.1s ease;
+
+  /* ── Utility ─────────────────────────────────────────────────────────── */
+  --opacity-disabled:     0.5;
+  --border-default:       1px solid var(--color-border);
+}
+
+:root[data-theme="dark"] {
+  --color-bg:               #0d1017;
+  --color-surface:          #13181f;
+  --color-surface-2:        #191f28;
+  --color-surface-3:        #202735;
+  --color-border:           #252e3e;
+  --color-border-mid:       #2f3b52;
+
+  --color-accent:           #4f6ef7;
+  --color-accent-hover:     #6b84ff;
+  --color-accent-dark:      #3a56d4;
+  --color-accent-subtle:    rgba(79, 110, 247, 0.1);
+  --color-accent-subtle-2:  rgba(79, 110, 247, 0.18);
+
+  --color-text-primary:     #e4e8f2;
+  --color-text-secondary:   #8b96b5;
+  --color-text-muted:       #4e5e7a;
+  --color-text-faint:       #2e3a50;
+
+  --color-green:            #34d399;
+  --color-green-light:      #a7f3d0;
+  --color-green-bg:         rgba(52, 211, 153, 0.1);
+  --color-amber:            #fbbf24;
+  --color-red:              #f87171;
+  --color-red-light:        #fca5a5;
+  --color-blue:             #60a5fa;
+  --color-blue-bg:          rgba(96, 165, 250, 0.1);
+
+  /* ── RGB variants ── */
+  --color-accent-rgb:         79, 110, 247;
+  --color-accent-hover-rgb:   107, 132, 255;
+  --color-accent-dark-rgb:    58, 86, 212;
+  --color-red-rgb:            248, 113, 113;
+  --color-red-light-rgb:      252, 165, 165;
+  --color-green-rgb:          52, 211, 153;
+  --color-green-light-rgb:    167, 243, 208;
+  --color-surface-rgb:        19, 24, 31;
+  --color-surface-2-rgb:      25, 31, 40;
+  --color-surface-3-rgb:      32, 39, 53;
+  --color-border-rgb:         37, 46, 62;
+  --color-border-mid-rgb:     47, 59, 82;
+  --color-text-primary-rgb:   228, 232, 242;
+  --color-text-muted-rgb:     78, 94, 122;
+  --color-bg-rgb:             13, 16, 23;
+}

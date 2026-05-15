@@ -4,7 +4,7 @@
   @include mixins.inputMinimizedContainer;
   @include mixins.inputContainer;
   color: #000;
-  padding: var(--oziko-padding-md);
+  padding: var(--spacing-9);
 }
 
 .richTextContent {
@@ -24,5 +24,5 @@
 }
 
 .placeholder {
-  color: var(--oziko-color-input-placeholder);
+  color: var(--color-text-muted);
 }

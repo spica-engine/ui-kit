@@ -1,22 +1,42 @@
 import { FC, memo } from "react";
 import styles from "./Boolean.module.scss";
-import { TypeFlexElement } from "@atoms/flex-element/FlexElement";
-import Switch from "@atoms/switch/Switch";
 
 export type TypeInputBooleanMinimized = {
   checked: boolean;
   disabled?: boolean;
-  containerProps?: TypeFlexElement;
   onChange?: (checked: boolean) => void;
 };
 
 const InputBooleanMinimized: FC<TypeInputBooleanMinimized> = ({
   checked,
   disabled = false,
-  containerProps,
   onChange,
 }) => {
-  return <Switch checked={checked} disabled={disabled} {...containerProps} onChange={onChange} />;
+  const handleClick = () => {
+    if (!disabled && onChange) {
+      onChange(!checked);
+    }
+  };
+
+  return (
+    <span
+      className={`${styles.bool} ${checked ? styles.boolTrue : styles.boolFalse} ${disabled ? styles.disabled : ""}`}
+      onClick={handleClick}
+      role="checkbox"
+      aria-checked={checked}
+      aria-disabled={disabled}
+      tabIndex={disabled ? -1 : 0}
+      onKeyDown={(e) => {
+        if ((e.key === " " || e.key === "Enter") && !disabled && onChange) {
+          e.preventDefault();
+          onChange(!checked);
+        }
+      }}
+    >
+      {checked ? "true" : "false"}
+    </span>
+  );
 };
+
 
 export default memo(InputBooleanMinimized);

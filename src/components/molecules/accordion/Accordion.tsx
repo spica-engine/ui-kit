@@ -1,38 +1,19 @@
-import React, { memo, useEffect, useState } from "react";
+import React, { memo, useState } from "react";
 import styles from "./Accordion.module.scss";
-import { TypeFluidContainer } from "@atoms/fluid-container/FluidContainer";
-
-import FlexElement, { TypeFlexElement } from "@atoms/flex-element/FlexElement";
+import FlexElement from "@atoms/flex-element/FlexElement";
 import AccordionElement from "./AccordionElement";
+import {
+  TypeAccordionGroup,
+  TypeAccordionItem,
+} from "./Accordion.types";
 
-export type TypeAccordionItem = {
-  title: React.ReactNode;
-  content: React.ReactNode;
-  icon?: React.ReactNode;
-  className?: string;
-};
-
-export type TypeAccordionGroup = TypeFlexElement & {
-  items: TypeAccordionItem[];
-  defaultActiveIndex?: number;
-  icon?: React.ReactNode;
-  bordered?: boolean;
-  header?: TypeFluidContainer;
-  openClassName?: string;
-  itemClassName?: string;
-  contentClassName?: string;
-  headerClassName?: string;
-  suffixOnHover?: boolean;
-  noBackgroundOnFocus?: boolean;
-  disableSuffixIcon?: boolean;
-};
+export type { TypeAccordionItem, TypeAccordionGroup };
 
 const AccordionGroup: React.FC<TypeAccordionGroup> = ({
   items,
   defaultActiveIndex = 1,
   icon,
   bordered = false,
-  header,
   openClassName,
   itemClassName,
   contentClassName,
@@ -40,18 +21,48 @@ const AccordionGroup: React.FC<TypeAccordionGroup> = ({
   suffixOnHover,
   noBackgroundOnFocus,
   disableSuffixIcon,
+  multiOpen = false,
+  borderBottom = true,
+  headingPadding,
+  bodyPadding,
+  titleSize,
+  titleWeight,
+  chevronSize,
+  mountContent,
+  gap,
   ...props
 }) => {
-  const [activeIndex, setActiveIndex] = useState<number | null>(defaultActiveIndex || null);
+  const [activeIndexes, setActiveIndexes] = useState<Set<number>>(() => {
+    const s = new Set<number>();
+    if (defaultActiveIndex) s.add(defaultActiveIndex);
+    if (multiOpen) {
+      items.forEach((item, i) => {
+        if (item.defaultOpen) s.add(i + 1);
+      });
+    }
+    return s;
+  });
 
-  const handleItemClick = (index: number): void => {
-    setActiveIndex(activeIndex === index ? null : index);
+  const handleItemClick = (index: number) => {
+    setActiveIndexes((prev) => {
+      const next = new Set(prev);
+      if (next.has(index)) {
+        next.delete(index);
+      } else {
+        if (!multiOpen) next.clear();
+        next.add(index);
+      }
+      return next;
+    });
   };
+
+  const effectiveGap = gap !== undefined ? gap : bordered ? 8 : 0;
+
   return (
     <FlexElement
       direction="vertical"
       dimensionX="fill"
-      gap={10}
+      gap={effectiveGap}
       {...props}
       className={`${styles.accordionGroup} ${props.className || ""}`}
     >
@@ -59,17 +70,25 @@ const AccordionGroup: React.FC<TypeAccordionGroup> = ({
         <AccordionElement
           key={index}
           title={item.title}
-          isOpen={activeIndex === index + 1}
+          isOpen={activeIndexes.has(index + 1)}
           onClick={() => handleItemClick(index + 1)}
-          icon={item.icon || icon}
+          icon={item.icon ?? icon}
           bordered={bordered}
           openClassName={openClassName}
-          itemClassName={itemClassName}
+          itemClassName={item.className ?? itemClassName}
           contentClassName={contentClassName}
           headerClassName={headerClassName}
           suffixOnHover={suffixOnHover}
           noBackgroundOnFocus={noBackgroundOnFocus}
           disableSuffixIcon={disableSuffixIcon}
+          borderBottom={item.borderBottom ?? borderBottom}
+          headingPadding={item.headingPadding ?? headingPadding}
+          bodyPadding={item.bodyPadding ?? bodyPadding}
+          titleSize={titleSize}
+          titleWeight={titleWeight}
+          chevronSize={chevronSize}
+          mountContent={mountContent}
+          disabled={item.disabled}
         >
           {item.content}
         </AccordionElement>
@@ -79,3 +98,4 @@ const AccordionGroup: React.FC<TypeAccordionGroup> = ({
 };
 
 export default memo(AccordionGroup);
+

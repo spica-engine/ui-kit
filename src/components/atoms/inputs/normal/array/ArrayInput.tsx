@@ -1,4 +1,4 @@
-import { FC, memo, useState } from "react";
+import { FC, memo, useMemo, useEffect } from "react";
 import styles from "./ArrayInput.module.scss";
 import Icon from "@atoms/icon/Icon";
 import InputHeader from "@atoms/input-header/InputHeader";
@@ -10,8 +10,7 @@ import {
   TypeInputRepresenterError,
   TypeValueType,
 } from "@custom-hooks/useInputRepresenter";
-import { useArrayItemInput } from "@custom-hooks/useArrayItemInput";
-import DropList from "@atoms/drop-list/DropList";
+import { useArrayItemInput, getDefaultValue } from "@custom-hooks/useArrayItemInput";
 
 export type TypeArrayInput = {
   value?: TypeValueType[];
@@ -28,6 +27,62 @@ export type TypeArrayInput = {
   errors?: TypeInputRepresenterError | string;
 } & TypeFlexElement;
 
+type TypeArrayItemRowProps = {
+  index: number;
+  propertyKey: string;
+  items?: TypeArrayItems;
+  value?: TypeValueType[];
+  onChange?: (value: any) => void;
+  onDelete: () => void;
+  canDelete: boolean;
+  errors?: TypeInputRepresenterError | string;
+};
+
+const ArrayItemRow: FC<TypeArrayItemRowProps> = ({
+  index,
+  propertyKey,
+  items,
+  value,
+  onChange,
+  onDelete,
+  canDelete,
+  errors,
+}) => {
+  const itemsWithClass = useMemo(
+    () => (items ? ({ ...items, className: styles.itemInput } as unknown as TypeArrayItems) : items),
+    [items]
+  );
+
+  const { inputFields } = useArrayItemInput({
+    propertyKey,
+    items: itemsWithClass,
+    value,
+    activeIndex: index,
+    onChange,
+    errors,
+  });
+
+  return (
+    <div className={styles.item}>
+      <span className={styles.itemIdx}>{index}</span>
+      <div className={styles.itemContent}>{inputFields}</div>
+      <button
+        className={styles.itemRemove}
+        onClick={onDelete}
+        type="button"
+        aria-label={`Remove item ${index}`}
+        disabled={!canDelete}
+        style={!canDelete ? { visibility: "hidden" } : undefined}
+      >
+        <svg width="12" height="12" fill="none" viewBox="0 0 24 24" stroke="currentColor" strokeWidth="2.5">
+          <line x1="18" y1="6" x2="6" y2="18" />
+          <line x1="6" y1="6" x2="18" y2="18" />
+        </svg>
+      </button>
+    </div>
+  );
+};
+
 const ArrayInput: FC<TypeArrayInput> = ({
   value,
   items,
@@ -40,80 +95,85 @@ const ArrayInput: FC<TypeArrayInput> = ({
   propertyKey,
   onChange,
   errors,
-  minItems,
+  minItems = 1,
   ...props
 }) => {
-  const [active, setActive] = useState(0);
+  const effectiveMin = Math.max(1, minItems ?? 1);
+  const canAddMore = !maxItems || !value || value.length < maxItems;
+  const canDelete = !value || value.length > effectiveMin;
 
-  const { inputFields, getDefaultValue: getDefaultValueFn } = useArrayItemInput({
-    propertyKey,
-    items,
-    value,
-    activeIndex: active,
-    onChange,
-    errors,
-  });
-
-  const handleChangeActiveIndex = (index: number) => {
-    setActive(index);
-  };
+  useEffect(() => {
+    if (!value || value.length === 0) {
+      onChange?.([getDefaultValue(items)]);
+    }
+  // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, []);
 
   const handleCreateNewItem = () => {
     const localValue = [...(value || [])];
-
-    localValue?.push(value?.[active] || getDefaultValueFn());
+    localValue.push(getDefaultValue(items));
     onChange?.(localValue);
-    setActive(localValue.length - 1);
   };
 
   const handleDeleteItem = (index: number) => {
+    if (!canDelete) return;
     const localValue = [...(value || [])];
     localValue.splice(index, 1);
     onChange?.(localValue);
-    setActive(Math.max(0, index - 1));
   };
 
   return (
     <FlexElement
-      gap={20}
+      gap={8}
       direction="vertical"
       dimensionX="fill"
       {...props}
-      className={`${props.className} ${styles.container}`}
+      className={`${props.className ?? ""} ${styles.container}`}
     >
-      <div className={styles.header}>
-        {title && (
-          <InputHeader
-            className={styles.inputHeader}
-            prefix={{ children: <Icon name="ballot" className={styles.icon} /> }}
-            root={{ children: <Text variant="secondary">{title}</Text> }}
-          />
-        )}
-        <DropList
-          length={value?.length}
-          active={active}
-          maxItems={maxItems}
-          onChange={handleChangeActiveIndex}
-          onCreate={handleCreateNewItem}
-          onDelete={handleDeleteItem}
+      {title && (
+        <InputHeader
+          className={styles.inputHeader}
+          prefix={{ children: <Icon name="ballot" className={styles.icon} /> }}
+          root={{ children: <Text variant="secondary">{title}</Text> }}
         />
-      </div>
-      {value?.length ? (
-        inputFields
-      ) : (
-        <span className={styles.emptyStateText}>Create an element to see the fields</span>
       )}
+      <div className={styles.wrap}>
+        {value?.map((_, index) => (
+          <ArrayItemRow
+            key={index}
+            index={index}
+            propertyKey={propertyKey}
+            items={items}
+            value={value}
+            onChange={onChange}
+            onDelete={() => handleDeleteItem(index)}
+            canDelete={canDelete}
+            errors={errors}
+          />
+        ))}
+        {canAddMore ? (
+          <button className={styles.addBtn} onClick={handleCreateNewItem} type="button">
+            <svg width="12" height="12" fill="none" viewBox="0 0 24 24" stroke="currentColor" strokeWidth="2.5">
+              <line x1="12" y1="5" x2="12" y2="19" />
+              <line x1="5" y1="12" x2="19" y2="12" />
+            </svg>
+            Add item
+          </button>
+        ) : !value?.length ? (
+          <span className={styles.emptyStateText}>No items can be added</span>
+        ) : null}
+      </div>
       <InputGroup.HelperText
         alignment="leftCenter"
         dimensionX="fill"
         {...helperTextContainerProps}
-        className={`${styles.helperText} ${helperTextContainerProps?.className}`}
+        className={`${styles.helperText} ${helperTextContainerProps?.className ?? ""}`}
       >
         <Text
           {...helperTextProps}
           size="small"
           variant={errorMessage ? "danger" : "secondary"}
-          className={`${helperTextProps?.className}`}
+          className={`${helperTextProps?.className ?? ""}`}
         >
           {errorMessage || description}
         </Text>

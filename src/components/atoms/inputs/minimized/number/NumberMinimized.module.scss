@@ -2,11 +2,11 @@
 
 .numberMinimized {
   @include mixins.inputMinimizedContainer;
-  padding: 0 var(--oziko-padding-md);
-  font-size: var(--oziko-font-size-md);
+  padding: 0 var(--spacing-9);
+  font-size: var(--font-size-lg);
 
   .select {
-    background: var(--oziko-color-input-background);
+    background: var(--color-surface-2);
     padding: 0;
   }
   .closeIcon {

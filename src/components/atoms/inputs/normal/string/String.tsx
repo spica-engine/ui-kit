@@ -1,13 +1,13 @@
-import BaseInput from "@atoms/base-input/BaseInput";
 import Icon from "@atoms/icon/Icon";
 import Input, { TypeInput } from "components/atoms/input/Input";
 import React, { FC, memo, useState, useRef } from "react";
 import Text from "@atoms/text/Text";
 import styles from "./String.module.scss";
 import Select, { TypeSelectRef } from "@molecules/select/Select";
-import { TypeFlexElement } from "@atoms/flex-element/FlexElement";
+import FlexElement, { TypeFlexElement } from "@atoms/flex-element/FlexElement";
 import { TypeFluidContainer } from "@atoms/fluid-container/FluidContainer";
 import { IconName } from "@utils/iconList";
+import { useOnClickOutside } from "custom-hooks/useOnClickOutside";
 
 export type TypeStringInput = {
   label?: string;
@@ -36,69 +36,76 @@ const StringInput: FC<TypeStringInput & TypeFlexElement> = ({
   const selectRef = useRef<TypeSelectRef>(null);
   const inputRef = useRef<HTMLInputElement>(null);
   const dropDownRef = useRef<HTMLDivElement>(null);
-  const [forceFocus, setForceFocus] = useState(false);
+  const containerRef = useRef<HTMLDivElement>(null);
+  const [isFocused, setIsFocused] = useState(false);
 
-  const handleOnFocusChange = (isFocused: boolean) => {
-    selectRef?.current?.toggleDropdown(isFocused);
-    setForceFocus(isFocused);
-
-    if (isFocused && !options) {
+  const handleFocusChange = (focused: boolean) => {
+    selectRef?.current?.toggleDropdown(focused);
+    setIsFocused(focused);
+    if (focused && !options) {
       inputRef.current?.focus();
     }
   };
 
+  useOnClickOutside({
+    targetElements: [containerRef, dropDownRef],
+    onClickOutside: () => handleFocusChange(false),
+  });
+
   return (
-    <BaseInput
-      dimensionX={"fill"}
-      description={description}
-      forceFocus={forceFocus}
-      dropDownRef={dropDownRef}
-      onFocusChange={(isFocused) => handleOnFocusChange(isFocused)}
-      labelProps={{
-        dimensionX: "hug",
-        divider: !!label?.trim(),
-        prefix: {
-          children: <Icon className={styles.icon} name={iconName} />,
-        },
-        root: label
-          ? {
-              dimensionX: "hug",
-              children: (
-                <Text className={styles.text} size="medium">
-                  {label}
-                </Text>
-              ),
-            }
-          : undefined,
-      }}
-      inputContainerProps={{ className: `${styles.baseInput} ${inputContainerClassName}` }}
+    <FlexElement
+      direction="vertical"
+      alignment="leftTop"
+      dimensionX="fill"
+      ref={containerRef}
       {...props}
+      className={`${styles.field} ${props.className ?? ""}`}
     >
-      {!!options ? (
-        <Select
-          selectRef={selectRef}
-          externalDropdownRef={dropDownRef}
-          disableClick
-          options={options}
-          value={value}
-          placeholder=""
-          onChange={(value) => {
-            onChange?.(value as string);
-            setForceFocus(false);
-          }}
-          {...selectProps}
-          className={`${styles.select} ${selectProps?.className}`}
-        />
-      ) : (
-        <Input
-          ref={inputRef}
-          value={value}
-          onChange={(e) => onChange?.(e.target.value)}
-          {...inputProps}
-          className={`${styles.input} ${inputProps?.className}`}
-        />
+      {label && (
+        <div className={styles.fieldHead}>
+          <div className={styles.fieldName}>
+            <Icon className={styles.icon} name={iconName} />
+            <span>{label}</span>
+          </div>
+          <span className={styles.fieldType}>string</span>
+        </div>
       )}
-    </BaseInput>
+      <div
+        className={`${styles.inputBox} ${isFocused ? styles.inputBoxFocused : ""} ${inputContainerClassName ?? ""}`}
+        onClick={() => handleFocusChange(true)}
+      >
+        {options ? (
+          <Select
+            selectRef={selectRef}
+            externalDropdownRef={dropDownRef}
+            disableClick
+            options={options}
+            value={value}
+            placeholder=""
+            onChange={(val) => {
+              onChange?.(val as string);
+              setIsFocused(false);
+            }}
+            {...selectProps}
+            className={`${styles.select} ${selectProps?.className ?? ""}`}
+          />
+        ) : (
+          <Input
+            ref={inputRef}
+            value={value}
+            placeholder={label ? `Enter ${label}` : undefined}
+            onChange={(e) => onChange?.(e.target.value)}
+            {...inputProps}
+            className={`${styles.input} ${inputProps?.className ?? ""}`}
+          />
+        )}
+      </div>
+      {description && (
+        <Text size="xsmall" variant="secondary" className={styles.description}>
+          {description}
+        </Text>
+      )}
+    </FlexElement>
   );
 };
 

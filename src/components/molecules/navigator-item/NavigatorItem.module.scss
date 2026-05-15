@@ -1,14 +1,18 @@
 @use "styles/mixins";
 
 .navigatorItem {
-  padding: var(--oziko-padding-md);
-  color: var(--oziko-color-font-primary);
+  padding: var(--spacing-4) var(--spacing-5);
+  color: var(--color-text-secondary);
+  font-size: var(--font-size-base-plus);
+  font-family: var(--font-sans);
+  border-radius: var(--radius-md);
+  transition: background var(--transition-fast), color var(--transition-fast);
 
   .suffixButton {
     border: 0;
     padding: 0;
-    width: var(--oziko-icon-size-sm);
-    height: var(--oziko-icon-size-sm);
+    width: var(--size-icon-sm);
+    height: var(--size-icon-sm);
 
     opacity: 0;
     transition: opacity 0.1s ease-in-out;
@@ -16,6 +20,19 @@
 
   &:hover {
     cursor: pointer;
+    background: var(--color-surface-2);
+    color: var(--color-text-primary);
+
+    .suffixButton {
+      opacity: 1;
+    }
+  }
+
+  &.active {
+    background: var(--color-accent-subtle);
+    color: var(--color-accent);
+    font-weight: var(--font-weight-medium);
+
     .suffixButton {
       opacity: 1;
     }

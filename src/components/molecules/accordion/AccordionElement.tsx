@@ -1,24 +1,8 @@
+import React, { memo, useRef } from "react";
 import styles from "./Accordion.module.scss";
-import FluidContainer from "components/atoms/fluid-container/FluidContainer";
-import Icon from "components/atoms/icon/Icon";
-import { memo } from "react";
-import { IconName } from "@utils/iconList";
+import { TypeAccordionElement } from "./Accordion.types";
 
-export type TypeAccordionElement = {
-  title: React.ReactNode;
-  children: React.ReactNode;
-  icon?: React.ReactNode | IconName;
-  isOpen: boolean;
-  bordered?: boolean;
-  openClassName?: string;
-  itemClassName?: string;
-  contentClassName?: string;
-  headerClassName?: string;
-  suffixOnHover?: boolean;
-  noBackgroundOnFocus?: boolean;
-  onClick: () => void;
-  disableSuffixIcon?: boolean;
-};
+export type { TypeAccordionElement };
 
 const AccordionElement: React.FC<TypeAccordionElement> = ({
   title,
@@ -34,55 +18,107 @@ const AccordionElement: React.FC<TypeAccordionElement> = ({
   suffixOnHover = false,
   noBackgroundOnFocus = false,
   disableSuffixIcon = false,
+  disabled = false,
+  borderBottom = true,
+  headingPadding,
+  bodyPadding,
+  titleSize,
+  titleWeight,
+  chevronSize = 13,
+  mountContent = "always",
 }) => {
-  const renderIcon = () => {
-    if (disableSuffixIcon) {
-      return null;
-    }
-    if (icon && typeof icon !== "string") {
-      return icon;
-    }
-    const iconName = icon || "chevronDown";
-    return (
-      <Icon
-        name={iconName as IconName}
-        className={`${styles.icon} ${isOpen ? styles.rotate : ""}`}
-      />
-    );
-  };
+  const hasBeenOpened = useRef(false);
+  if (isOpen && !hasBeenOpened.current) {
+    hasBeenOpened.current = true;
+  }
+  const shouldMount = mountContent === "always" || hasBeenOpened.current;
+
+  const itemClass = [
+    styles.item,
+    bordered ? styles.bordered : borderBottom ? styles.borderBottom : "",
+    disabled ? styles.disabled : "",
+    itemClassName || "",
+  ]
+    .filter(Boolean)
+    .join(" ");
+
+  const headerClass = [
+    styles.header,
+    noBackgroundOnFocus ? styles.noHover : "",
+    isOpen ? styles.headerOpen : "",
+    isOpen ? openClassName || "" : "",
+    headerClassName || "",
+  ]
+    .filter(Boolean)
+    .join(" ");
+
+  const chevronClass = [
+    styles.chevron,
+    isOpen ? styles.open : "",
+    suffixOnHover ? styles.onHover : "",
+  ]
+    .filter(Boolean)
+    .join(" ");
+
+  const bodyClass = [
+    styles.body,
+    isOpen ? styles.bodyOpen : "",
+    contentClassName || "",
+  ]
+    .filter(Boolean)
+    .join(" ");
 
   return (
-    <div
-      className={`${styles.accordionItem} ${bordered ? styles.bordered : ""} ${
-        itemClassName || ""
-      }`}
-    >
-      <FluidContainer
-        dimensionX="fill"
-        mode="fill"
-        root={{
-          children: title,
-          alignment: "leftCenter",
-        }}
-        suffix={{
-          children: renderIcon(),
-          className: suffixOnHover ? styles.suffixOnHover : "",
-        }}
-        onClick={onClick}
-        className={`${styles.accordionTitle} ${isOpen ? openClassName || styles.open : ""} ${
-          headerClassName || ""
-        } ${noBackgroundOnFocus ? styles.noBackgroundOnFocus : ""}`}
-      />
-
+    <div className={itemClass}>
       <div
-        className={`${styles.accordionContent} ${isOpen ? styles.open : ""} ${
-          contentClassName || ""
-        }`}
+        className={headerClass}
+        style={headingPadding ? { padding: headingPadding } : undefined}
+        onClick={disabled ? undefined : onClick}
       >
-        <div className={styles.accordionContentInner}>{children}</div>
+        <div className={styles.titleRow}>
+          {icon && <span className={styles.iconSlot}>{icon}</span>}
+          <span
+            className={styles.title}
+            style={{
+              ...(titleSize ? { fontSize: titleSize } : {}),
+              ...(titleWeight !== undefined ? { fontWeight: titleWeight } : {}),
+            }}
+          >
+            {title}
+          </span>
+        </div>
+
+        {!disableSuffixIcon && (
+          <span className={chevronClass}>
+            <svg
+              width={chevronSize}
+              height={chevronSize}
+              viewBox="0 0 24 24"
+              fill="none"
+              stroke="currentColor"
+              strokeWidth="2.5"
+              strokeLinecap="round"
+              strokeLinejoin="round"
+            >
+              <polyline points="6 9 12 15 18 9" />
+            </svg>
+          </span>
+        )}
       </div>
+
+      {shouldMount && (
+        <div className={bodyClass}>
+          <div
+            className={styles.bodyInner}
+            style={bodyPadding ? { padding: bodyPadding } : undefined}
+          >
+            {children}
+          </div>
+        </div>
+      )}
     </div>
   );
 };
 
 export default memo(AccordionElement);
+

@@ -13,6 +13,8 @@ export { default as ColorPicker } from "./components/atoms/color-picker/ColorPic
 export { default as DashboardItem } from "./components/atoms/dashboard-item/DashboardItem";
 export { default as DatePicker } from "./components/atoms/date-picker/DatePicker";
 export { default as Directory } from "./components/atoms/directory/Directory";
+export { default as Divider } from "./components/atoms/divider/Divider";
+export type { TypeDivider } from "./components/atoms/divider/Divider";
 export { default as DropList } from "./components/atoms/drop-list/DropList";
 export { default as FlexElement } from "./components/atoms/flex-element/FlexElement";
 export { default as FluidContainer } from "./components/atoms/fluid-container/FluidContainer";
@@ -190,6 +192,7 @@ export { type TableSaveToLocalStorage } from "./components/organisms/table/Table
 export { type TableCellKeyDownParams } from "./components/organisms/table/Table";
 export { type TableRowClickParams } from "./components/organisms/table/Table";
 export { type TableSkeletonCellParams } from "./components/organisms/table/Table";
+export { type TableEmptyStateProps } from "./components/organisms/table/Table";
 export { type TableProps } from "./components/organisms/table/Table";
 export { type TableColumnContainerProps } from "./components/organisms/table/Table";
 export { type TableHeaderCellProps } from "./components/organisms/table/Table";

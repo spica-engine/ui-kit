@@ -82,7 +82,8 @@ export type TypeInputType =
   | "array"
   | "chip"
   | "relation"
-  | "select";
+  | "select"
+  | "json";
 
 type TypeOptions = {
   position?: "top" | "bottom" | "left" | "right";
@@ -171,6 +172,7 @@ export type TypeInputTypeMap = {
   chip: (props: TypeChipInputProps<string[] | number[]>) => ReactNode;
   relation: (props: TypeRelationInputProps<TypeLabeledValue[] | TypeLabeledValue>) => ReactNode;
   select: (props: TypeSelectInputProps<string>) => ReactNode;
+  json: (props: TypeInputProps<any>) => ReactNode;
 };
 
 const types: TypeInputTypeMap = {
@@ -361,6 +363,33 @@ const types: TypeInputTypeMap = {
       />
     );
   },
+  json: (props) => {
+    const stringified =
+      props.value === undefined || props.value === null
+        ? ""
+        : typeof props.value === "string"
+        ? props.value
+        : JSON.stringify(props.value, null, 2);
+    return (
+      <TextAreaInput
+        title={props.title}
+        containerProps={{ className: props.className }}
+        value={stringified}
+        onChange={(event) => {
+          const raw = event.target.value;
+          let parsed: any = raw;
+          try {
+            parsed = JSON.parse(raw);
+          } catch {
+            parsed = raw;
+          }
+          props.onChange?.({ key: props.key, value: parsed });
+        }}
+        icon="fieldObject"
+        placeholder={props.placeholder ?? "Enter JSON value\u2026"}
+      />
+    );
+  },
 };
 
 type TypeUseInputRepresenter = {
@@ -383,7 +412,8 @@ const useInputRepresenter = ({
   typeOverrides,
 }: TypeUseInputRepresenter) => {
   const handleChange = (event: { key: string; value: any }) => {
-    const updatedValue: any = structuredClone(value);
+    const base = typeof value === "object" && value !== null && !Array.isArray(value) ? value : {};
+    const updatedValue: any = structuredClone(base);
     updatedValue[event.key] = event.value;
     onChange?.(updatedValue);
   };
@@ -410,7 +440,7 @@ const useInputRepresenter = ({
       }
     }
 
-    const _value = isObject ? (value[key] ?? value) : value;
+    const _value = isObject ? value[key] : value;
     const _error = error?.[key];
 
     return (

@@ -2,17 +2,17 @@
   z-index: 1000;
   display: block;
   position: fixed;
-  border-radius: var(--oziko-border-radius-md);
+  border-radius: var(--radius-md);
   min-height: 40px;
-  background-color: var(--oziko-color-menu-background);
-  box-shadow: var(--box-shadow);
+  background-color: var(--color-surface);
+  box-shadow: var(--shadow-md);
 
   .item {
     padding: 2px 10px;
     cursor: pointer;
     line-height: 12px;
     font-weight: 300;
-    font-size: var(--oziko-font-size-md);
+    font-size: var(--font-size-lg);
     display: flex;
     align-content: center;
     flex-direction: row;
@@ -21,10 +21,10 @@
     border: 0;
     max-width: 250px;
     min-width: 100px;
-    background-color: var(--oziko-color-menu-background);
+    background-color: var(--color-surface);
 
     &:hover {
-      background-color: var(--oziko-color-zebra);
+      background-color: var(--color-surface-2);
     }
   }
 }
@@ -70,7 +70,7 @@
 
 .dropdown .divider {
   width: auto;
-  background-color: #eee;
+  background-color: var(--color-border);
   margin: 4px 8px;
   height: 1px;
 }
@@ -105,7 +105,12 @@ button.toolbar-item.active i {
   display: flex;
   align-items: center;
   flex-wrap: wrap;
-  gap: var(--oziko-gap-sm);
+  gap: 1px;
+  padding: 4px 7px;
+  border: 1px solid var(--color-border);
+  border-bottom: none;
+  border-radius: var(--radius-md) var(--radius-md) 0 0;
+  background: var(--color-surface-2);
 }
 
 .toolbar-item {
@@ -113,35 +118,41 @@ button.toolbar-item.active i {
   align-items: center;
   justify-content: center;
   background: transparent;
-  border: 0px;
+  border: 0;
   cursor: pointer;
-  padding: 8px;
-  border-radius: var(--oziko-border-radius-md);
+  padding: 0;
+  width: 22px;
+  height: 22px;
+  border-radius: var(--radius-sm);
+  color: var(--color-text-muted);
+  font-size: var(--font-size-sm);
+  transition: background 0.1s, color 0.1s;
 }
 
 .toolbar-item {
   &:hover {
-    background: var(--oziko-color-zebra);
+    background: var(--color-surface-3);
+    color: var(--color-text-primary);
   }
 
   .toolbar-icon {
-    min-width: 18px;
-    min-height: 18px;
+    min-width: 12px;
+    min-height: 12px;
   }
 
   &.dropdownButton {
     width: auto;
-    border-radius: var(--oziko-border-radius-md);
-    height: 30px;
+    border-radius: var(--radius-sm);
+    height: 22px;
     display: flex;
-    gap: var(--oziko-gap-sm);
-    padding-left: var(--oziko-padding-md);
+    gap: var(--spacing-3);
+    padding: 0 var(--spacing-4);
   }
 }
 
 .divider {
   width: 1px;
-  background-color: var(--oziko-color-input-placeholder);
-  margin: 0 4px;
-  height: 20px;
+  height: 14px;
+  background: var(--color-border);
+  margin: 4px 2px;
 }
