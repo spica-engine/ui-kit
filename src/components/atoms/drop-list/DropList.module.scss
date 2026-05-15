@@ -10,11 +10,11 @@
     height: 30px;
   }
   button {
-    border-radius: var(--oziko-border-radius-circle) !important;
-    background: var(--oziko-color-background-secondary) !important;
-    color: var(--oziko-color-font-primary) !important;
-    border: var(--oziko-border-default) !important;
-    border-color: var(--oziko-color-background-secondary) !important;
+    border-radius: var(--radius-full) !important;
+    background: var(--color-surface-3) !important;
+    color: var(--color-text-primary) !important;
+    border: var(--border-default) !important;
+    border-color: var(--color-surface-3) !important;
 
     &.active {
       background: transparent !important;
@@ -32,7 +32,7 @@
         margin-bottom: 3px;
       }
       &:hover {
-        background: var(--oziko-color-default) !important;
+        background: var(--color-surface) !important;
       }
       position: absolute;
       bottom: 33px;

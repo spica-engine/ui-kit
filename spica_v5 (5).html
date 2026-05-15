@@ -1,0 +1,3896 @@
+<!DOCTYPE html>
+<html lang="tr">
+
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Spica — Bucket</title>
+  <link
+    href="https://fonts.googleapis.com/css2?family=DM+Sans:ital,opsz,wght@0,9..40,300;0,9..40,400;0,9..40,500;0,9..40,600;1,9..40,400&family=JetBrains+Mono:wght@400;500&display=swap"
+    rel="stylesheet">
+  <style>
+    :root {
+      --bg: #f0f0f0;
+      --surface: #ffffff;
+      --surface2: #f7f7f7;
+      --surface3: #eeeeee;
+      --border: #e4e4e4;
+      --border-mid: #d8d8d8;
+      --accent: #1a2448;
+      --accent-hover: #253060;
+      --accent-subtle: rgba(26, 36, 72, 0.07);
+      --accent-subtle2: rgba(26, 36, 72, 0.13);
+      --text-primary: #111827;
+      --text-secondary: #4b5563;
+      --text-muted: #9ca3af;
+      --text-faint: #c5cad4;
+      --green: #10b981;
+      --green-bg: rgba(16, 185, 129, 0.1);
+      --amber: #f59e0b;
+      --red: #ef4444;
+      --red-bg: rgba(239, 68, 68, 0.08);
+      --sidebar-w: 232px;
+      --rail-w: 44px;
+      --topbar-h: 48px;
+      --row-h: 36px;
+      --shadow-sm: 0 1px 4px rgba(0, 0, 0, 0.07), 0 1px 2px rgba(0, 0, 0, 0.04);
+      --shadow-md: 0 4px 16px rgba(0, 0, 0, 0.10), 0 2px 6px rgba(0, 0, 0, 0.05);
+      --shadow-lg: 0 12px 40px rgba(0, 0, 0, 0.13), 0 4px 12px rgba(0, 0, 0, 0.07);
+    }
+
+    [data-theme="dark"] {
+      --bg: #0d1017;
+      --surface: #13181f;
+      --surface2: #191f28;
+      --surface3: #202735;
+      --border: #252e3e;
+      --border-mid: #2f3b52;
+      --accent: #4f6ef7;
+      --accent-hover: #6b84ff;
+      --accent-subtle: rgba(79, 110, 247, 0.10);
+      --accent-subtle2: rgba(79, 110, 247, 0.18);
+      --text-primary: #e4e8f2;
+      --text-secondary: #8b96b5;
+      --text-muted: #4e5e7a;
+      --text-faint: #2e3a50;
+      --green: #34d399;
+      --green-bg: rgba(52, 211, 153, 0.10);
+      --amber: #fbbf24;
+      --red: #f87171;
+      --red-bg: rgba(248, 113, 113, 0.10);
+      --shadow-sm: 0 1px 4px rgba(0, 0, 0, 0.3), 0 1px 2px rgba(0, 0, 0, 0.2);
+      --shadow-md: 0 4px 16px rgba(0, 0, 0, 0.45), 0 2px 6px rgba(0, 0, 0, 0.25);
+      --shadow-lg: 0 12px 40px rgba(0, 0, 0, 0.6), 0 4px 12px rgba(0, 0, 0, 0.3);
+    }
+
+    *,
+    *::before,
+    *::after {
+      box-sizing: border-box;
+      margin: 0;
+      padding: 0;
+    }
+
+    body {
+      font-family: 'DM Sans', sans-serif;
+      background: var(--bg);
+      color: var(--text-primary);
+      display: flex;
+      height: 100vh;
+      overflow: hidden;
+      font-size: 13px;
+      -webkit-font-smoothing: antialiased;
+    }
+
+    /* ─── RAIL ─── */
+    .rail {
+      width: var(--rail-w);
+      background: var(--surface);
+      border-right: 1px solid var(--border);
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      padding: 10px 0 8px;
+      gap: 2px;
+      flex-shrink: 0;
+      z-index: 20;
+    }
+
+    .rail-logo {
+      width: 28px;
+      height: 28px;
+      background: var(--accent);
+      border-radius: 7px;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      font-size: 12px;
+      font-weight: 700;
+      color: #fff;
+      margin-bottom: 10px;
+      flex-shrink: 0;
+      letter-spacing: -0.5px;
+    }
+
+    .rail-btn {
+      width: 32px;
+      height: 32px;
+      border-radius: 7px;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      cursor: pointer;
+      color: var(--text-muted);
+      transition: background 0.12s, color 0.12s;
+    }
+
+    .rail-btn:hover {
+      background: var(--surface2);
+      color: var(--text-secondary);
+    }
+
+    .rail-btn.active {
+      background: var(--accent-subtle);
+      color: var(--accent);
+    }
+
+    .rail-sep {
+      width: 20px;
+      height: 1px;
+      background: var(--border);
+      margin: 3px 0;
+    }
+
+    .rail-bottom {
+      margin-top: auto;
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      gap: 2px;
+    }
+
+    .theme-toggle {
+      width: 32px;
+      height: 32px;
+      border-radius: 7px;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      cursor: pointer;
+      background: transparent;
+      border: none;
+      color: var(--text-muted);
+      transition: background 0.12s, color 0.12s;
+    }
+
+    .theme-toggle:hover {
+      background: var(--surface2);
+      color: var(--text-secondary);
+    }
+
+    .sun-icon {
+      display: none;
+    }
+
+    [data-theme="dark"] .sun-icon {
+      display: flex;
+    }
+
+    [data-theme="dark"] .moon-icon {
+      display: none;
+    }
+
+    /* ─── SIDEBAR ─── */
+    .sidebar {
+      width: var(--sidebar-w);
+      background: var(--surface);
+      border-right: 1px solid var(--border);
+      display: flex;
+      flex-direction: column;
+      overflow: hidden;
+      flex-shrink: 0;
+    }
+
+    .sidebar-head {
+      padding: 12px 10px 8px;
+      border-bottom: 1px solid var(--border);
+      display: flex;
+      flex-direction: column;
+      gap: 8px;
+    }
+
+    .sidebar-top-row {
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+    }
+
+    .sidebar-label {
+      font-size: 11px;
+      font-weight: 600;
+      letter-spacing: 0.06em;
+      text-transform: uppercase;
+      color: var(--text-muted);
+    }
+
+    .sidebar-actions {
+      display: flex;
+      gap: 2px;
+    }
+
+    .icon-btn {
+      width: 24px;
+      height: 24px;
+      border-radius: 5px;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      cursor: pointer;
+      color: var(--text-muted);
+      transition: background 0.12s, color 0.12s;
+      border: none;
+      background: transparent;
+    }
+
+    .icon-btn:hover {
+      background: var(--surface2);
+      color: var(--text-secondary);
+    }
+
+    .search-box {
+      display: flex;
+      align-items: center;
+      gap: 6px;
+      background: var(--surface2);
+      border: 1px solid var(--border);
+      border-radius: 6px;
+      padding: 5px 9px;
+      transition: border-color 0.15s;
+    }
+
+    .search-box:focus-within {
+      border-color: var(--accent);
+    }
+
+    .search-box input {
+      background: none;
+      border: none;
+      outline: none;
+      color: var(--text-primary);
+      font-size: 12px;
+      font-family: inherit;
+      width: 100%;
+    }
+
+    .search-box input::placeholder {
+      color: var(--text-muted);
+    }
+
+    .sidebar-body {
+      flex: 1;
+      overflow-y: auto;
+      padding: 6px 8px 12px;
+    }
+
+    .sidebar-body::-webkit-scrollbar {
+      width: 3px;
+    }
+
+    .sidebar-body::-webkit-scrollbar-thumb {
+      background: var(--border);
+      border-radius: 2px;
+    }
+
+    /* Category group */
+    .cat-group {
+      margin-bottom: 8px;
+    }
+
+    .cat-group-head {
+      display: flex;
+      align-items: center;
+      gap: 6px;
+      padding: 5px 6px;
+      border-radius: 6px;
+      font-size: 11px;
+      font-weight: 600;
+      color: var(--text-muted);
+      letter-spacing: .06em;
+      text-transform: uppercase;
+      cursor: pointer;
+      user-select: none;
+      transition: background .1s;
+    }
+
+    .cat-group-head:hover {
+      background: var(--surface2);
+    }
+
+    .cat-group-head svg {
+      transition: transform .2s;
+    }
+
+    .cat-group.collapsed .cat-group-head svg {
+      transform: rotate(-90deg);
+    }
+
+    .cat-group-items {
+      padding-left: 8px;
+    }
+
+    .cat-group.collapsed .cat-group-items {
+      display: none;
+    }
+
+    /* Bucket nav row */
+    .nav-row {
+      display: flex;
+      align-items: center;
+      gap: 7px;
+      padding: 5px 6px;
+      border-radius: 6px;
+      cursor: pointer;
+      color: var(--text-secondary);
+      transition: background .1s, color .1s;
+      font-size: 12.5px;
+      user-select: none;
+      position: relative;
+    }
+
+    .nav-row:hover {
+      background: var(--surface2);
+      color: var(--text-primary);
+    }
+
+    .nav-row.active {
+      background: var(--accent-subtle);
+      color: var(--accent);
+      font-weight: 500;
+    }
+
+    .nav-row-icon {
+      flex-shrink: 0;
+      opacity: 0.5;
+    }
+
+    .nav-row.active .nav-row-icon {
+      opacity: 1;
+    }
+
+    .nav-row-actions {
+      display: flex;
+      margin-left: auto;
+    }
+
+    .nav-row-dots {
+      margin-left: auto;
+      padding: 2px 4px;
+      border-radius: 4px;
+      color: var(--text-muted);
+      display: flex;
+      align-items: center;
+      opacity: 0;
+      transition: opacity .1s, background .1s;
+      flex-shrink: 0;
+    }
+
+    .nav-row:hover .nav-row-dots {
+      opacity: 1;
+    }
+
+    .nav-row-dots:hover {
+      background: var(--surface3);
+      color: var(--text-secondary);
+    }
+
+    /* Uncategorized group */
+    .nav-group-lbl {
+      font-size: 9.5px;
+      font-weight: 600;
+      letter-spacing: .08em;
+      text-transform: uppercase;
+      color: var(--text-faint);
+      padding: 8px 6px 3px;
+    }
+
+    .nav-add {
+      display: flex;
+      align-items: center;
+      gap: 6px;
+      padding: 5px 6px;
+      border-radius: 6px;
+      cursor: pointer;
+      color: var(--text-muted);
+      font-size: 12px;
+      transition: all .1s;
+      border: 1px dashed var(--border);
+      margin-top: 6px;
+    }
+
+    .nav-add:hover {
+      border-color: var(--accent);
+      color: var(--accent);
+      background: var(--accent-subtle);
+    }
+
+    /* ── Sidebar drag handle ── */
+    .nav-drag-handle {
+      width: 16px;
+      height: 16px;
+      border-radius: 3px;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      color: var(--text-faint);
+      cursor: grab;
+      flex-shrink: 0;
+      opacity: 0;
+      transition: opacity .1s, color .1s;
+      margin-left: auto;
+    }
+
+    .nav-drag-handle:active {
+      cursor: grabbing;
+    }
+
+    .nav-row:hover .nav-drag-handle {
+      opacity: 1;
+    }
+
+    .nav-drag-handle:hover {
+      color: var(--text-muted);
+    }
+
+    /* Sidebar nav-row-dots: push to right of handle */
+    .nav-row-dots {
+      margin-left: 0;
+    }
+
+    /* Category head drag handle */
+    .cat-group-drag {
+      width: 16px;
+      height: 16px;
+      border-radius: 3px;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      color: var(--text-faint);
+      cursor: grab;
+      flex-shrink: 0;
+      opacity: 0;
+      transition: opacity .1s, color .1s;
+      margin-left: auto;
+    }
+
+    .cat-group-drag:active {
+      cursor: grabbing;
+    }
+
+    .cat-group-head:hover .cat-group-drag {
+      opacity: 1;
+    }
+
+    .cat-group-drag:hover {
+      color: var(--text-muted);
+    }
+
+    /* Sidebar drag states */
+    .nav-row.sb-dragging {
+      opacity: 0.3;
+      background: var(--surface2) !important;
+      border-radius: 6px;
+    }
+
+    .cat-group.sb-dragging-cat {
+      opacity: 0.3;
+    }
+
+    /* Sidebar drop indicator */
+    .sb-drop-line {
+      height: 2px;
+      border-radius: 2px;
+      background: var(--accent);
+      margin: 1px 4px;
+      position: relative;
+      pointer-events: none;
+    }
+
+    .sb-drop-line::before {
+      content: '';
+      position: absolute;
+      left: -3px;
+      top: -3px;
+      width: 8px;
+      height: 8px;
+      border-radius: 50%;
+      background: var(--accent);
+    }
+
+    /* Sidebar drop zone highlight */
+    .cat-group-items.sb-drop-zone {
+      border-radius: 6px;
+      background: var(--accent-subtle);
+      outline: 1.5px dashed var(--accent-subtle2);
+      outline-offset: 1px;
+      min-height: 32px;
+      padding: 2px;
+      transition: all .1s;
+    }
+
+    /* ─── MAIN ─── */
+    .main {
+      flex: 1;
+      display: flex;
+      flex-direction: column;
+      overflow: hidden;
+      min-width: 0;
+      position: relative;
+    }
+
+    /* TOPBAR */
+    .topbar {
+      height: var(--topbar-h);
+      display: flex;
+      align-items: center;
+      gap: 8px;
+      padding: 0 16px;
+      border-bottom: 1px solid var(--border);
+      background: var(--surface);
+      flex-shrink: 0;
+    }
+
+    .jwt-chip {
+      display: flex;
+      align-items: center;
+      gap: 5px;
+      background: var(--surface2);
+      border: 1px solid var(--border);
+      border-radius: 6px;
+      padding: 4px 9px;
+      font-family: 'JetBrains Mono', monospace;
+      font-size: 10px;
+      color: var(--text-secondary);
+      cursor: pointer;
+      transition: border-color 0.15s, color 0.15s;
+      max-width: 220px;
+    }
+
+    .jwt-chip:hover {
+      border-color: var(--accent);
+      color: var(--accent);
+    }
+
+    .jwt-label {
+      font-weight: 600;
+      color: var(--amber);
+    }
+
+    .topbar-gap {
+      flex: 1;
+    }
+
+    .toolbar-right {
+      display: flex;
+      align-items: center;
+      gap: 6px;
+    }
+
+    .toolbar-left {
+      display: flex;
+      align-items: center;
+      gap: 6px;
+    }
+
+    .btn {
+      display: inline-flex;
+      align-items: center;
+      gap: 5px;
+      padding: 5px 11px;
+      border-radius: 6px;
+      font-size: 12.5px;
+      font-weight: 500;
+      font-family: inherit;
+      cursor: pointer;
+      border: none;
+      transition: all 0.14s;
+      white-space: nowrap;
+    }
+
+    .btn-ghost {
+      background: transparent;
+      color: var(--text-secondary);
+      border: 1px solid var(--border);
+    }
+
+    .btn-ghost:hover {
+      background: var(--surface2);
+      color: var(--text-primary);
+    }
+
+    .btn-primary {
+      background: var(--accent);
+      color: #fff;
+    }
+
+    .btn-primary:hover {
+      background: var(--accent-hover);
+    }
+
+    .btn-danger {
+      background: transparent;
+      color: var(--red);
+      border: 1px solid rgba(239, 68, 68, 0.3);
+    }
+
+    .btn-danger:hover {
+      background: var(--red-bg);
+    }
+
+    .btn-icon {
+      padding: 5px 7px;
+    }
+
+    /* TOOLBAR */
+    .toolbar {
+      display: flex;
+      align-items: center;
+      gap: 6px;
+      justify-content: space-between;
+      padding: 7px 16px;
+      border-bottom: 1px solid var(--border);
+      background: var(--surface);
+      flex-shrink: 0;
+    }
+
+    .toolbar-search {
+      display: flex;
+      align-items: center;
+      gap: 7px;
+      background: var(--surface2);
+      border: 1px solid var(--border);
+      border-radius: 6px;
+      padding: 5px 10px;
+      flex: 1;
+      max-width: 280px;
+      transition: border-color 0.15s;
+    }
+
+    .toolbar-search:focus-within {
+      border-color: var(--border-mid);
+    }
+
+    .toolbar-search input {
+      background: none;
+      border: none;
+      outline: none;
+      color: var(--text-primary);
+      font-size: 12.5px;
+      font-family: inherit;
+      width: 100%;
+    }
+
+    .toolbar-search input::placeholder {
+      color: var(--text-muted);
+    }
+
+    .chip {
+      display: inline-flex;
+      align-items: center;
+      gap: 4px;
+      padding: 4px 9px;
+      border-radius: 5px;
+      border: 1px solid var(--border);
+      background: transparent;
+      color: var(--text-secondary);
+      font-size: 12px;
+      cursor: pointer;
+      transition: all 0.1s;
+      font-family: inherit;
+    }
+
+    .chip:hover {
+      border-color: var(--border-mid);
+      color: var(--text-primary);
+      background: var(--surface2);
+    }
+
+    .chip.active {
+      border-color: var(--accent);
+      color: var(--accent);
+      background: var(--accent-subtle);
+    }
+
+    .toolbar-end {
+      margin-left: auto;
+      display: flex;
+      align-items: center;
+      gap: 8px;
+    }
+
+    .count-label {
+      font-size: 11.5px;
+      color: var(--text-muted);
+    }
+
+    .count-label b {
+      color: var(--text-secondary);
+      font-weight: 500;
+    }
+
+    /* ACTION BAR */
+    .action-bar {
+      display: flex;
+      align-items: center;
+      gap: 6px;
+      justify-content: flex-end;
+      padding: 4px 16px;
+      background: var(--surface2);
+      border-bottom: 1px solid var(--border);
+      flex-shrink: 1;
+      font-size: 11px;
+      color: var(--text-muted);
+    }
+
+    .action-bar strong {
+      color: var(--text-secondary);
+      margin-right: 4px;
+    }
+
+    .demo-chip {
+      display: inline-flex;
+      align-items: center;
+      gap: 4px;
+      padding: 2px 8px;
+      border-radius: 4px;
+      border: 1px solid var(--border);
+      background: var(--surface);
+      color: var(--text-muted);
+      font-size: 11px;
+      cursor: pointer;
+      transition: all 0.1s;
+      font-family: inherit;
+    }
+
+    .demo-chip.on {
+      border-color: var(--accent);
+      color: var(--accent);
+      background: var(--accent-subtle);
+      font-weight: 500;
+    }
+
+    .demo-chip:hover:not(.on) {
+      background: var(--surface3);
+    }
+
+    /* TABLE AREA */
+    .table-area {
+      flex: 1;
+      overflow: auto;
+      position: relative;
+    }
+
+    .table-area::-webkit-scrollbar {
+      width: 6px;
+      height: 6px;
+    }
+
+    .table-area::-webkit-scrollbar-thumb {
+      background: var(--border-mid);
+      border-radius: 3px;
+    }
+
+    .table-area::-webkit-scrollbar-track {
+      background: transparent;
+    }
+
+    table {
+      width: 100%;
+      border-collapse: separate;
+      border-spacing: 0;
+      min-width: 900px;
+      table-layout: fixed;
+    }
+
+    thead {
+      position: sticky;
+      top: 0;
+      z-index: 10;
+    }
+
+    thead tr {
+      background: var(--surface2);
+    }
+
+    th {
+      height: 34px;
+      padding: 0 12px;
+      text-align: left;
+      font-size: 11.5px;
+      font-weight: 500;
+      color: var(--text-secondary);
+      border-bottom: 1px solid var(--border);
+      border-right: 1px solid var(--border);
+      white-space: nowrap;
+      overflow: hidden;
+      user-select: none;
+      cursor: pointer;
+      background: var(--surface2);
+    }
+
+    th:first-child {
+      width: 40px;
+      min-width: 40px;
+      max-width: 40px;
+      cursor: default;
+      padding: 0 10px;
+    }
+
+    th.add-col {
+      width: 110px;
+      cursor: pointer;
+      color: var(--text-muted);
+      font-weight: 400;
+      font-size: 12px;
+      border-right: none;
+    }
+
+    th.add-col:hover {
+      color: var(--accent);
+      background: var(--accent-subtle);
+    }
+
+    th:not(:first-child):not(.add-col):hover {
+      background: var(--surface3);
+    }
+
+    .th-content {
+      display: flex;
+      align-items: center;
+      gap: 5px;
+      height: 100%;
+    }
+
+    .th-type-icon {
+      color: var(--text-muted);
+      flex-shrink: 0;
+    }
+
+    .th-name {
+      color: var(--text-secondary);
+    }
+
+    th:not(:first-child):not(.add-col):hover .th-name {
+      color: var(--text-primary);
+    }
+
+    .th-sort {
+      color: var(--text-faint);
+      margin-left: 2px;
+      flex-shrink: 0;
+    }
+
+    th:nth-child(2) {
+      width: 100px;
+    }
+
+    th:nth-child(3) {
+      width: 160px;
+    }
+
+    th:nth-child(4) {
+      width: 120px;
+    }
+
+    th:nth-child(5) {
+      width: 110px;
+    }
+
+    th:nth-child(6) {
+      width: 150px;
+    }
+
+    th:nth-child(7) {
+      width: 160px;
+    }
+
+    th:nth-child(8) {
+      width: 110px;
+    }
+
+    tbody tr {
+      background: var(--surface);
+      transition: background 0.08s;
+      cursor: pointer;
+    }
+
+    tbody tr:hover {
+      background: var(--surface2);
+    }
+
+    tbody tr:hover .row-actions {
+      opacity: 1;
+    }
+
+    td {
+      height: var(--row-h);
+      padding: 0;
+      border-bottom: 1px solid var(--border);
+      border-right: 1px solid var(--border);
+      vertical-align: middle;
+      overflow: hidden;
+    }
+
+    td:first-child {
+      padding: 0 10px;
+    }
+
+    td:last-child {
+      border-right: none;
+    }
+
+    .cell {
+      padding: 0 12px;
+      display: flex;
+      align-items: center;
+      gap: 6px;
+      height: 100%;
+      overflow: hidden;
+      font-size: 12.5px;
+      color: var(--text-primary);
+      white-space: nowrap;
+    }
+
+    .cell-mono {
+      font-family: 'JetBrains Mono', monospace;
+      font-size: 11px;
+      color: var(--text-muted);
+    }
+
+    .cell-text {
+      overflow: hidden;
+      text-overflow: ellipsis;
+    }
+
+    .avatar {
+      width: 20px;
+      height: 20px;
+      border-radius: 5px;
+      background: var(--accent-subtle2);
+      color: var(--accent);
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      font-size: 9.5px;
+      font-weight: 700;
+      flex-shrink: 0;
+    }
+
+    .bool {
+      display: inline-flex;
+      align-items: center;
+      padding: 2px 6px;
+      border-radius: 4px;
+      font-size: 10.5px;
+      font-family: 'JetBrains Mono', monospace;
+      font-weight: 500;
+    }
+
+    .bool-t {
+      background: var(--green-bg);
+      color: var(--green);
+    }
+
+    .bool-f {
+      background: var(--surface3);
+      color: var(--text-muted);
+    }
+
+    .null {
+      font-family: 'JetBrains Mono', monospace;
+      font-size: 10px;
+      color: var(--text-faint);
+      background: var(--surface3);
+      padding: 1px 5px;
+      border-radius: 3px;
+    }
+
+    .row-actions {
+      display: flex;
+      align-items: center;
+      gap: 2px;
+      opacity: 0;
+      transition: opacity 0.1s;
+      padding: 0 8px;
+    }
+
+    .row-act-btn {
+      width: 22px;
+      height: 22px;
+      border-radius: 4px;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      cursor: pointer;
+      color: var(--text-muted);
+      transition: background 0.1s, color 0.1s;
+    }
+
+    .row-act-btn:hover {
+      background: var(--surface3);
+      color: var(--text-primary);
+    }
+
+    .row-act-btn.danger:hover {
+      background: var(--red-bg);
+      color: var(--red);
+    }
+
+    .tfoot-row td {
+      background: var(--surface2);
+      padding: 0 12px;
+      height: 30px;
+      font-size: 11px;
+      color: var(--text-muted);
+      border-top: 1px solid var(--border);
+      border-bottom: none;
+      border-right: none;
+    }
+
+    /* EMPTY STATE */
+    .empty-state {
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      justify-content: center;
+      padding: 48px 24px;
+    }
+
+    .ghost-table {
+      width: 560px;
+      max-width: 100%;
+      border: 1px solid var(--border);
+      border-radius: 10px;
+      overflow: hidden;
+      background: var(--surface);
+    }
+
+    .ghost-row {
+      display: flex;
+      align-items: center;
+      gap: 10px;
+      padding: 9px 14px;
+      border-bottom: 1px solid var(--border);
+    }
+
+    .ghost-row:last-child {
+      border-bottom: none;
+    }
+
+    .ghost-cb {
+      width: 13px;
+      height: 13px;
+      border-radius: 3px;
+      border: 1.5px solid var(--border);
+      flex-shrink: 0;
+    }
+
+    .g-bar {
+      height: 7px;
+      border-radius: 100px;
+      background: var(--surface3);
+      flex-shrink: 0;
+    }
+
+    .g20 {
+      width: 20px
+    }
+
+    .g36 {
+      width: 36px
+    }
+
+    .g48 {
+      width: 48px
+    }
+
+    .g60 {
+      width: 60px
+    }
+
+    .g80 {
+      width: 80px
+    }
+
+    .g96 {
+      width: 96px
+    }
+
+    .g120 {
+      width: 120px
+    }
+
+    .ghost-dot {
+      width: 8px;
+      height: 8px;
+      border-radius: 50%;
+      background: var(--surface3);
+      flex-shrink: 0;
+    }
+
+    .empty-copy {
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      gap: 8px;
+      padding: 28px 16px 0;
+      max-width: 340px;
+      text-align: center;
+    }
+
+    .empty-title {
+      font-size: 14px;
+      font-weight: 600;
+      color: var(--text-primary);
+    }
+
+    .empty-sub {
+      font-size: 12.5px;
+      color: var(--text-muted);
+      line-height: 1.65;
+    }
+
+    .empty-btns {
+      display: flex;
+      gap: 8px;
+      margin-top: 6px;
+    }
+
+    /* STATUSBAR */
+    .statusbar {
+      height: 26px;
+      display: flex;
+      align-items: center;
+      padding: 0 16px;
+      gap: 10px;
+      border-top: 1px solid var(--border);
+      background: var(--surface);
+      flex-shrink: 0;
+    }
+
+    .live-dot {
+      width: 6px;
+      height: 6px;
+      border-radius: 50%;
+      background: var(--green);
+      flex-shrink: 0;
+      animation: blink 2.4s ease infinite;
+    }
+
+    @keyframes blink {
+
+      0%,
+      100% {
+        opacity: 1
+      }
+
+      50% {
+        opacity: 0.4
+      }
+    }
+
+    .status-text {
+      font-size: 11px;
+      color: var(--text-muted);
+    }
+
+    .status-text b {
+      color: var(--green);
+      font-weight: 500;
+    }
+
+    .status-end {
+      margin-left: auto;
+      font-size: 11px;
+      color: var(--text-muted);
+    }
+
+    .status-end b {
+      color: var(--text-secondary);
+      font-weight: 500;
+    }
+
+    /* ══════════════════════════════════════════════════════
+   ENTRY PANEL — full-height right drawer
+══════════════════════════════════════════════════════ */
+    .entry-panel {
+      position: absolute;
+      top: 0;
+      right: 0;
+      bottom: 0;
+      width: 360px;
+      background: var(--surface);
+      border-left: 1px solid var(--border);
+      display: flex;
+      flex-direction: column;
+      z-index: 60;
+      transform: translateX(100%);
+      transition: transform 0.22s cubic-bezier(0.4, 0, 0.2, 1);
+      box-shadow: var(--shadow-lg);
+    }
+
+    .entry-panel.open {
+      transform: translateX(0);
+    }
+
+    .ep-backdrop {
+      position: absolute;
+      inset: 0;
+      z-index: 59;
+      display: none;
+    }
+
+    .ep-backdrop.open {
+      display: block;
+    }
+
+    /* Panel head */
+    .ep-head {
+      display: flex;
+      align-items: center;
+      gap: 8px;
+      padding: 0 14px;
+      height: var(--topbar-h);
+      border-bottom: 1px solid var(--border);
+      background: var(--surface);
+      flex-shrink: 0;
+    }
+
+    .ep-head-info {
+      flex: 1;
+      min-width: 0;
+    }
+
+    .ep-title {
+      font-size: 13px;
+      font-weight: 600;
+      color: var(--text-primary);
+    }
+
+    .ep-subtitle {
+      font-size: 10.5px;
+      color: var(--text-muted);
+      font-family: 'JetBrains Mono', monospace;
+    }
+
+    .ep-close {
+      width: 26px;
+      height: 26px;
+      border-radius: 5px;
+      flex-shrink: 0;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      cursor: pointer;
+      color: var(--text-muted);
+      border: none;
+      background: none;
+      transition: background 0.1s, color 0.1s;
+    }
+
+    .ep-close:hover {
+      background: var(--surface2);
+      color: var(--text-primary);
+    }
+
+    /* Panel body */
+    .ep-body {
+      flex: 1;
+      overflow-y: auto;
+      padding: 12px 14px 8px;
+      display: flex;
+      flex-direction: column;
+      gap: 10px;
+    }
+
+    .ep-body::-webkit-scrollbar {
+      width: 4px;
+    }
+
+    .ep-body::-webkit-scrollbar-thumb {
+      background: var(--border);
+      border-radius: 2px;
+    }
+
+    /* Field rows */
+    .ep-field {
+      display: flex;
+      flex-direction: column;
+      gap: 5px;
+    }
+
+    .ep-field-head {
+      display: flex;
+      align-items: center;
+      gap: 5px;
+    }
+
+    .ep-field-name {
+      font-size: 11px;
+      font-weight: 600;
+      letter-spacing: 0.03em;
+      color: var(--text-muted);
+      display: flex;
+      align-items: center;
+      gap: 4px;
+    }
+
+    .ep-field-type {
+      font-size: 9px;
+      font-weight: 500;
+      font-family: 'JetBrains Mono', monospace;
+      color: var(--text-faint);
+      background: var(--surface3);
+      padding: 1px 5px;
+      border-radius: 3px;
+      margin-left: 3px;
+    }
+
+    .ep-input {
+      background: var(--surface2);
+      border: 1px solid var(--border);
+      border-radius: 6px;
+      padding: 7px 10px;
+      font-size: 12.5px;
+      color: var(--text-primary);
+      font-family: inherit;
+      outline: none;
+      transition: border-color 0.15s;
+      width: 100%;
+    }
+
+    .ep-input:focus {
+      border-color: var(--accent);
+    }
+
+    .ep-input::placeholder {
+      color: var(--text-muted);
+    }
+
+    textarea.ep-input {
+      min-height: 68px;
+      resize: vertical;
+      line-height: 1.55;
+    }
+
+    /* Toggle (boolean) */
+    .ep-toggle-row {
+      display: flex;
+      align-items: center;
+      gap: 8px;
+    }
+
+    .ep-toggle {
+      width: 32px;
+      height: 18px;
+      border-radius: 9px;
+      background: var(--surface3);
+      border: 1px solid var(--border-mid);
+      position: relative;
+      cursor: pointer;
+      transition: background 0.15s, border-color 0.15s;
+      flex-shrink: 0;
+    }
+
+    .ep-toggle.on {
+      background: var(--accent);
+      border-color: var(--accent);
+    }
+
+    .ep-toggle::after {
+      content: '';
+      position: absolute;
+      width: 12px;
+      height: 12px;
+      border-radius: 50%;
+      background: #fff;
+      top: 2px;
+      left: 2px;
+      transition: transform 0.15s;
+      box-shadow: 0 1px 2px rgba(0, 0, 0, 0.2);
+    }
+
+    .ep-toggle.on::after {
+      transform: translateX(14px);
+    }
+
+    .ep-toggle-label {
+      font-size: 12.5px;
+      color: var(--text-secondary);
+    }
+
+    /* Array field */
+    .ep-array {
+      border: 1px solid var(--border);
+      border-radius: 6px;
+      overflow: hidden;
+    }
+
+    .ep-array-tabs {
+      display: flex;
+      border-bottom: 1px solid var(--border);
+      background: var(--surface);
+      padding: 0 6px;
+    }
+
+    .ep-array-tab {
+      padding: 5px 9px;
+      font-size: 11px;
+      font-family: 'JetBrains Mono', monospace;
+      font-weight: 500;
+      cursor: pointer;
+      color: var(--text-muted);
+      border-bottom: 2px solid transparent;
+      margin-bottom: -1px;
+      transition: color 0.1s, border-color 0.1s;
+    }
+
+    .ep-array-tab.active {
+      color: var(--accent);
+      border-bottom-color: var(--accent);
+    }
+
+    .ep-array-body {
+      padding: 8px 8px;
+      display: flex;
+      flex-wrap: wrap;
+      gap: 5px;
+      align-items: center;
+      background: var(--surface2);
+    }
+
+    .ep-array-chip {
+      display: inline-flex;
+      align-items: center;
+      gap: 3px;
+      padding: 3px 8px;
+      border-radius: 4px;
+      background: var(--surface3);
+      color: var(--text-secondary);
+      font-size: 11px;
+    }
+
+    .ep-array-add {
+      width: 22px;
+      height: 22px;
+      border-radius: 4px;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      cursor: pointer;
+      color: var(--text-muted);
+      border: 1px dashed var(--border);
+      transition: all 0.1s;
+    }
+
+    .ep-array-add:hover {
+      border-color: var(--accent);
+      color: var(--accent);
+      background: var(--accent-subtle);
+    }
+
+    /* Object field */
+    .ep-object {
+      border: 1px solid var(--border);
+      border-radius: 6px;
+      overflow: hidden;
+    }
+
+    .ep-obj-row {
+      display: flex;
+      align-items: center;
+      border-bottom: 1px solid var(--border);
+    }
+
+    .ep-obj-row:last-child {
+      border-bottom: none;
+    }
+
+    .ep-obj-key {
+      width: 80px;
+      min-width: 80px;
+      padding: 6px 9px;
+      font-size: 11px;
+      font-family: 'JetBrains Mono', monospace;
+      color: var(--text-secondary);
+      border-right: 1px solid var(--border);
+      background: var(--surface2);
+      flex-shrink: 0;
+    }
+
+    .ep-obj-val {
+      flex: 1;
+      padding: 5px 9px;
+      font-size: 12px;
+      color: var(--text-primary);
+      background: var(--surface);
+      display: flex;
+      align-items: center;
+      gap: 6px;
+    }
+
+    .ep-obj-type {
+      font-size: 9px;
+      font-family: 'JetBrains Mono', monospace;
+      color: var(--text-muted);
+      background: var(--surface3);
+      padding: 1px 5px;
+      border-radius: 3px;
+      flex-shrink: 0;
+    }
+
+    /* Relation */
+    .ep-relation {
+      display: flex;
+      align-items: center;
+      gap: 7px;
+      background: var(--surface2);
+      border: 1px solid var(--border);
+      border-radius: 6px;
+      padding: 7px 10px;
+      cursor: pointer;
+      transition: border-color 0.15s;
+    }
+
+    .ep-relation:hover {
+      border-color: var(--border-mid);
+    }
+
+    .ep-relation-ph {
+      font-size: 12.5px;
+      color: var(--text-muted);
+      flex: 1;
+    }
+
+    /* Location map */
+    .ep-map {
+      border: 1px solid var(--border);
+      border-radius: 6px;
+      overflow: hidden;
+      height: 100px;
+      position: relative;
+      background: linear-gradient(135deg, #e2eed8 0%, #cfe0c4 50%, #d4e8c8 100%);
+    }
+
+    [data-theme="dark"] .ep-map {
+      background: linear-gradient(135deg, #1a2820 0%, #1c2f22 50%, #1a2a1e 100%);
+    }
+
+    .ep-map-grid {
+      position: absolute;
+      inset: 0;
+      background-image: linear-gradient(var(--border) 1px, transparent 1px), linear-gradient(90deg, var(--border) 1px, transparent 1px);
+      background-size: 20px 20px;
+      opacity: 0.5;
+    }
+
+    .ep-map-pin {
+      position: absolute;
+      top: 50%;
+      left: 50%;
+      transform: translate(-50%, -65%);
+      color: var(--red);
+      filter: drop-shadow(0 2px 4px rgba(0, 0, 0, 0.3));
+    }
+
+    .ep-map-coords {
+      position: absolute;
+      bottom: 6px;
+      right: 8px;
+      background: var(--surface);
+      border: 1px solid var(--border);
+      border-radius: 4px;
+      padding: 2px 6px;
+      font-size: 9px;
+      font-family: 'JetBrains Mono', monospace;
+      color: var(--text-secondary);
+    }
+
+    .ep-coords-row {
+      display: flex;
+      gap: 6px;
+      margin-top: 5px;
+    }
+
+    .ep-coords-row .ep-input {
+      font-family: 'JetBrains Mono', monospace;
+      font-size: 11px;
+    }
+
+    /* Storage */
+    .ep-storage {
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      justify-content: center;
+      gap: 5px;
+      padding: 14px;
+      text-align: center;
+      border: 1.5px dashed var(--border);
+      border-radius: 8px;
+      cursor: pointer;
+      color: var(--text-muted);
+      font-size: 12px;
+      transition: all 0.15s;
+    }
+
+    .ep-storage:hover {
+      border-color: var(--accent);
+      color: var(--accent);
+      background: var(--accent-subtle);
+    }
+
+    /* Rich text */
+    .ep-richtext-bar {
+      display: flex;
+      gap: 1px;
+      padding: 4px 7px;
+      border: 1px solid var(--border);
+      border-bottom: none;
+      border-radius: 6px 6px 0 0;
+      background: var(--surface2);
+    }
+
+    .ep-rt-btn {
+      width: 22px;
+      height: 22px;
+      border-radius: 4px;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      cursor: pointer;
+      color: var(--text-muted);
+      border: none;
+      background: none;
+      font-size: 11px;
+      transition: background 0.1s, color 0.1s;
+    }
+
+    .ep-rt-btn:hover {
+      background: var(--surface3);
+      color: var(--text-primary);
+    }
+
+    .ep-rt-sep {
+      width: 1px;
+      height: 14px;
+      background: var(--border);
+      margin: 4px 2px;
+    }
+
+    textarea.ep-richtext-area {
+      background: var(--surface2);
+      border: 1px solid var(--border);
+      border-radius: 0 0 6px 6px;
+      padding: 7px 10px;
+      font-size: 12.5px;
+      color: var(--text-primary);
+      font-family: inherit;
+      outline: none;
+      min-height: 72px;
+      line-height: 1.6;
+      resize: vertical;
+      width: 100%;
+    }
+
+    textarea.ep-richtext-area:focus {
+      border-color: var(--accent);
+    }
+
+    textarea.ep-richtext-area::placeholder {
+      color: var(--text-muted);
+    }
+
+    /* Section divider */
+    .ep-section {
+      font-size: 9px;
+      font-weight: 600;
+      letter-spacing: 0.08em;
+      text-transform: uppercase;
+      color: var(--text-faint);
+      padding: 6px 0 2px;
+      border-top: 1px solid var(--border);
+      margin-top: 2px;
+    }
+
+    /* Panel footer */
+    .ep-foot {
+      padding: 11px 14px;
+      border-top: 1px solid var(--border);
+      display: flex;
+      gap: 8px;
+      background: var(--surface2);
+      flex-shrink: 0;
+    }
+
+    .ep-foot .btn {
+      flex: 1;
+      justify-content: center;
+    }
+
+    /* ══════════════════════════════════════════════════════
+   BUCKET NAVIGATOR POPUP (three-dot menu)
+══════════════════════════════════════════════════════ */
+    .bnav-popup {
+      position: fixed;
+      z-index: 500;
+      background: var(--surface);
+      border: 1px solid var(--border);
+      border-radius: 9px;
+      box-shadow: var(--shadow-lg);
+      padding: 4px;
+      min-width: 172px;
+      display: none;
+    }
+
+    .bnav-popup.open {
+      display: block;
+      animation: popIn 0.12s ease;
+    }
+
+    @keyframes popIn {
+      from {
+        opacity: 0;
+        transform: scale(0.94) translateY(-4px);
+      }
+
+      to {
+        opacity: 1;
+        transform: scale(1) translateY(0);
+      }
+    }
+
+    .bnav-item {
+      display: flex;
+      align-items: center;
+      gap: 8px;
+      padding: 7px 10px;
+      border-radius: 6px;
+      cursor: pointer;
+      font-size: 12.5px;
+      color: var(--text-secondary);
+      transition: background 0.1s, color 0.1s;
+    }
+
+    .bnav-item:hover {
+      background: var(--surface2);
+      color: var(--text-primary);
+    }
+
+    .bnav-item.danger {
+      color: var(--red);
+    }
+
+    .bnav-item.danger:hover {
+      background: var(--red-bg);
+    }
+
+    .bnav-sep {
+      height: 1px;
+      background: var(--border);
+      margin: 3px 0;
+    }
+
+    /* ══════════════════════════════════════════════════════
+   NEW FIELD MODAL (from Add Field button on table)
+══════════════════════════════════════════════════════ */
+    .modal-overlay {
+      position: fixed;
+      inset: 0;
+      background: rgba(0, 0, 0, 0.32);
+      z-index: 400;
+      display: none;
+      align-items: center;
+      justify-content: center;
+      backdrop-filter: blur(2px);
+    }
+
+    .modal-overlay.open {
+      display: flex;
+      animation: fadeIn 0.15s ease;
+    }
+
+    @keyframes fadeIn {
+      from {
+        opacity: 0
+      }
+
+      to {
+        opacity: 1
+      }
+    }
+
+    .field-modal {
+      background: var(--surface);
+      border: 1px solid var(--border);
+      border-radius: 12px;
+      box-shadow: var(--shadow-lg);
+      width: 480px;
+      max-width: calc(100vw - 32px);
+      max-height: calc(100vh - 64px);
+      display: flex;
+      flex-direction: column;
+      animation: slideUp 0.18s ease;
+    }
+
+    @keyframes slideUp {
+      from {
+        transform: translateY(16px);
+        opacity: 0
+      }
+
+      to {
+        transform: translateY(0);
+        opacity: 1
+      }
+    }
+
+    .fm-head {
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      padding: 14px 16px 12px;
+      border-bottom: 1px solid var(--border);
+      flex-shrink: 0;
+    }
+
+    .fm-title {
+      font-size: 13.5px;
+      font-weight: 600;
+      color: var(--text-primary);
+    }
+
+    .fm-close {
+      width: 24px;
+      height: 24px;
+      border-radius: 5px;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      cursor: pointer;
+      color: var(--text-muted);
+      border: none;
+      background: none;
+      transition: background 0.1s, color 0.1s;
+    }
+
+    .fm-close:hover {
+      background: var(--surface2);
+      color: var(--text-primary);
+    }
+
+    .fm-body {
+      padding: 16px;
+      display: flex;
+      flex-direction: column;
+      gap: 14px;
+      overflow-y: auto;
+      flex: 1;
+    }
+
+    .fm-body::-webkit-scrollbar {
+      width: 4px;
+    }
+
+    .fm-body::-webkit-scrollbar-thumb {
+      background: var(--border);
+      border-radius: 2px;
+    }
+
+    .fm-row {
+      display: flex;
+      flex-direction: column;
+      gap: 5px;
+    }
+
+    .fm-label {
+      font-size: 10.5px;
+      font-weight: 600;
+      letter-spacing: 0.04em;
+      color: var(--text-muted);
+      text-transform: uppercase;
+    }
+
+    .fm-input {
+      background: var(--surface2);
+      border: 1px solid var(--border);
+      border-radius: 6px;
+      padding: 7px 10px;
+      font-size: 12.5px;
+      color: var(--text-primary);
+      font-family: inherit;
+      outline: none;
+      transition: border-color 0.15s;
+      width: 100%;
+    }
+
+    .fm-input:focus {
+      border-color: var(--accent);
+    }
+
+    .fm-input::placeholder {
+      color: var(--text-muted);
+    }
+
+    .fm-hint {
+      font-size: 11.5px;
+      color: var(--text-muted);
+      line-height: 1.5;
+    }
+
+    /* Tab bar inside modal */
+    .fm-tabs {
+      display: flex;
+      border-bottom: 1px solid var(--border);
+      margin: 0 -16px;
+      padding: 0 16px;
+    }
+
+    .fm-tab {
+      padding: 7px 12px;
+      font-size: 12px;
+      font-weight: 500;
+      color: var(--text-muted);
+      cursor: pointer;
+      border-bottom: 2px solid transparent;
+      margin-bottom: -1px;
+      transition: color 0.1s, border-color 0.1s;
+    }
+
+    .fm-tab:hover {
+      color: var(--text-secondary);
+    }
+
+    .fm-tab.active {
+      color: var(--accent);
+      border-bottom-color: var(--accent);
+    }
+
+    /* Field type grid */
+    .ft-grid {
+      display: grid;
+      grid-template-columns: repeat(4, 1fr);
+      gap: 5px;
+    }
+
+    .ft-btn {
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      gap: 4px;
+      padding: 8px 4px;
+      border-radius: 7px;
+      border: 1px solid var(--border);
+      background: transparent;
+      color: var(--text-secondary);
+      font-size: 10.5px;
+      cursor: pointer;
+      transition: all 0.1s;
+      font-family: inherit;
+    }
+
+    .ft-btn:hover {
+      border-color: var(--border-mid);
+      background: var(--surface2);
+      color: var(--text-primary);
+    }
+
+    .ft-btn.selected {
+      border-color: var(--accent);
+      background: var(--accent-subtle);
+      color: var(--accent);
+    }
+
+    .ft-icon {
+      width: 28px;
+      height: 28px;
+      border-radius: 6px;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      background: var(--surface3);
+    }
+
+    .ft-btn.selected .ft-icon {
+      background: var(--accent-subtle2);
+    }
+
+    .ft-name {
+      font-size: 10px;
+      font-weight: 500;
+    }
+
+    /* Toggle row */
+    .fm-toggle-row {
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      padding: 8px 10px;
+      background: var(--surface2);
+      border-radius: 7px;
+      border: 1px solid var(--border);
+    }
+
+    .fm-toggle-label {
+      font-size: 12.5px;
+      color: var(--text-secondary);
+    }
+
+    .fm-toggle {
+      width: 32px;
+      height: 18px;
+      border-radius: 9px;
+      background: var(--surface3);
+      border: 1px solid var(--border-mid);
+      position: relative;
+      cursor: pointer;
+      transition: background 0.15s, border-color 0.15s;
+      flex-shrink: 0;
+    }
+
+    .fm-toggle.on {
+      background: var(--accent);
+      border-color: var(--accent);
+    }
+
+    .fm-toggle::after {
+      content: '';
+      position: absolute;
+      width: 12px;
+      height: 12px;
+      border-radius: 50%;
+      background: #fff;
+      top: 2px;
+      left: 2px;
+      transition: transform 0.15s;
+      box-shadow: 0 1px 2px rgba(0, 0, 0, 0.2);
+    }
+
+    .fm-toggle.on::after {
+      transform: translateX(14px);
+    }
+
+    .fm-foot {
+      padding: 11px 16px;
+      border-top: 1px solid var(--border);
+      display: flex;
+      justify-content: flex-end;
+      gap: 8px;
+      background: var(--surface2);
+      flex-shrink: 0;
+    }
+
+    /* ══════════════════════════════════════════════════════
+   BUCKET SETTINGS MODAL (Edit Bucket from nav popup)
+══════════════════════════════════════════════════════ */
+    .bucket-settings-modal {
+      background: var(--surface);
+      border: 1px solid var(--border);
+      border-radius: 12px;
+      box-shadow: var(--shadow-lg);
+      width: 420px;
+      max-width: calc(100vw - 32px);
+      display: flex;
+      flex-direction: column;
+      animation: slideUp 0.18s ease;
+    }
+
+    .bsm-head {
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      padding: 14px 16px 12px;
+      border-bottom: 1px solid var(--border);
+    }
+
+    .bsm-title {
+      font-size: 13.5px;
+      font-weight: 600;
+      color: var(--text-primary);
+    }
+
+    .bsm-body {
+      padding: 16px;
+      display: flex;
+      flex-direction: column;
+      gap: 12px;
+    }
+
+    .bsm-nav {
+      display: flex;
+      flex-direction: column;
+      gap: 1px;
+    }
+
+    .bsm-nav-item {
+      display: flex;
+      align-items: center;
+      gap: 8px;
+      padding: 8px 10px;
+      border-radius: 7px;
+      cursor: pointer;
+      font-size: 12.5px;
+      color: var(--text-secondary);
+      transition: background 0.1s, color 0.1s;
+    }
+
+    .bsm-nav-item:hover {
+      background: var(--surface2);
+      color: var(--text-primary);
+    }
+
+    .bsm-nav-item.danger {
+      color: var(--red);
+    }
+
+    .bsm-nav-item.danger:hover {
+      background: var(--red-bg);
+    }
+
+    .bsm-sep {
+      height: 1px;
+      background: var(--border);
+      margin: 4px 0;
+    }
+
+    /* Rules code block */
+    .bsm-rules {
+      background: var(--surface2);
+      border: 1px solid var(--border);
+      border-radius: 8px;
+      overflow: hidden;
+    }
+
+    .bsm-rules-head {
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      padding: 8px 12px;
+      border-bottom: 1px solid var(--border);
+      font-size: 11px;
+      font-weight: 600;
+      letter-spacing: 0.04em;
+      text-transform: uppercase;
+      color: var(--text-muted);
+    }
+
+    .bsm-rules-code {
+      padding: 10px 12px;
+      font-family: 'JetBrains Mono', monospace;
+      font-size: 11px;
+      color: var(--text-secondary);
+      line-height: 1.6;
+      background: var(--surface2);
+    }
+
+    .bsm-rules-code .kw {
+      color: var(--accent);
+      font-weight: 500;
+    }
+
+    .bsm-rules-code .str {
+      color: var(--green);
+    }
+
+    .bsm-foot {
+      padding: 11px 16px;
+      border-top: 1px solid var(--border);
+      display: flex;
+      justify-content: flex-end;
+      gap: 8px;
+      background: var(--surface2);
+      border-radius: 0 0 12px 12px;
+    }
+  </style>
+</head>
+
+<body>
+
+  <!-- ══ RAIL ══ -->
+  <div class="rail">
+    <div class="rail-logo">S</div>
+    <div class="rail-btn active" title="Buckets">
+      <svg width="15" height="15" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="1.8">
+        <path
+          d="M4 7h16M4 7a2 2 0 01-2-2V5a2 2 0 012-2h16a2 2 0 012 2v0a2 2 0 01-2 2M4 7v10a2 2 0 002 2h12a2 2 0 002-2V7" />
+      </svg>
+    </div>
+    <div class="rail-btn" title="RBAC">
+      <svg width="15" height="15" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="1.8">
+        <circle cx="9" cy="7" r="4" />
+        <path d="M3 21v-2a4 4 0 014-4h4a4 4 0 014 4v2" />
+        <path d="M16 3.13a4 4 0 010 7.75M21 21v-2a4 4 0 00-3-3.85" />
+      </svg>
+    </div>
+    <div class="rail-btn" title="Build">
+      <svg width="15" height="15" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="1.8">
+        <rect x="3" y="3" width="7" height="7" rx="1" />
+        <rect x="14" y="3" width="7" height="7" rx="1" />
+        <rect x="3" y="14" width="7" height="7" rx="1" />
+        <rect x="14" y="14" width="7" height="7" rx="1" />
+      </svg>
+    </div>
+    <div class="rail-btn" title="Analytics">
+      <svg width="15" height="15" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="1.8">
+        <polyline points="22 12 18 12 15 21 9 3 6 12 2 12" />
+      </svg>
+    </div>
+    <div class="rail-sep"></div>
+    <div class="rail-btn" title="Storage">
+      <svg width="15" height="15" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="1.8">
+        <ellipse cx="12" cy="5" rx="9" ry="3" />
+        <path d="M21 12c0 1.66-4 3-9 3s-9-1.34-9-3" />
+        <path d="M3 5v14c0 1.66 4 3 9 3s9-1.34 9-3V5" />
+      </svg>
+    </div>
+    <div class="rail-btn" title="Settings">
+      <svg width="15" height="15" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="1.8">
+        <circle cx="12" cy="12" r="3" />
+        <path
+          d="M19.4 15a1.65 1.65 0 00.33 1.82l.06.06a2 2 0 010 2.83 2 2 0 01-2.83 0l-.06-.06a1.65 1.65 0 00-1.82-.33 1.65 1.65 0 00-1 1.51V21a2 2 0 01-4 0v-.09A1.65 1.65 0 009 19.4a1.65 1.65 0 00-1.82.33l-.06.06a2 2 0 01-2.83-2.83l.06-.06A1.65 1.65 0 004.68 15a1.65 1.65 0 00-1.51-1H3a2 2 0 010-4h.09A1.65 1.65 0 004.6 9a1.65 1.65 0 00-.33-1.82l-.06-.06a2 2 0 012.83-2.83l.06.06A1.65 1.65 0 009 4.68a1.65 1.65 0 001-1.51V3a2 2 0 014 0v.09a1.65 1.65 0 001 1.51 1.65 1.65 0 001.82-.33l.06-.06a2 2 0 012.83 2.83l-.06.06A1.65 1.65 0 0019.4 9a1.65 1.65 0 001.51 1H21a2 2 0 010 4h-.09a1.65 1.65 0 00-1.51 1z" />
+      </svg>
+    </div>
+    <div class="rail-bottom">
+      <div class="rail-sep"></div>
+      <button class="theme-toggle" onclick="toggleTheme()" title="Toggle theme">
+        <svg class="sun-icon" width="15" height="15" fill="none" viewBox="0 0 24 24" stroke="currentColor"
+          stroke-width="1.8">
+          <circle cx="12" cy="12" r="5" />
+          <line x1="12" y1="1" x2="12" y2="3" />
+          <line x1="12" y1="21" x2="12" y2="23" />
+          <line x1="4.22" y1="4.22" x2="5.64" y2="5.64" />
+          <line x1="18.36" y1="18.36" x2="19.78" y2="19.78" />
+          <line x1="1" y1="12" x2="3" y2="12" />
+          <line x1="21" y1="12" x2="23" y2="12" />
+          <line x1="4.22" y1="19.78" x2="5.64" y2="18.36" />
+          <line x1="18.36" y1="5.64" x2="19.78" y2="4.22" />
+        </svg>
+        <svg class="moon-icon" width="15" height="15" fill="none" viewBox="0 0 24 24" stroke="currentColor"
+          stroke-width="1.8">
+          <path d="M21 12.79A9 9 0 1111.21 3 7 7 0 0021 12.79z" />
+        </svg>
+      </button>
+      <div class="rail-btn" title="Profile">
+        <svg width="15" height="15" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="1.8">
+          <path d="M20 21v-2a4 4 0 00-4-4H8a4 4 0 00-4 4v2" />
+          <circle cx="12" cy="7" r="4" />
+        </svg>
+      </div>
+    </div>
+  </div>
+
+  <!-- ══ SIDEBAR ══ -->
+  <div class="sidebar">
+    <div class="sidebar-head">
+      <div class="sidebar-top-row">
+        <span class="sidebar-label">Buckets</span>
+        <div class="sidebar-actions">
+          <button class="icon-btn" title="History"><svg width="13" height="13" fill="none" viewBox="0 0 24 24"
+              stroke="currentColor" stroke-width="2">
+              <circle cx="12" cy="12" r="10" />
+              <polyline points="12 6 12 12 16 14" />
+            </svg></button>
+          <button class="icon-btn" title="View"><svg width="13" height="13" fill="none" viewBox="0 0 24 24"
+              stroke="currentColor" stroke-width="2">
+              <rect x="3" y="3" width="7" height="7" />
+              <rect x="14" y="3" width="7" height="7" />
+              <rect x="14" y="14" width="7" height="7" />
+              <rect x="3" y="14" width="7" height="7" />
+            </svg></button>
+        </div>
+      </div>
+      <div class="search-box">
+        <svg width="12" height="12" fill="none" viewBox="0 0 24 24" stroke="var(--text-muted)" stroke-width="2.2">
+          <circle cx="11" cy="11" r="8" />
+          <path d="M21 21l-4.35-4.35" />
+        </svg>
+        <input placeholder="Search buckets…" />
+      </div>
+    </div>
+
+    <div class="sidebar-body" id="sidebar-body">
+
+      <!-- Category: Stripe -->
+      <div class="cat-group" id="sg-stripe" data-cat="stripe">
+        <div class="cat-group-head" onclick="toggleCatGroup('sg-stripe')">
+          <svg width="12" height="12" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2.5">
+            <polyline points="6 9 12 15 18 9" />
+          </svg>
+          Stripe
+          <span class="cat-group-drag" title="Kategoriyi sürükle" data-cat-handle="stripe">
+            <svg width="12" height="12" viewBox="0 0 24 24" fill="currentColor">
+              <circle cx="9" cy="5" r="1.5" />
+              <circle cx="15" cy="5" r="1.5" />
+              <circle cx="9" cy="12" r="1.5" />
+              <circle cx="15" cy="12" r="1.5" />
+              <circle cx="9" cy="19" r="1.5" />
+              <circle cx="15" cy="19" r="1.5" />
+            </svg>
+          </span>
+        </div>
+        <div class="cat-group-items" id="sbi-stripe">
+          <div class="nav-row" onclick="setActive(this)" data-bucket="Logs">
+            <svg class="nav-row-icon" width="13" height="13" fill="none" viewBox="0 0 24 24" stroke="currentColor"
+              stroke-width="2">
+              <ellipse cx="12" cy="5" rx="9" ry="3" />
+              <path d="M3 5v14c0 1.66 4.03 3 9 3s9-1.34 9-3V5" />
+              <path d="M3 12c0 1.66 4.03 3 9 3s9-1.34 9-3" />
+            </svg>
+            Logs
+            <div class="nav-row-actions">
+              <span class="nav-row-dots" onclick="openCtx(event,'Logs')"><svg width="12" height="12" fill="none"
+                  viewBox="0 0 24 24" stroke="currentColor" stroke-width="2.5">
+                  <circle cx="12" cy="5" r="1" />
+                  <circle cx="12" cy="12" r="1" />
+                  <circle cx="12" cy="19" r="1" />
+                </svg></span>
+              <span class="nav-drag-handle" title="Sürükle"><svg width="12" height="12" viewBox="0 0 24 24"
+                  fill="currentColor">
+                  <circle cx="9" cy="5" r="1.5" />
+                  <circle cx="15" cy="5" r="1.5" />
+                  <circle cx="9" cy="12" r="1.5" />
+                  <circle cx="15" cy="12" r="1.5" />
+                  <circle cx="9" cy="19" r="1.5" />
+                  <circle cx="15" cy="19" r="1.5" />
+                </svg></span>
+            </div>
+          </div>
+          <div class="nav-row" onclick="setActive(this)" data-bucket="Subscriptions">
+            <svg class="nav-row-icon" width="13" height="13" fill="none" viewBox="0 0 24 24" stroke="currentColor"
+              stroke-width="2">
+              <ellipse cx="12" cy="5" rx="9" ry="3" />
+              <path d="M3 5v14c0 1.66 4.03 3 9 3s9-1.34 9-3V5" />
+              <path d="M3 12c0 1.66 4.03 3 9 3s9-1.34 9-3" />
+            </svg>
+            Subscriptions
+            <div class="nav-row-actions">
+              <span class="nav-row-dots" onclick="openCtx(event,'Logs')"><svg width="12" height="12" fill="none"
+                  viewBox="0 0 24 24" stroke="currentColor" stroke-width="2.5">
+                  <circle cx="12" cy="5" r="1" />
+                  <circle cx="12" cy="12" r="1" />
+                  <circle cx="12" cy="19" r="1" />
+                </svg></span>
+              <span class="nav-drag-handle" title="Sürükle"><svg width="12" height="12" viewBox="0 0 24 24"
+                  fill="currentColor">
+                  <circle cx="9" cy="5" r="1.5" />
+                  <circle cx="15" cy="5" r="1.5" />
+                  <circle cx="9" cy="12" r="1.5" />
+                  <circle cx="15" cy="12" r="1.5" />
+                  <circle cx="9" cy="19" r="1.5" />
+                  <circle cx="15" cy="19" r="1.5" />
+                </svg></span>
+            </div>
+          </div>
+          <div class="nav-row" onclick="setActive(this)" data-bucket="Prices">
+            <svg class="nav-row-icon" width="13" height="13" fill="none" viewBox="0 0 24 24" stroke="currentColor"
+              stroke-width="2">
+              <ellipse cx="12" cy="5" rx="9" ry="3" />
+              <path d="M3 5v14c0 1.66 4.03 3 9 3s9-1.34 9-3V5" />
+              <path d="M3 12c0 1.66 4.03 3 9 3s9-1.34 9-3" />
+            </svg>
+            Prices
+            <div class="nav-row-actions">
+              <span class="nav-row-dots" onclick="openCtx(event,'Logs')"><svg width="12" height="12" fill="none"
+                  viewBox="0 0 24 24" stroke="currentColor" stroke-width="2.5">
+                  <circle cx="12" cy="5" r="1" />
+                  <circle cx="12" cy="12" r="1" />
+                  <circle cx="12" cy="19" r="1" />
+                </svg></span>
+              <span class="nav-drag-handle" title="Sürükle"><svg width="12" height="12" viewBox="0 0 24 24"
+                  fill="currentColor">
+                  <circle cx="9" cy="5" r="1.5" />
+                  <circle cx="15" cy="5" r="1.5" />
+                  <circle cx="9" cy="12" r="1.5" />
+                  <circle cx="15" cy="12" r="1.5" />
+                  <circle cx="9" cy="19" r="1.5" />
+                  <circle cx="15" cy="19" r="1.5" />
+                </svg></span>
+            </div>
+          </div>
+          <div class="nav-row" onclick="setActive(this)" data-bucket="Products">
+            <svg class="nav-row-icon" width="13" height="13" fill="none" viewBox="0 0 24 24" stroke="currentColor"
+              stroke-width="2">
+              <ellipse cx="12" cy="5" rx="9" ry="3" />
+              <path d="M3 5v14c0 1.66 4.03 3 9 3s9-1.34 9-3V5" />
+              <path d="M3 12c0 1.66 4.03 3 9 3s9-1.34 9-3" />
+            </svg>
+            Products
+            <div class="nav-row-actions">
+              <span class="nav-row-dots" onclick="openCtx(event,'Logs')"><svg width="12" height="12" fill="none"
+                  viewBox="0 0 24 24" stroke="currentColor" stroke-width="2.5">
+                  <circle cx="12" cy="5" r="1" />
+                  <circle cx="12" cy="12" r="1" />
+                  <circle cx="12" cy="19" r="1" />
+                </svg></span>
+              <span class="nav-drag-handle" title="Sürükle"><svg width="12" height="12" viewBox="0 0 24 24"
+                  fill="currentColor">
+                  <circle cx="9" cy="5" r="1.5" />
+                  <circle cx="15" cy="5" r="1.5" />
+                  <circle cx="9" cy="12" r="1.5" />
+                  <circle cx="15" cy="12" r="1.5" />
+                  <circle cx="9" cy="19" r="1.5" />
+                  <circle cx="15" cy="19" r="1.5" />
+                </svg></span>
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <!-- Category: AI -->
+      <div class="cat-group" id="sg-ai" data-cat="ai">
+        <div class="cat-group-head" onclick="toggleCatGroup('sg-ai')">
+          <svg width="12" height="12" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2.5">
+            <polyline points="6 9 12 15 18 9" />
+          </svg>
+          AI
+          <span class="cat-group-drag" title="Kategoriyi sürükle" data-cat-handle="ai">
+            <svg width="12" height="12" viewBox="0 0 24 24" fill="currentColor">
+              <circle cx="9" cy="5" r="1.5" />
+              <circle cx="15" cy="5" r="1.5" />
+              <circle cx="9" cy="12" r="1.5" />
+              <circle cx="15" cy="12" r="1.5" />
+              <circle cx="9" cy="19" r="1.5" />
+              <circle cx="15" cy="19" r="1.5" />
+            </svg>
+          </span>
+        </div>
+        <div class="cat-group-items" id="sbi-ai">
+          <div class="nav-row" onclick="setActive(this)" data-bucket="Models">
+            <svg class="nav-row-icon" width="13" height="13" fill="none" viewBox="0 0 24 24" stroke="currentColor"
+              stroke-width="2">
+              <ellipse cx="12" cy="5" rx="9" ry="3" />
+              <path d="M3 5v14c0 1.66 4.03 3 9 3s9-1.34 9-3V5" />
+              <path d="M3 12c0 1.66 4.03 3 9 3s9-1.34 9-3" />
+            </svg>
+            Models
+            <div class="nav-row-actions">
+              <span class="nav-row-dots" onclick="openCtx(event,'Logs')"><svg width="12" height="12" fill="none"
+                  viewBox="0 0 24 24" stroke="currentColor" stroke-width="2.5">
+                  <circle cx="12" cy="5" r="1" />
+                  <circle cx="12" cy="12" r="1" />
+                  <circle cx="12" cy="19" r="1" />
+                </svg></span>
+              <span class="nav-drag-handle" title="Sürükle"><svg width="12" height="12" viewBox="0 0 24 24"
+                  fill="currentColor">
+                  <circle cx="9" cy="5" r="1.5" />
+                  <circle cx="15" cy="5" r="1.5" />
+                  <circle cx="9" cy="12" r="1.5" />
+                  <circle cx="15" cy="12" r="1.5" />
+                  <circle cx="9" cy="19" r="1.5" />
+                  <circle cx="15" cy="19" r="1.5" />
+                </svg></span>
+            </div>
+          </div>
+          <div class="nav-row active" onclick="setActive(this)" data-bucket="Completions">
+            <svg class="nav-row-icon" width="13" height="13" fill="none" viewBox="0 0 24 24" stroke="currentColor"
+              stroke-width="2">
+              <ellipse cx="12" cy="5" rx="9" ry="3" />
+              <path d="M3 5v14c0 1.66 4.03 3 9 3s9-1.34 9-3V5" />
+              <path d="M3 12c0 1.66 4.03 3 9 3s9-1.34 9-3" />
+            </svg>
+            Completions
+            <div class="nav-row-actions">
+              <span class="nav-row-dots" onclick="openCtx(event,'Logs')"><svg width="12" height="12" fill="none"
+                  viewBox="0 0 24 24" stroke="currentColor" stroke-width="2.5">
+                  <circle cx="12" cy="5" r="1" />
+                  <circle cx="12" cy="12" r="1" />
+                  <circle cx="12" cy="19" r="1" />
+                </svg></span>
+              <span class="nav-drag-handle" title="Sürükle"><svg width="12" height="12" viewBox="0 0 24 24"
+                  fill="currentColor">
+                  <circle cx="9" cy="5" r="1.5" />
+                  <circle cx="15" cy="5" r="1.5" />
+                  <circle cx="9" cy="12" r="1.5" />
+                  <circle cx="15" cy="12" r="1.5" />
+                  <circle cx="9" cy="19" r="1.5" />
+                  <circle cx="15" cy="19" r="1.5" />
+                </svg></span>
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <!-- Uncategorized -->
+      <div style="margin-top:8px">
+        <div class="nav-group-lbl">Kategorisiz</div>
+        <div id="sbi-uncategorized">
+          <div class="nav-row" onclick="setActive(this)" data-bucket="Users">
+            <svg class="nav-row-icon" width="13" height="13" fill="none" viewBox="0 0 24 24" stroke="currentColor"
+              stroke-width="2">
+              <ellipse cx="12" cy="5" rx="9" ry="3" />
+              <path d="M3 5v14c0 1.66 4.03 3 9 3s9-1.34 9-3V5" />
+              <path d="M3 12c0 1.66 4.03 3 9 3s9-1.34 9-3" />
+            </svg>
+            Users
+            <div class="nav-row-actions">
+              <span class="nav-row-dots" onclick="openCtx(event,'Logs')"><svg width="12" height="12" fill="none"
+                  viewBox="0 0 24 24" stroke="currentColor" stroke-width="2.5">
+                  <circle cx="12" cy="5" r="1" />
+                  <circle cx="12" cy="12" r="1" />
+                  <circle cx="12" cy="19" r="1" />
+                </svg></span>
+              <span class="nav-drag-handle" title="Sürükle"><svg width="12" height="12" viewBox="0 0 24 24"
+                  fill="currentColor">
+                  <circle cx="9" cy="5" r="1.5" />
+                  <circle cx="15" cy="5" r="1.5" />
+                  <circle cx="9" cy="12" r="1.5" />
+                  <circle cx="15" cy="12" r="1.5" />
+                  <circle cx="9" cy="19" r="1.5" />
+                  <circle cx="15" cy="19" r="1.5" />
+                </svg></span>
+            </div>
+          </div>
+          <div class="nav-row" onclick="setActive(this)" data-bucket="Orders">
+            <svg class="nav-row-icon" width="13" height="13" fill="none" viewBox="0 0 24 24" stroke="currentColor"
+              stroke-width="2">
+              <ellipse cx="12" cy="5" rx="9" ry="3" />
+              <path d="M3 5v14c0 1.66 4.03 3 9 3s9-1.34 9-3V5" />
+              <path d="M3 12c0 1.66 4.03 3 9 3s9-1.34 9-3" />
+            </svg>
+            Orders
+            <div class="nav-row-actions">
+              <span class="nav-row-dots" onclick="openCtx(event,'Logs')"><svg width="12" height="12" fill="none"
+                  viewBox="0 0 24 24" stroke="currentColor" stroke-width="2.5">
+                  <circle cx="12" cy="5" r="1" />
+                  <circle cx="12" cy="12" r="1" />
+                  <circle cx="12" cy="19" r="1" />
+                </svg></span>
+              <span class="nav-drag-handle" title="Sürükle"><svg width="12" height="12" viewBox="0 0 24 24"
+                  fill="currentColor">
+                  <circle cx="9" cy="5" r="1.5" />
+                  <circle cx="15" cy="5" r="1.5" />
+                  <circle cx="9" cy="12" r="1.5" />
+                  <circle cx="15" cy="12" r="1.5" />
+                  <circle cx="9" cy="19" r="1.5" />
+                  <circle cx="15" cy="19" r="1.5" />
+                </svg></span>
+            </div>
+          </div>
+        </div>
+        <div class="nav-add">
+          <svg width="12" height="12" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2.5">
+            <line x1="12" y1="5" x2="12" y2="19" />
+            <line x1="5" y1="12" x2="19" y2="12" />
+          </svg>
+          New Bucket
+        </div>
+      </div>
+
+    </div>
+  </div>
+
+  <!-- ══ MAIN ══ -->
+  <div class="main">
+
+    <!-- TOPBAR -->
+    <div class="topbar">
+      <div class="jwt-chip" title="Click to copy JWT">
+        <span class="jwt-label">JWT:</span>
+        eyJhbGciOiJIUzI1NzI…
+        <svg width="11" height="11" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2">
+          <rect x="9" y="9" width="13" height="13" rx="2" />
+          <path d="M5 15H4a2 2 0 01-2-2V4a2 2 0 012-2h9a2 2 0 012 2v1" />
+        </svg>
+      </div>
+      <div class="topbar-gap"></div>
+
+    </div>
+
+
+    <!-- TOOLBAR -->
+    <div class="toolbar">
+      <div class="toolbar-left">
+        <div class="toolbar-search">
+          <svg width="12" height="12" fill="none" viewBox="0 0 24 24" stroke="var(--text-muted)" stroke-width="2.2">
+            <circle cx="11" cy="11" r="8" />
+            <path d="M21 21l-4.35-4.35" />
+          </svg>
+          <input placeholder="Search entries…" />
+        </div>
+        <button class="chip active">All</button>
+        <button class="chip">
+          <svg width="11" height="11" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2">
+            <polygon points="22 3 2 3 10 12.46 10 19 14 21 14 12.46 22 3" />
+          </svg>
+          Filter
+        </button>
+        <button class="chip">
+          <svg width="11" height="11" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2">
+            <line x1="12" y1="5" x2="12" y2="19" />
+            <polyline points="19 12 12 19 5 12" />
+          </svg>
+          Sort
+        </button>
+      </div>
+      <div class="toolbar-right">
+        <button class="btn btn-ghost btn-icon">
+          <svg width="13" height="13" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2">
+            <polyline points="23 4 23 10 17 10" />
+            <path d="M20.49 15a9 9 0 11-2.12-9.36L23 10" />
+          </svg>
+          Refresh
+        </button>
+        <button class="btn btn-ghost btn-icon">
+          <svg width="13" height="13" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2">
+            <rect x="3" y="3" width="7" height="18" />
+            <rect x="14" y="3" width="7" height="18" />
+          </svg>
+          Column
+        </button>
+        <button class="btn btn-ghost btn-icon">
+          <svg width="13" height="13" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2">
+            <circle cx="12" cy="12" r="1" />
+            <circle cx="19" cy="12" r="1" />
+            <circle cx="5" cy="12" r="1" />
+          </svg>
+          More
+        </button>
+        <button class="btn btn-primary" onclick="openEntry()">
+          <svg width="12" height="12" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2.5">
+            <line x1="12" y1="5" x2="12" y2="19" />
+            <line x1="5" y1="12" x2="19" y2="12" />
+          </svg>
+          New Entry
+        </button>
+      </div>
+    </div>
+
+    <!-- FILLED STATE -->
+    <div class="table-area" id="state-filled">
+      <table>
+        <thead>
+          <tr>
+            <th><input type="checkbox" style="accent-color:var(--accent)" /></th>
+            <th>
+              <div class="th-content"><svg class="th-type-icon" width="11" height="11" viewBox="0 0 24 24" fill="none"
+                  stroke="currentColor" stroke-width="2">
+                  <path d="M21 6H3M15 12H3M17 18H3" />
+                </svg><span class="th-name">_id</span></div>
+            </th>
+            <th>
+              <div class="th-content"><svg class="th-type-icon" width="11" height="11" viewBox="0 0 24 24" fill="none"
+                  stroke="currentColor" stroke-width="2">
+                  <path d="M20 21v-2a4 4 0 00-4-4H8a4 4 0 00-4 4v2" />
+                  <circle cx="12" cy="7" r="4" />
+                </svg><span class="th-name">name</span><svg class="th-sort" width="9" height="9" viewBox="0 0 24 24"
+                  fill="none" stroke="currentColor" stroke-width="2.5">
+                  <polyline points="6 9 12 15 18 9" />
+                </svg></div>
+            </th>
+            <th>
+              <div class="th-content"><svg class="th-type-icon" width="11" height="11" viewBox="0 0 24 24" fill="none"
+                  stroke="currentColor" stroke-width="2">
+                  <path d="M21 6H3M15 12H3M17 18H3" />
+                </svg><span class="th-name">identifier</span></div>
+            </th>
+            <th>
+              <div class="th-content"><svg class="th-type-icon" width="11" height="11" viewBox="0 0 24 24" fill="none"
+                  stroke="currentColor" stroke-width="2">
+                  <rect x="2" y="5" width="20" height="14" rx="2" />
+                  <line x1="2" y1="10" x2="22" y2="10" />
+                </svg><span class="th-name">payment_type</span><svg class="th-sort" width="9" height="9"
+                  viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5">
+                  <polyline points="6 9 12 15 18 9" />
+                </svg></div>
+            </th>
+            <th>
+              <div class="th-content"><svg class="th-type-icon" width="11" height="11" viewBox="0 0 24 24" fill="none"
+                  stroke="currentColor" stroke-width="2">
+                  <path d="M4 4h16c1.1 0 2 .9 2 2v12c0 1.1-.9 2-2 2H4c-1.1 0-2-.9-2-2V6c0-1.1.9-2 2-2z" />
+                  <polyline points="22,6 12,13 2,6" />
+                </svg><span class="th-name">email</span><svg class="th-sort" width="9" height="9" viewBox="0 0 24 24"
+                  fill="none" stroke="currentColor" stroke-width="2.5">
+                  <polyline points="6 9 12 15 18 9" />
+                </svg></div>
+            </th>
+            <th>
+              <div class="th-content"><svg class="th-type-icon" width="11" height="11" viewBox="0 0 24 24" fill="none"
+                  stroke="currentColor" stroke-width="2">
+                  <rect x="2" y="5" width="20" height="14" rx="2" />
+                </svg><span class="th-name">stripe_customer_id</span></div>
+            </th>
+            <th>
+              <div class="th-content"><svg class="th-type-icon" width="11" height="11" viewBox="0 0 24 24" fill="none"
+                  stroke="currentColor" stroke-width="2">
+                  <rect x="3" y="11" width="18" height="11" rx="2" />
+                  <path d="M7 11V7a5 5 0 0110 0v4" />
+                </svg><span class="th-name">is_anonymous</span></div>
+            </th>
+            <th class="add-col" onclick="openFieldModal()">
+              <div class="th-content">
+                <svg width="11" height="11" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2.5">
+                  <line x1="12" y1="5" x2="12" y2="19" />
+                  <line x1="5" y1="12" x2="19" y2="12" />
+                </svg>
+                New Field
+              </div>
+            </th>
+          </tr>
+        </thead>
+        <tbody>
+          <tr onclick="openEntry()">
+            <td onclick="event.stopPropagation()"><input type="checkbox" style="accent-color:var(--accent)" /></td>
+            <td>
+              <div class="cell cell-mono">a3f9c12e</div>
+            </td>
+            <td>
+              <div class="cell">
+                <div class="avatar">A</div><span class="cell-text">Alice Müller</span>
+              </div>
+            </td>
+            <td>
+              <div class="cell cell-mono">alice_m</div>
+            </td>
+            <td>
+              <div class="cell"><span class="cell-text">stripe</span></div>
+            </td>
+            <td>
+              <div class="cell"><span class="cell-text">alice@example.com</span></div>
+            </td>
+            <td>
+              <div class="cell cell-mono">cus_NxR3fA01k</div>
+            </td>
+            <td>
+              <div class="cell"><span class="bool bool-f">false</span></div>
+            </td>
+            <td onclick="event.stopPropagation()">
+              <div class="row-actions">
+                <div class="row-act-btn" title="Edit"><svg width="11" height="11" fill="none" viewBox="0 0 24 24"
+                    stroke="currentColor" stroke-width="2">
+                    <path d="M11 4H4a2 2 0 00-2 2v14a2 2 0 002 2h14a2 2 0 002-2v-7" />
+                    <path d="M18.5 2.5a2.121 2.121 0 013 3L12 15l-4 1 1-4 9.5-9.5z" />
+                  </svg></div>
+                <div class="row-act-btn danger" title="Delete"><svg width="11" height="11" fill="none"
+                    viewBox="0 0 24 24" stroke="currentColor" stroke-width="2">
+                    <polyline points="3 6 5 6 21 6" />
+                    <path d="M19 6l-1 14a2 2 0 01-2 2H8a2 2 0 01-2-2L5 6" />
+                    <path d="M10 11v6M14 11v6" />
+                    <path d="M9 6V4a1 1 0 011-1h4a1 1 0 011 1v2" />
+                  </svg></div>
+              </div>
+            </td>
+          </tr>
+          <tr>
+            <td><input type="checkbox" style="accent-color:var(--accent)" /></td>
+            <td>
+              <div class="cell cell-mono">b7d21af4</div>
+            </td>
+            <td>
+              <div class="cell">
+                <div class="avatar">J</div><span class="cell-text">James Harrington</span>
+              </div>
+            </td>
+            <td>
+              <div class="cell cell-mono">james_h</div>
+            </td>
+            <td>
+              <div class="cell"><span class="cell-text">stripe</span></div>
+            </td>
+            <td>
+              <div class="cell"><span class="cell-text">james.h@company.io</span></div>
+            </td>
+            <td>
+              <div class="cell cell-mono">cus_PqL7mB92z</div>
+            </td>
+            <td>
+              <div class="cell"><span class="bool bool-f">false</span></div>
+            </td>
+            <td>
+              <div class="row-actions">
+                <div class="row-act-btn" title="Edit"><svg width="11" height="11" fill="none" viewBox="0 0 24 24"
+                    stroke="currentColor" stroke-width="2">
+                    <path d="M11 4H4a2 2 0 00-2 2v14a2 2 0 002 2h14a2 2 0 002-2v-7" />
+                    <path d="M18.5 2.5a2.121 2.121 0 013 3L12 15l-4 1 1-4 9.5-9.5z" />
+                  </svg></div>
+                <div class="row-act-btn danger" title="Delete"><svg width="11" height="11" fill="none"
+                    viewBox="0 0 24 24" stroke="currentColor" stroke-width="2">
+                    <polyline points="3 6 5 6 21 6" />
+                    <path d="M19 6l-1 14a2 2 0 01-2 2H8a2 2 0 01-2-2L5 6" />
+                    <path d="M10 11v6M14 11v6" />
+                    <path d="M9 6V4a1 1 0 011-1h4a1 1 0 011 1v2" />
+                  </svg></div>
+              </div>
+            </td>
+          </tr>
+          <tr>
+            <td><input type="checkbox" style="accent-color:var(--accent)" /></td>
+            <td>
+              <div class="cell cell-mono">c1e80bb3</div>
+            </td>
+            <td>
+              <div class="cell">
+                <div class="avatar">S</div><span class="cell-text">Sara Yıldız</span>
+              </div>
+            </td>
+            <td>
+              <div class="cell cell-mono">sara_y</div>
+            </td>
+            <td>
+              <div class="cell"><span class="null">null</span></div>
+            </td>
+            <td>
+              <div class="cell"><span class="cell-text">sara@yildiz.dev</span></div>
+            </td>
+            <td>
+              <div class="cell"><span class="null">null</span></div>
+            </td>
+            <td>
+              <div class="cell"><span class="bool bool-t">true</span></div>
+            </td>
+            <td>
+              <div class="row-actions">
+                <div class="row-act-btn" title="Edit"><svg width="11" height="11" fill="none" viewBox="0 0 24 24"
+                    stroke="currentColor" stroke-width="2">
+                    <path d="M11 4H4a2 2 0 00-2 2v14a2 2 0 002 2h14a2 2 0 002-2v-7" />
+                    <path d="M18.5 2.5a2.121 2.121 0 013 3L12 15l-4 1 1-4 9.5-9.5z" />
+                  </svg></div>
+                <div class="row-act-btn danger" title="Delete"><svg width="11" height="11" fill="none"
+                    viewBox="0 0 24 24" stroke="currentColor" stroke-width="2">
+                    <polyline points="3 6 5 6 21 6" />
+                    <path d="M19 6l-1 14a2 2 0 01-2 2H8a2 2 0 01-2-2L5 6" />
+                    <path d="M10 11v6M14 11v6" />
+                    <path d="M9 6V4a1 1 0 011-1h4a1 1 0 011 1v2" />
+                  </svg></div>
+              </div>
+            </td>
+          </tr>
+          <tr>
+            <td><input type="checkbox" style="accent-color:var(--accent)" /></td>
+            <td>
+              <div class="cell cell-mono">d4a55c61</div>
+            </td>
+            <td>
+              <div class="cell">
+                <div class="avatar">M</div><span class="cell-text">Marco Rossi</span>
+              </div>
+            </td>
+            <td>
+              <div class="cell cell-mono">marco_r</div>
+            </td>
+            <td>
+              <div class="cell"><span class="cell-text">stripe</span></div>
+            </td>
+            <td>
+              <div class="cell"><span class="cell-text">marco@rossi.it</span></div>
+            </td>
+            <td>
+              <div class="cell cell-mono">cus_Wz9kXC43n</div>
+            </td>
+            <td>
+              <div class="cell"><span class="bool bool-f">false</span></div>
+            </td>
+            <td>
+              <div class="row-actions">
+                <div class="row-act-btn" title="Edit"><svg width="11" height="11" fill="none" viewBox="0 0 24 24"
+                    stroke="currentColor" stroke-width="2">
+                    <path d="M11 4H4a2 2 0 00-2 2v14a2 2 0 002 2h14a2 2 0 002-2v-7" />
+                    <path d="M18.5 2.5a2.121 2.121 0 013 3L12 15l-4 1 1-4 9.5-9.5z" />
+                  </svg></div>
+                <div class="row-act-btn danger" title="Delete"><svg width="11" height="11" fill="none"
+                    viewBox="0 0 24 24" stroke="currentColor" stroke-width="2">
+                    <polyline points="3 6 5 6 21 6" />
+                    <path d="M19 6l-1 14a2 2 0 01-2 2H8a2 2 0 01-2-2L5 6" />
+                    <path d="M10 11v6M14 11v6" />
+                    <path d="M9 6V4a1 1 0 011-1h4a1 1 0 011 1v2" />
+                  </svg></div>
+              </div>
+            </td>
+          </tr>
+          <tr>
+            <td><input type="checkbox" style="accent-color:var(--accent)" /></td>
+            <td>
+              <div class="cell cell-mono">e9b34d77</div>
+            </td>
+            <td>
+              <div class="cell">
+                <div class="avatar">N</div><span class="cell-text">Nadia Petrova</span>
+              </div>
+            </td>
+            <td>
+              <div class="cell cell-mono">nadia_p</div>
+            </td>
+            <td>
+              <div class="cell"><span class="null">null</span></div>
+            </td>
+            <td>
+              <div class="cell"><span class="cell-text">n.petrova@mail.ru</span></div>
+            </td>
+            <td>
+              <div class="cell"><span class="null">null</span></div>
+            </td>
+            <td>
+              <div class="cell"><span class="bool bool-t">true</span></div>
+            </td>
+            <td>
+              <div class="row-actions">
+                <div class="row-act-btn" title="Edit"><svg width="11" height="11" fill="none" viewBox="0 0 24 24"
+                    stroke="currentColor" stroke-width="2">
+                    <path d="M11 4H4a2 2 0 00-2 2v14a2 2 0 002 2h14a2 2 0 002-2v-7" />
+                    <path d="M18.5 2.5a2.121 2.121 0 013 3L12 15l-4 1 1-4 9.5-9.5z" />
+                  </svg></div>
+                <div class="row-act-btn danger" title="Delete"><svg width="11" height="11" fill="none"
+                    viewBox="0 0 24 24" stroke="currentColor" stroke-width="2">
+                    <polyline points="3 6 5 6 21 6" />
+                    <path d="M19 6l-1 14a2 2 0 01-2 2H8a2 2 0 01-2-2L5 6" />
+                    <path d="M10 11v6M14 11v6" />
+                    <path d="M9 6V4a1 1 0 011-1h4a1 1 0 011 1v2" />
+                  </svg></div>
+              </div>
+            </td>
+          </tr>
+          <tr>
+            <td><input type="checkbox" style="accent-color:var(--accent)" /></td>
+            <td>
+              <div class="cell cell-mono">f2c11e90</div>
+            </td>
+            <td>
+              <div class="cell">
+                <div class="avatar">L</div><span class="cell-text">Lucas Fontaine</span>
+              </div>
+            </td>
+            <td>
+              <div class="cell cell-mono">lucas_f</div>
+            </td>
+            <td>
+              <div class="cell"><span class="cell-text">stripe</span></div>
+            </td>
+            <td>
+              <div class="cell"><span class="cell-text">lucas@fontaine.fr</span></div>
+            </td>
+            <td>
+              <div class="cell cell-mono">cus_Rf5tYD88q</div>
+            </td>
+            <td>
+              <div class="cell"><span class="bool bool-f">false</span></div>
+            </td>
+            <td>
+              <div class="row-actions">
+                <div class="row-act-btn" title="Edit"><svg width="11" height="11" fill="none" viewBox="0 0 24 24"
+                    stroke="currentColor" stroke-width="2">
+                    <path d="M11 4H4a2 2 0 00-2 2v14a2 2 0 002 2h14a2 2 0 002-2v-7" />
+                    <path d="M18.5 2.5a2.121 2.121 0 013 3L12 15l-4 1 1-4 9.5-9.5z" />
+                  </svg></div>
+                <div class="row-act-btn danger" title="Delete"><svg width="11" height="11" fill="none"
+                    viewBox="0 0 24 24" stroke="currentColor" stroke-width="2">
+                    <polyline points="3 6 5 6 21 6" />
+                    <path d="M19 6l-1 14a2 2 0 01-2 2H8a2 2 0 01-2-2L5 6" />
+                    <path d="M10 11v6M14 11v6" />
+                    <path d="M9 6V4a1 1 0 011-1h4a1 1 0 011 1v2" />
+                  </svg></div>
+              </div>
+            </td>
+          </tr>
+          <tr>
+            <td><input type="checkbox" style="accent-color:var(--accent)" /></td>
+            <td>
+              <div class="cell cell-mono">g8e47ba2</div>
+            </td>
+            <td>
+              <div class="cell">
+                <div class="avatar">E</div><span class="cell-text">Elif Çelik</span>
+              </div>
+            </td>
+            <td>
+              <div class="cell cell-mono">elif_c</div>
+            </td>
+            <td>
+              <div class="cell"><span class="cell-text">stripe</span></div>
+            </td>
+            <td>
+              <div class="cell"><span class="cell-text">elif@celik.com.tr</span></div>
+            </td>
+            <td>
+              <div class="cell cell-mono">cus_Hn2wKE19m</div>
+            </td>
+            <td>
+              <div class="cell"><span class="bool bool-f">false</span></div>
+            </td>
+            <td>
+              <div class="row-actions">
+                <div class="row-act-btn" title="Edit"><svg width="11" height="11" fill="none" viewBox="0 0 24 24"
+                    stroke="currentColor" stroke-width="2">
+                    <path d="M11 4H4a2 2 0 00-2 2v14a2 2 0 002 2h14a2 2 0 002-2v-7" />
+                    <path d="M18.5 2.5a2.121 2.121 0 013 3L12 15l-4 1 1-4 9.5-9.5z" />
+                  </svg></div>
+                <div class="row-act-btn danger" title="Delete"><svg width="11" height="11" fill="none"
+                    viewBox="0 0 24 24" stroke="currentColor" stroke-width="2">
+                    <polyline points="3 6 5 6 21 6" />
+                    <path d="M19 6l-1 14a2 2 0 01-2 2H8a2 2 0 01-2-2L5 6" />
+                    <path d="M10 11v6M14 11v6" />
+                    <path d="M9 6V4a1 1 0 011-1h4a1 1 0 011 1v2" />
+                  </svg></div>
+              </div>
+            </td>
+          </tr>
+          <tr>
+            <td><input type="checkbox" style="accent-color:var(--accent)" /></td>
+            <td>
+              <div class="cell cell-mono">h5f88cd5</div>
+            </td>
+            <td>
+              <div class="cell">
+                <div class="avatar">K</div><span class="cell-text">Kenji Tanaka</span>
+              </div>
+            </td>
+            <td>
+              <div class="cell cell-mono">kenji_t</div>
+            </td>
+            <td>
+              <div class="cell"><span class="null">null</span></div>
+            </td>
+            <td>
+              <div class="cell"><span class="cell-text">k.tanaka@jp.io</span></div>
+            </td>
+            <td>
+              <div class="cell"><span class="null">null</span></div>
+            </td>
+            <td>
+              <div class="cell"><span class="bool bool-t">true</span></div>
+            </td>
+            <td>
+              <div class="row-actions">
+                <div class="row-act-btn" title="Edit"><svg width="11" height="11" fill="none" viewBox="0 0 24 24"
+                    stroke="currentColor" stroke-width="2">
+                    <path d="M11 4H4a2 2 0 00-2 2v14a2 2 0 002 2h14a2 2 0 002-2v-7" />
+                    <path d="M18.5 2.5a2.121 2.121 0 013 3L12 15l-4 1 1-4 9.5-9.5z" />
+                  </svg></div>
+                <div class="row-act-btn danger" title="Delete"><svg width="11" height="11" fill="none"
+                    viewBox="0 0 24 24" stroke="currentColor" stroke-width="2">
+                    <polyline points="3 6 5 6 21 6" />
+                    <path d="M19 6l-1 14a2 2 0 01-2 2H8a2 2 0 01-2-2L5 6" />
+                    <path d="M10 11v6M14 11v6" />
+                    <path d="M9 6V4a1 1 0 011-1h4a1 1 0 011 1v2" />
+                  </svg></div>
+              </div>
+            </td>
+          </tr>
+          <tr class="tfoot-row">
+            <td colspan="9">Showing 8 of 8 entries</td>
+          </tr>
+        </tbody>
+      </table>
+    </div>
+
+    <!-- EMPTY STATE -->
+    <div class="table-area" id="state-empty" style="display:none">
+      <table>
+        <thead>
+          <tr>
+            <th><input type="checkbox" disabled style="accent-color:var(--accent)" /></th>
+            <th>
+              <div class="th-content"><span class="th-name">_id</span></div>
+            </th>
+            <th>
+              <div class="th-content"><span class="th-name">name</span></div>
+            </th>
+            <th>
+              <div class="th-content"><span class="th-name">identifier</span></div>
+            </th>
+            <th>
+              <div class="th-content"><span class="th-name">payment_type</span></div>
+            </th>
+            <th>
+              <div class="th-content"><span class="th-name">email</span></div>
+            </th>
+            <th>
+              <div class="th-content"><span class="th-name">stripe_customer_id</span></div>
+            </th>
+            <th>
+              <div class="th-content"><span class="th-name">is_anonymous</span></div>
+            </th>
+            <th class="add-col" onclick="openFieldModal()">
+              <div class="th-content"><svg width="11" height="11" fill="none" viewBox="0 0 24 24" stroke="currentColor"
+                  stroke-width="2.5">
+                  <line x1="12" y1="5" x2="12" y2="19" />
+                  <line x1="5" y1="12" x2="19" y2="12" />
+                </svg>New Field</div>
+            </th>
+          </tr>
+        </thead>
+      </table>
+      <div class="empty-state">
+        <div class="ghost-table">
+          <div class="ghost-row">
+            <div class="ghost-cb"></div>
+            <div class="g-bar g36"></div>
+            <div class="g-bar g96"></div>
+            <div class="g-bar g60"></div>
+            <div class="g-bar g48"></div>
+            <div class="g-bar g120"></div>
+            <div class="g-bar g80"></div>
+            <div class="ghost-dot"></div>
+          </div>
+          <div class="ghost-row" style="opacity:.55">
+            <div class="ghost-cb"></div>
+            <div class="g-bar g36"></div>
+            <div class="g-bar g80"></div>
+            <div class="g-bar g48"></div>
+            <div class="g-bar g60"></div>
+            <div class="g-bar g96"></div>
+            <div class="g-bar g60"></div>
+            <div class="ghost-dot"></div>
+          </div>
+          <div class="ghost-row" style="opacity:.25">
+            <div class="ghost-cb"></div>
+            <div class="g-bar g36"></div>
+            <div class="g-bar g120"></div>
+            <div class="g-bar g60"></div>
+            <div class="g-bar g20"></div>
+            <div class="g-bar g80"></div>
+            <div class="g-bar g48"></div>
+            <div class="ghost-dot"></div>
+          </div>
+        </div>
+        <div class="empty-copy">
+          <div class="empty-title">Bu bucket boş</div>
+          <div class="empty-sub">Henüz hiç kayıt yok. Manuel olarak entry ekleyebilir ya da CSV ile toplu içe
+            aktarabilirsin.</div>
+          <div class="empty-btns">
+            <button class="btn btn-ghost"><svg width="12" height="12" fill="none" viewBox="0 0 24 24"
+                stroke="currentColor" stroke-width="2">
+                <path d="M21 15v4a2 2 0 01-2 2H5a2 2 0 01-2-2v-4" />
+                <polyline points="17 8 12 3 7 8" />
+                <line x1="12" y1="3" x2="12" y2="15" />
+              </svg>Import CSV</button>
+            <button class="btn btn-primary" onclick="openEntry()"><svg width="12" height="12" fill="none"
+                viewBox="0 0 24 24" stroke="currentColor" stroke-width="2.5">
+                <line x1="12" y1="5" x2="12" y2="19" />
+                <line x1="5" y1="12" x2="19" y2="12" />
+              </svg>New Entry</button>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <!-- STATUSBAR -->
+    <div class="statusbar">
+      <div class="live-dot"></div>
+      <span class="status-text">Connected — <b>Live</b></span>
+      <span class="status-end" id="status-end">Bucket: <b>User</b> &nbsp;·&nbsp; <b>8</b> documents</span>
+    </div>
+
+    <!-- Entry panel backdrop -->
+    <div class="ep-backdrop" id="ep-backdrop" onclick="closeEntry()"></div>
+
+    <!-- ══ ENTRY PANEL ══ -->
+    <div class="entry-panel" id="entry-panel">
+      <div class="ep-head">
+        <div class="ep-head-info">
+          <div class="ep-title">New Entry</div>
+          <div class="ep-subtitle">User &nbsp;·&nbsp; new document</div>
+        </div>
+        <button class="ep-close" onclick="closeEntry()">
+          <svg width="13" height="13" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2.2">
+            <line x1="18" y1="6" x2="6" y2="18" />
+            <line x1="6" y1="6" x2="18" y2="18" />
+          </svg>
+        </button>
+      </div>
+
+      <div class="ep-body">
+        <!-- name -->
+        <div class="ep-field">
+          <div class="ep-field-head">
+            <div class="ep-field-name"><svg width="10" height="10" fill="none" viewBox="0 0 24 24" stroke="currentColor"
+                stroke-width="2">
+                <path d="M20 21v-2a4 4 0 00-4-4H8a4 4 0 00-4 4v2" />
+                <circle cx="12" cy="7" r="4" />
+              </svg>name</div>
+            <span class="ep-field-type">string</span>
+          </div>
+          <input class="ep-input" placeholder="Enter name…" />
+        </div>
+
+        <!-- identifier -->
+        <div class="ep-field">
+          <div class="ep-field-head">
+            <div class="ep-field-name"><svg width="10" height="10" fill="none" viewBox="0 0 24 24" stroke="currentColor"
+                stroke-width="2">
+                <path d="M21 6H3M15 12H3M17 18H3" />
+              </svg>identifier</div>
+            <span class="ep-field-type">string</span>
+          </div>
+          <input class="ep-input" placeholder="e.g. alice_m"
+            style="font-family:'JetBrains Mono',monospace;font-size:12px" />
+        </div>
+
+        <!-- payment_type -->
+        <div class="ep-field">
+          <div class="ep-field-head">
+            <div class="ep-field-name"><svg width="10" height="10" fill="none" viewBox="0 0 24 24" stroke="currentColor"
+                stroke-width="2">
+                <rect x="2" y="5" width="20" height="14" rx="2" />
+                <line x1="2" y1="10" x2="22" y2="10" />
+              </svg>payment_type</div>
+            <span class="ep-field-type">string</span>
+          </div>
+          <input class="ep-input" placeholder="e.g. stripe" />
+        </div>
+
+        <!-- email -->
+        <div class="ep-field">
+          <div class="ep-field-head">
+            <div class="ep-field-name"><svg width="10" height="10" fill="none" viewBox="0 0 24 24" stroke="currentColor"
+                stroke-width="2">
+                <path d="M4 4h16c1.1 0 2 .9 2 2v12c0 1.1-.9 2-2 2H4c-1.1 0-2-.9-2-2V6c0-1.1.9-2 2-2z" />
+                <polyline points="22,6 12,13 2,6" />
+              </svg>email</div>
+            <span class="ep-field-type">string</span>
+          </div>
+          <input class="ep-input" type="email" placeholder="user@example.com" />
+        </div>
+
+        <!-- stripe_customer_id -->
+        <div class="ep-field">
+          <div class="ep-field-head">
+            <div class="ep-field-name"><svg width="10" height="10" fill="none" viewBox="0 0 24 24" stroke="currentColor"
+                stroke-width="2">
+                <rect x="2" y="5" width="20" height="14" rx="2" />
+              </svg>stripe_customer_id</div>
+            <span class="ep-field-type">string</span>
+          </div>
+          <input class="ep-input" placeholder="cus_…" style="font-family:'JetBrains Mono',monospace;font-size:12px" />
+        </div>
+
+        <!-- is_anonymous boolean -->
+        <div class="ep-field">
+          <div class="ep-field-head">
+            <div class="ep-field-name"><svg width="10" height="10" fill="none" viewBox="0 0 24 24" stroke="currentColor"
+                stroke-width="2">
+                <rect x="3" y="11" width="18" height="11" rx="2" />
+                <path d="M7 11V7a5 5 0 0110 0v4" />
+              </svg>is_anonymous</div>
+            <span class="ep-field-type">boolean</span>
+          </div>
+          <div class="ep-toggle-row">
+            <div class="ep-toggle" id="bool-toggle" onclick="toggleBool()"></div>
+            <span class="ep-toggle-label" id="bool-label">false</span>
+          </div>
+        </div>
+
+        <div class="ep-section">Object & Array Fields</div>
+
+        <!-- number (extra field example) -->
+        <div class="ep-field">
+          <div class="ep-field-head">
+            <div class="ep-field-name"><svg width="10" height="10" fill="none" viewBox="0 0 24 24" stroke="currentColor"
+                stroke-width="2">
+                <line x1="12" y1="5" x2="12" y2="19" />
+                <polyline points="19 12 12 19 5 12" />
+              </svg>Number</div>
+            <span class="ep-field-type">number</span>
+          </div>
+          <input class="ep-input" placeholder="0" value="589"
+            style="font-family:'JetBrains Mono',monospace;font-size:12px" />
+        </div>
+
+        <!-- Array field -->
+        <div class="ep-field">
+          <div class="ep-field-head">
+            <div class="ep-field-name"><svg width="10" height="10" fill="none" viewBox="0 0 24 24" stroke="currentColor"
+                stroke-width="2">
+                <polyline points="4 7 4 4 20 4 20 7" />
+                <line x1="9" y1="20" x2="15" y2="20" />
+                <line x1="12" y1="4" x2="12" y2="20" />
+              </svg>Array</div>
+            <span class="ep-field-type">array</span>
+          </div>
+          <div class="ep-array">
+            <div class="ep-array-tabs">
+              <div class="ep-array-tab active">1</div>
+              <div class="ep-array-tab">2</div>
+              <div class="ep-array-tab">3</div>
+              <div class="ep-array-tab">4</div>
+              <div class="ep-array-tab">5</div>
+              <div class="ep-array-tab">6</div>
+              <div class="ep-array-tab" style="color:var(--text-faint)">+</div>
+            </div>
+            <div class="ep-array-body">
+              <div class="ep-array-chip">admin</div>
+              <div class="ep-array-chip">verified</div>
+              <div class="ep-array-add"><svg width="10" height="10" fill="none" viewBox="0 0 24 24"
+                  stroke="currentColor" stroke-width="2.5">
+                  <line x1="12" y1="5" x2="12" y2="19" />
+                  <line x1="5" y1="12" x2="19" y2="12" />
+                </svg></div>
+            </div>
+          </div>
+        </div>
+
+        <!-- Object field -->
+        <div class="ep-field">
+          <div class="ep-field-head">
+            <div class="ep-field-name"><svg width="10" height="10" fill="none" viewBox="0 0 24 24" stroke="currentColor"
+                stroke-width="2">
+                <path d="M12 2L2 7l10 5 10-5-10-5z" />
+                <polyline points="2 17 12 22 22 17" />
+                <polyline points="2 12 12 17 22 12" />
+              </svg>Object</div>
+            <span class="ep-field-type">object</span>
+          </div>
+          <div class="ep-object">
+            <div class="ep-obj-row">
+              <div class="ep-obj-key">Name</div>
+              <div class="ep-obj-val"><input
+                  style="background:none;border:none;outline:none;flex:1;font-size:12px;font-family:inherit;color:var(--text-primary)"
+                  placeholder="string value…" /><span class="ep-obj-type">string</span></div>
+            </div>
+            <div class="ep-obj-row">
+              <div class="ep-obj-key">Number</div>
+              <div class="ep-obj-val"><input
+                  style="background:none;border:none;outline:none;flex:1;font-size:12px;font-family:'JetBrains Mono',monospace;color:var(--text-primary)"
+                  value="589" /><span class="ep-obj-type">number</span></div>
+            </div>
+            <div class="ep-obj-row">
+              <div class="ep-obj-key">Boolean</div>
+              <div class="ep-obj-val">
+                <div class="ep-toggle on" onclick="this.classList.toggle('on')"></div><span
+                  class="ep-obj-type">boolean</span>
+              </div>
+            </div>
+            <div class="ep-obj-row" style="cursor:pointer; color:var(--text-muted)">
+              <div class="ep-obj-key" style="color:var(--text-faint)">Cities</div>
+              <div class="ep-obj-val" style="color:var(--text-muted);font-size:12px">
+                <svg width="11" height="11" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2">
+                  <polyline points="9 18 15 12 9 6" />
+                </svg>
+                Select…
+                <span class="ep-obj-type">relation</span>
+              </div>
+            </div>
+          </div>
+        </div>
+
+        <div class="ep-section">Location</div>
+
+        <!-- Location -->
+        <div class="ep-field">
+          <div class="ep-field-head">
+            <div class="ep-field-name"><svg width="10" height="10" fill="none" viewBox="0 0 24 24" stroke="currentColor"
+                stroke-width="2">
+                <path d="M21 10c0 7-9 13-9 13s-9-6-9-13a9 9 0 0118 0z" />
+                <circle cx="12" cy="10" r="3" />
+              </svg>Location Coords</div>
+            <span class="ep-field-type">location</span>
+          </div>
+          <div class="ep-map">
+            <div class="ep-map-grid"></div>
+            <div class="ep-map-pin">
+              <svg width="18" height="18" fill="currentColor" viewBox="0 0 24 24">
+                <path
+                  d="M12 2C8.13 2 5 5.13 5 9c0 5.25 7 13 7 13s7-7.75 7-13c0-3.87-3.13-7-7-7zm0 9.5c-1.38 0-2.5-1.12-2.5-2.5s1.12-2.5 2.5-2.5 2.5 1.12 2.5 2.5-1.12 2.5-2.5 2.5z" />
+              </svg>
+            </div>
+            <div class="ep-map-coords">41.0082° N, 28.9784° E</div>
+          </div>
+          <div class="ep-coords-row">
+            <input class="ep-input" placeholder="Latitude" value="41.0082"
+              style="font-family:'JetBrains Mono',monospace;font-size:11px" />
+            <input class="ep-input" placeholder="Longitude" value="28.9784"
+              style="font-family:'JetBrains Mono',monospace;font-size:11px" />
+          </div>
+        </div>
+
+        <div class="ep-section">Media & Rich Text</div>
+
+        <!-- Storage -->
+        <div class="ep-field">
+          <div class="ep-field-head">
+            <div class="ep-field-name"><svg width="10" height="10" fill="none" viewBox="0 0 24 24" stroke="currentColor"
+                stroke-width="2">
+                <rect x="2" y="2" width="20" height="20" rx="3" />
+                <path d="M2 14l6-6 4 4 4-4 6 6" />
+              </svg>Storage</div>
+            <span class="ep-field-type">storage</span>
+          </div>
+          <div class="ep-storage">
+            <svg width="20" height="20" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="1.5">
+              <rect x="2" y="2" width="20" height="20" rx="4" />
+              <path d="M2 14l6-6 4 4 4-4 6 6" />
+            </svg>
+            Upload one image or pick an image from library
+          </div>
+        </div>
+
+        <!-- Richtext - Business Title -->
+        <div class="ep-field">
+          <div class="ep-field-head">
+            <div class="ep-field-name"><svg width="10" height="10" fill="none" viewBox="0 0 24 24" stroke="currentColor"
+                stroke-width="2">
+                <path d="M14 2H6a2 2 0 00-2 2v16a2 2 0 002 2h12a2 2 0 002-2V8z" />
+                <polyline points="14 2 14 8 20 8" />
+                <line x1="16" y1="13" x2="8" y2="13" />
+              </svg>Business Title</div>
+            <span class="ep-field-type">richtext</span>
+          </div>
+          <div class="ep-richtext-bar">
+            <button class="ep-rt-btn" style="font-style:italic;font-family:serif;font-size:13px">I</button>
+            <button class="ep-rt-btn" style="font-weight:800;font-size:13px">B</button>
+            <div class="ep-rt-sep"></div>
+            <button class="ep-rt-btn"><svg width="12" height="12" fill="none" viewBox="0 0 24 24" stroke="currentColor"
+                stroke-width="2">
+                <line x1="8" y1="6" x2="21" y2="6" />
+                <line x1="8" y1="12" x2="21" y2="12" />
+                <line x1="8" y1="18" x2="21" y2="18" />
+                <line x1="3" y1="6" x2="3.01" y2="6" />
+                <line x1="3" y1="12" x2="3.01" y2="12" />
+                <line x1="3" y1="18" x2="3.01" y2="18" />
+              </svg></button>
+            <button class="ep-rt-btn"><svg width="12" height="12" fill="none" viewBox="0 0 24 24" stroke="currentColor"
+                stroke-width="2">
+                <line x1="8" y1="6" x2="21" y2="6" />
+                <line x1="8" y1="12" x2="21" y2="12" />
+                <line x1="8" y1="18" x2="21" y2="18" />
+              </svg></button>
+            <div class="ep-rt-sep"></div>
+            <button class="ep-rt-btn"><svg width="12" height="12" fill="none" viewBox="0 0 24 24" stroke="currentColor"
+                stroke-width="2">
+                <path d="M10 13a5 5 0 007.54.54l3-3a5 5 0 00-7.07-7.07l-1.72 1.71" />
+                <path d="M14 11a5 5 0 00-7.54-.54l-3 3a5 5 0 007.07 7.07l1.71-1.71" />
+              </svg></button>
+            <button class="ep-rt-btn"><svg width="12" height="12" fill="none" viewBox="0 0 24 24" stroke="currentColor"
+                stroke-width="2">
+                <polyline points="16 18 22 12 16 6" />
+                <polyline points="8 6 2 12 8 18" />
+              </svg></button>
+          </div>
+          <textarea class="ep-richtext-area" placeholder="Enter your text here…"></textarea>
+        </div>
+
+        <!-- Textarea Title -->
+        <div class="ep-field">
+          <div class="ep-field-head">
+            <div class="ep-field-name"><svg width="10" height="10" fill="none" viewBox="0 0 24 24" stroke="currentColor"
+                stroke-width="2">
+                <path d="M14 2H6a2 2 0 00-2 2v16a2 2 0 002 2h12a2 2 0 002-2V8z" />
+              </svg>Textarea Title</div>
+            <span class="ep-field-type">textarea</span>
+          </div>
+          <textarea class="ep-input" placeholder="Enter your message here…"></textarea>
+        </div>
+      </div>
+
+      <div class="ep-foot">
+        <button class="btn btn-ghost" onclick="closeEntry()">Cancel</button>
+        <button class="btn btn-primary">
+          <svg width="12" height="12" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2.5">
+            <polyline points="20 6 9 17 4 12" />
+          </svg>
+          Save and close
+        </button>
+      </div>
+    </div>
+  </div><!-- /main -->
+
+  <!-- ══ BUCKET NAVIGATOR POPUP ══ -->
+  <div class="bnav-popup" id="bnav-popup">
+    <div class="bnav-item" onclick="openBucketSettings('edit')">
+      <svg width="13" height="13" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2">
+        <path d="M11 4H4a2 2 0 00-2 2v14a2 2 0 002 2h14a2 2 0 002-2v-7" />
+        <path d="M18.5 2.5a2.121 2.121 0 013 3L12 15l-4 1 1-4 9.5-9.5z" />
+      </svg>
+      Edit Bucket
+    </div>
+    <div class="bnav-item" onclick="openBucketSettings('rules')">
+      <svg width="13" height="13" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2">
+        <path d="M12 22s8-4 8-10V5l-8-3-8 3v7c0 6 8 10 8 10z" />
+      </svg>
+      Configure Rules
+    </div>
+    <div class="bnav-sep"></div>
+    <div class="bnav-item danger" onclick="closeBNav()">
+      <svg width="13" height="13" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2">
+        <polyline points="3 6 5 6 21 6" />
+        <path d="M19 6l-1 14a2 2 0 01-2 2H8a2 2 0 01-2-2L5 6" />
+        <path d="M10 11v6M14 11v6" />
+        <path d="M9 6V4a1 1 0 011-1h4a1 1 0 011 1v2" />
+      </svg>
+      Delete Bucket
+    </div>
+  </div>
+
+  <!-- ══ BUCKET SETTINGS / EDIT BUCKET MODAL ══ -->
+  <div class="modal-overlay" id="bucket-settings-overlay" onclick="handleBSOverlay(event)">
+    <div class="bucket-settings-modal" onclick="event.stopPropagation()">
+      <div class="bsm-head">
+        <span class="bsm-title" id="bsm-title">Edit Bucket</span>
+        <button class="fm-close" onclick="closeBucketSettings()">
+          <svg width="13" height="13" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2.2">
+            <line x1="18" y1="6" x2="6" y2="18" />
+            <line x1="6" y1="6" x2="18" y2="18" />
+          </svg>
+        </button>
+      </div>
+      <!-- Edit Bucket view -->
+      <div class="bsm-body" id="bsm-edit">
+        <div class="fm-row">
+          <label class="fm-label">Bucket Name</label>
+          <input class="fm-input" id="bsm-name-input" placeholder="Bucket name" />
+        </div>
+        <div class="fm-row">
+          <label class="fm-label">Title</label>
+          <input class="fm-input" placeholder="Human-readable title" />
+        </div>
+        <div class="bsm-sep"></div>
+        <div class="bsm-nav">
+          <div class="bsm-nav-item">
+            <svg width="13" height="13" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2">
+              <circle cx="12" cy="12" r="10" />
+              <polyline points="12 6 12 12 16 14" />
+            </svg>
+            History
+          </div>
+          <div class="bsm-nav-item danger">
+            <svg width="13" height="13" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2">
+              <polyline points="3 6 5 6 21 6" />
+              <path d="M19 6l-1 14a2 2 0 01-2 2H8a2 2 0 01-2-2L5 6" />
+            </svg>
+            Delete Bucket
+          </div>
+        </div>
+        <div class="bsm-sep"></div>
+        <div class="fm-row">
+          <label class="fm-label">Limitations</label>
+          <div style="display:flex;align-items:center;gap:6px">
+            <input class="fm-input" placeholder="Max Documents" style="flex:1" />
+          </div>
+        </div>
+        <div class="fm-row">
+          <label class="fm-label" style="display:flex;align-items:center;gap:6px">
+            <svg width="11" height="11" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2">
+              <polyline points="9 18 15 12 9 6" />
+            </svg>
+            Other
+          </label>
+        </div>
+      </div>
+      <!-- Rules view -->
+      <div class="bsm-body" id="bsm-rules" style="display:none">
+        <div class="bsm-rules">
+          <div class="bsm-rules-head">
+            RULES
+            <svg width="13" height="13" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2">
+              <circle cx="12" cy="12" r="1" />
+              <circle cx="19" cy="12" r="1" />
+              <circle cx="5" cy="12" r="1" />
+            </svg>
+          </div>
+          <div class="bsm-rules-code">
+            {<br>
+            &nbsp;&nbsp;<span class="kw">read</span>: document.user_id == auth.attributes.id || auth.attributes.key ==
+            <span class="str">"admin"</span>,<br>
+            &nbsp;&nbsp;<span class="kw">write</span>: document.user_id == auth.attributes.id<br>
+            }
+          </div>
+        </div>
+      </div>
+      <div class="bsm-foot">
+        <button class="btn btn-ghost" onclick="closeBucketSettings()">Cancel</button>
+        <button class="btn btn-primary" onclick="closeBucketSettings()">
+          <svg width="12" height="12" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2.5">
+            <polyline points="20 6 9 17 4 12" />
+          </svg>
+          Apply
+        </button>
+      </div>
+    </div>
+  </div>
+
+  <!-- ══ NEW FIELD MODAL ══ -->
+  <div class="modal-overlay" id="field-modal-overlay" onclick="handleFMOverlay(event)">
+    <div class="field-modal" onclick="event.stopPropagation()">
+      <div class="fm-head">
+        <span class="fm-title">New Field</span>
+        <button class="fm-close" onclick="closeFieldModal()">
+          <svg width="13" height="13" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2.2">
+            <line x1="18" y1="6" x2="6" y2="18" />
+            <line x1="6" y1="6" x2="18" y2="18" />
+          </svg>
+        </button>
+      </div>
+      <div class="fm-body">
+        <div class="fm-row">
+          <label class="fm-label">Field Name</label>
+          <input class="fm-input" placeholder="e.g. full_name" />
+        </div>
+        <div class="fm-row">
+          <label class="fm-label">Translate Title</label>
+          <input class="fm-input" placeholder="Description of the input" />
+          <span class="fm-hint">Displayed as a label in the entry form.</span>
+        </div>
+
+        <!-- Tabs -->
+        <div style="margin:0 -16px">
+          <div class="fm-tabs">
+            <div class="fm-tab active" onclick="switchFMTab(this,'default')">Default</div>
+            <div class="fm-tab" onclick="switchFMTab(this,'config')">Configuration</div>
+          </div>
+        </div>
+
+        <!-- Default tab -->
+        <div id="fmt-default">
+          <div class="fm-row" style="margin-bottom:0">
+            <label class="fm-label">Field Type</label>
+            <div class="ft-grid">
+              <button class="ft-btn selected" onclick="selectFT(this)">
+                <div class="ft-icon"><svg width="13" height="13" fill="none" viewBox="0 0 24 24" stroke="currentColor"
+                    stroke-width="2">
+                    <path d="M21 6H3M15 12H3M17 18H3" />
+                  </svg></div><span class="ft-name">String</span>
+              </button>
+              <button class="ft-btn" onclick="selectFT(this)">
+                <div class="ft-icon"><svg width="13" height="13" fill="none" viewBox="0 0 24 24" stroke="currentColor"
+                    stroke-width="2">
+                    <line x1="12" y1="5" x2="12" y2="19" />
+                    <polyline points="19 12 12 19 5 12" />
+                  </svg></div><span class="ft-name">Number</span>
+              </button>
+              <button class="ft-btn" onclick="selectFT(this)">
+                <div class="ft-icon"><svg width="13" height="13" fill="none" viewBox="0 0 24 24" stroke="currentColor"
+                    stroke-width="2">
+                    <rect x="3" y="4" width="18" height="18" rx="2" />
+                    <line x1="16" y1="2" x2="16" y2="6" />
+                    <line x1="8" y1="2" x2="8" y2="6" />
+                    <line x1="3" y1="10" x2="21" y2="10" />
+                  </svg></div><span class="ft-name">Date</span>
+              </button>
+              <button class="ft-btn" onclick="selectFT(this)">
+                <div class="ft-icon"><svg width="13" height="13" fill="none" viewBox="0 0 24 24" stroke="currentColor"
+                    stroke-width="2">
+                    <rect x="3" y="11" width="18" height="11" rx="2" />
+                    <path d="M7 11V7a5 5 0 0110 0v4" />
+                  </svg></div><span class="ft-name">Boolean</span>
+              </button>
+              <button class="ft-btn" onclick="selectFT(this)">
+                <div class="ft-icon"><svg width="13" height="13" fill="none" viewBox="0 0 24 24" stroke="currentColor"
+                    stroke-width="2">
+                    <path d="M14 2H6a2 2 0 00-2 2v16a2 2 0 002 2h12a2 2 0 002-2V8z" />
+                    <polyline points="14 2 14 8 20 8" />
+                  </svg></div><span class="ft-name">Textarea</span>
+              </button>
+              <button class="ft-btn" onclick="selectFT(this)">
+                <div class="ft-icon"><svg width="13" height="13" fill="none" viewBox="0 0 24 24" stroke="currentColor"
+                    stroke-width="2">
+                    <circle cx="12" cy="12" r="10" />
+                    <polyline points="8 12 12 16 16 12" />
+                    <line x1="12" y1="8" x2="12" y2="16" />
+                  </svg></div><span class="ft-name">MultiSelect</span>
+              </button>
+              <button class="ft-btn" onclick="selectFT(this)">
+                <div class="ft-icon"><svg width="13" height="13" fill="none" viewBox="0 0 24 24" stroke="currentColor"
+                    stroke-width="2">
+                    <path
+                      d="M21 16V8a2 2 0 00-1-1.73l-7-4a2 2 0 00-2 0l-7 4A2 2 0 003 8v8a2 2 0 001 1.73l7 4a2 2 0 002 0l7-4A2 2 0 0021 16z" />
+                  </svg></div><span class="ft-name">Relation</span>
+              </button>
+              <button class="ft-btn" onclick="selectFT(this)">
+                <div class="ft-icon"><svg width="13" height="13" fill="none" viewBox="0 0 24 24" stroke="currentColor"
+                    stroke-width="2">
+                    <polyline points="4 7 4 4 20 4 20 7" />
+                    <line x1="9" y1="20" x2="15" y2="20" />
+                    <line x1="12" y1="4" x2="12" y2="20" />
+                  </svg></div><span class="ft-name">Array</span>
+              </button>
+              <button class="ft-btn" onclick="selectFT(this)">
+                <div class="ft-icon"><svg width="13" height="13" fill="none" viewBox="0 0 24 24" stroke="currentColor"
+                    stroke-width="2">
+                    <path d="M12 2L2 7l10 5 10-5-10-5z" />
+                    <polyline points="2 17 12 22 22 17" />
+                    <polyline points="2 12 12 17 22 12" />
+                  </svg></div><span class="ft-name">Object</span>
+              </button>
+              <button class="ft-btn" onclick="selectFT(this)">
+                <div class="ft-icon"><svg width="13" height="13" fill="none" viewBox="0 0 24 24" stroke="currentColor"
+                    stroke-width="2">
+                    <ellipse cx="12" cy="5" rx="9" ry="3" />
+                    <path d="M21 12c0 1.66-4 3-9 3s-9-1.34-9-3" />
+                    <path d="M3 5v14c0 1.66 4 3 9 3s9-1.34 9-3V5" />
+                  </svg></div><span class="ft-name">File</span>
+              </button>
+              <button class="ft-btn" onclick="selectFT(this)">
+                <div class="ft-icon"><svg width="13" height="13" fill="none" viewBox="0 0 24 24" stroke="currentColor"
+                    stroke-width="2">
+                    <path d="M21 10c0 7-9 13-9 13s-9-6-9-13a9 9 0 0118 0z" />
+                    <circle cx="12" cy="10" r="3" />
+                  </svg></div><span class="ft-name">Location</span>
+              </button>
+              <button class="ft-btn" onclick="selectFT(this)">
+                <div class="ft-icon"><svg width="13" height="13" fill="none" viewBox="0 0 24 24" stroke="currentColor"
+                    stroke-width="2">
+                    <path d="M14 2H6a2 2 0 00-2 2v16a2 2 0 002 2h12a2 2 0 002-2V8z" />
+                    <polyline points="14 2 14 8 20 8" />
+                    <line x1="16" y1="13" x2="8" y2="13" />
+                  </svg></div><span class="ft-name">RichText</span>
+              </button>
+            </div>
+          </div>
+        </div>
+
+        <!-- Config tab -->
+        <div id="fmt-config" style="display:none;flex-direction:column;gap:8px">
+          <div class="fm-toggle-row"><span class="fm-toggle-label">Frozen</span>
+            <div class="fm-toggle" onclick="this.classList.toggle('on')"></div>
+          </div>
+          <div class="fm-toggle-row"><span class="fm-toggle-label">Define pattern</span>
+            <div class="fm-toggle" onclick="this.classList.toggle('on')"></div>
+          </div>
+          <div class="fm-toggle-row"><span class="fm-toggle-label">Primary field</span>
+            <div class="fm-toggle" onclick="this.classList.toggle('on')"></div>
+          </div>
+          <div class="fm-toggle-row"><span class="fm-toggle-label">Translation</span>
+            <div class="fm-toggle" onclick="this.classList.toggle('on')"></div>
+          </div>
+          <div class="fm-toggle-row"><span class="fm-toggle-label">Read Only</span>
+            <div class="fm-toggle" onclick="this.classList.toggle('on')"></div>
+          </div>
+          <div class="fm-toggle-row"><span class="fm-toggle-label">Unique factory</span>
+            <div class="fm-toggle" onclick="this.classList.toggle('on')"></div>
+          </div>
+          <div class="fm-toggle-row"><span class="fm-toggle-label">Required field</span>
+            <div class="fm-toggle" onclick="this.classList.toggle('on')"></div>
+          </div>
+          <div class="fm-toggle-row"><span class="fm-toggle-label">Add selection options</span>
+            <div class="fm-toggle" onclick="this.classList.toggle('on')"></div>
+          </div>
+          <div class="fm-toggle-row"><span class="fm-toggle-label">Indexed field in database</span>
+            <div class="fm-toggle" onclick="this.classList.toggle('on')"></div>
+          </div>
+        </div>
+      </div>
+
+      <div class="fm-foot">
+        <button class="btn btn-ghost" onclick="closeFieldModal()">Cancel</button>
+        <button class="btn btn-primary" onclick="closeFieldModal()">
+          <svg width="12" height="12" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2.5">
+            <polyline points="20 6 9 17 4 12" />
+          </svg>
+          Save and close
+        </button>
+      </div>
+    </div>
+  </div>
+
+  <script>
+    // ─── THEME
+    function toggleTheme() {
+      const html = document.documentElement;
+      const dark = html.getAttribute('data-theme') === 'dark';
+      html.setAttribute('data-theme', dark ? 'light' : 'dark');
+      localStorage.setItem('spica-theme', dark ? 'light' : 'dark');
+    }
+    if (localStorage.getItem('spica-theme') === 'dark')
+      document.documentElement.setAttribute('data-theme', 'dark');
+
+    // ─── TABLE STATE
+    function switchState(s) {
+      const filled = document.getElementById('state-filled');
+      const empty = document.getElementById('state-empty');
+      const dFilled = document.getElementById('d-filled');
+      const dEmpty = document.getElementById('d-empty');
+      const count = document.getElementById('count-label');
+      const statusEnd = document.getElementById('status-end');
+      const badge = document.getElementById('sb-badge');
+      if (s === 'filled') {
+        filled.style.display = ''; empty.style.display = 'none';
+        dFilled.classList.add('on'); dEmpty.classList.remove('on');
+        count.innerHTML = '<b>8</b> entries';
+        statusEnd.innerHTML = 'Bucket: <b>User</b> &nbsp;·&nbsp; <b>8</b> documents';
+        badge.textContent = '8';
+      } else {
+        filled.style.display = 'none'; empty.style.display = '';
+        dFilled.classList.remove('on'); dEmpty.classList.add('on');
+        count.innerHTML = '<b>0</b> entries';
+        statusEnd.innerHTML = 'Bucket: <b>User</b> &nbsp;·&nbsp; 0 documents';
+        badge.textContent = '0';
+      }
+    }
+
+    // ─── ENTRY PANEL
+    function openEntry() {
+      document.getElementById('entry-panel').classList.add('open');
+      document.getElementById('ep-backdrop').classList.add('open');
+    }
+    function closeEntry() {
+      document.getElementById('entry-panel').classList.remove('open');
+      document.getElementById('ep-backdrop').classList.remove('open');
+    }
+    function toggleBool() {
+      const t = document.getElementById('bool-toggle');
+      const l = document.getElementById('bool-label');
+      t.classList.toggle('on');
+      l.textContent = t.classList.contains('on') ? 'true' : 'false';
+    }
+
+    // ─── BUCKET NAV POPUP
+    let bnavTarget = '';
+    function openBNav(e, bucket) {
+      e.stopPropagation();
+      bnavTarget = bucket;
+      const popup = document.getElementById('bnav-popup');
+      const rect = e.currentTarget.getBoundingClientRect();
+      popup.style.top = (rect.bottom + 5) + 'px';
+      const left = Math.min(rect.left, window.innerWidth - 185);
+      popup.style.left = left + 'px';
+      popup.classList.add('open');
+      setTimeout(() => document.addEventListener('click', closeBNavOutside, { once: true }), 50);
+    }
+    function closeBNav() {
+      document.getElementById('bnav-popup').classList.remove('open');
+    }
+    function closeBNavOutside(e) {
+      if (!document.getElementById('bnav-popup').contains(e.target)) closeBNav();
+    }
+
+    // ─── BUCKET SETTINGS MODAL
+    function openBucketSettings(view) {
+      closeBNav();
+      const overlay = document.getElementById('bucket-settings-overlay');
+      const editView = document.getElementById('bsm-edit');
+      const rulesView = document.getElementById('bsm-rules');
+      const title = document.getElementById('bsm-title');
+      const nameInput = document.getElementById('bsm-name-input');
+
+      if (view === 'edit') {
+        title.textContent = 'Edit Bucket — ' + bnavTarget;
+        nameInput.value = bnavTarget;
+        editView.style.display = '';
+        rulesView.style.display = 'none';
+      } else {
+        title.textContent = 'Configure Rules — ' + bnavTarget;
+        editView.style.display = 'none';
+        rulesView.style.display = '';
+      }
+      overlay.classList.add('open');
+    }
+    function closeBucketSettings() {
+      document.getElementById('bucket-settings-overlay').classList.remove('open');
+    }
+    function handleBSOverlay(e) {
+      if (e.target === document.getElementById('bucket-settings-overlay')) closeBucketSettings();
+    }
+
+    // ─── NEW FIELD MODAL
+    function openFieldModal() {
+      document.getElementById('field-modal-overlay').classList.add('open');
+    }
+    function closeFieldModal() {
+      document.getElementById('field-modal-overlay').classList.remove('open');
+    }
+    function handleFMOverlay(e) {
+      if (e.target === document.getElementById('field-modal-overlay')) closeFieldModal();
+    }
+    function selectFT(btn) {
+      document.querySelectorAll('.ft-btn').forEach(b => b.classList.remove('selected'));
+      btn.classList.add('selected');
+    }
+    function switchFMTab(tab, which) {
+      document.querySelectorAll('.fm-tab').forEach(t => t.classList.remove('active'));
+      tab.classList.add('active');
+      const def = document.getElementById('fmt-default');
+      const cfg = document.getElementById('fmt-config');
+      if (which === 'default') {
+        def.style.display = ''; cfg.style.display = 'none';
+      } else {
+        def.style.display = 'none'; cfg.style.display = 'flex';
+      }
+    }
+
+    // ─── ESC KEY
+    document.addEventListener('keydown', e => {
+      if (e.key === 'Escape') {
+        closeEntry(); closeFieldModal(); closeBucketSettings(); closeBNav();
+      }
+    });
+  </script>
+</body>
+
+</html>

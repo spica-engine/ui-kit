@@ -9,7 +9,7 @@
 
 .backgroundCircle {
   fill: none;
-  stroke: var(--oziko-color-soft-dark);
+  stroke: var(--color-border-mid);
 }
 
 .progressCircle {
@@ -18,18 +18,18 @@
   transition: stroke-dashoffset 0.3s ease;
   transform-origin: center;
   transform: rotate(-90deg);
-  stroke: var(--oziko-color-primary-light);
+  stroke: var(--color-accent-hover);
 
   &.normal {
-    stroke: var(--oziko-color-primary-light);
+    stroke: var(--color-accent-hover);
   }
 
   &.success {
-    stroke: var(--oziko-color-success);
+    stroke: var(--color-green);
   }
 
   &.danger {
-    stroke: var(--oziko-color-danger);
+    stroke: var(--color-red);
   }
 }
 
@@ -39,18 +39,18 @@
   left: 50%;
   transform: translate(-50%, -50%);
   font-weight: 500;
-  font-family: var(--oziko-font-family-base);
+  font-family: var(--font-sans);
 
   &.normal {
-    color: var(--oziko-color-font-primary);
+    color: var(--color-text-primary);
   }
 
   &.success {
-    color: var(--oziko-color-success);
+    color: var(--color-green);
   }
 
   &.danger {
-    color: var(--oziko-color-danger);
+    color: var(--color-red);
   }
 
   &.xxs.danger {
@@ -62,22 +62,22 @@
 
   &.xs,
   &.xxs {
-    font-size: var(--oziko-font-size-xs);
+    font-size: var(--font-size-xs);
   }
 
   &.sm {
-    font-size: var(--oziko-font-size-sm);
+    font-size: var(--font-size-base);
   }
 
   &.md {
-    font-size: var(--oziko-font-size-md);
+    font-size: var(--font-size-lg);
   }
 
   &.lg {
-    font-size: var(--oziko-font-size-lg);
+    font-size: var(--font-size-lg);
   }
 
   &.xl {
-    font-size: var(--oziko-font-size-xl);
+    font-size: var(--font-size-xl);
   }
 }

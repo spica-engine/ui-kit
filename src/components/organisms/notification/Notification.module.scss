@@ -12,26 +12,26 @@
   position: relative;
   display: flex;
   align-items: flex-start;
-  gap: var(--oziko-gap-md);
+  gap: var(--spacing-9);
   min-width: 320px;
   max-width: 480px;
-  padding: var(--oziko-padding-lg) var(--oziko-padding-xl);
+  padding: var(--spacing-12) var(--spacing-14);
 
-  background: var(--notif-bg, var(--oziko-color-default));
-  border: var(--oziko-border-default);
-  border-radius: var(--notif-radius, var(--oziko-border-radius-lg));
-  box-shadow: var(--notif-shadow, var(--box-shadow));
+  background: var(--notif-bg, var(--color-surface));
+  border: var(--border-default);
+  border-radius: var(--notif-radius, var(--radius-2xl));
+  box-shadow: var(--notif-shadow, var(--shadow-md));
 
-  color: var(--notif-fg, var(--oziko-color-font-primary));
-  font-family: var(--notif-font-family, var(--oziko-font-family-base));
-  font-size: var(--notif-font-size, var(--oziko-font-size-md));
+  color: var(--notif-fg, var(--color-text-primary));
+  font-family: var(--notif-font-family, var(--font-sans));
+  font-size: var(--notif-font-size, var(--font-size-lg));
   line-height: var(--notif-line-height, 1.5);
 
   cursor: pointer;
   pointer-events: auto;
 
   opacity: 0;
-  transition: all var(--oziko-transition-duration) cubic-bezier(0.645, 0.045, 0.355, 1);
+  transition: all var(--transition-base) cubic-bezier(0.645, 0.045, 0.355, 1);
 
   will-change: transform, opacity;
 
@@ -100,18 +100,18 @@
 
 .notificationIcon {
   flex-shrink: 0;
-  margin-top: var(--oziko-padding-xs);
+  margin-top: var(--spacing-2);
 
   :global(.notification-icon-info) {
-    color: var(--color-info, var(--oziko-color-primary));
+    color: var(--color-info, var(--color-accent));
   }
 
   :global(.notification-icon-success) {
-    color: var(--color-success, var(--oziko-color-success));
+    color: var(--color-success, var(--color-green));
   }
 
   :global(.notification-icon-error) {
-    color: var(--color-error, var(--oziko-color-danger));
+    color: var(--color-error, var(--color-red));
   }
 
   :global(.notification-icon-warning) {
@@ -119,7 +119,7 @@
   }
 
   :global(.notification-icon-loading) {
-    color: var(--color-primary, var(--oziko-color-primary));
+    color: var(--color-primary, var(--color-accent));
     animation: spin 1s linear infinite;
   }
 }
@@ -140,8 +140,8 @@
 
 .notificationMessage {
   font-weight: var(--notif-message-weight, 600);
-  color: var(--notif-message-color, var(--oziko-color-font-primary));
-  margin-bottom: var(--oziko-gap-xs);
+  color: var(--notif-message-color, var(--color-text-primary));
+  margin-bottom: var(--spacing-2);
 
   &:last-child {
     margin-bottom: 0;
@@ -149,10 +149,10 @@
 }
 
 .notificationDescription {
-  color: var(--notif-description-color, var(--oziko-color-input-placeholder));
-  font-size: var(--notif-description-size, var(--oziko-font-size-sm));
+  color: var(--notif-description-color, var(--color-text-muted));
+  font-size: var(--notif-description-size, var(--font-size-base));
   line-height: var(--notif-description-line-height, 1.4);
-  margin-bottom: var(--oziko-gap-md);
+  margin-bottom: var(--spacing-9);
 
   &:last-child {
     margin-bottom: 0;
@@ -160,25 +160,25 @@
 }
 
 .notificationAction {
-  margin-top: var(--oziko-gap-md);
+  margin-top: var(--spacing-9);
 
   button {
-    background: var(--color-primary, var(--oziko-color-primary));
-    color: var(--color-primary-text, var(--oziko-color-font-secondary));
+    background: var(--color-primary, var(--color-accent));
+    color: var(--color-primary-text, var(--color-on-accent));
     border: none;
-    border-radius: var(--notif-button-radius, var(--oziko-border-radius-sm));
-    padding: var(--oziko-padding-sm) var(--oziko-gap-md);
-    font-size: var(--oziko-font-size-sm);
+    border-radius: var(--notif-button-radius, var(--radius-sm));
+    padding: var(--spacing-4) var(--spacing-9);
+    font-size: var(--font-size-base);
     font-weight: 500;
     cursor: pointer;
     transition: all 0.2s;
 
     &:hover {
-      background: var(--color-primary-hover, var(--oziko-color-primary-light));
+      background: var(--color-primary-hover, var(--color-accent-hover));
     }
 
     &:active {
-      background: var(--color-primary-active, var(--oziko-color-primary-dark));
+      background: var(--color-primary-active, var(--color-accent-dark));
     }
   }
 }
@@ -187,12 +187,12 @@
   flex-shrink: 0;
   background: none;
   border: none;
-  padding: var(--oziko-padding-xs);
-  margin: calc(-1 * var(--oziko-padding-xs)) calc(-1 * var(--oziko-gap-md))
-    calc(-1 * var(--oziko-padding-xs)) var(--oziko-padding-xs);
+  padding: var(--spacing-2);
+  margin: calc(-1 * var(--spacing-2)) calc(-1 * var(--spacing-9))
+    calc(-1 * var(--spacing-2)) var(--spacing-2);
   cursor: pointer;
-  border-radius: var(--notif-close-radius, var(--oziko-border-radius-sm));
-  color: var(--notif-close-color, var(--oziko-color-input-placeholder));
+  border-radius: var(--notif-close-radius, var(--radius-sm));
+  color: var(--notif-close-color, var(--color-text-muted));
   transition: all 0.2s;
 
   &:hover {
@@ -201,7 +201,7 @@
   }
 
   &:focus {
-    outline: 2px solid var(--color-primary, var(--oziko-color-primary));
+    outline: 2px solid var(--color-primary, var(--color-accent));
     outline-offset: 1px;
   }
 
@@ -215,9 +215,9 @@
   bottom: 0;
   left: 0;
   right: 0;
-  height: var(--oziko-padding-xs);
-  background: rgba(var(--oziko-color-border-rgb), 0.3);
-  border-radius: 0 0 var(--oziko-border-radius-lg) var(--oziko-border-radius-lg);
+  height: var(--spacing-2);
+  background: rgba(var(--color-border-rgb), 0.3);
+  border-radius: 0 0 var(--radius-2xl) var(--radius-2xl);
   overflow: hidden;
 }
 
@@ -226,22 +226,22 @@
   transition:
     width 0.016s linear,
     opacity 0.2s ease;
-  border-radius: 0 0 var(--oziko-border-radius-lg) var(--oziko-border-radius-lg);
+  border-radius: 0 0 var(--radius-2xl) var(--radius-2xl);
 
-  background: linear-gradient(90deg, var(--oziko-color-primary), var(--oziko-color-primary-light));
+  background: linear-gradient(90deg, var(--color-accent), var(--color-accent-hover));
 }
 
 .notificationItem {
   &[data-type="success"] .notificationProgress {
     background: linear-gradient(
       90deg,
-      var(--oziko-color-success),
-      var(--oziko-color-success-light)
+      var(--color-green),
+      var(--color-green-light)
     );
   }
 
   &[data-type="error"] .notificationProgress {
-    background: linear-gradient(90deg, var(--oziko-color-danger), var(--oziko-color-danger-light));
+    background: linear-gradient(90deg, var(--color-red), var(--color-red-light));
   }
 
   &[data-type="warning"] .notificationProgress {
@@ -251,22 +251,22 @@
   &[data-type="info"] .notificationProgress {
     background: linear-gradient(
       90deg,
-      var(--oziko-color-primary),
-      var(--oziko-color-primary-light)
+      var(--color-accent),
+      var(--color-accent-hover)
     );
   }
 }
 
 .notificationItem:focus {
-  outline: 2px solid var(--color-primary, var(--oziko-color-primary));
+  outline: 2px solid var(--color-primary, var(--color-accent));
   outline-offset: 2px;
 }
 
 @media (max-width: 768px) {
   .notificationItem {
     min-width: 280px;
-    max-width: calc(100vw - calc(2 * var(--oziko-padding-xl)));
-    margin: 0 var(--oziko-padding-xl);
+    max-width: calc(100vw - calc(2 * var(--spacing-14)));
+    margin: 0 var(--spacing-14);
   }
 
   .notificationContainer {
@@ -309,21 +309,21 @@
 
 @media (prefers-color-scheme: dark) {
   .notificationItem {
-    --notif-bg: var(--oziko-color-background-secondary);
-    --notif-border: var(--oziko-color-border);
-    --notif-fg: var(--oziko-color-font-secondary);
-    --notif-message-color: var(--oziko-color-font-secondary);
-    --notif-description-color: var(--oziko-color-soft);
-    --notif-close-color: var(--oziko-color-input-placeholder);
-    --notif-close-color-hover: var(--oziko-color-font-secondary);
+    --notif-bg: var(--color-surface-3);
+    --notif-border: var(--color-border);
+    --notif-fg: var(--color-on-accent);
+    --notif-message-color: var(--color-on-accent);
+    --notif-description-color: var(--color-surface-3);
+    --notif-close-color: var(--color-text-muted);
+    --notif-close-color-hover: var(--color-on-accent);
     --notif-close-bg-hover: rgba(255, 255, 255, 0.1);
     --notif-close-bg-active: rgba(255, 255, 255, 0.2);
-    --notif-shadow: var(--box-shadow);
+    --notif-shadow: var(--shadow-md);
     --notif-shadow-hover: 0 8px 24px rgba(0, 0, 0, 0.6);
   }
 
   .notificationProgressContainer {
-    background: rgba(var(--oziko-color-soft-light-rgb), 0.2);
+    background: rgba(var(--color-surface-rgb), 0.2);
   }
 }
 

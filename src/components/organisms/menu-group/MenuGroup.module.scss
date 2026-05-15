@@ -1,19 +1,19 @@
 @use "styles/mixins";
 
 .container {
-  background-color: var(--oziko-color-menu-background);
-  border-radius: var(--oziko-border-radius-md);
-  box-shadow: var(--box-shadow);
-  color: var(--oziko-color-font-primary);
+  background-color: var(--color-surface);
+  border-radius: var(--radius-md);
+  box-shadow: var(--shadow-md);
+  color: var(--color-text-primary);
 }
 
 .menuSection {
-  padding: var(--oziko-padding-md);
+  padding: var(--spacing-9);
 
   .label {
     width: 100%;
     @include mixins.textEllipsis(1);
-    color: var(--oziko-color-input-placeholder);
+    color: var(--color-text-muted);
   }
 }
 
@@ -22,5 +22,5 @@
 }
 
 .container > *:not(:last-child) {
-  border-bottom: 1px solid var(--oziko-color-border);
+  border-bottom: 1px solid var(--color-border);
 }

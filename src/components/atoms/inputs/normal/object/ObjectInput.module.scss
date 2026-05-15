@@ -1,15 +1,288 @@
-@use "styles/mixins";
-
-.container {
-  @include mixins.inputContainer;
-  border: var(--oziko-border-default);
-  border-radius: var(--oziko-border-radius-md);
-}
-
-.error {
-  position: unset;
-}
-
-.inputContainer {
+/* ── Field wrapper ─────────────────────────────────────────────────────────── */
+.field {
+  display: flex;
+  flex-direction: column;
+  gap: var(--spacing-4);
   width: 100%;
 }
+
+/* ── Field head (top-level label row) ──────────────────────────────────────── */
+.fieldHead {
+  display: flex;
+  align-items: center;
+  gap: var(--spacing-4);
+}
+
+.fieldName {
+  font-size: var(--font-size-sm);
+  font-weight: var(--font-weight-semibold);
+  letter-spacing: 0.03em;
+  color: var(--color-text-muted);
+  display: flex;
+  align-items: center;
+  gap: var(--spacing-3);
+
+  svg {
+    flex-shrink: 0;
+    color: var(--color-text-muted);
+  }
+}
+
+.fieldType {
+  font-size: var(--font-size-2xs);
+  font-weight: var(--font-weight-medium);
+  font-family: var(--font-mono);
+  color: var(--color-text-faint);
+  background: var(--color-surface-3);
+  padding: 1px var(--spacing-4);
+  border-radius: var(--radius-xs);
+  margin-left: var(--spacing-2);
+}
+
+/* ── Object container ─────────────────────────────────────────────────────── */
+.object {
+  border: 1px solid var(--color-border);
+  border-radius: 12px;
+  background: var(--color-surface);
+  box-shadow: var(--shadow-sm);
+  overflow: hidden;
+}
+
+/* ── Row: 2-column flex layout ────────────────────────────────────────────── */
+.objRow {
+  display: flex;
+  align-items: stretch;
+  border-bottom: 1px solid var(--color-border);
+
+  &:last-child {
+    border-bottom: none;
+  }
+
+  &:focus-within {
+    background: rgba(var(--color-accent-rgb), 0.015);
+  }
+}
+
+/* ── Key cell: icon + name + badge ────────────────────────────────────────── */
+.objKey {
+  width: 160px;
+  flex-shrink: 0;
+  padding: 9px 12px;
+  font-family: var(--font-mono);
+  font-size: 12px;
+  font-weight: 500;
+  color: var(--color-text-secondary);
+  border-right: 1px solid var(--color-border);
+  background: var(--color-surface-2);
+  display: flex;
+  align-items: center;
+  gap: 6px;
+  overflow: hidden;
+
+  > span:first-of-type {
+    overflow: hidden;
+    text-overflow: ellipsis;
+    white-space: nowrap;
+    flex: 1;
+    min-width: 0;
+  }
+}
+
+/* ── Value cell ───────────────────────────────────────────────────────────── */
+.objVal {
+  flex: 1;
+  min-width: 0;
+  padding: 8px 12px;
+  display: flex;
+  align-items: center;
+}
+
+/* ── Input inside val cell ────────────────────────────────────────────────── */
+.valInput {
+  flex: 1;
+  width: 100%;
+  border: none;
+  outline: none;
+  background: transparent;
+  padding: 0;
+  font-family: var(--font-mono);
+  font-size: 13px;
+  color: var(--color-text-primary);
+
+  &::placeholder {
+    color: var(--color-text-muted);
+  }
+
+  &[type="number"] {
+    -moz-appearance: textfield;
+
+    &::-webkit-inner-spin-button {
+      opacity: 0;
+    }
+  }
+}
+
+/* ── Type badge (inside key cell) ─────────────────────────────────────────── */
+.ofBadge {
+  font-size: 10px;
+  font-weight: 500;
+  font-family: var(--font-mono);
+  border-radius: 4px;
+  padding: 1px 6px;
+  white-space: nowrap;
+  flex-shrink: 0;
+  background: var(--color-surface-3);
+  color: var(--color-text-muted);
+}
+
+/* Badge color variants */
+.badgeString {
+  color: var(--color-blue);
+  background: var(--color-blue-bg);
+}
+
+.badgeNumber,
+.badgeColor {
+  color: var(--color-green);
+  background: var(--color-green-bg);
+}
+
+.badgeDate,
+.badgeStorage {
+  color: var(--color-amber);
+  background: rgba(245, 158, 11, 0.1);
+}
+
+.badgeBoolean {
+  color: #8b5cf6;
+  background: rgba(139, 92, 246, 0.1);
+}
+
+.badgeRelation,
+.badgeLocation {
+  color: var(--color-red);
+  background: rgba(var(--color-red-rgb), 0.1);
+}
+
+.badgeMultiselect,
+.badgeArray,
+.badgeChip,
+.badgeSelect {
+  color: var(--color-accent);
+  background: var(--color-accent-subtle);
+}
+
+.badgeRichtext {
+  color: var(--color-blue);
+  background: var(--color-blue-bg);
+}
+
+/* ── Boolean toggle ───────────────────────────────────────────────────────── */
+.toggle {
+  width: 30px;
+  height: 17px;
+  border-radius: 99px;
+  background: var(--color-border);
+  position: relative;
+  cursor: pointer;
+  flex-shrink: 0;
+  transition: background 0.15s;
+
+  &::after {
+    content: "";
+    position: absolute;
+    top: 3px;
+    left: 3px;
+    width: 11px;
+    height: 11px;
+    border-radius: 50%;
+    background: var(--color-surface);
+    transition: transform 0.15s;
+  }
+}
+
+.toggleOn {
+  background: var(--color-accent);
+
+  &::after {
+    transform: translateX(13px);
+  }
+}
+
+/* ── Relation trigger ─────────────────────────────────────────────────────── */
+.relationTrigger {
+  flex: 1;
+  display: flex;
+  align-items: center;
+  gap: 4px;
+  font-size: 13px;
+  font-family: var(--font-mono);
+  color: var(--color-text-muted);
+  cursor: pointer;
+
+  svg {
+    flex-shrink: 0;
+  }
+}
+
+/* ── Nested object block ──────────────────────────────────────────────────── */
+.nestedBlock {
+  border-bottom: 1px solid var(--color-border);
+
+  &:last-child {
+    border-bottom: none;
+  }
+}
+
+.nestedHead {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  padding: 9px 12px;
+  background: var(--color-surface-2);
+}
+
+.nestedName {
+  font-size: 12px;
+  font-weight: 600;
+  font-family: var(--font-mono);
+  color: var(--color-text-secondary);
+}
+
+.nestedToggle {
+  margin-left: auto;
+  width: 22px;
+  height: 22px;
+  border: none;
+  background: transparent;
+  border-radius: 4px;
+  cursor: pointer;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  color: var(--color-text-muted);
+  flex-shrink: 0;
+  transition: background var(--transition-fast), color var(--transition-fast);
+
+  svg {
+    transition: transform 0.18s;
+  }
+
+  &:hover {
+    background: var(--color-surface-3);
+    color: var(--color-text-primary);
+  }
+}
+
+.nestedToggleCollapsed {
+  svg {
+    transform: rotate(-90deg);
+  }
+}
+
+.nestedBody {
+  > .objRow:first-child {
+    border-top: 1px solid var(--color-border);
+  }
+}
+

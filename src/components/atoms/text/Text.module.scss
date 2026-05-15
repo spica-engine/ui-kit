@@ -3,34 +3,34 @@
   line-height: 1rem;
 
   &.primary {
-    color: var(--oziko-color-font-primary);
+    color: var(--color-text-primary);
   }
 
   &.secondary {
-    color: var(--oziko-color-input-placeholder);
+    color: var(--color-text-muted);
   }
 
   &.danger {
-    color: var(--oziko-color-danger);
+    color: var(--color-red);
   }
 
   &.xsmall {
-    font-size: var(--oziko-font-size-xs);
+    font-size: var(--font-size-xs);
   }
 
   &.small {
-    font-size: var(--oziko-font-size-sm);
+    font-size: var(--font-size-base);
   }
 
   &.medium {
-    font-size: var(--oziko-font-size-md);
+    font-size: var(--font-size-lg);
   }
 
   &.large {
-    font-size: var(--oziko-font-size-lg);
+    font-size: var(--font-size-lg);
   }
 
   &.xlarge {
-    font-size: var(--oziko-font-size-xl);
+    font-size: var(--font-size-xl);
   }
 }

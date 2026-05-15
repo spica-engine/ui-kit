@@ -2,7 +2,7 @@
   flex-direction: row-reverse !important;
 
   .title {
-    padding-left: var(--oziko-padding-md);
+    padding-left: var(--spacing-9);
     padding-right: 0;
     text-align: right;
   }
@@ -11,22 +11,22 @@
 .divider {
   width: 1px;
   height: 0;
-  background: var(--oziko-color-primary);
-  transition: all var(--oziko-transition-duration);
+  background: var(--color-accent);
+  transition: all var(--transition-base);
 }
 
 .focused {
   .divider {
     height: 100%;
-    transition: all var(--oziko-transition-duration);
+    transition: all var(--transition-base);
   }
 }
 
 .container {
   .title {
     span {
-      font-size: var(--oziko-font-size-md);
-      color: var(--oziko-color-font-primary);
+      font-size: var(--font-size-lg);
+      color: var(--color-text-primary);
       width: 100px;
       text-align: left;
 
@@ -35,21 +35,21 @@
       overflow: hidden !important;
       text-overflow: ellipsis;
       position: relative;
-      transition: all var(--oziko-transition-duration);
+      transition: all var(--transition-base);
     }
 
     &::after {
       content: "";
       width: 1px;
-      background-color: var(--oziko-color-primary);
+      background-color: var(--color-accent);
       height: 0;
       position: absolute;
       bottom: 0;
       right: 0;
-      transition: all var(--oziko-transition-duration);
+      transition: all var(--transition-base);
     }
   }
   .icon {
-    transition: all var(--oziko-transition-duration);
+    transition: all var(--transition-base);
   }
 }

@@ -1,0 +1,921 @@
+<!DOCTYPE html>
+<html lang="tr">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width,initial-scale=1.0">
+<title>Spica — Functions</title>
+<link href="https://fonts.googleapis.com/css2?family=DM+Sans:opsz,wght@9..40,300;9..40,400;9..40,500;9..40,600;9..40,700&family=JetBrains+Mono:wght@400;500;600&display=swap" rel="stylesheet">
+<style>
+:root{
+  --bg:#f0f2f5;--sf:#fff;--sf2:#f7f8fa;--sf3:#eef0f3;
+  --bd:#e4e7ec;--bd2:#d0d5dd;
+  --ac:#1a2448;--ach:#253060;
+  --as:rgba(26,36,72,.07);--as2:rgba(26,36,72,.14);
+  --tx:#101828;--tx2:#344054;--txm:#98a2b3;--txf:#d0d5dd;
+  --gr:#12b76a;--grb:rgba(18,183,106,.12);
+  --am:#f79009;--amb:rgba(247,144,9,.1);
+  --rd:#f04438;--rdb:rgba(240,68,56,.08);
+  --bl:#2e90fa;--blb:rgba(46,144,250,.1);
+  --sh:0 1px 3px rgba(16,24,40,.1),0 1px 2px rgba(16,24,40,.06);
+
+  /* syntax colors */
+  --syn-kw:#7c3aed;   /* keyword: const import from */
+  --syn-str:#059669;  /* string */
+  --syn-cmt:#94a3b8;  /* comment */
+  --syn-fn:#2563eb;   /* function/method */
+  --syn-num:#d97706;  /* number */
+  --syn-prop:#0891b2; /* property */
+}
+[data-theme=dark]{
+  --bg:#0d1017;--sf:#13181f;--sf2:#191f28;--sf3:#202735;
+  --bd:#252e3e;--bd2:#2f3b52;
+  --ac:#4f6ef7;--ach:#6b84ff;
+  --as:rgba(79,110,247,.1);--as2:rgba(79,110,247,.18);
+  --tx:#f2f4f7;--tx2:#c8cfe0;--txm:#4e5e7a;--txf:#2e3a50;
+  --gr:#32d583;--grb:rgba(50,213,131,.1);
+  --am:#fdb022;--amb:rgba(253,176,34,.1);
+  --rd:#f97066;--rdb:rgba(249,112,102,.08);
+  --bl:#53b1fd;--blb:rgba(83,177,253,.1);
+  --sh:0 1px 3px rgba(0,0,0,.4);
+
+  --syn-kw:#a78bfa;
+  --syn-str:#34d399;
+  --syn-cmt:#4e5e7a;
+  --syn-fn:#60a5fa;
+  --syn-num:#fbbf24;
+  --syn-prop:#22d3ee;
+}
+
+*,*::before,*::after{box-sizing:border-box;margin:0;padding:0}
+body{font-family:'DM Sans',sans-serif;font-size:13px;background:var(--bg);color:var(--tx);
+  display:flex;height:100vh;overflow:hidden;-webkit-font-smoothing:antialiased}
+
+/* ══ RAIL ══ */
+.rail{
+  width:44px;background:var(--sf);border-right:1px solid var(--bd);
+  display:flex;flex-direction:column;align-items:center;
+  padding:10px 0 8px;gap:2px;flex-shrink:0;z-index:10;
+}
+.rail-logo{width:28px;height:28px;border-radius:7px;background:var(--ac);
+  display:flex;align-items:center;justify-content:center;
+  font-size:11px;font-weight:700;color:#fff;margin-bottom:10px;letter-spacing:-.5px}
+.rail-btn{width:32px;height:32px;border-radius:7px;display:flex;align-items:center;
+  justify-content:center;cursor:pointer;color:var(--txm);transition:background .12s,color .12s}
+.rail-btn:hover{background:var(--sf2);color:var(--tx2)}
+.rail-btn.active{background:var(--as);color:var(--ac)}
+.rail-sep{width:20px;height:1px;background:var(--bd);margin:3px 0}
+.rail-bottom{margin-top:auto;display:flex;flex-direction:column;align-items:center;gap:2px}
+.tbtn{width:32px;height:32px;border-radius:7px;border:none;
+  display:flex;align-items:center;justify-content:center;
+  background:transparent;cursor:pointer;color:var(--txm);transition:background .12s,color .12s}
+.tbtn:hover{background:var(--sf2)}
+.sun{display:none}[data-theme=dark] .sun{display:flex}[data-theme=dark] .moon{display:none}
+
+/* ══ LEFT SIDEBAR ══ */
+.sidebar{
+  width:240px;background:var(--sf);border-right:1px solid var(--bd);
+  display:flex;flex-direction:column;flex-shrink:0;overflow:hidden;
+}
+.sb-head{
+  padding:11px 12px 9px;border-bottom:1px solid var(--bd);
+  display:flex;align-items:center;justify-content:space-between;
+}
+.sb-title{font-size:14px;font-weight:700;color:var(--tx);letter-spacing:-.2px}
+.sb-head-btns{display:flex;gap:4px}
+.sb-icon-btn{width:26px;height:26px;border-radius:6px;border:none;background:transparent;
+  cursor:pointer;color:var(--txm);display:flex;align-items:center;justify-content:center;
+  transition:background .1s,color .1s}
+.sb-icon-btn:hover{background:var(--sf2);color:var(--tx2)}
+
+.sb-body{flex:1;overflow-y:auto;padding:5px}
+.sb-body::-webkit-scrollbar{width:3px}
+.sb-body::-webkit-scrollbar-thumb{background:var(--bd);border-radius:2px}
+
+.fn-item{
+  display:flex;align-items:center;gap:0;
+  border-radius:7px;cursor:pointer;
+  transition:background .1s;overflow:hidden;
+  margin-bottom:1px;
+}
+.fn-item:hover{background:var(--sf2)}
+.fn-item.active{background:var(--as)}
+.fn-item-icon{
+  width:28px;height:32px;display:flex;align-items:center;justify-content:center;
+  flex-shrink:0;color:var(--txm);
+}
+.fn-item.active .fn-item-icon{color:var(--ac)}
+.fn-name{
+  flex:1;font-size:12.5px;font-weight:500;color:var(--tx2);
+  overflow:hidden;text-overflow:ellipsis;white-space:nowrap;padding:0 4px;
+}
+.fn-item.active .fn-name{color:var(--ac);font-weight:600}
+.fn-actions{display:flex;gap:0;opacity:0;transition:opacity .12s;flex-shrink:0}
+.fn-item:hover .fn-actions{opacity:1}
+.fn-act-btn{width:26px;height:32px;display:flex;align-items:center;justify-content:center;
+  color:var(--txm);transition:color .1s,background .1s;border:none;background:transparent;cursor:pointer}
+.fn-act-btn:hover{color:var(--rd)}
+.fn-act-drag{cursor:grab;color:var(--txm)}
+
+.sb-add-btn{
+  display:flex;align-items:center;gap:7px;
+  padding:7px 10px;margin:4px 5px;border-radius:7px;cursor:pointer;
+  border:1.5px dashed var(--bd);background:transparent;font-family:inherit;
+  font-size:12.5px;font-weight:500;color:var(--txm);transition:all .15s;width:calc(100% - 10px);
+}
+.sb-add-btn:hover{border-color:var(--ac);color:var(--ac);background:var(--as)}
+
+/* ══ MAIN EDITOR ══ */
+.main{flex:1;display:flex;flex-direction:column;overflow:hidden;min-width:0}
+
+/* topbar */
+.topbar{
+  height:48px;background:var(--sf);border-bottom:1px solid var(--bd);
+  display:flex;align-items:center;gap:8px;padding:0 16px;flex-shrink:0;
+}
+.jwt-chip{
+  display:flex;align-items:center;gap:5px;
+  background:var(--sf2);border:1px solid var(--bd);border-radius:6px;padding:4px 9px;
+  font-family:'JetBrains Mono',monospace;font-size:10px;color:var(--tx2);cursor:pointer;
+}
+.jwt-label{color:var(--am);font-weight:600}
+.jwt-val{overflow:hidden;text-overflow:ellipsis;white-space:nowrap;max-width:150px}
+.tr-right{margin-left:auto;display:flex;align-items:center;gap:6px}
+.avatar{width:28px;height:28px;border-radius:50%;background:var(--ac);color:#fff;
+  display:flex;align-items:center;justify-content:center;font-size:11px;font-weight:700}
+
+/* function tab bar */
+.fn-tabs{
+  height:40px;background:var(--sf);border-bottom:1px solid var(--bd);
+  display:flex;align-items:center;flex-shrink:0;padding:0 4px;gap:2px;
+}
+.fn-tab{
+  display:flex;align-items:center;gap:6px;
+  padding:6px 12px;border-radius:6px;cursor:pointer;
+  font-size:12.5px;font-weight:500;color:var(--txm);
+  transition:background .1s,color .1s;user-select:none;
+}
+.fn-tab:hover{background:var(--sf2);color:var(--tx2)}
+.fn-tab.active{background:var(--as);color:var(--ac);font-weight:600}
+.fn-tab-dot{width:7px;height:7px;border-radius:50%;background:var(--ac);flex-shrink:0}
+.fn-tab-actions{display:flex;gap:2px;margin-left:auto}
+.fn-tab-btn{width:24px;height:24px;border-radius:5px;border:none;background:transparent;
+  cursor:pointer;color:var(--txm);display:flex;align-items:center;justify-content:center;
+  transition:background .1s,color .1s}
+.fn-tab-btn:hover{background:var(--sf2);color:var(--tx2)}
+
+/* editor area */
+.editor-wrap{flex:1;display:flex;overflow:hidden;position:relative}
+.editor-scroll{flex:1;overflow:auto;display:flex;min-width:0}
+.editor-scroll::-webkit-scrollbar{width:6px;height:6px}
+.editor-scroll::-webkit-scrollbar-thumb{background:var(--bd);border-radius:3px}
+
+/* line numbers */
+.line-nums{
+  flex-shrink:0;padding:14px 0;
+  background:var(--sf2);border-right:1px solid var(--bd);
+  min-width:48px;text-align:right;user-select:none;
+}
+.ln{
+  height:21px;padding:0 12px 0 8px;
+  font-family:'JetBrains Mono',monospace;font-size:12.5px;
+  color:var(--txm);line-height:21px;
+}
+.ln.current{color:var(--tx2);background:var(--as)}
+
+/* code area */
+.code-area{
+  flex:1;padding:14px 0 14px 16px;min-width:0;
+  font-family:'JetBrains Mono',monospace;font-size:12.5px;
+  line-height:21px;white-space:pre;overflow:visible;color:var(--tx);
+}
+
+/* syntax highlighting */
+.sk{color:var(--syn-kw)}   /* keyword */
+.ss{color:var(--syn-str)}  /* string */
+.sc{color:var(--syn-cmt);font-style:italic} /* comment */
+.sf{color:var(--syn-fn)}   /* function */
+.sn{color:var(--syn-num)}  /* number */
+.sp{color:var(--syn-prop)} /* property */
+
+/* logs panel */
+.logs-bar{
+  height:32px;border-top:1px solid var(--bd);background:var(--sf2);
+  display:flex;align-items:center;gap:8px;padding:0 14px;cursor:pointer;
+  flex-shrink:0;user-select:none;transition:background .1s;
+}
+.logs-bar:hover{background:var(--sf3)}
+.logs-bar-title{font-size:12px;font-weight:500;color:var(--txm)}
+.logs-chev{color:var(--txm);transition:transform .2s}
+.logs-bar.open .logs-chev{transform:rotate(180deg)}
+.logs-panel{
+  background:var(--sf);border-top:1px solid var(--bd);
+  overflow-y:auto;transition:height .2s;height:0;flex-shrink:0;
+}
+.logs-panel.open{height:140px}
+.logs-panel::-webkit-scrollbar{width:3px}
+.logs-panel::-webkit-scrollbar-thumb{background:var(--bd);border-radius:2px}
+.log-line{
+  padding:3px 14px;font-family:'JetBrains Mono',monospace;font-size:11.5px;
+  color:var(--tx2);line-height:1.6;border-bottom:1px solid var(--bd);
+}
+.log-line.err{color:var(--rd)}
+.log-line.warn{color:var(--am)}
+.log-line.ok{color:var(--gr)}
+.log-ts{color:var(--txm);margin-right:10px}
+
+/* ══ RIGHT DRAWER ══ */
+.drawer{
+  width:300px;flex-shrink:0;background:var(--sf);border-left:1px solid var(--bd);
+  display:flex;flex-direction:column;overflow:hidden;
+}
+.drawer.collapsed{width:0;border-left:none}
+
+.drawer-scroll{flex:1;overflow-y:auto}
+.drawer-scroll::-webkit-scrollbar{width:3px}
+.drawer-scroll::-webkit-scrollbar-thumb{background:var(--bd);border-radius:2px}
+
+/* drawer sections */
+.ds{border-bottom:1px solid var(--bd)}
+.ds-head{
+  display:flex;align-items:center;justify-content:space-between;
+  padding:10px 14px 9px;cursor:pointer;user-select:none;
+  transition:background .1s;
+}
+.ds-head:hover{background:var(--sf2)}
+.ds-title{font-size:12px;font-weight:700;color:var(--tx2)}
+.ds-chev{color:var(--txm);transition:transform .2s}
+.ds.open .ds-chev{transform:rotate(180deg)}
+.ds-body{display:none;padding:0 14px 12px}
+.ds.open .ds-body{display:block}
+
+/* imported functions */
+.import-select{
+  display:flex;align-items:center;
+  border:1px solid var(--bd);border-radius:8px;background:var(--sf2);overflow:hidden;
+  height:34px;transition:border-color .15s;
+}
+.import-select:focus-within{border-color:var(--ac)}
+.import-sel{
+  flex:1;border:none;outline:none;background:transparent;
+  padding:0 10px;font-family:'DM Sans',sans-serif;font-size:12.5px;color:var(--tx2);cursor:pointer;
+}
+.import-arrow{width:28px;display:flex;align-items:center;justify-content:center;color:var(--txm)}
+
+/* trigger rows */
+.trigger-row{
+  display:flex;align-items:center;gap:8px;
+  padding:8px 0;border-bottom:1px solid var(--bd);
+}
+.trigger-row:last-child{border-bottom:none}
+.trigger-name{flex:1;font-size:12.5px;font-weight:500;color:var(--tx2);
+  overflow:hidden;text-overflow:ellipsis;white-space:nowrap}
+.trigger-acts{display:flex;align-items:center;gap:4px;flex-shrink:0}
+.t-del-btn{width:22px;height:22px;border-radius:4px;border:none;background:transparent;
+  cursor:pointer;color:var(--txm);display:flex;align-items:center;justify-content:center;
+  transition:background .1s,color .1s}
+.t-del-btn:hover{background:var(--rdb);color:var(--rd)}
+.t-expand-btn{width:22px;height:22px;border-radius:4px;border:none;background:transparent;
+  cursor:pointer;color:var(--txm);display:flex;align-items:center;justify-content:center;
+  transition:background .1s,color .1s}
+.t-expand-btn:hover{background:var(--sf2);color:var(--tx2)}
+.tsw-sm{width:34px;height:19px;border-radius:10px;flex-shrink:0;
+  background:var(--sf3);border:1.5px solid var(--bd);position:relative;
+  cursor:pointer;transition:background .2s,border-color .2s}
+.tsw-sm.on{background:var(--ac);border-color:var(--ac)}
+.tsw-sm::after{content:'';position:absolute;width:13px;height:13px;border-radius:50%;
+  background:var(--txf);top:1px;left:1px;transition:transform .18s,background .18s;
+  box-shadow:0 1px 2px rgba(0,0,0,.12)}
+.tsw-sm.on::after{transform:translateX(15px);background:#fff}
+
+.add-trigger-btn{
+  display:flex;align-items:center;gap:6px;margin-top:8px;
+  padding:6px 10px;border-radius:6px;border:1.5px dashed var(--bd);background:transparent;
+  font-family:inherit;font-size:12px;color:var(--txm);cursor:pointer;transition:all .15s;
+  width:100%;
+}
+.add-trigger-btn:hover{border-color:var(--ac);color:var(--ac);background:var(--as)}
+
+/* dependencies */
+.dep-item{
+  display:flex;align-items:center;gap:6px;
+  padding:5px 0;border-bottom:1px solid var(--bd);
+}
+.dep-item:last-of-type{border-bottom:none}
+.dep-name{flex:1;font-family:'JetBrains Mono',monospace;font-size:11.5px;color:var(--tx2);
+  overflow:hidden;text-overflow:ellipsis;white-space:nowrap}
+.dep-act{width:22px;height:22px;border-radius:4px;border:none;background:transparent;
+  cursor:pointer;color:var(--txm);display:flex;align-items:center;justify-content:center;
+  transition:background .1s,color .1s}
+.dep-act:hover{background:var(--sf2);color:var(--tx2)}
+.dep-act.del:hover{background:var(--rdb);color:var(--rd)}
+.dep-add-row{
+  display:flex;align-items:center;gap:6px;margin-top:6px;
+}
+.dep-add-inp{
+  flex:1;border:1px solid var(--bd);border-radius:6px;background:var(--sf2);
+  padding:6px 9px;font-family:'JetBrains Mono',monospace;font-size:12px;color:var(--tx);
+  outline:none;transition:border-color .15s;
+}
+.dep-add-inp:focus{border-color:var(--ac)}
+.dep-add-inp::placeholder{color:var(--txm)}
+.dep-add-submit{
+  width:26px;height:26px;border-radius:6px;border:none;background:var(--ac);color:#fff;
+  cursor:pointer;display:flex;align-items:center;justify-content:center;
+  transition:background .1s;flex-shrink:0;
+}
+.dep-add-submit:hover{background:var(--ach)}
+
+/* env tabs */
+.env-tabs{display:flex;border-bottom:1.5px solid var(--bd);margin-bottom:8px}
+.env-tab{
+  padding:6px 12px;font-size:12px;font-weight:500;cursor:pointer;color:var(--txm);
+  border-bottom:2px solid transparent;margin-bottom:-1.5px;
+  transition:color .12s,border-color .12s;
+}
+.env-tab:hover{color:var(--tx2)}
+.env-tab.active{color:var(--ac);border-bottom-color:var(--ac);font-weight:600}
+
+.env-select{
+  display:flex;align-items:center;border:1px solid var(--bd);border-radius:8px;
+  background:var(--sf2);overflow:hidden;height:32px;margin-bottom:8px;
+}
+.env-sel{flex:1;border:none;outline:none;background:transparent;
+  padding:0 9px;font-family:'DM Sans',sans-serif;font-size:12px;color:var(--tx2);cursor:pointer}
+.env-sel-arrow{width:24px;display:flex;align-items:center;justify-content:center;color:var(--txm)}
+
+.env-var-item{
+  display:flex;align-items:center;justify-content:space-between;
+  padding:6px 8px;border-radius:6px;margin-bottom:2px;
+  transition:background .1s;cursor:default;
+}
+.env-var-item:hover{background:var(--sf2)}
+.env-var-name{font-family:'JetBrains Mono',monospace;font-size:11.5px;font-weight:500;color:var(--tx2)}
+.env-var-del{width:18px;height:18px;border-radius:4px;border:none;background:transparent;
+  cursor:pointer;color:var(--txm);display:flex;align-items:center;justify-content:center;
+  transition:background .1s,color .1s;flex-shrink:0}
+.env-var-del:hover{background:var(--rdb);color:var(--rd)}
+
+/* save button */
+.drawer-save{
+  display:flex;align-items:center;gap:6px;
+  padding:10px 14px;border-top:1px solid var(--bd);flex-shrink:0;
+}
+.btn-save-fn{
+  flex:1;display:flex;align-items:center;justify-content:center;gap:6px;
+  padding:9px;border-radius:8px;border:none;background:var(--ac);color:#fff;
+  font-family:'DM Sans',sans-serif;font-size:13px;font-weight:600;
+  cursor:pointer;transition:background .12s,transform .1s;
+}
+.btn-save-fn:hover{background:var(--ach);transform:translateY(-1px)}
+.btn-save-fn:active{transform:translateY(0)}
+
+/* drawer toggle button */
+.drawer-toggle{
+  position:absolute;right:0;top:50%;transform:translateY(-50%);
+  width:20px;height:48px;background:var(--sf);border:1px solid var(--bd);
+  border-right:none;border-radius:6px 0 0 6px;
+  display:flex;align-items:center;justify-content:center;
+  cursor:pointer;color:var(--txm);z-index:5;
+  transition:background .1s,color .1s;
+}
+.drawer-toggle:hover{background:var(--sf2);color:var(--tx)}
+</style>
+</head>
+<body>
+
+<!-- ══ RAIL ══ -->
+<div class="rail">
+  <div class="rail-logo">S</div>
+  <div class="rail-btn" title="Buckets"><svg width="15" height="15" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="1.8"><ellipse cx="12" cy="5" rx="9" ry="3"/><path d="M3 5v14c0 1.66 4.03 3 9 3s9-1.34 9-3V5"/><path d="M3 12c0 1.66 4.03 3 9 3s9-1.34 9-3"/></svg></div>
+  <div class="rail-btn" title="Dashboard"><svg width="15" height="15" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="1.8"><rect x="3" y="3" width="7" height="7" rx="1"/><rect x="14" y="3" width="7" height="7" rx="1"/><rect x="3" y="14" width="7" height="7" rx="1"/><rect x="14" y="14" width="7" height="7" rx="1"/></svg></div>
+  <div class="rail-btn" title="Storage"><svg width="15" height="15" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="1.8"><polyline points="22 12 16 12 14 15 10 15 8 12 2 12"/><path d="M5.45 5.11L2 12v6a2 2 0 0 0 2 2h16a2 2 0 0 0 2-2v-6l-3.45-6.89A2 2 0 0 0 16.76 4H7.24a2 2 0 0 0-1.79 1.11z"/></svg></div>
+  <div class="rail-btn" title="IAM"><svg width="15" height="15" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="1.8"><path d="M17 21v-2a4 4 0 0 0-4-4H5a4 4 0 0 0-4 4v2"/><circle cx="9" cy="7" r="4"/><path d="M23 21v-2a4 4 0 0 0-3-3.87m-4-12a4 4 0 0 1 0 7.75"/></svg></div>
+  <div class="rail-sep"></div>
+  <div class="rail-btn active" title="Functions"><svg width="15" height="15" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="1.8"><polyline points="16 18 22 12 16 6"/><polyline points="8 6 2 12 8 18"/></svg></div>
+  <div class="rail-btn" title="Settings"><svg width="15" height="15" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="1.8"><circle cx="12" cy="12" r="3"/><path d="M19.4 15a1.65 1.65 0 0 0 .33 1.82l.06.06a2 2 0 0 1-2.83 2.83l-.06-.06a1.65 1.65 0 0 0-1.82-.33 1.65 1.65 0 0 0-1 1.51V21a2 2 0 0 1-4 0v-.09A1.65 1.65 0 0 0 9 19.4a1.65 1.65 0 0 0-1.82.33l-.06.06a2 2 0 0 1-2.83-2.83l.06-.06A1.65 1.65 0 0 0 4.68 15a1.65 1.65 0 0 0-1.51-1H3a2 2 0 0 1 0-4h.09A1.65 1.65 0 0 0 4.6 9a1.65 1.65 0 0 0-.33-1.82l-.06-.06a2 2 0 0 1 2.83-2.83l.06.06A1.65 1.65 0 0 0 9 4.68a1.65 1.65 0 0 0 1-1.51V3a2 2 0 0 1 4 0v.09a1.65 1.65 0 0 0 1 1.51 1.65 1.65 0 0 0 1.82-.33l.06-.06a2 2 0 0 1 2.83 2.83l-.06.06A1.65 1.65 0 0 0 19.4 9a1.65 1.65 0 0 0 1.51 1H21a2 2 0 0 1 0 4h-.09a1.65 1.65 0 0 0-1.51 1z"/></svg></div>
+  <div class="rail-sep"></div>
+  <div class="rail-btn" title="Extensions"><svg width="15" height="15" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="1.8"><path d="M20.24 12.24a6 6 0 0 0-8.49-8.49L5 10.5V19h8.5z"/><line x1="16" y1="8" x2="2" y2="22"/><line x1="17.5" y1="15" x2="9" y2="15"/></svg></div>
+  <div class="rail-btn" title="Git"><svg width="15" height="15" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="1.8"><circle cx="18" cy="18" r="3"/><circle cx="6" cy="6" r="3"/><circle cx="6" cy="18" r="3"/><line x1="6" y1="9" x2="6" y2="15"/><path d="M18 15V9a3 3 0 0 0-3-3H9"/></svg></div>
+  <div class="rail-bottom">
+    <button class="tbtn" onclick="toggleTheme()">
+      <svg class="moon" width="14" height="14" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2"><path d="M21 12.79A9 9 0 1 1 11.21 3 7 7 0 0 0 21 12.79z"/></svg>
+      <svg class="sun" width="14" height="14" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2"><circle cx="12" cy="12" r="5"/><line x1="12" y1="1" x2="12" y2="3"/><line x1="12" y1="21" x2="12" y2="23"/><line x1="4.22" y1="4.22" x2="5.64" y2="5.64"/><line x1="18.36" y1="18.36" x2="19.78" y2="19.78"/><line x1="1" y1="12" x2="3" y2="12"/><line x1="21" y1="12" x2="23" y2="12"/><line x1="4.22" y1="19.78" x2="5.64" y2="18.36"/><line x1="18.36" y1="5.64" x2="19.78" y2="4.22"/></svg>
+    </button>
+    <div class="rail-btn"><svg width="14" height="14" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="1.8"><path d="M20 21v-2a4 4 0 0 0-4-4H8a4 4 0 0 0-4 4v2"/><circle cx="12" cy="7" r="4"/></svg></div>
+  </div>
+</div>
+
+<!-- ══ LEFT SIDEBAR ══ -->
+<div class="sidebar">
+  <div class="sb-head">
+    <span class="sb-title">Functions</span>
+    <div class="sb-head-btns">
+      <button class="sb-icon-btn" title="Settings"><svg width="13" height="13" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2"><circle cx="12" cy="12" r="3"/><path d="M19.4 15a1.65 1.65 0 0 0 .33 1.82l.06.06a2 2 0 0 1-2.83 2.83l-.06-.06a1.65 1.65 0 0 0-1.82-.33 1.65 1.65 0 0 0-1 1.51V21a2 2 0 0 1-4 0v-.09A1.65 1.65 0 0 0 9 19.4a1.65 1.65 0 0 0-1.82.33l-.06.06a2 2 0 0 1-2.83-2.83l.06-.06A1.65 1.65 0 0 0 4.68 15a1.65 1.65 0 0 0-1.51-1H3a2 2 0 0 1 0-4h.09A1.65 1.65 0 0 0 4.6 9a1.65 1.65 0 0 0-.33-1.82l-.06-.06a2 2 0 0 1 2.83-2.83l.06.06A1.65 1.65 0 0 0 9 4.68a1.65 1.65 0 0 0 1-1.51V3a2 2 0 0 1 4 0v.09a1.65 1.65 0 0 0 1 1.51 1.65 1.65 0 0 0 1.82-.33l.06-.06a2 2 0 0 1 2.83 2.83l-.06.06A1.65 1.65 0 0 0 19.4 9a1.65 1.65 0 0 0 1.51 1H21a2 2 0 0 1 0 4h-.09a1.65 1.65 0 0 0-1.51 1z"/></svg></button>
+      <button class="sb-icon-btn" title="Config"><svg width="13" height="13" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2"><line x1="4" y1="6" x2="20" y2="6"/><line x1="4" y1="12" x2="20" y2="12"/><line x1="4" y1="18" x2="20" y2="18"/></svg></button>
+    </div>
+  </div>
+  <div class="sb-body" id="fn-list"><!-- injected --></div>
+  <button class="sb-add-btn" onclick="addFunction()">
+    <svg width="12" height="12" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2.5"><line x1="12" y1="5" x2="12" y2="19"/><line x1="5" y1="12" x2="19" y2="12"/></svg>
+    Add New Function
+  </button>
+</div>
+
+<!-- ══ MAIN ══ -->
+<div class="main">
+
+  <!-- topbar -->
+  <div class="topbar">
+    <div class="jwt-chip">
+      <span class="jwt-label">JWT:</span>
+      <span class="jwt-val">eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9…</span>
+      <svg width="11" height="11" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2"><rect x="9" y="9" width="13" height="13" rx="2"/><path d="M5 15H4a2 2 0 0 1-2-2V4a2 2 0 0 1 2-2h9a2 2 0 0 1 2 2v1"/></svg>
+    </div>
+    <div class="tr-right">
+      <div class="avatar">S</div>
+    </div>
+  </div>
+
+  <!-- tab bar -->
+  <div class="fn-tabs">
+    <div class="fn-tab active" id="active-tab">
+      <svg width="12" height="12" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2"><polyline points="16 18 22 12 16 6"/><polyline points="8 6 2 12 8 18"/></svg>
+      <span id="active-tab-name">Stripe</span>
+      <div class="fn-tab-actions">
+        <button class="fn-tab-btn" title="Edit" onclick="editTabName()"><svg width="11" height="11" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2"><path d="M11 4H4a2 2 0 0 0-2 2v14a2 2 0 0 0 2 2h14a2 2 0 0 0 2-2v-7"/><path d="M18.5 2.5a2.121 2.121 0 0 1 3 3L12 15l-4 1 1-4 9.5-9.5z"/></svg></button>
+        <button class="fn-tab-btn" title="Save" onclick="saveFunction()"><svg width="11" height="11" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2"><path d="M19 21H5a2 2 0 0 1-2-2V5a2 2 0 0 1 2-2h11l5 5v11a2 2 0 0 1-2 2z"/><polyline points="17 21 17 13 7 13 7 21"/><polyline points="7 3 7 8 15 8"/></svg></button>
+        <button class="fn-tab-btn" title="Toggle drawer" onclick="toggleDrawer()"><svg width="11" height="11" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2"><polyline points="9 18 15 12 9 6"/></svg></button>
+      </div>
+    </div>
+  </div>
+
+  <!-- editor -->
+  <div class="editor-wrap" id="editor-wrap">
+    <div class="editor-scroll" id="editor-scroll">
+      <div class="line-nums" id="line-nums"></div>
+      <div class="code-area" id="code-area" contenteditable="true" spellcheck="false" onkeydown="handleEditorKey(event)" oninput="renderEditor()"></div>
+    </div>
+  </div>
+
+  <!-- logs -->
+  <div class="logs-bar" id="logs-bar" onclick="toggleLogs()">
+    <svg width="12" height="12" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2" style="color:var(--txm)"><polyline points="22 12 18 12 15 21 9 3 6 12 2 12"/></svg>
+    <span class="logs-bar-title">Logs</span>
+    <svg class="logs-chev" width="12" height="12" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2.5"><polyline points="6 9 12 15 18 9"/></svg>
+  </div>
+  <div class="logs-panel" id="logs-panel">
+    <div class="log-line ok"><span class="log-ts">10:31:02</span>Function deployed successfully</div>
+    <div class="log-line"><span class="log-ts">10:31:05</span>GET /stripe/webhook 200 OK (24ms)</div>
+    <div class="log-line warn"><span class="log-ts">10:31:08</span>Retrying payment intent: pi_3Oxx… (attempt 2)</div>
+    <div class="log-line err"><span class="log-ts">10:31:11</span>Error: Stripe webhook signature verification failed</div>
+    <div class="log-line"><span class="log-ts">10:31:14</span>POST /stripe/create-subscription 200 OK (118ms)</div>
+    <div class="log-line ok"><span class="log-ts">10:31:18</span>Subscription created: sub_1Oxx… → user a3f9c12e</div>
+  </div>
+
+</div>
+
+<!-- ══ RIGHT DRAWER ══ -->
+<div class="drawer" id="drawer">
+  <div class="drawer-scroll">
+
+    <!-- Imported Functions -->
+    <div class="ds open">
+      <div class="ds-head" onclick="toggleDs(this)">
+        <span class="ds-title">Imported Functions</span>
+        <svg class="ds-chev" width="13" height="13" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2.5"><polyline points="6 9 12 15 18 9"/></svg>
+      </div>
+      <div class="ds-body">
+        <div class="import-select">
+          <select class="import-sel">
+            <option value="">Select functions…</option>
+            <option>Helper</option>
+            <option>Api</option>
+            <option>Common</option>
+          </select>
+          <div class="import-arrow"><svg width="11" height="11" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2.5"><polyline points="6 9 12 15 18 9"/></svg></div>
+        </div>
+      </div>
+    </div>
+
+    <!-- Triggers -->
+    <div class="ds open">
+      <div class="ds-head" onclick="toggleDs(this)">
+        <span class="ds-title">Triggers</span>
+        <svg class="ds-chev" width="13" height="13" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2.5"><polyline points="6 9 12 15 18 9"/></svg>
+      </div>
+      <div class="ds-body" id="triggers-body"><!-- injected --></div>
+    </div>
+
+    <!-- Dependencies -->
+    <div class="ds open">
+      <div class="ds-head" onclick="toggleDs(this)">
+        <span class="ds-title">Dependencies</span>
+        <svg class="ds-chev" width="13" height="13" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2.5"><polyline points="6 9 12 15 18 9"/></svg>
+      </div>
+      <div class="ds-body">
+        <div id="deps-list"><!-- injected --></div>
+        <div class="dep-add-row">
+          <input class="dep-add-inp" type="text" id="dep-inp" placeholder="Package name" onkeydown="if(event.key==='Enter')addDep()"/>
+          <button class="dep-add-submit" onclick="addDep()" title="Add">
+            <svg width="12" height="12" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2.5"><line x1="12" y1="5" x2="12" y2="19"/><line x1="5" y1="12" x2="19" y2="12"/></svg>
+          </button>
+        </div>
+      </div>
+    </div>
+
+    <!-- Environment -->
+    <div class="ds open">
+      <div class="ds-head" onclick="toggleDs(this)">
+        <span class="ds-title">Environment</span>
+        <svg class="ds-chev" width="13" height="13" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2.5"><polyline points="6 9 12 15 18 9"/></svg>
+      </div>
+      <div class="ds-body">
+        <div class="env-tabs">
+          <div class="env-tab active" onclick="switchEnvTab(this,'variables')">Variables</div>
+          <div class="env-tab"        onclick="switchEnvTab(this,'secrets')">Secrets</div>
+        </div>
+        <div id="env-variables">
+          <div class="env-select">
+            <select class="env-sel">
+              <option>Select variables…</option>
+              <option>PAYMENT_METHODS</option>
+              <option>PRODUCTS_BUCKET</option>
+              <option>STRIPE_APIKEY_TEST</option>
+            </select>
+            <div class="env-sel-arrow"><svg width="11" height="11" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2.5"><polyline points="6 9 12 15 18 9"/></svg></div>
+          </div>
+          <div id="env-vars-list"><!-- injected --></div>
+        </div>
+        <div id="env-secrets" style="display:none">
+          <div class="env-select">
+            <select class="env-sel">
+              <option>Select secrets…</option>
+              <option>JWT_SECRET</option>
+              <option>DATABASE_PASSWORD</option>
+            </select>
+            <div class="env-sel-arrow"><svg width="11" height="11" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2.5"><polyline points="6 9 12 15 18 9"/></svg></div>
+          </div>
+          <div id="env-secrets-list"></div>
+        </div>
+      </div>
+    </div>
+
+  </div>
+
+  <!-- Save -->
+  <div class="drawer-save">
+    <button class="btn-save-fn" onclick="saveFunction()">
+      <svg width="13" height="13" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2.2"><path d="M19 21H5a2 2 0 0 1-2-2V5a2 2 0 0 1 2-2h11l5 5v11a2 2 0 0 1-2 2z"/><polyline points="17 21 17 13 7 13 7 21"/><polyline points="7 3 7 8 15 8"/></svg>
+      Save
+    </button>
+  </div>
+</div>
+
+<script>
+/* ══ DATA ══ */
+const FUNCTIONS = [
+  'Stripe','Stripe-Webhook','Access-Manager','Organization','Team',
+  'Resource','Invitation','Initialization','Api','Mailler-API',
+  'Project','Auto-Content-Generator','Social-Login','AI-Tool-Router',
+  'Routes','Helper','Distributions','Constants','Aws'
+];
+
+let TRIGGERS = [
+  {name:'subscribe',on:true},{name:'createPaymentMethod',on:true},
+  {name:'deletePaymentMethod',on:true},{name:'updatePaymentMethod',on:true},
+  {name:'onProductInsert',on:true},{name:'onProductUpdate',on:false},
+  {name:'onPriceInsert',on:true},{name:'onPriceUpdate',on:false},
+  {name:'validateDowngradeLimits',on:true},
+];
+
+let DEPS = [
+  '@spica-devkit/bucket @^0.18.25','@spica-fn/Api @file:…/Api',
+  '@spica-fn/Common @file:…/Common','@spica-fn/Constants @file:…/Constants',
+  '@spica-fn/Firebase @file:…/Firebase','@spica-fn/Helper @file:…/Helper',
+  'stripe @^11.8.0',
+];
+
+let ENV_VARS = ['PAYMENT_METHODS','PRODUCTS_BUCKET','PRICES_BUCKET','STRIPE_APIKEY_TEST','USER_BUCKET'];
+
+let currentFn = 'Stripe';
+let drawerOpen = true;
+
+const CODE = `
+// ========================================================================
+// CONFIGURATION & CONSTANTS
+// ========================================================================
+
+const stripe = require("stripe")(process.env.STRIPE_APIKEY_TEST);
+
+import * as Helper from "@spica-fn/Helper";
+import * as Api from "@spica-fn/Api";
+import * as Common from "@spica-fn/Common";
+import * as Constants from "@spica-fn/Constants";
+import * as Firebase from "@spica-fn/Firebase";
+
+// Environment Configuration
+const CONFIG = {
+  USER_BUCKET: process.env.USER_BUCKET,
+  PRODUCTS_BUCKET: process.env.PRODUCTS_BUCKET,
+  PRICES_BUCKET: process.env.PRICES_BUCKET,
+  PAYMENT_METHODS: process.env.PAYMENT_METHODS,
+  MAX_RETRIES: 3,
+  COOLDOWN_SECONDS: 600, // 10 minutes
+};
+
+// Stripe Configuration
+const STRIPE_CONFIG = {
+  SUBSCRIPTION_EXPAND: ["items.data.price", "plan.product"],
+  INVOICE_EXPAND: ["payment_intent"],
+};
+
+// Status Constants
+const STATUS = {
+  ACTIVE: "active",
+  TRIALING: "trialing",
+  PAST_DUE: "past_due",
+  CANCELED: "canceled",
+  INCOMPLETE: "incomplete",
+};
+
+export async function subscribe(request, response) {
+  const { userId, priceId } = request.body;
+  try {
+    const user = await Api.getUser(userId);
+    const customer = await stripe.customers.create({
+      email: user.email,
+      metadata: { userId },
+    });
+    const subscription = await stripe.subscriptions.create({
+      customer: customer.id,
+      items: [{ price: priceId }],
+      expand: STRIPE_CONFIG.SUBSCRIPTION_EXPAND,
+    });
+    await Helper.updateUserSubscription(userId, subscription);
+    response.send({ success: true, subscriptionId: subscription.id });
+  } catch (err) {
+    response.status(500).send({ error: err.message });
+  }
+}
+
+export async function createPaymentMethod(request, response) {
+  const { userId, paymentMethodId } = request.body;
+  try {
+    const user = await Api.getUser(userId);
+    await stripe.paymentMethods.attach(paymentMethodId, {
+      customer: user.stripeCustomerId,
+    });
+    response.send({ success: true });
+  } catch (err) {
+    response.status(500).send({ error: err.message });
+  }
+}
+`.trim();
+
+/* ══ SYNTAX HIGHLIGHT ══ */
+function highlight(code) {
+  const esc = s => s.replace(/&/g,'&amp;').replace(/</g,'&lt;').replace(/>/g,'&gt;');
+  return esc(code)
+    // comments
+    .replace(/(\/\/.*)/g, '<span class="sc">$1</span>')
+    // strings
+    .replace(/("(?:[^"\\]|\\.)*"|'(?:[^'\\]|\\.)*'|`(?:[^`\\]|\\.)*`)/g, '<span class="ss">$1</span>')
+    // keywords
+    .replace(/\b(const|let|var|import|export|from|async|await|function|return|try|catch|throw|new|if|else|for|of|in)\b/g, '<span class="sk">$1</span>')
+    // builtins
+    .replace(/\b(process|require|console)\b/g, '<span class="sp">$1</span>')
+    // numbers
+    .replace(/\b(\d+)\b/g, '<span class="sn">$1</span>');
+}
+
+/* ══ EDITOR RENDER ══ */
+let editorLines = CODE.split('\n');
+
+function renderEditor() {
+  const ca = document.getElementById('code-area');
+  const ln = document.getElementById('line-nums');
+  // Only re-render line numbers on input (content is editable)
+  const lines = ca.innerText.split('\n');
+  ln.innerHTML = lines.map((_, i) => `<div class="ln">${i+1}</div>`).join('');
+}
+
+function initEditor() {
+  const ca = document.getElementById('code-area');
+  ca.innerHTML = highlight(CODE);
+  renderEditor();
+}
+
+function handleEditorKey(e) {
+  if (e.key === 'Tab') {
+    e.preventDefault();
+    document.execCommand('insertText', false, '  ');
+  }
+}
+
+/* ══ FUNCTION LIST ══ */
+function renderFnList() {
+  const list = document.getElementById('fn-list');
+  list.innerHTML = FUNCTIONS.map(fn => `
+    <div class="fn-item ${fn===currentFn?'active':''}" onclick="selectFn('${fn}')">
+      <div class="fn-item-icon">
+        <svg width="13" height="13" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2">
+          <polyline points="16 18 22 12 16 6"/><polyline points="8 6 2 12 8 18"/>
+        </svg>
+      </div>
+      <span class="fn-name">${fn}</span>
+      <div class="fn-actions">
+        <button class="fn-act-btn" onclick="deleteFn(event,'${fn}')" title="Delete">
+          <svg width="12" height="12" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2">
+            <polyline points="3 6 5 6 21 6"/><path d="M19 6l-1 14a2 2 0 0 1-2 2H8a2 2 0 0 1-2-2L5 6"/>
+          </svg>
+        </button>
+        <button class="fn-act-btn fn-act-drag" title="Reorder">
+          <svg width="12" height="12" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2">
+            <line x1="8" y1="6" x2="21" y2="6"/><line x1="8" y1="12" x2="21" y2="12"/>
+            <line x1="8" y1="18" x2="21" y2="18"/><line x1="3" y1="6" x2="3.01" y2="6"/>
+            <line x1="3" y1="12" x2="3.01" y2="12"/><line x1="3" y1="18" x2="3.01" y2="18"/>
+          </svg>
+        </button>
+      </div>
+    </div>`).join('');
+}
+
+function selectFn(name) {
+  currentFn = name;
+  document.getElementById('active-tab-name').textContent = name;
+  renderFnList();
+  toast(`Loaded: ${name}`);
+}
+
+function deleteFn(e, name) {
+  e.stopPropagation();
+  const i = FUNCTIONS.indexOf(name);
+  if (i > -1) FUNCTIONS.splice(i,1);
+  if (currentFn === name) currentFn = FUNCTIONS[0] || '';
+  renderFnList();
+}
+
+function addFunction() {
+  const name = prompt('Function name:');
+  if (!name?.trim()) return;
+  FUNCTIONS.push(name.trim());
+  selectFn(name.trim());
+}
+
+/* ══ TRIGGERS ══ */
+function renderTriggers() {
+  document.getElementById('triggers-body').innerHTML = `
+    <div>
+      ${TRIGGERS.map((t,i) => `
+        <div class="trigger-row">
+          <span class="trigger-name">${t.name}</span>
+          <div class="trigger-acts">
+            <div class="tsw-sm ${t.on?'on':''}" onclick="toggleTrigger(${i})" title="${t.on?'Disable':'Enable'}"></div>
+            <button class="t-del-btn" onclick="deleteTrigger(${i})" title="Delete">
+              <svg width="11" height="11" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2">
+                <polyline points="3 6 5 6 21 6"/><path d="M19 6l-1 14a2 2 0 0 1-2 2H8a2 2 0 0 1-2-2L5 6"/>
+              </svg>
+            </button>
+            <button class="t-expand-btn" title="Expand">
+              <svg width="11" height="11" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2.5"><polyline points="6 9 12 15 18 9"/></svg>
+            </button>
+          </div>
+        </div>`).join('')}
+    </div>
+    <button class="add-trigger-btn" onclick="addTrigger()">
+      <svg width="11" height="11" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2.5"><line x1="12" y1="5" x2="12" y2="19"/><line x1="5" y1="12" x2="19" y2="12"/></svg>
+      Add Trigger
+    </button>`;
+}
+
+function toggleTrigger(i) {
+  TRIGGERS[i].on = !TRIGGERS[i].on;
+  renderTriggers();
+}
+
+function deleteTrigger(i) {
+  TRIGGERS.splice(i,1);
+  renderTriggers();
+}
+
+function addTrigger() {
+  const name = prompt('Trigger name:');
+  if (!name?.trim()) return;
+  TRIGGERS.push({name:name.trim(), on:true});
+  renderTriggers();
+}
+
+/* ══ DEPENDENCIES ══ */
+function renderDeps() {
+  document.getElementById('deps-list').innerHTML = DEPS.map((d,i) => `
+    <div class="dep-item">
+      <span class="dep-name" title="${d}">${d}</span>
+      <button class="dep-act" title="Refresh"><svg width="11" height="11" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2"><polyline points="1 4 1 10 7 10"/><polyline points="23 20 23 14 17 14"/><path d="M20.49 9A9 9 0 0 0 5.64 5.64L1 10m22 4l-4.64 4.36A9 9 0 0 1 3.51 15"/></svg></button>
+      <button class="dep-act del" onclick="deleteDep(${i})" title="Remove"><svg width="11" height="11" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2"><line x1="18" y1="6" x2="6" y2="18"/><line x1="6" y1="6" x2="18" y2="18"/></svg></button>
+    </div>`).join('');
+}
+
+function deleteDep(i) { DEPS.splice(i,1); renderDeps(); }
+function addDep() {
+  const v = document.getElementById('dep-inp').value.trim();
+  if (!v) return;
+  DEPS.push(v);
+  document.getElementById('dep-inp').value = '';
+  renderDeps();
+}
+
+/* ══ ENV VARS ══ */
+function renderEnvVars() {
+  document.getElementById('env-vars-list').innerHTML = ENV_VARS.map((v,i) => `
+    <div class="env-var-item">
+      <span class="env-var-name">${v}</span>
+      <button class="env-var-del" onclick="deleteEnvVar(${i})">
+        <svg width="11" height="11" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2"><line x1="18" y1="6" x2="6" y2="18"/><line x1="6" y1="6" x2="18" y2="18"/></svg>
+      </button>
+    </div>`).join('');
+}
+
+function deleteEnvVar(i) { ENV_VARS.splice(i,1); renderEnvVars(); }
+
+function switchEnvTab(tab, which) {
+  document.querySelectorAll('.env-tab').forEach(t => t.classList.remove('active'));
+  tab.classList.add('active');
+  document.getElementById('env-variables').style.display = which==='variables' ? '' : 'none';
+  document.getElementById('env-secrets').style.display   = which==='secrets'   ? '' : 'none';
+}
+
+/* ══ DRAWER TOGGLE ══ */
+function toggleDrawer() {
+  drawerOpen = !drawerOpen;
+  document.getElementById('drawer').classList.toggle('collapsed', !drawerOpen);
+}
+
+/* ══ DS SECTIONS ══ */
+function toggleDs(head) {
+  head.closest('.ds').classList.toggle('open');
+}
+
+/* ══ LOGS ══ */
+function toggleLogs() {
+  const bar   = document.getElementById('logs-bar');
+  const panel = document.getElementById('logs-panel');
+  bar.classList.toggle('open');
+  panel.classList.toggle('open');
+}
+
+/* ══ SAVE ══ */
+function saveFunction() {
+  const btn = document.querySelector('.btn-save-fn');
+  btn.style.background = 'var(--gr)';
+  btn.innerHTML = `<svg width="13" height="13" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2.5"><polyline points="20 6 9 17 4 12"/></svg>Saved`;
+  setTimeout(() => {
+    btn.style.background = '';
+    btn.innerHTML = `<svg width="13" height="13" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2.2"><path d="M19 21H5a2 2 0 0 1-2-2V5a2 2 0 0 1 2-2h11l5 5v11a2 2 0 0 1-2 2z"/><polyline points="17 21 17 13 7 13 7 21"/><polyline points="7 3 7 8 15 8"/></svg>Save`;
+  }, 2000);
+}
+
+/* ══ TOAST ══ */
+function toast(msg) {
+  let t = document.getElementById('toast-el');
+  if (!t) {
+    t = document.createElement('div');
+    t.id = 'toast-el';
+    t.style.cssText = 'position:fixed;bottom:20px;left:50%;transform:translateX(-50%);background:var(--ac);color:#fff;padding:8px 16px;border-radius:8px;font-size:12.5px;font-weight:500;z-index:999;opacity:0;transition:opacity .15s;pointer-events:none';
+    document.body.appendChild(t);
+  }
+  t.textContent = msg; t.style.opacity = '1';
+  clearTimeout(t._tid);
+  t._tid = setTimeout(() => t.style.opacity = '0', 2000);
+}
+
+/* ══ THEME ══ */
+function toggleTheme() {
+  const d = document.documentElement.getAttribute('data-theme') === 'dark';
+  document.documentElement.setAttribute('data-theme', d?'':'dark');
+  localStorage.setItem('spica-theme', d?'light':'dark');
+}
+if (localStorage.getItem('spica-theme') === 'dark')
+  document.documentElement.setAttribute('data-theme','dark');
+
+/* ══ EDIT TAB NAME ══ */
+function editTabName() {
+  const span = document.getElementById('active-tab-name');
+  const cur = span.textContent;
+  const input = document.createElement('input');
+  input.value = cur;
+  input.style.cssText = 'border:none;outline:none;background:transparent;font-family:inherit;font-size:inherit;font-weight:inherit;color:inherit;width:80px';
+  span.replaceWith(input);
+  input.focus(); input.select();
+  input.onblur = () => { const s = document.createElement('span'); s.id='active-tab-name'; s.textContent=input.value||cur; input.replaceWith(s); };
+  input.onkeydown = e => { if(e.key==='Enter'||e.key==='Escape') input.blur(); };
+}
+
+/* ══ INIT ══ */
+initEditor();
+renderFnList();
+renderTriggers();
+renderDeps();
+renderEnvVars();
+</script>
+</body>
+</html>
