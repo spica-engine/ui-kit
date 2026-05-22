@@ -46,6 +46,7 @@ const Popover: FC<TypePopover> = ({
 }) => {
   const containerRef = useRef<HTMLDivElement | null>(null);
   const popoverRef = useRef<HTMLDivElement | null>(null);
+  const closeTimerRef = useRef<ReturnType<typeof setTimeout> | null>(null);
 
   useImperativeHandle(
     contentProps?.ref ?? { current: null },
@@ -116,11 +117,30 @@ const Popover: FC<TypePopover> = ({
     [isOpen, trigger, handleVisibilityChange]
   );
 
+  const cancelCloseTimer = useCallback(() => {
+    if (closeTimerRef.current) {
+      clearTimeout(closeTimerRef.current);
+      closeTimerRef.current = null;
+    }
+  }, []);
+
+  const scheduleClose = useCallback(() => {
+    cancelCloseTimer();
+    closeTimerRef.current = setTimeout(() => handleVisibilityChange(false), 100);
+  }, [cancelCloseTimer, handleVisibilityChange]);
+
   const handleInteraction = {
     onMouseEnter: () => {
-      trigger === "hover" && handleVisibilityChange(true);
+      if (trigger === "hover") {
+        cancelCloseTimer();
+        handleVisibilityChange(true);
+      }
     },
-    onMouseLeave: () => trigger === "hover" && handleVisibilityChange(false),
+    onMouseLeave: () => {
+      if (trigger === "hover") {
+        scheduleClose();
+      }
+    },
     onClick: () => trigger === "click" && handleVisibilityChange(true),
   };
 
@@ -147,6 +167,14 @@ const Popover: FC<TypePopover> = ({
             data-popover-content
             style={{ ...targetPosition, ...(contentProps?.style ?? {}) }}
             className={`${contentProps?.className} ${styles.content}`}
+            onMouseEnter={(e) => {
+              if (trigger === "hover") cancelCloseTimer();
+              contentProps?.onMouseEnter?.(e);
+            }}
+            onMouseLeave={(e) => {
+              if (trigger === "hover") scheduleClose();
+              contentProps?.onMouseLeave?.(e);
+            }}
           >
             {arrow && (
               <div className={`${styles.arrow} ${styles[arrowPlacement || arrowplc[placement]]}`} />
