@@ -18,6 +18,12 @@ const DatePicker = ({ value, onChange, renderLabel, ...props }: DatePickerProps)
 
   const handleOnChange = (date: Dayjs, dateString: string | string[]) => {
     onChange?.(dateString);
+    if (!props.showTime) {
+      setPopupOpen(false);
+    }
+  };
+
+  const handleOnOk = () => {
     setPopupOpen(false);
   };
 
@@ -44,6 +50,7 @@ const DatePicker = ({ value, onChange, renderLabel, ...props }: DatePickerProps)
         onOpenChange={setPopupOpen}
         value={normalizedPickerValue}
         onChange={handleOnChange}
+        onOk={handleOnOk}
         className={`${styles.datePicker} ${props.className || ""} ${!antDatePickerVisible ? styles.hiddenAntDatePicker : ""}`}
       />
       {!antDatePickerVisible && (

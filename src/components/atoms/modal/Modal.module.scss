@@ -1,6 +1,7 @@
 .modalContainer {
   position: fixed;
   inset: 0;
+  z-index: var(--z-index-overlay, 1000);
   width: 100% !important;
   height: 100% !important;
   padding: 24px;
