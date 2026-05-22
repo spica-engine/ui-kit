@@ -1,5 +1,5 @@
 {
-  "name": "oziko-ui-kit",
+  "name": "@spica-engine/ui-kit",
   "version": "0.0.122",
   "private": false,
   "main": "dist/index.cjs.js",
@@ -12,6 +12,10 @@
   "sideEffects": [
     "*.css"
   ],
+  "publishConfig": {
+    "access": "public",
+    "registry": "https://registry.npmjs.org/"
+  },
   "dependencies": {
     "@emotion/react": "^11.14.0",
     "@emotion/styled": "^11.14.0",
