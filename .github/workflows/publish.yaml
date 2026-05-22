@@ -38,7 +38,16 @@ jobs:
 
       - name: Validate package metadata before publish
         run: |
-          node -e 'const pkg = require("./build/package.json"); if (!pkg.name) { throw new Error("Missing package name in build/package.json"); } if (pkg.private) { throw new Error("build/package.json cannot be private for npm publish"); } console.log(`Publishing ${pkg.name}@${pkg.version}`);'
+          node <<'EOF'
+          const pkg = require("./build/package.json");
+          if (!pkg.name) {
+            throw new Error("Missing package name in build/package.json");
+          }
+          if (pkg.private) {
+            throw new Error("build/package.json cannot be private for npm publish");
+          }
+          console.log(`Publishing ${pkg.name}@${pkg.version}`);
+          EOF
 
       - name: Publish to npm
         run: |
