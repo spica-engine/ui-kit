@@ -72,6 +72,7 @@
   --font-size-sm-plus:      11.5px;
   --font-size-base:         12px;
   --font-size-base-plus:    12.5px;
+  --font-size-button:       12px;
   --font-size-md:           13px;
   --font-size-lg:           14px;
   --font-size-xl:           20px;
@@ -143,6 +144,12 @@
   --transition-panel:     0.22s cubic-bezier(0.4, 0, 0.2, 1);
   --transition-modal-in:  0.15s ease;
   --transition-ctx-in:    0.1s ease;
+
+  /* ── Z-index scale ───────────────────────────────────────────────────── */
+  --z-index-sticky:       10;
+  --z-index-dropdown:     100;
+  --z-index-overlay:      1000;
+  --z-index-notification: 9999;
 
   /* ── Utility ─────────────────────────────────────────────────────────── */
   --opacity-disabled:     0.5;
