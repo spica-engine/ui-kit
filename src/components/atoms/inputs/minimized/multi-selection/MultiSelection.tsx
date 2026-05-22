@@ -1,10 +1,8 @@
-import React, { useRef } from "react";
-import FluidContainer, { TypeFluidContainer } from "@atoms/fluid-container/FluidContainer";
-import Icon from "@atoms/icon/Icon";
-import Select, { TypeSelect, TypeSelectRef, TypeValue } from "@molecules/select/Select";
+import React from "react";
+import { TypeFluidContainer } from "@atoms/fluid-container/FluidContainer";
+import { TypeSelect, TypeValue } from "@molecules/select/Select";
 import styles from "./MultiSelection.module.scss";
 import { TypeLabeledValue } from "@atoms/select-option/SelectOption";
-import Button from "@atoms/button/Button";
 
 export type TypeMultiSelectionInput = {
   options?: (string | number | TypeLabeledValue)[];
@@ -16,46 +14,39 @@ export type TypeMultiSelectionInput = {
 const MultipleSelectionMinimizedInput = ({
   options,
   value,
-  onChange,
-  selectProps,
+  selectProps: _selectProps,
+  onChange: _onChange,
+  className,
+  // strip FluidContainer-specific props that don't apply to a plain div
+  prefix: _prefix,
+  root: _root,
+  suffix: _suffix,
+  mode: _mode,
   ...props
 }: TypeMultiSelectionInput) => {
-  const selectRef = useRef<TypeSelectRef>(null);
+  const tags = Array.isArray(value) ? (value as (string | number)[]) : [];
 
-  const handleClear = (event: React.MouseEvent<HTMLButtonElement>) => {
-    event.preventDefault();
-    event.stopPropagation();
-    selectRef?.current?.clear();
+  const getLabelByValue = (val: string | number): string => {
+    if (!options || options.length === 0) return String(val);
+    const found = (options as TypeLabeledValue[]).find(
+      (o) => typeof o === "object" && o.value === val
+    );
+    return found ? found.label : String(val);
   };
 
   return (
-    <FluidContainer
-      mode="fill"
-      dimensionX="fill"
-      root={{
-        children: (
-          <Select
-            selectRef={selectRef}
-            prefix={{ children: <Icon name="chevronDown" /> }}
-            suffix={{
-              children: Array.isArray(value) && value.length > 0 && (
-                <Button variant="text" keepWidth={false} onClick={handleClear}>
-                  <Icon name="close" />
-                </Button>
-              ),
-            }}
-            multiple
-            options={options!}
-            value={value!}
-            onChange={(value) => onChange?.(value)}
-            {...selectProps}
-            className={styles.multiSelect}
-          />
-        ),
-      }}
-      {...props}
-      className={`${styles.multiSelectionContainer} ${props.className}`}
-    />
+    <div
+      className={`${styles.multiSelectionContainer} ${className ?? ""}`}
+      {...(props as React.HTMLAttributes<HTMLDivElement>)}
+    >
+      <div className={styles.selectedValues}>
+        {tags.map((v) => (
+          <span key={String(v)} className={styles.selectedTag}>
+            {getLabelByValue(v)}
+          </span>
+        ))}
+      </div>
+    </div>
   );
 };
 

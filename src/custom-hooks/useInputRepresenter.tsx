@@ -16,7 +16,7 @@ import { utils } from "utils";
 import ChipInput, { TypeChipInput } from "@molecules/chip/ChipInput";
 import Text from "../components/atoms/text/Text";
 import RelationInput, { RelationType } from "@atoms/relation-input/RelationInput";
-import { IconName, Select, TypeLabeledValue, TypeSwitch } from "index.export";
+import { IconName, Select, FlexElement, TypeLabeledValue, TypeSwitch } from "index.export";
 import { TypeRelationSelect } from "@atoms/relation-input/relation-select/RelationSelect";
 
 // TODO: This type is overly complex and combines properties for multiple input types.
@@ -215,6 +215,7 @@ const types: TypeInputTypeMap = {
       inputContainerClassName={props.className}
       value={props.value}
       onChange={(value) => props.onChange?.({ key: props.key, value })}
+      datePickerProps={{ showTime: true, format: "YYYY-MM-DD HH:mm:ss" }}
     />
   ),
   boolean: (props) => (
@@ -239,7 +240,7 @@ const types: TypeInputTypeMap = {
   ),
   storage: (props) => (
     <StorageInput
-      onUpload={() => {}}
+      onUpload={() => { }}
       label={props.title}
       containerProps={{
         className: props.className,
@@ -353,14 +354,20 @@ const types: TypeInputTypeMap = {
   },
   select: (props) => {
     return (
-      <Select
-        options={props.enum as string[]}
-        value={props.value}
-        onChange={(value) => {
-          props.onChange?.({ key: props.key, value: value as string });
-        }}
-        className={props.className}
-      />
+      <FlexElement direction="vertical" gap={4} dimensionX="fill" alignment="leftTop">
+        {props.title && (
+          <Text size="small" variant="secondary" style={{ textAlign: "left" }}>{props.title}</Text>
+        )}
+        <Select
+          options={props.enum as string[]}
+          value={props.value}
+          onChange={(value) => {
+            props.onChange?.({ key: props.key, value: value as string });
+          }}
+          className={props.className}
+          dimensionX="fill"
+        />
+      </FlexElement>
     );
   },
   json: (props) => {
@@ -368,8 +375,8 @@ const types: TypeInputTypeMap = {
       props.value === undefined || props.value === null
         ? ""
         : typeof props.value === "string"
-        ? props.value
-        : JSON.stringify(props.value, null, 2);
+          ? props.value
+          : JSON.stringify(props.value, null, 2);
     return (
       <TextAreaInput
         title={props.title}
@@ -482,12 +489,12 @@ const useInputRepresenter = ({
               hasCustomStyles
                 ? undefined
                 : {
-                    position: "absolute",
-                    bottom: 0,
-                    left: 0,
-                    pointerEvents: "none",
-                    whiteSpace: "nowrap",
-                  }
+                  position: "absolute",
+                  bottom: 0,
+                  left: 0,
+                  pointerEvents: "none",
+                  whiteSpace: "nowrap",
+                }
             }
             size="xsmall"
             variant="danger"
