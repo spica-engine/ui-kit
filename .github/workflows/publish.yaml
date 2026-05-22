@@ -36,9 +36,13 @@ jobs:
       - name: Bundle build
         run: yarn rollup
 
+      - name: Validate package metadata before publish
+        run: |
+          node -e 'const pkg = require("./build/package.json"); if (!pkg.name) { throw new Error("Missing package name in build/package.json"); } if (pkg.private) { throw new Error("build/package.json cannot be private for npm publish"); } console.log(`Publishing ${pkg.name}@${pkg.version}`);'
+
       - name: Publish to npm
         run: |
           cd build
-          npm publish
+          npm publish --access public
         env:
           NODE_AUTH_TOKEN: ${{ secrets.NPM_TOKEN }}
