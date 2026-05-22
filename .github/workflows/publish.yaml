@@ -33,6 +33,7 @@ jobs:
       - name: Set project version based on latest tag
         run: |
           npm version $LATEST_TAG --no-git-tag-version
+          cd build && npm version $LATEST_TAG --no-git-tag-version
 
       - name: Bundle build
         run: yarn rollup
