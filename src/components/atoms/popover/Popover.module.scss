@@ -3,6 +3,7 @@
 }
 .content {
   position: absolute;
+  z-index: var(--z-index-overlay, 1000);
   box-shadow: var(--shadow-md);
   padding: var(--spacing-9);
   border-radius: var(--radius-md);
