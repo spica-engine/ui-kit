@@ -1,4 +1,4 @@
-import React, { FC, memo, useCallback, useState } from "react";
+import React, { FC, memo, useCallback, useState, ReactElement } from "react";
 import styles from "./ObjectInput.module.scss";
 import {
   TypeInputRepresenterError,
@@ -22,7 +22,7 @@ export type TypeObjectInput = {
 };
 
 // ── Type → colored SVG icon ────────────────────────────────────────────────
-const TYPE_ICONS: Record<string, JSX.Element> = {
+const TYPE_ICONS: Record<string, ReactElement> = {
   string: (
     <svg width="11" height="11" fill="none" viewBox="0 0 24 24" stroke="currentColor" strokeWidth="2" style={{ color: "var(--color-blue)", flexShrink: 0 }}>
       <polyline points="4 7 4 4 20 4 20 7" /><line x1="9" y1="20" x2="15" y2="20" /><line x1="12" y1="4" x2="12" y2="20" />
@@ -125,7 +125,7 @@ const BADGE_CLASSES: Record<string, string> = {
   location: styles.badgeLocation,
 };
 
-function getTypeIcon(type: string): JSX.Element {
+function getTypeIcon(type: string): ReactElement {
   return TYPE_ICONS[type] ?? TYPE_ICONS.object;
 }
 

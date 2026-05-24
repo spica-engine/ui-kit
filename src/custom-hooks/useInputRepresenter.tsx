@@ -223,7 +223,7 @@ const types: TypeInputTypeMap = {
       checked={props.value}
       label={props.title}
       description={props.description}
-      containerProps={{ dimensionX: "fill" }}
+      dimensionX="fill"
       onChange={(value) => props.onChange?.({ key: props.key, value })}
       size={props.size}
       className={props.className}
@@ -277,7 +277,6 @@ const types: TypeInputTypeMap = {
     return (
       <LocationInput
         title={props.title}
-        dimensionX="fill"
         coordinates={props.value as TypeCoordinates}
         onChange={handleChangeLocation}
         className={props.className}
@@ -457,6 +456,7 @@ const useInputRepresenter = ({
         key={key}
         id={el.id ?? undefined}
       >
+        {/* @ts-ignore - effectiveTypes[el.type] union call cannot be statically narrowed */}
         {effectiveTypes[el.type]({
           key,
           title: el.title,

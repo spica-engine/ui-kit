@@ -200,7 +200,6 @@ export { type TableCellProps } from "./components/organisms/table/Table";
 // Deprecated — use the Table-prefixed names above
 export { type TypeTable } from "./components/organisms/table/Table";
 export { type TypeColumn } from "./components/organisms/table/Table";
-export { type TypeColumnComponent } from "./components/organisms/table/Table";
 export { type TypeHeaderCell } from "./components/organisms/table/Table";
 export { type TypeCell } from "./components/organisms/table/Table";
 export {

@@ -23,7 +23,7 @@ const BooleanInput: FC<TypeBooleanInput & TypeFlexElement> = ({
   hideLabel = false,
   description,
   onChange,
-  iconName = "toggleSwitchOutline",
+  iconName = "fieldBoolean" as IconName,
   className,
   ...props
 }) => {
@@ -44,7 +44,7 @@ const BooleanInput: FC<TypeBooleanInput & TypeFlexElement> = ({
       alignment="leftTop"
       dimensionX="fill"
       {...props}
-      className={`${styles.field} ${className ?? ""} ${props.className ?? ""}`}
+      className={`${styles.field} ${className ?? ""}`}
     >
       {label && (
         <div className={styles.fieldHead}>
