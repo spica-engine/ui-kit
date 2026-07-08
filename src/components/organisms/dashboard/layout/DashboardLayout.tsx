@@ -1,13 +1,12 @@
-import React, { FC, useEffect, useRef } from "react";
+import React, { FC, memo, useEffect, useRef } from "react";
 import GridLayout, { Layout } from "react-grid-layout";
 import styles from "./DashboardLayout.module.scss";
 import { ChartData, ChartOptions, ChartType } from "chart.js";
 import Icon from "@atoms/icon/Icon";
 import Text from "@atoms/text/Text";
 import FlexElement from "@atoms/flex-element/FlexElement";
-import FluidContainer, { TypeFluidContainer } from "@atoms/fluid-container/FluidContainer";
+import { TypeFluidContainer } from "@atoms/fluid-container/FluidContainer";
 import DashboardItem from "@atoms/dashboard-item/DashboardItem";
-import Popover from "@atoms/popover/Popover";
 
 export type TypeDashboardItem = {
   ratio: string;
@@ -37,7 +36,6 @@ const DashboardLayout: FC<TypeDashboardLayout> = ({ dashboards }) => {
 
     const dashboardItemIds = dashboardItems.map((item: TypeDashboardItem) => item.id);
     const existDashboardItems = layout.filter((item: Layout) => dashboardItemIds.includes(item.i));
-    console.log("existDashboardItems", existDashboardItems);
     if (existDashboardItems.length > 0) {
       return setLayout(existDashboardItems);
     }
@@ -106,13 +104,7 @@ const DashboardLayout: FC<TypeDashboardLayout> = ({ dashboards }) => {
         draggableHandle=".dragHandle"
       >
         {layout.map((item) => (
-          <div
-            key={item.i}
-            className={styles.gridItem}
-            onClick={() => {
-              console.log(item);
-            }}
-          >
+          <div key={item.i} className={styles.gridItem} onClick={() => {}}>
             {item.i !== "addNewComponent" ? (
               <DashboardItem
                 chartProps={{
@@ -146,4 +138,4 @@ const DashboardLayout: FC<TypeDashboardLayout> = ({ dashboards }) => {
   );
 };
 
-export default DashboardLayout;
+export default memo(DashboardLayout);
