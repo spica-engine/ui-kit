@@ -27,9 +27,6 @@ It is intended for developers building React 19 applications (particularly withi
 **Core**
 - React 19, TypeScript 5, Sass/SCSS
 
-**UI foundations**
-- MUI 6 (`@mui/material`, `@mui/icons-material`), Ant Design 5, Emotion
-
 **Feature libraries**
 - Lexical — rich-text inputs
 - Chart.js + react-chartjs-2 — charts and timeline
