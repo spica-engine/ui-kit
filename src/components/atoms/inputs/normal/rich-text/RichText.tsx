@@ -9,19 +9,14 @@ import { LexicalComposer } from "@lexical/react/LexicalComposer";
 import { $generateHtmlFromNodes, $generateNodesFromDOM } from "@lexical/html";
 import LexicalContent from "./LexicalContent";
 import FlexElement, { TypeFlexElement } from "@atoms/flex-element/FlexElement";
-import InputHeader from "@atoms/input-header/InputHeader";
 import Text from "@atoms/text/Text";
 import Icon from "@atoms/icon/Icon";
 import { IconName } from "@utils/iconList";
-import { TypeFluidContainer } from "@atoms/fluid-container/FluidContainer";
 
 export type TypeRichTextInput = {
   headerProps?: {
     icon?: IconName;
     label?: string;
-    iconProps?: TypeFlexElement;
-    labelProps?: TypeFlexElement;
-    container?: TypeFluidContainer;
   };
   value?: string;
   className?: string;
@@ -94,30 +89,29 @@ const RichTextInput: FC<TypeRichTextInput> = ({
 
   return (
     <FlexElement
-      className={`${styles.container} ${className}`}
-      dimensionX="fill"
       direction="vertical"
+      alignment="leftTop"
+      dimensionX="fill"
+      className={`${styles.field} ${className}`}
     >
-      {headerProps && (
-        <InputHeader
-          prefix={{
-            children: headerProps?.icon && <Icon name={headerProps?.icon} />,
-            ...headerProps?.iconProps,
-          }}
-          root={{
-            children: headerProps?.label && <Text>{headerProps?.label}</Text>,
-            ...headerProps?.labelProps,
-          }}
-          {...headerProps?.container}
-        />
+      {headerProps?.label && (
+        <div className={styles.fieldHead}>
+          <div className={styles.fieldName}>
+            {headerProps.icon && <Icon className={styles.icon} name={headerProps.icon} />}
+            <span>{headerProps.label}</span>
+          </div>
+          <span className={styles.fieldType}>richtext</span>
+        </div>
       )}
 
       <LexicalComposer initialConfig={initialConfig}>
         <LexicalContent {...contentProps} onChange={handleChange} placeHolder={placeHolder} />
       </LexicalComposer>
-      <Text size="xsmall" className={`${styles.description}`}>
-        {description}
-      </Text>
+      {description && (
+        <Text size="xsmall" className={styles.description}>
+          {description}
+        </Text>
+      )}
     </FlexElement>
   );
 };

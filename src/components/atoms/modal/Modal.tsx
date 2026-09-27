@@ -1,5 +1,5 @@
 import { TypeFluidContainer } from "@atoms/fluid-container/FluidContainer";
-import React, { FC, useRef, useState, useEffect, memo } from "react";
+import React, { FC, useRef, useState, useEffect, memo, useCallback } from "react";
 import styles from "./Modal.module.scss";
 import FlexElement, { TypeFlexElement } from "../flex-element/FlexElement";
 import ModalHeader from "./header/ModalHeader";
@@ -43,12 +43,18 @@ const ModalComponent: FC<TypeModal> = ({
   const [isVisible, setIsVisible] = useState(isOpen);
   const [isShaking, setIsShaking] = useState(false);
   const [animationController, setIsAnimationEnded] = useState(false);
+  const contentRef = useRef<HTMLDivElement | null>(null);
 
   useEffect(() => {
     setIsVisible(isOpen);
   }, [isOpen]);
 
-  const handleClickOutside = () => {
+  const handleClose = useCallback(() => {
+    setIsVisible(false);
+    if (onClose) onClose();
+  }, [onClose]);
+
+  const handleClickOutside = useCallback(() => {
     if (backdropType !== "static") {
       handleClose();
       return;
@@ -59,24 +65,20 @@ const ModalComponent: FC<TypeModal> = ({
       setIsShaking(false);
       setIsAnimationEnded(true);
     }, 400);
-  };
-  const handleClose = () => {
-    setIsVisible(false);
-    if (onClose) onClose();
-  };
+  }, [backdropType, handleClose]);
 
   if (!isVisible) return null;
 
   return (
-    <Portal className={portalClassName}>
+    <Portal
+      className={portalClassName}
+      onClickOutside={handleClickOutside}
+      additionalRefs={[contentRef]}
+    >
       <FlexElement className={styles.modalContainer}>
-        <Backdrop
-          showBackdrop={showBackdrop}
-          {...backdropProps}
-          className={backdropClassName}
-          onClick={handleClickOutside}
-        />
+        <Backdrop showBackdrop={showBackdrop} {...backdropProps} className={backdropClassName} />
         <FlexElement
+          ref={contentRef}
           alignment="top"
           direction="vertical"
           {...props}

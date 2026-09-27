@@ -1,36 +1,75 @@
-@use "styles/mixins";
+/* ep-field layout */
+.field {
+  display: flex;
+  flex-direction: column;
+  gap: var(--spacing-4); /* 5px */
+  width: 100%;
+}
 
-.container {
-  @include mixins.inputContainer;
-  padding: var(--oziko-padding-md);
+/* ep-field-head */
+.fieldHead {
+  display: flex;
+  align-items: center;
+  gap: var(--spacing-4); /* 5px */
+}
 
-  .titleContainer {
-    font-size: var(--oziko-font-size-md);
-    color: var(--oziko-color-input-placeholder);
-  }
-  .textAreaInput {
-    width: 100%;
-    padding: var(--oziko-padding-md);
-    font-size: var(--oziko-font-size-md);
-    border-radius: var(--oziko-border-radius-md);
-    color: var(--oziko-color-font-primary);
-    background-color: var(--oziko-color-input-background);
-    outline: none;
-    resize: vertical;
-    overflow: auto;
-    border: 0;
-    line-height: 1rem;
-    &::placeholder {
-      color: var(--oziko-color-input-placeholder);
-      font-size: var(--oziko-font-size-md);
-    }
-  }
-  .description {
-    width: 100% !important;
-    @include mixins.inputDescriptionContainer;
+/* ep-field-name */
+.fieldName {
+  font-size: var(--font-size-sm); /* 11px */
+  font-weight: var(--font-weight-semibold); /* 600 */
+  letter-spacing: 0.03em;
+  color: var(--color-text-muted);
+  display: flex;
+  align-items: center;
+  gap: var(--spacing-3); /* 4px */
+}
+
+/* ep-field-type badge */
+.fieldType {
+  font-size: var(--font-size-2xs); /* 9px */
+  font-weight: var(--font-weight-medium); /* 500 */
+  font-family: var(--font-mono);
+  color: var(--color-text-faint);
+  background: var(--color-surface-3);
+  padding: 1px var(--spacing-4); /* 1px 5px */
+  border-radius: var(--radius-xs); /* 3px */
+  margin-left: var(--spacing-2); /* 3px */
+}
+
+/* field icon: 10×10 */
+.icon {
+  color: var(--color-text-muted) !important;
+  width: 10px !important;
+  height: 10px !important;
+  flex-shrink: 0;
+}
+
+/* textarea.ep-input */
+.textAreaInput {
+  width: 100%;
+  background: var(--color-surface-2);
+  border: 1px solid var(--color-border);
+  border-radius: var(--radius-md); /* 6px */
+  padding: var(--spacing-6) var(--spacing-9); /* 7px 10px */
+  font-size: var(--font-size-base-plus); /* 12.5px */
+  color: var(--color-text-primary);
+  font-family: inherit;
+  outline: none;
+  transition: border-color var(--transition-border);
+  min-height: 68px;
+  resize: vertical;
+  line-height: 1.55;
+
+  &:focus {
+    border-color: var(--color-accent);
   }
 
-  .icon {
-    color: var(--oziko-color-font-primary);
+  &::placeholder {
+    color: var(--color-text-muted);
   }
+}
+
+/* description / helper text */
+.description {
+  color: var(--color-text-muted);
 }

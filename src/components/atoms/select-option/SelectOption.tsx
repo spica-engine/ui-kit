@@ -2,10 +2,12 @@ import { FC, memo } from "react";
 import styles from "./SelectOption.module.scss";
 import FluidContainer, { TypeFluidContainer } from "../fluid-container/FluidContainer";
 import Checkbox from "../checkbox/Checkbox";
+import Text from "../text/Text";
 
 export type TypeLabeledValue = {
   value: string | number;
   label: string;
+  description?: string;
 };
 
 export type TypeSelectOption = {
@@ -24,10 +26,10 @@ const SelectOption: FC<TypeSelectOption & TypeFluidContainer> = ({
   onClick,
   ...props
 }) => {
-  const { value, label } =
+  const { value, label, description } =
     typeof option === "object"
-      ? { value: option.value, label: option.label }
-      : { value: option, label: option };
+      ? { value: option.value, label: option.label, description: option.description }
+      : { value: option, label: String(option), description: undefined };
 
   return (
     <FluidContainer
@@ -52,6 +54,19 @@ const SelectOption: FC<TypeSelectOption & TypeFluidContainer> = ({
         ),
         dimensionX: "fill",
       }}
+      suffix={
+        description
+          ? {
+              children: (
+                <Text variant="secondary" size="small" className={styles.description}>
+                  {description}
+                </Text>
+              ),
+              dimensionX: "hug",
+              alignment: "rightCenter",
+            }
+          : undefined
+      }
       {...props}
       className={`${styles.option} ${selected && styles.selected} ${disabled && styles.disabled} ${props.className || ""}`}
     />

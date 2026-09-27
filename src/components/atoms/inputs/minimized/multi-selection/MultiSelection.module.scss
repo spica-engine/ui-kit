@@ -3,17 +3,34 @@
 .multiSelectionContainer {
   @include mixins.inputContainer;
   padding: 0;
+  width: 100%;
+  overflow: hidden;
+}
 
-  .multiSelect {
-    background: transparent;
-  }
+.selectedValues {
+  display: flex;
+  flex-wrap: nowrap;
+  align-items: center;
+  gap: 4px;
+  padding: 4px 8px;
+  min-height: 34px;
+  width: 100%;
+  overflow-x: auto;
+  scrollbar-width: none;
 
-  .visible {
-    visibility: visible;
-  }
-
-  .hidden {
-    visibility: hidden;
-    pointer-events: none;
+  &::-webkit-scrollbar {
+    display: none;
   }
 }
+
+.selectedTag {
+  display: inline-flex;
+  align-items: center;
+  padding: 2px 8px;
+  border-radius: 4px;
+  font-size: 12px;
+  background: var(--color-neutral-100, #f0f0f0);
+  color: var(--color-neutral-800, #333);
+  white-space: nowrap;
+}
+

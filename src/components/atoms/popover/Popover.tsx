@@ -12,7 +12,6 @@ import FlexElement, { TypeFlexElement } from "../flex-element/FlexElement";
 import styles from "./Popover.module.scss";
 import useAdaptivePosition, { Placement } from "@custom-hooks/useAdaptivePosition";
 import useKeyDown from "@custom-hooks/useKeyDown";
-import { useOnClickOutside } from "@custom-hooks/useOnClickOutside";
 import Portal from "../portal/Portal";
 import Backdrop from "@atoms/backdrop/Backdrop";
 
@@ -47,6 +46,7 @@ const Popover: FC<TypePopover> = ({
 }) => {
   const containerRef = useRef<HTMLDivElement | null>(null);
   const popoverRef = useRef<HTMLDivElement | null>(null);
+  const closeTimerRef = useRef<ReturnType<typeof setTimeout> | null>(null);
 
   useImperativeHandle(
     contentProps?.ref ?? { current: null },
@@ -109,53 +109,38 @@ const Popover: FC<TypePopover> = ({
 
   const handleClickOutside = useCallback(
     (event?: MouseEvent) => {
-      if (!isOpen || trigger !== "click" || !event?.target || !popoverRef.current) {
+      if (!isOpen || trigger !== "click") {
         return;
       }
-
-      const target = event.target as Node;
-      const allPopoverContents = document.querySelectorAll("[data-popover-content]");
-
-      const clickedInsideOtherPopover = Array.from(allPopoverContents).some(
-        (popoverContent) => popoverContent !== popoverRef.current && popoverContent.contains(target)
-      );
-
-      if (clickedInsideOtherPopover) {
-        return;
-      }
-
-      const selectDropdowns = document.querySelectorAll("[data-select-dropdown]");
-      const clickedInsideSelectDropdown = Array.from(selectDropdowns).some((dropdown) => {
-        return dropdown.contains(target);
-      });
-
-      if (clickedInsideSelectDropdown) {
-        return;
-      }
-
-      const visiblePopovers = Array.from(allPopoverContents).filter((el) => {
-        const style = globalThis.getComputedStyle(el);
-        return style.display !== "none" && style.visibility !== "hidden";
-      });
-
-      const topmostPopover = visiblePopovers.at(-1);
-      if (topmostPopover === popoverRef.current) {
-        handleVisibilityChange(false, event);
-      }
+      handleVisibilityChange(false, event);
     },
     [isOpen, trigger, handleVisibilityChange]
   );
 
-  useOnClickOutside({
-    targetElements: [popoverRef, containerRef],
-    onClickOutside: handleClickOutside,
-  });
+  const cancelCloseTimer = useCallback(() => {
+    if (closeTimerRef.current) {
+      clearTimeout(closeTimerRef.current);
+      closeTimerRef.current = null;
+    }
+  }, []);
+
+  const scheduleClose = useCallback(() => {
+    cancelCloseTimer();
+    closeTimerRef.current = setTimeout(() => handleVisibilityChange(false), 100);
+  }, [cancelCloseTimer, handleVisibilityChange]);
 
   const handleInteraction = {
     onMouseEnter: () => {
-      trigger === "hover" && handleVisibilityChange(true);
+      if (trigger === "hover") {
+        cancelCloseTimer();
+        handleVisibilityChange(true);
+      }
     },
-    onMouseLeave: () => trigger === "hover" && handleVisibilityChange(false),
+    onMouseLeave: () => {
+      if (trigger === "hover") {
+        scheduleClose();
+      }
+    },
     onClick: () => trigger === "click" && handleVisibilityChange(true),
   };
 
@@ -170,7 +155,11 @@ const Popover: FC<TypePopover> = ({
         {children}
       </FlexElement>
       {isOpen && (
-        <Portal className={portalClassName}>
+        <Portal
+          className={portalClassName}
+          onClickOutside={handleClickOutside}
+          additionalRefs={[containerRef, popoverRef]}
+        >
           <Backdrop showBackdrop={false} />
           <FlexElement
             {...contentProps}
@@ -178,6 +167,14 @@ const Popover: FC<TypePopover> = ({
             data-popover-content
             style={{ ...targetPosition, ...(contentProps?.style ?? {}) }}
             className={`${contentProps?.className} ${styles.content}`}
+            onMouseEnter={(e) => {
+              if (trigger === "hover") cancelCloseTimer();
+              contentProps?.onMouseEnter?.(e);
+            }}
+            onMouseLeave={(e) => {
+              if (trigger === "hover") scheduleClose();
+              contentProps?.onMouseLeave?.(e);
+            }}
           >
             {arrow && (
               <div className={`${styles.arrow} ${styles[arrowPlacement || arrowplc[placement]]}`} />

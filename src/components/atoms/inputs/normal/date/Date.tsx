@@ -46,7 +46,7 @@ const DateInput: React.FC<DateRangePickerProps> = ({
       }}
     >
       <DatePicker
-        placeholder={placeholder}
+        placeholder={placeholder || (label ? `Enter ${label}` : "")}
         suffixIcon={null}
         onChange={handleOnChange}
         value={value}

@@ -5,12 +5,10 @@
   }
 
   .header {
-    border-bottom: var(--oziko-border-default);
+    border-bottom: var(--border-default);
   }
 
-  .header,
   .chartContainer {
-    padding: var(--oziko-padding-xl);
   }
 
   .chartContainer {

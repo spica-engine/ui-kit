@@ -16,7 +16,7 @@ import { utils } from "utils";
 import ChipInput, { TypeChipInput } from "@molecules/chip/ChipInput";
 import Text from "../components/atoms/text/Text";
 import RelationInput, { RelationType } from "@atoms/relation-input/RelationInput";
-import { IconName, Select, TypeLabeledValue, TypeSwitch } from "index.export";
+import { IconName, Select, FlexElement, TypeLabeledValue, TypeSwitch } from "index.export";
 import { TypeRelationSelect } from "@atoms/relation-input/relation-select/RelationSelect";
 
 // TODO: This type is overly complex and combines properties for multiple input types.
@@ -82,7 +82,8 @@ export type TypeInputType =
   | "array"
   | "chip"
   | "relation"
-  | "select";
+  | "select"
+  | "json";
 
 type TypeOptions = {
   position?: "top" | "bottom" | "left" | "right";
@@ -171,6 +172,7 @@ export type TypeInputTypeMap = {
   chip: (props: TypeChipInputProps<string[] | number[]>) => ReactNode;
   relation: (props: TypeRelationInputProps<TypeLabeledValue[] | TypeLabeledValue>) => ReactNode;
   select: (props: TypeSelectInputProps<string>) => ReactNode;
+  json: (props: TypeInputProps<any>) => ReactNode;
 };
 
 const types: TypeInputTypeMap = {
@@ -213,6 +215,7 @@ const types: TypeInputTypeMap = {
       inputContainerClassName={props.className}
       value={props.value}
       onChange={(value) => props.onChange?.({ key: props.key, value })}
+      datePickerProps={{ showTime: true, format: "YYYY-MM-DD HH:mm:ss" }}
     />
   ),
   boolean: (props) => (
@@ -220,7 +223,7 @@ const types: TypeInputTypeMap = {
       checked={props.value}
       label={props.title}
       description={props.description}
-      containerProps={{ dimensionX: "fill" }}
+      dimensionX="fill"
       onChange={(value) => props.onChange?.({ key: props.key, value })}
       size={props.size}
       className={props.className}
@@ -237,7 +240,7 @@ const types: TypeInputTypeMap = {
   ),
   storage: (props) => (
     <StorageInput
-      onUpload={() => {}}
+      onUpload={() => { }}
       label={props.title}
       containerProps={{
         className: props.className,
@@ -274,7 +277,6 @@ const types: TypeInputTypeMap = {
     return (
       <LocationInput
         title={props.title}
-        dimensionX="fill"
         coordinates={props.value as TypeCoordinates}
         onChange={handleChangeLocation}
         className={props.className}
@@ -351,13 +353,46 @@ const types: TypeInputTypeMap = {
   },
   select: (props) => {
     return (
-      <Select
-        options={props.enum as string[]}
-        value={props.value}
-        onChange={(value) => {
-          props.onChange?.({ key: props.key, value: value as string });
+      <FlexElement direction="vertical" gap={4} dimensionX="fill" alignment="leftTop">
+        {props.title && (
+          <Text size="small" variant="secondary" style={{ textAlign: "left" }}>{props.title}</Text>
+        )}
+        <Select
+          options={props.enum as string[]}
+          value={props.value}
+          onChange={(value) => {
+            props.onChange?.({ key: props.key, value: value as string });
+          }}
+          className={props.className}
+          dimensionX="fill"
+        />
+      </FlexElement>
+    );
+  },
+  json: (props) => {
+    const stringified =
+      props.value === undefined || props.value === null
+        ? ""
+        : typeof props.value === "string"
+          ? props.value
+          : JSON.stringify(props.value, null, 2);
+    return (
+      <TextAreaInput
+        title={props.title}
+        containerProps={{ className: props.className }}
+        value={stringified}
+        onChange={(event) => {
+          const raw = event.target.value;
+          let parsed: any = raw;
+          try {
+            parsed = JSON.parse(raw);
+          } catch {
+            parsed = raw;
+          }
+          props.onChange?.({ key: props.key, value: parsed });
         }}
-        className={props.className}
+        icon="fieldObject"
+        placeholder={props.placeholder ?? "Enter JSON value\u2026"}
       />
     );
   },
@@ -370,6 +405,7 @@ type TypeUseInputRepresenter = {
   onChange?: (value: any) => void;
   containerClassName?: string;
   errorClassName?: string;
+  typeOverrides?: Partial<TypeInputTypeMap>;
 };
 
 const useInputRepresenter = ({
@@ -379,13 +415,16 @@ const useInputRepresenter = ({
   onChange,
   containerClassName,
   errorClassName,
+  typeOverrides,
 }: TypeUseInputRepresenter) => {
   const handleChange = (event: { key: string; value: any }) => {
-    const updatedValue: any = structuredClone(value);
+    const base = typeof value === "object" && value !== null && !Array.isArray(value) ? value : {};
+    const updatedValue: any = structuredClone(base);
     updatedValue[event.key] = event.value;
     onChange?.(updatedValue);
   };
 
+  const effectiveTypes = typeOverrides ? { ...types, ...typeOverrides } : types;
   const hasCustomStyles = Boolean(containerClassName || errorClassName);
   return Object.entries(properties).map(([key, el]) => {
     const isObject = typeof value === "object" && !Array.isArray(value);
@@ -407,7 +446,7 @@ const useInputRepresenter = ({
       }
     }
 
-    const _value = isObject ? (value[key] ?? value) : value;
+    const _value = isObject ? value[key] : value;
     const _error = error?.[key];
 
     return (
@@ -417,7 +456,8 @@ const useInputRepresenter = ({
         key={key}
         id={el.id ?? undefined}
       >
-        {types[el.type]({
+        {/* @ts-ignore - effectiveTypes[el.type] union call cannot be statically narrowed */}
+        {effectiveTypes[el.type]({
           key,
           title: el.title,
           description: el.description!,
@@ -449,12 +489,12 @@ const useInputRepresenter = ({
               hasCustomStyles
                 ? undefined
                 : {
-                    position: "absolute",
-                    bottom: 0,
-                    left: 0,
-                    pointerEvents: "none",
-                    whiteSpace: "nowrap",
-                  }
+                  position: "absolute",
+                  bottom: 0,
+                  left: 0,
+                  pointerEvents: "none",
+                  whiteSpace: "nowrap",
+                }
             }
             size="xsmall"
             variant="danger"

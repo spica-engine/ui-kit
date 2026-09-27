@@ -18,7 +18,7 @@ import Icon from "@atoms/icon/Icon";
 import Text from "@atoms/text/Text";
 import SelectOption, { TypeLabeledValue } from "@atoms/select-option/SelectOption";
 import FlexElement from "@atoms/flex-element/FlexElement";
-import { useOnClickOutside } from "@custom-hooks/useOnClickOutside";
+
 import useAdaptivePosition from "@custom-hooks/useAdaptivePosition";
 import { Chip, InputWithIcon, Spinner } from "index.export";
 import debounce from "lodash/debounce";
@@ -98,25 +98,26 @@ const RelationSelect: FC<TypeRelationSelect & TypeFluidContainer> = ({
   }, [searchValue]);
 
   const containerRef = useRef<HTMLDivElement | null>(null);
+  const internalDropDownRef = useRef<HTMLDivElement | null>(null);
 
   const handleClose = () => {
     if (disableClick) return;
     setIsOpen(false);
   };
 
-  useOnClickOutside({
-    targetElements: [containerRef],
-    onClickOutside: handleClose,
-  });
+  useImperativeHandle(
+    dropDownRef ?? { current: null },
+    () => internalDropDownRef.current as HTMLDivElement
+  );
 
   const { targetPosition, calculatePosition } = useAdaptivePosition({
     containerRef,
-    targetRef: dropDownRef as RefObject<HTMLElement | null>,
+    targetRef: internalDropDownRef,
     initialPlacement: placement,
   });
 
   useLayoutEffect(() => {
-    if (isOpen && containerRef.current && (dropDownRef as RefObject<HTMLElement | null>)?.current) {
+    if (isOpen && containerRef.current && internalDropDownRef.current) {
       calculatePosition();
     }
   }, [isOpen, options, calculatePosition]);
@@ -227,9 +228,13 @@ const RelationSelect: FC<TypeRelationSelect & TypeFluidContainer> = ({
         className={`${props.className} ${styles.container} ${disabled && styles.disabled}`}
       />
       {isOpen && (
-        <Portal onClickOutside={handleClose} className={portalClassName}>
+        <Portal
+          onClickOutside={handleClose}
+          className={portalClassName}
+          additionalRefs={[containerRef, internalDropDownRef]}
+        >
           <FlexElement
-            ref={dropDownRef as RefObject<HTMLDivElement>}
+            ref={internalDropDownRef}
             style={{ ...targetPosition }}
             className={`${popupClassName} ${styles.selectDropdown}`}
             direction="vertical"

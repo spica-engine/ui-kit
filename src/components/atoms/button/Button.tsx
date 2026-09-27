@@ -7,7 +7,7 @@ import { TypeFlexDimension } from "@utils/interface";
 export type TypeButton = {
   fullWidth?: boolean;
   containerProps?: TypeFluidContainer;
-  shape?: "default" | "circle" | "round";
+  shape?: "default" | "circle" | "round" | "chip";
   variant?: "solid" | "outlined" | "dashed" | "filled" | "text" | "link" | "icon";
   color?: "primary" | "default" | "success" | "danger" | "soft" | "transparent";
   loading?: boolean;
@@ -53,6 +53,7 @@ const Button: FC<TypeButton> = ({
     default: styles.sDefault,
     circle: styles.sCircle,
     round: styles.sRound,
+    chip: styles.sChip,
   };
 
   const customStyle = {
@@ -84,7 +85,7 @@ const Button: FC<TypeButton> = ({
       {loading ? (
         <Spinner size="small" color={getSpinnerColor()} {...spinnerProps} />
       ) : (
-        <FluidContainer root={{ children }} {...containerProps} />
+        <FluidContainer root={{ children }} className={styles.buttonContent} {...containerProps} />
       )}
     </button>
   );

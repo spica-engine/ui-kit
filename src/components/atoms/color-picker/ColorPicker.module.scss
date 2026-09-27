@@ -10,8 +10,8 @@
   width: 100%;
   height: 32px;
   border-radius: 8px;
-  border: var(--oziko-border-default);
-  background: var(--oziko-background-default);
+  border: var(--border-default);
+  background: var(--color-surface);
   cursor: pointer;
   display: flex;
   align-items: center;
@@ -188,7 +188,7 @@
   top: 50%;
   width: 10px;
   height: 10px;
-  border: 2px solid var(--oziko-color-default);
+  border: 2px solid var(--color-surface);
   border-radius: 50%;
   box-shadow:
     0 0 0 1px rgba(0, 0, 0, 0.3),
@@ -205,8 +205,8 @@
 
   .formatSelect {
     height: 32px;
-    border: var(--oziko-border-default) !important;
-    border-radius: var(--oziko-border-radius-md) !important;
+    border: var(--border-default) !important;
+    border-radius: var(--radius-md) !important;
 
     font-weight: 500;
     outline: none;
@@ -214,16 +214,16 @@
     padding: 0 8px !important;
 
     span {
-      font-size: var(--oziko-font-size-xs) !important;
+      font-size: var(--font-size-xs) !important;
     }
   }
 }
 
 .colorInput {
-  border: var(--oziko-border-default) !important;
-  font-size: var(--oziko-font-size-sm) !important;
-  padding: 0 var(--oziko-padding-sm) !important;
-  border-radius: var(--oziko-border-radius-md);
+  border: var(--border-default) !important;
+  font-size: var(--font-size-base) !important;
+  padding: 0 var(--spacing-4) !important;
+  border-radius: var(--radius-md);
 }
 
 .colorInput.error {
@@ -232,12 +232,12 @@
 }
 
 .alphaInputContainer {
-  border: var(--oziko-border-default) !important;
-  border-radius: var(--oziko-border-radius-md) !important;
-  font-size: var(--oziko-font-size-sm) !important;
+  border: var(--border-default) !important;
+  border-radius: var(--radius-md) !important;
+  font-size: var(--font-size-base) !important;
   display: flex;
   align-items: center;
-  padding-right: var(--oziko-padding-sm) !important;
+  padding-right: var(--spacing-4) !important;
 }
 
 .alphaInput {

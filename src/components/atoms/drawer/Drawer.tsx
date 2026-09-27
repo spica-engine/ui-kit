@@ -1,4 +1,4 @@
-import React, { FC, useEffect, useRef, useState } from "react";
+import React, { FC, useEffect, useState } from "react";
 import Backdrop from "../backdrop/Backdrop";
 import FlexElement, { TypeFlexElement } from "../flex-element/FlexElement";
 import styles from "./Drawer.module.scss";
@@ -25,11 +25,13 @@ export type TypeDrawer = {
   scrollableContentClassName?: string;
 } & TypeFlexElement;
 
+const TRANSITION_DURATION = 220;
+
 const Drawer: FC<TypeDrawer> = ({
   placement,
   size = "hug",
   children,
-  showBackdrop = true,
+  showBackdrop = false,
   backdropType = "default",
   backdropClassName,
   backdropProps,
@@ -40,13 +42,28 @@ const Drawer: FC<TypeDrawer> = ({
   contentClassName,
   scrollableContentClassName,
 }) => {
+  const [inDom, setInDom] = useState(isOpen);
   const [isVisible, setIsVisible] = useState(isOpen);
   const [isShaking, setIsShaking] = useState(false);
-  const [animationController, setIsAnimationEnded] = useState(false);
 
+  // Mount/unmount the element based on isOpen
   useEffect(() => {
-    setIsVisible(isOpen);
+    if (isOpen) {
+      setInDom(true);
+    } else {
+      setIsVisible(false);
+      const timer = setTimeout(() => setInDom(false), TRANSITION_DURATION);
+      return () => clearTimeout(timer);
+    }
   }, [isOpen]);
+
+  // After element is mounted in DOM (off-screen), trigger the open transition
+  // eslint-disable-next-line react-hooks/exhaustive-deps
+  useEffect(() => {
+    if (!inDom) return;
+    const rafId = requestAnimationFrame(() => setIsVisible(true));
+    return () => cancelAnimationFrame(rafId);
+  }, [inDom]);
 
   const handleClickOutside = () => {
     if (backdropType !== "static") {
@@ -55,28 +72,19 @@ const Drawer: FC<TypeDrawer> = ({
     }
 
     setIsShaking(true);
-    setIsAnimationEnded(false);
-    setTimeout(() => {
-      setIsShaking(false);
-      setIsAnimationEnded(true);
-    }, 400);
+    setTimeout(() => setIsShaking(false), 400);
   };
 
   const handleClose = () => {
-    setIsVisible(false);
-    if (onClose) onClose();
+    if (onClose) {
+      onClose();
+    } else {
+      setIsVisible(false);
+      setTimeout(() => setInDom(false), TRANSITION_DURATION);
+    }
   };
 
-  if (!isVisible) return null;
-
-  const animationClassMap = {
-    top: "topToBottom",
-    right: "rightToMiddle",
-    bottom: "bottomToTop",
-    left: "leftToMiddle",
-  };
-
-  const animationClass = animationClassMap[placement];
+  if (!inDom) return null;
 
   const isCustomSize =
     typeof size === "number" ||
@@ -98,7 +106,7 @@ const Drawer: FC<TypeDrawer> = ({
           onClick={handleClickOutside}
         />
         <div
-          className={`${styles.contentContainer} ${animationController ? "" : styles[animationClass]} ${isShaking ? styles.shake : ""} ${styles[placement]} ${isCustomSize ? "" : styles[size as keyof typeof styles]} ${contentClassName || ""}`}
+          className={`${styles.contentContainer} ${styles[placement]} ${isCustomSize ? "" : styles[size as keyof typeof styles]} ${isVisible ? styles.open : ""} ${isShaking ? styles.shake : ""} ${contentClassName || ""}`}
           style={sizeStyle}
         >
           {showCloseButton && (

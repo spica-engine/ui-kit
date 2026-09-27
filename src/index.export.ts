@@ -13,6 +13,8 @@ export { default as ColorPicker } from "./components/atoms/color-picker/ColorPic
 export { default as DashboardItem } from "./components/atoms/dashboard-item/DashboardItem";
 export { default as DatePicker } from "./components/atoms/date-picker/DatePicker";
 export { default as Directory } from "./components/atoms/directory/Directory";
+export { default as Divider } from "./components/atoms/divider/Divider";
+export type { TypeDivider } from "./components/atoms/divider/Divider";
 export { default as DropList } from "./components/atoms/drop-list/DropList";
 export { default as FlexElement } from "./components/atoms/flex-element/FlexElement";
 export { default as FluidContainer } from "./components/atoms/fluid-container/FluidContainer";
@@ -78,8 +80,10 @@ export { default as CircularProgress } from "./components/atoms/CircularProgress
 //Custom Hooks export
 export { default as useInputRepresenter } from "./custom-hooks/useInputRepresenter";
 export { default as useKeyDown } from "./custom-hooks/useKeyDown";
-export { useOnClickOutside } from "./custom-hooks/useOnClickOutside";
+export { useOnClickOutside, handledClickOutsideEvents } from "./custom-hooks/useOnClickOutside";
 export { default as useAdaptivePosition } from "./custom-hooks/useAdaptivePosition";
+//Layer Manager export
+export { LayerManagerProvider, useLayer } from "./components/atoms/layer-manager/LayerManager";
 //Theme export
 export { createTheme } from "./theme/createTheme";
 export { useTheme } from "./theme/ThemeContext";
@@ -183,11 +187,19 @@ export { type TypeSectionComponent } from "./components/organisms/section/Sectio
 //Table exports
 export { type TableColumn } from "./components/organisms/table/Table";
 export { type TableColumnRenderCellParams } from "./components/organisms/table/Table";
+export { type TableCellParams } from "./components/organisms/table/Table";
 export { type TableSaveToLocalStorage } from "./components/organisms/table/Table";
 export { type TableCellKeyDownParams } from "./components/organisms/table/Table";
+export { type TableRowClickParams } from "./components/organisms/table/Table";
+export { type TableSkeletonCellParams } from "./components/organisms/table/Table";
+export { type TableEmptyStateProps } from "./components/organisms/table/Table";
+export { type TableProps } from "./components/organisms/table/Table";
+export { type TableColumnContainerProps } from "./components/organisms/table/Table";
+export { type TableHeaderCellProps } from "./components/organisms/table/Table";
+export { type TableCellProps } from "./components/organisms/table/Table";
+// Deprecated — use the Table-prefixed names above
 export { type TypeTable } from "./components/organisms/table/Table";
 export { type TypeColumn } from "./components/organisms/table/Table";
-export { type TypeColumnComponent } from "./components/organisms/table/Table";
 export { type TypeHeaderCell } from "./components/organisms/table/Table";
 export { type TypeCell } from "./components/organisms/table/Table";
 export {
@@ -204,6 +216,7 @@ export {
   type ColorFormat,
 } from "./components/atoms/color-picker";
 export { type TypeProperties } from "./custom-hooks/useInputRepresenter";
+export { type TypeInputTypeMap } from "./custom-hooks/useInputRepresenter";
 //Utilities export
 export { api as apiUtil } from "./utils/api";
 export { color as colorUtil } from "./utils/color";

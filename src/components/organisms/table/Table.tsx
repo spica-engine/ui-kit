@@ -1,12 +1,18 @@
-import React, { memo, useEffect, useRef, useState } from "react";
-import FlexElement, { TypeFlexElement } from "components/atoms/flex-element/FlexElement";
+import React, { memo, useCallback, useEffect, useMemo, useRef, useState } from "react";
+import { DefaultSkeletonCell, parsePx } from "./Column";
 import styles from "./Table.module.scss";
-import { TypeAlignment } from "utils/interface";
 
 export type TableColumnRenderCellParams<TRow = any> = {
   row: TRow;
   rowIndex: number;
+  /** @deprecated Always false — cell focus has been removed. Kept for API compatibility. */
   isFocused: boolean;
+  columnKey: string;
+};
+
+export type TableCellParams<TRow = any> = {
+  row: TRow;
+  rowIndex: number;
   columnKey: string;
 };
 
@@ -23,10 +29,17 @@ export type TableSaveToLocalStorage = {
   save?: boolean;
 };
 
+/** @deprecated Cell-level keyboard navigation has been removed. */
 export type TableCellKeyDownParams = {
   columnKey: string;
   rowIndex: number;
   event: KeyboardEvent;
+};
+
+export type TableRowClickParams<TRow = any> = {
+  row: TRow;
+  rowIndex: number;
+  event: React.MouseEvent<HTMLTableRowElement>;
 };
 
 export type TableSkeletonCellParams<TRow = any> = {
@@ -34,7 +47,13 @@ export type TableSkeletonCellParams<TRow = any> = {
   rowIndex: number;
 };
 
-export type TypeTable<TRow = any> = {
+export type TableEmptyStateProps = {
+  title?: React.ReactNode;
+  description?: React.ReactNode;
+  actions?: React.ReactNode;
+};
+
+export type TableProps<TRow = any> = {
   columns: TableColumn<TRow>[];
   data: TRow[];
   loading?: boolean;
@@ -43,22 +62,47 @@ export type TypeTable<TRow = any> = {
   saveToLocalStorage?: TableSaveToLocalStorage;
   fixedColumns?: string[];
   noResizeableColumns?: string[];
-  onCellKeyDown?: (params: TableCellKeyDownParams) => void;
+  onRowClick?: (params: TableRowClickParams<TRow>) => void;
   tableClassName?: string;
+  /** @deprecated No-op — columns are now <th>/<td> elements. */
   columnClassName?: string;
   headerClassName?: string;
   cellClassName?: string;
+  /** @deprecated Cell focus has been removed. Use onRowClick instead. */
+  isCellFocusable?: (params: TableCellParams<TRow>) => boolean;
+  /** @deprecated Cell-level keyboard navigation has been removed. */
+  onCellKeyDown?: (params: TableCellKeyDownParams) => void;
+  emptyState?: TableEmptyStateProps;
 };
 
-const isEditableElement = (target: EventTarget | null): boolean => {
-  if (!(target instanceof HTMLElement)) return false;
-  const tagName = target.tagName.toLowerCase();
-  if (tagName === "input" || tagName === "textarea") return true;
-  if (target.isContentEditable) return true;
-  return false;
-};
+// ─── Re-export sub-component types (public API) ──────────────────────────────
+export type {
+  TableColumnContainerProps,
+  TableHeaderCellProps,
+  TableCellProps,
+} from "./Column";
 
-const Table = <TRow = any,>({
+// ─── Deprecated aliases (public API backward compat) ─────────────────────────
+/** @deprecated Use TableProps instead */
+export type TypeTable<TRow = any> = TableProps<TRow>;
+/** @deprecated Use TableColumnContainerProps instead */
+export type { TableColumnContainerProps as TypeColumn } from "./Column";
+/** @deprecated Use TableHeaderCellProps instead */
+export type { TableHeaderCellProps as TypeHeaderCell } from "./Column";
+/** @deprecated Use TableCellProps instead */
+export type { TableCellProps as TypeCell } from "./Column";
+
+const MIN_COLUMN_WIDTH = 60;
+
+const GHOST_BAR_WIDTHS: number[][] = [
+  [36, 96, 60, 48, 120, 80],
+  [36, 80, 48, 60, 96, 60],
+  [36, 120, 60, 20, 80, 48],
+];
+
+const GHOST_ROW_OPACITIES = [1, 0.55, 0.25];
+
+const TableBase = <TRow = any,>({
   columns,
   data,
   loading = false,
@@ -67,370 +111,250 @@ const Table = <TRow = any,>({
   saveToLocalStorage = { id: "table", save: false },
   fixedColumns = [],
   noResizeableColumns = [],
-  onCellKeyDown,
+  onRowClick,
   tableClassName = "",
-  columnClassName = "",
   headerClassName = "",
   cellClassName = "",
-}: TypeTable<TRow>) => {
-  const getColumnWidth = (column: TableColumn<TRow>): string => {
-    const savedWidth = saveToLocalStorage?.save
-      ? localStorage.getItem(`${saveToLocalStorage?.id}-${column.key}`)
-      : null;
-    return savedWidth || column.width || "300px";
-  };
-
-  const [dataColumns, setDataColumns] = useState<TableColumn<TRow>[]>(() => {
-    return columns.map((column) => ({
-      ...column,
-      width: getColumnWidth(column),
-    }));
+  emptyState,
+}: TableProps<TRow>) => {
+  const [columnWidths, setColumnWidths] = useState<Map<string, number>>(() => {
+    const map = new Map<string, number>();
+    columns.forEach((col) => {
+      const saved = saveToLocalStorage.save
+        ? localStorage.getItem(`${saveToLocalStorage.id}-${col.key}`)
+        : null;
+      const colMinWidth = parsePx(col.minWidth) || MIN_COLUMN_WIDTH;
+      map.set(col.key, Math.max(colMinWidth, parsePx(saved ?? col.width) || 150));
+    });
+    return map;
   });
 
-  const [focusedCell, setFocusedCell] = useState<{ column: string; row: number } | null>(null);
-
+  // Sync column widths when columns change (new columns added/removed)
   useEffect(() => {
-    setDataColumns((prevColumns) => {
-      const prevWidthMap = new Map(prevColumns.map((col) => [col.key, col.width]));
-      return columns.map((column) => ({
-        ...column,
-        width: prevWidthMap.get(column.key) || getColumnWidth(column),
-      }));
-    });
-  }, [columns, saveToLocalStorage?.save, saveToLocalStorage?.id]);
-
-  const updateColumnWidth = (key: string, newWidth: string) => {
-    setDataColumns((prevColumns) =>
-      prevColumns.map((col) => (col.key === key ? { ...col, width: newWidth } : col))
-    );
-  };
-
-  // (1) Only save to localStorage when saveToLocalStorage.save is true
-  useEffect(() => {
-    if (!saveToLocalStorage?.save) return;
-    dataColumns.forEach((column) => {
-      localStorage.setItem(`${saveToLocalStorage.id}-${column.key}`, column.width || "");
-    });
-  }, [dataColumns, saveToLocalStorage?.save, saveToLocalStorage?.id]);
-
-  const handleCellClick = (columnKey: string, index: number) => {
-    if (!loading) {
-      setFocusedCell({ column: columnKey, row: index });
-    }
-  };
-
-  useEffect(() => {
-    if (!focusedCell || loading) return;
-
-    const ARROW_KEYS = ["ArrowRight", "ArrowLeft", "ArrowDown", "ArrowUp"] as const;
-    const isArrowKey = (key: string): boolean =>
-      ARROW_KEYS.includes(key as (typeof ARROW_KEYS)[number]);
-
-    const handleArrowRight = (currentColumnIndex: number, currentRowIndex: number) => {
-      if (currentColumnIndex < columns.length - 1) {
-        setFocusedCell({
-          column: columns[currentColumnIndex + 1].key,
-          row: currentRowIndex,
-        });
-      }
-    };
-
-    const handleArrowLeft = (currentColumnIndex: number, currentRowIndex: number) => {
-      if (currentColumnIndex > 0) {
-        setFocusedCell({
-          column: columns[currentColumnIndex - 1].key,
-          row: currentRowIndex,
-        });
-      }
-    };
-
-    const handleArrowDown = (column: string, currentRowIndex: number) => {
-      if (currentRowIndex < data.length - 1) {
-        setFocusedCell({
-          column,
-          row: currentRowIndex + 1,
-        });
-      }
-    };
-
-    const handleArrowUp = (column: string, currentRowIndex: number) => {
-      if (currentRowIndex > 0) {
-        setFocusedCell({
-          column,
-          row: currentRowIndex - 1,
-        });
-      }
-    };
-
-    const handleArrowKeyNavigation = (
-      event: KeyboardEvent,
-      cell: { column: string; row: number }
-    ) => {
-      const currentColumnIndex = columns.findIndex((col) => col.key === cell.column);
-      const currentRowIndex = cell.row;
-
-      switch (event.key) {
-        case "ArrowRight":
-          handleArrowRight(currentColumnIndex, currentRowIndex);
-          break;
-        case "ArrowLeft":
-          handleArrowLeft(currentColumnIndex, currentRowIndex);
-          break;
-        case "ArrowDown":
-          handleArrowDown(cell.column, currentRowIndex);
-          break;
-        case "ArrowUp":
-          handleArrowUp(cell.column, currentRowIndex);
-          break;
-      }
-    };
-
-    const handleKeyDown = (event: KeyboardEvent) => {
-      // (6) Skip keyboard handling when inside an editable element
-      if (isEditableElement(event.target)) return;
-
-      if (isArrowKey(event.key)) {
-        event.preventDefault();
-        handleArrowKeyNavigation(event, focusedCell);
-      } else {
-        onCellKeyDown?.({
-          columnKey: focusedCell.column,
-          rowIndex: focusedCell.row,
-          event,
-        });
-      }
-    };
-
-    globalThis.addEventListener("keydown", handleKeyDown);
-
-    return () => {
-      globalThis.removeEventListener("keydown", handleKeyDown);
-    };
-  }, [focusedCell, columns, data, onCellKeyDown, loading]);
-
-  return (
-    <div className={`${styles.table} ${tableClassName}`}>
-      {dataColumns.map((column, index) => {
-        const isFixed = fixedColumns.includes(column.key);
-        const positionAmount = isFixed
-          ? fixedColumns
-              .slice(0, fixedColumns.indexOf(column.key))
-              .reduce(
-                (acc, curr) =>
-                  acc +
-                  Number.parseInt(dataColumns.find((dc) => dc.key === curr)?.width || "300px"),
-                0
-              ) + "px"
-          : "unset";
-        return (
-          <Column
-            key={column.key}
-            columnKey={column.key}
-            className={`${styles.column} ${
-              isFixed ? styles.fixedColumns : styles.scrollableColumns
-            } ${columnClassName}`}
-            style={{
-              left: positionAmount,
-            }}
-            width={column.width}
-            minWidth={column.minWidth}
-            updateColumnWidth={updateColumnWidth}
-            noResizeable={noResizeableColumns.includes(column.key)}
-          >
-            <Column.Header className={headerClassName}>{column.header}</Column.Header>
-            {loading
-              ? Array.from({ length: skeletonRowCount }).map((_, index) => {
-                  const cellKey = `skeleton-${column.key}-${index}`;
-                  return (
-                    <Column.Cell key={cellKey} className={cellClassName} data-skeleton-cell>
-                      {renderSkeletonCell ? (
-                        renderSkeletonCell({ column, rowIndex: index })
-                      ) : (
-                        <DefaultSkeletonCell />
-                      )}
-                    </Column.Cell>
-                  );
-                })
-              : data.map((row: TRow, index: number) => {
-                  const isFocused =
-                    focusedCell?.column === column.key && focusedCell?.row === index;
-                  const cellKey = `${column.key}-${index}`;
-                  return (
-                    <Column.Cell
-                      key={cellKey}
-                      focused={isFocused}
-                      onClick={() => handleCellClick(column.key, index)}
-                      data-cell-key={cellKey}
-                      className={cellClassName}
-                    >
-                      {column.renderCell({
-                        row,
-                        rowIndex: index,
-                        isFocused,
-                        columnKey: column.key,
-                      })}
-                    </Column.Cell>
-                  );
-                })}
-          </Column>
-        );
-      })}
-    </div>
-  );
-};
-
-const MemoizedTable = memo(Table) as <TRow = any>(props: TypeTable<TRow>) => React.ReactElement;
-export default MemoizedTable;
-
-export type TypeColumn = {
-  columnKey?: string;
-  children?: React.ReactNode;
-  className?: string;
-  width?: string;
-  minWidth?: string;
-  updateColumnWidth?: (key: string, newWidth: string) => void;
-  noResizeable?: boolean;
-  style?: React.CSSProperties;
-};
-
-export type TypeColumnComponent = React.FC<TypeColumn> & {
-  Header: typeof HeaderCell;
-  Cell: typeof Cell;
-};
-
-const parsePx = (value: string | undefined): number => {
-  if (!value) return 0;
-  return Number.parseInt(value, 10) || 0;
-};
-
-const ColumnComponent = ({
-  columnKey,
-  children,
-  className,
-  width,
-  minWidth,
-  updateColumnWidth,
-  noResizeable,
-  style,
-}: TypeColumn) => {
-  const [columnWidth, setColumnWidth] = useState(width);
-  const [isResizing, setIsResizing] = useState(false);
-  const columnRef = useRef<HTMLDivElement>(null);
-
-  useEffect(() => {
-    setColumnWidth(width);
-  }, [width]);
-
-  useEffect(() => {
-    const minWidthPx = parsePx(minWidth);
-
-    const handleMouseMove = (e: MouseEvent) => {
-      if (isResizing && columnRef.current) {
-        let newWidth = e.clientX - columnRef.current.getBoundingClientRect().left;
-
-        if (minWidthPx > 0 && newWidth < minWidthPx) {
-          newWidth = minWidthPx;
+    setColumnWidths((prev) => {
+      const next = new Map<string, number>();
+      columns.forEach((col) => {
+        const colMinWidth = parsePx(col.minWidth) || MIN_COLUMN_WIDTH;
+        if (prev.has(col.key)) {
+          next.set(col.key, Math.max(colMinWidth, prev.get(col.key)!));
+        } else {
+          const saved = saveToLocalStorage.save
+            ? localStorage.getItem(`${saveToLocalStorage.id}-${col.key}`)
+            : null;
+          next.set(col.key, Math.max(colMinWidth, parsePx(saved ?? col.width) || 150));
         }
-        setColumnWidth(`${newWidth}px`);
-      }
+      });
+      return next;
+    });
+  }, [columns, saveToLocalStorage.save, saveToLocalStorage.id]);
+
+  // Persist to localStorage when widths change
+  useEffect(() => {
+    if (!saveToLocalStorage.save) return;
+    columnWidths.forEach((width, key) => {
+      localStorage.setItem(`${saveToLocalStorage.id}-${key}`, `${width}px`);
+    });
+  }, [columnWidths, saveToLocalStorage.save, saveToLocalStorage.id]);
+
+  const fixedColumnOffsets = useMemo(() => {
+    const offsets = new Map<string, number>();
+    let offset = 0;
+    for (const key of fixedColumns) {
+      offsets.set(key, offset);
+      offset += columnWidths.get(key) ?? 150;
+    }
+    return offsets;
+  }, [fixedColumns, columnWidths]);
+
+  const totalColumnsWidth = useMemo(() => {
+    return columns.reduce((sum, col) => sum + (columnWidths.get(col.key) ?? 150), 0);
+  }, [columns, columnWidths]);
+
+  // ── Column resize ──────────────────────────────────────────────────────────
+  const resizeStateRef = useRef<{
+    columnKey: string;
+    startX: number;
+    startWidth: number;
+    minWidth: number;
+  } | null>(null);
+
+  const handleResizerMouseDown = useCallback(
+    (e: React.MouseEvent, columnKey: string) => {
+      e.preventDefault();
+      e.stopPropagation();
+      const col = columns.find((c) => c.key === columnKey);
+      const colMinWidth = parsePx(col?.minWidth) || MIN_COLUMN_WIDTH;
+      resizeStateRef.current = {
+        columnKey,
+        startX: e.clientX,
+        startWidth: columnWidths.get(columnKey) ?? 150,
+        minWidth: colMinWidth,
+      };
+    },
+    [columns, columnWidths]
+  );
+
+  useEffect(() => {
+    const handleMouseMove = (e: MouseEvent) => {
+      if (!resizeStateRef.current) return;
+      const { columnKey, startX, startWidth, minWidth } = resizeStateRef.current;
+      const delta = e.clientX - startX;
+      const newWidth = Math.max(minWidth, startWidth + delta);
+      setColumnWidths((prev) => new Map(prev).set(columnKey, newWidth));
     };
 
     const handleMouseUp = () => {
-      setIsResizing(false);
-      if (columnRef.current) {
-        let finalWidth = parsePx(columnRef.current.style.minWidth);
-        if (minWidthPx > 0 && finalWidth < minWidthPx) {
-          finalWidth = minWidthPx;
-        }
-        updateColumnWidth?.(columnKey!, `${finalWidth}px`);
-      }
+      resizeStateRef.current = null;
     };
 
-    if (isResizing) {
-      globalThis.addEventListener("mousemove", handleMouseMove);
-      globalThis.addEventListener("mouseup", handleMouseUp);
-    }
-
+    window.addEventListener("mousemove", handleMouseMove);
+    window.addEventListener("mouseup", handleMouseUp);
     return () => {
-      globalThis.removeEventListener("mousemove", handleMouseMove);
-      globalThis.removeEventListener("mouseup", handleMouseUp);
+      window.removeEventListener("mousemove", handleMouseMove);
+      window.removeEventListener("mouseup", handleMouseUp);
     };
-  }, [isResizing, columnKey, updateColumnWidth, minWidth]);
+  }, []);
 
-  const handleResizerMouseDown = (event: React.MouseEvent<HTMLButtonElement>) => {
-    event.preventDefault();
-    setIsResizing(true);
-  };
+  // ── Row click ──────────────────────────────────────────────────────────────
+  const handleRowClick = useCallback(
+    (row: TRow, rowIndex: number, event: React.MouseEvent<HTMLTableRowElement>) => {
+      if (loading) return;
+      onRowClick?.({ row, rowIndex, event });
+    },
+    [loading, onRowClick]
+  );
 
-  const handleResizerClick = (event: React.MouseEvent<HTMLButtonElement>) => {
-    event.preventDefault();
-  };
+  const skeletonRows = useMemo(
+    () => Array.from({ length: skeletonRowCount }, (_, i) => i),
+    [skeletonRowCount]
+  );
+
+  const isEmpty = !loading && data.length === 0 && !!emptyState;
 
   return (
-    <div ref={columnRef} className={className} style={{ ...style, minWidth: columnWidth }}>
-      {children}
-      {!noResizeable && (
-        <button
-          type="button"
-          className={styles.resizer}
-          aria-label="Resize column"
-          onMouseDown={handleResizerMouseDown}
-          onClick={handleResizerClick}
-        />
+    <div data-testid="table-root" className={`${styles.tableRoot} ${tableClassName}`}>
+      <div className={styles.tableArea}>
+      <table className={styles.table} style={{ width: totalColumnsWidth }}>
+        <colgroup>
+          {columns.map((col) => (
+            <col
+              key={col.key}
+              style={{ width: `${columnWidths.get(col.key) ?? 150}px` }}
+            />
+          ))}
+        </colgroup>
+
+        <thead className={styles.thead}>
+          <tr>
+            {columns.map((col) => {
+              const isFixed = fixedColumns.includes(col.key);
+              const isNoResize = noResizeableColumns.includes(col.key);
+              const offset = fixedColumnOffsets.get(col.key);
+              return (
+                <th
+                  key={col.key}
+                  className={`${styles.th} ${isFixed ? styles.stickyCell : ""} ${headerClassName}`}
+                  style={isFixed ? { left: offset } : undefined}
+                >
+                  <div className={styles.thContent}>{col.header}</div>
+                  {!isNoResize && (
+                    <div
+                      className={styles.thResizer}
+                      onMouseDown={(e) => handleResizerMouseDown(e, col.key)}
+                    />
+                  )}
+                </th>
+              );
+            })}
+          </tr>
+        </thead>
+
+        <tbody>
+          {isEmpty
+            ? null
+            : loading
+            ? skeletonRows.map((skeletonIndex) => (
+                <tr key={`skeleton-${skeletonIndex}`} className={styles.skeletonRow}>
+                  {columns.map((col) => (
+                    <td
+                      key={col.key}
+                      className={`${styles.td} ${cellClassName}`}
+                    >
+                      <div className={styles.cellInner}>
+                        {renderSkeletonCell ? (
+                          renderSkeletonCell({ column: col, rowIndex: skeletonIndex })
+                        ) : (
+                          <DefaultSkeletonCell />
+                        )}
+                      </div>
+                    </td>
+                  ))}
+                </tr>
+              ))
+            : data.map((row: TRow, rowIndex: number) => (
+                <tr
+                  key={rowIndex}
+                  className={`${styles.tr} ${onRowClick ? styles.trClickable : ""}`}
+                  onClick={(e) => handleRowClick(row, rowIndex, e)}
+                >
+                  {columns.map((col) => {
+                    const isFixed = fixedColumns.includes(col.key);
+                    const offset = fixedColumnOffsets.get(col.key);
+                    return (
+                      <td
+                        key={col.key}
+                        className={`${styles.td} ${isFixed ? styles.stickyCell : ""} ${cellClassName}`}
+                        style={isFixed ? { left: offset } : undefined}
+                      >
+                        <div className={styles.cellInner}>
+                          {col.renderCell({ row, rowIndex, isFocused: false, columnKey: col.key })}
+                        </div>
+                      </td>
+                    );
+                  })}
+                </tr>
+              ))}
+        </tbody>
+      </table>
+      </div>
+
+      {isEmpty && (
+        <div className={styles.emptyState}>
+          <div className={styles.emptyGhostTable}>
+            {GHOST_ROW_OPACITIES.map((opacity, rowIdx) => (
+              <div
+                key={rowIdx}
+                className={styles.emptyGhostRow}
+                style={{ opacity }}
+              >
+                {GHOST_BAR_WIDTHS[rowIdx].map((width, barIdx) => (
+                  <div
+                    key={barIdx}
+                    className={styles.emptyGhostBar}
+                    style={{ width }}
+                  />
+                ))}
+                <div className={styles.emptyGhostDot} />
+              </div>
+            ))}
+          </div>
+          {emptyState.title && (
+            <div className={styles.emptyTitle}>{emptyState.title}</div>
+          )}
+          {emptyState.description && (
+            <div className={styles.emptyDescription}>{emptyState.description}</div>
+          )}
+          {emptyState.actions && (
+            <div className={styles.emptyActions}>{emptyState.actions}</div>
+          )}
+        </div>
       )}
     </div>
   );
 };
 
-export type TypeHeaderCell = TypeFlexElement & {
-  border?: boolean;
-  headerAlign?: "left" | "center" | "right";
-};
+TableBase.displayName = "Table";
 
-const HeaderCell = ({
-  border = true,
-  headerAlign = "center",
-  children,
-  ...props
-}: TypeHeaderCell) => {
-  const align: Record<string, TypeAlignment> = {
-    left: "leftTop",
-    center: "center",
-    right: "rightTop",
-  };
+const Table = memo(TableBase) as <TRow = any>(props: TableProps<TRow>) => React.ReactElement;
+export default Table;
 
-  return (
-    <FlexElement
-      dimensionX="fill"
-      alignment={align[headerAlign]}
-      {...props}
-      className={`${styles.header} ${border ? styles.border : ""} ${props.className || ""}`}
-    >
-      {children}
-    </FlexElement>
-  );
-};
-
-export type TypeCell = React.HTMLAttributes<HTMLDivElement> & {
-  focused?: boolean;
-};
-
-const Cell = ({ children, focused, ...props }: TypeCell) => {
-  return (
-    <div
-      {...props}
-      className={`${styles.cell} ${focused ? styles.focusedCell : ""} ${props.className || ""}`}
-    >
-      {children}
-    </div>
-  );
-};
-
-const DefaultSkeletonCell = () => {
-  return <div className={styles.skeletonCell} />;
-};
-
-const Column = memo(ColumnComponent) as unknown as TypeColumnComponent;
-
-Column.Header = HeaderCell;
-Column.Cell = Cell;
